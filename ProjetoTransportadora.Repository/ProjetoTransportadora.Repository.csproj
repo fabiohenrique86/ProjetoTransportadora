@@ -1,0 +1,194 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{0BFF2267-6941-4EE2-B643-EF2AA4A4A7E6}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>ProjetoTransportadora.Repository</RootNamespace>
+    <AssemblyName>ProjetoTransportadora.Repository</AssemblyName>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <Deterministic>true</Deterministic>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Security" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Canal.cs">
+      <DependentUpon>ProjetoTransportadoraModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EstadoCivil.cs">
+      <DependentUpon>ProjetoTransportadoraModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EstadoRepository.cs" />
+    <Compile Include="EstadoCivilRepository.cs" />
+    <Compile Include="Feriado.cs">
+      <DependentUpon>ProjetoTransportadoraModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="FeriadoRepository.cs" />
+    <Compile Include="CanalRepository.cs" />
+    <Compile Include="Funcionalidade.cs">
+      <DependentUpon>ProjetoTransportadoraModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Grupo.cs">
+      <DependentUpon>ProjetoTransportadoraModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="GrupoFuncionalidade.cs">
+      <DependentUpon>ProjetoTransportadoraModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="GrupoFuncionalidadeRepository.cs" />
+    <Compile Include="Log.cs">
+      <DependentUpon>ProjetoTransportadoraModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Montadora.cs">
+      <DependentUpon>ProjetoTransportadoraModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Pessoa.cs">
+      <DependentUpon>ProjetoTransportadoraModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="PessoaEmail.cs">
+      <DependentUpon>ProjetoTransportadoraModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="PessoaEmailRepository.cs" />
+    <Compile Include="PessoaHistorico.cs">
+      <DependentUpon>ProjetoTransportadoraModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="PessoaHistoricoRepository.cs" />
+    <Compile Include="PessoaReferencia.cs">
+      <DependentUpon>ProjetoTransportadoraModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="PessoaRelacaoRepository.cs" />
+    <Compile Include="PessoaReferenciaRepository.cs" />
+    <Compile Include="PessoaTelefone.cs">
+      <DependentUpon>ProjetoTransportadoraModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="PessoaTelefoneRepository.cs" />
+    <Compile Include="Produto.cs">
+      <DependentUpon>ProjetoTransportadoraModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ProdutoRepository.cs" />
+    <Compile Include="FuncionalidadeRepository.cs" />
+    <Compile Include="RegimeCasamento.cs">
+      <DependentUpon>ProjetoTransportadoraModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SituacaoVeiculo.cs">
+      <DependentUpon>ProjetoTransportadoraModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SituacaoVeiculoRepository.cs" />
+    <Compile Include="TipoPessoa.cs">
+      <DependentUpon>ProjetoTransportadoraModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TipoReferencia.cs">
+      <DependentUpon>ProjetoTransportadoraModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TipoReferenciaRepository.cs" />
+    <Compile Include="TipoResidencia.cs">
+      <DependentUpon>ProjetoTransportadoraModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TipoTelefone.cs">
+      <DependentUpon>ProjetoTransportadoraModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TipoTelefoneRepository.cs" />
+    <Compile Include="TipoResidenciaRepository.cs" />
+    <Compile Include="RegimeCasamentoRepository.cs" />
+    <Compile Include="MontadoraRepository.cs" />
+    <Compile Include="ProjetoTransportadoraModel.Context.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ProjetoTransportadoraModel.Context.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ProjetoTransportadoraModel.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ProjetoTransportadoraModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ProjetoTransportadoraModel.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ProjetoTransportadoraModel.edmx</DependentUpon>
+    </Compile>
+    <Compile Include="Usuario.cs">
+      <DependentUpon>ProjetoTransportadoraModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="UsuarioGrupo.cs">
+      <DependentUpon>ProjetoTransportadoraModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="UsuarioGrupoRepository.cs" />
+    <Compile Include="GrupoRepository.cs" />
+    <Compile Include="LogRepository.cs" />
+    <Compile Include="UsuarioRepository.cs" />
+    <Compile Include="PessoaRepository.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ProjetoTransportadora.Dto\ProjetoTransportadora.Dto.csproj">
+      <Project>{4da24eae-0115-4439-929b-1c527d1ae3ad}</Project>
+      <Name>ProjetoTransportadora.Dto</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EntityDeploy Include="ProjetoTransportadoraModel.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>ProjetoTransportadoraModel.Designer.cs</LastGenOutput>
+    </EntityDeploy>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.Config" />
+    <None Include="packages.config" />
+    <None Include="ProjetoTransportadoraModel.edmx.diagram">
+      <DependentUpon>ProjetoTransportadoraModel.edmx</DependentUpon>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="ProjetoTransportadoraModel.Context.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>ProjetoTransportadoraModel.Context.cs</LastGenOutput>
+      <DependentUpon>ProjetoTransportadoraModel.edmx</DependentUpon>
+    </Content>
+    <Content Include="ProjetoTransportadoraModel.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>ProjetoTransportadoraModel.edmx</DependentUpon>
+      <LastGenOutput>ProjetoTransportadoraModel.cs</LastGenOutput>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>

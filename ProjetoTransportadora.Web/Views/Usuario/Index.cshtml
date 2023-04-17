@@ -1,0 +1,412 @@
+﻿@using ProjetoTransportadora.Dto;
+
+@{
+    ViewBag.Title = "Usuários";
+
+    UsuarioDto usuarioDto = null;
+    if (Session[System.Configuration.ConfigurationManager.AppSettings["ProjetoTransportadoraCookieLogin"]] != null)
+    {
+        usuarioDto = (UsuarioDto)Session[System.Configuration.ConfigurationManager.AppSettings["ProjetoTransportadoraCookieLogin"]];
+    }
+}
+
+@section scripts
+{
+    <script type="text/javascript">
+
+        function habilitarModal(opcao) {
+            if (opcao)
+                $("#modalUsuario input").removeProp("disabled");
+            else
+                $("#modalUsuario input").prop("disabled", "disabled");
+        }
+
+        function limparFormulario() {
+            $("#usuarioId").val("");
+            $("#login").val("");
+            $("#senha").val("");
+            $(".ckb").each(function (i, a) {
+                $(a).prop('checked', false);
+            });
+        }
+
+        function carregarDadosModal(data) {
+            $("#login").val(data.Login);
+            $("#senha").val(data.Senha);
+
+            if (data.TrocarSenha)
+                $("#trocarSenha").prop('checked', true);
+            else
+                $("#trocarSenha").prop('checked', false);
+
+            for (var i = 0; i < data.UsuarioGrupoDto.length; i++) {
+                var idGrupo = data.UsuarioGrupoDto[i].IdGrupo;
+                $(".ckb").each(function (i, a) {
+                    if ($(a).val() == idGrupo) {
+                        $(a).prop('checked', true);
+                        return;
+                    }
+                });
+            }
+        }
+
+        function consultar(data) {
+            limparFormulario();
+            carregarDadosModal(data);
+            habilitarModal(false);
+            $("#lblAcao").text("Consultar");
+            $("#lblTitulo").text(data.Login);
+            $("#usuarioId").val("");
+            $("#btnIncluir").hide();
+            $("#btnAlterar").hide();
+            $("#modalUsuario").modal('show');
+        }
+
+        function alterar(data, o) {
+            limparFormulario();
+            carregarDadosModal(data);
+            habilitarModal(true);
+            $("#usuarioId").val(data.Id);
+            $("#lblAcao").text("Alterar");
+            $("#lblTitulo").text(data.Login);
+            $("#btnIncluir").hide();
+            $("#btnAlterar").show();
+            $("#modalUsuario").modal('show');
+        }
+
+        function alterarStatus(data, obj) {
+            if (confirm("Deseja " + (data.Ativo == false ? "ativar" : "inativar") + " usuário?")) {
+
+                var usuarioDto = {};
+
+                usuarioDto.Id = data.Id;
+                usuarioDto.Ativo = !data.Ativo;
+
+                if (!usuarioDto.Ativo) {
+                    usuarioDto.IdUsuarioInativacao = '@usuarioDto.Id';
+                    usuarioDto.DataInativacao = '@DateTime.UtcNow';
+                }
+
+                $.ajax({
+                    dataType: "json",
+                    type: "POST",
+                    url: "/Usuario/AlterarStatus",
+                    data: { usuarioDto: usuarioDto },
+                    success: function (data) {
+
+                        if (!data.Sucesso) {
+                            if (data.Erro)
+                                alert("danger", data.Mensagem);
+                            else
+                                alert("warning", data.Mensagem);
+
+                            return;
+                        }
+
+                        $("#tbUsuario").DataTable().row($(obj).parents("tr")).invalidate().data(data.Data).draw();
+                    }
+                });
+            }
+        }
+
+        $(document).ready(function () {
+
+            var tbUsuario = $("#tbUsuario").DataTable({
+                "ordering": false,
+                "bFilter": false,
+                "pageLength": 25,
+                "language": {
+                    "lengthMenu": "_MENU_ registros por página",
+                    "zeroRecords": "Sem registros a serem exibidos",
+                    "info": "Página _PAGE_ de _PAGES_",
+                    "infoEmpty": "Sem registros a serem exibidos",
+                    "infoFiltered": "(filtrados de _MAX_ total de registros)",
+                    "sSearch": "Pesquisar",
+                    "oPaginate": { "sNext": "Próximo", "sPrevious": "Anterior", "sFirst": "Primeiro", "sLast": "Último" }
+                },
+                "columns":
+                    [
+                        { "data": "Id", "className": "text-center" },
+                        { "data": "Login", "className": "text-center" },
+                        {
+                            "data": function (data, type, row) {
+                                var grupos = "";
+
+                                if (data.UsuarioGrupoDto == null || data.UsuarioGrupoDto.length <= 0)
+                                    return grupos;
+
+                                for (var i = 0; i < data.UsuarioGrupoDto.length; i++) {
+                                    grupos = grupos + data.UsuarioGrupoDto[i].GrupoDto.Nome + ", ";
+                                }
+
+                                return grupos.substring(0, grupos.length - 2);;
+
+                            }, "className": "text-center"
+                        },
+                        {
+                            "data": function (data, type, row) {
+                                if (data["DataCadastro"] != null) { return moment(data["DataCadastro"]).format("DD/MM/YYYY"); } else { return ""; }
+                            },
+                            "className": "text-center"
+                        },
+                        { "data": function (data, type, row) { return "<a href='#' onclick='alterarStatus(" + JSON.stringify(data) + ", this)'>" + (data.Ativo ? "Sim" : "Não") + "</a>"; }, "className": "text-center" },
+                        {
+                            "data": function (data, type, row) {
+                                var consultar = "<i class='glyphicon glyphicon-search' title='Consultar' style='cursor: pointer' onclick='consultar(" + JSON.stringify(data) + ", this)'></i>";
+                                var alterar = "<i class='glyphicon glyphicon-edit' title='Editar' style='cursor: pointer' onclick='alterar(" + JSON.stringify(data) + ", this)'></i>";
+
+                                return consultar + " " + alterar;
+
+                            }, "className": "text-center"
+                        }
+                    ]
+            });
+
+            $("#btnPesquisar").click(function () {
+
+                var ativo = null;
+
+                if ($("#ativo").val() == "0")
+                    ativo = false;
+                else if ($("#ativo").val() == "1")
+                    ativo = true;
+
+                $.ajax({
+                    dataType: "json",
+                    type: "GET",
+                    url: "/Usuario/Listar?Login=" + $("#loginPesquisar").val() + "&UsuarioGrupoDto[0].IdGrupo=" + $("#grupoPesquisar").val() + "&Ativo=" + ativo,
+                    success: function (data) {
+
+                        if (!data.Sucesso) {
+                            if (data.Erro)
+                                alert("danger", data.Mensagem);
+                            else
+                                alert("warning", data.Mensagem);
+
+                            return;
+                        }
+
+                        tbUsuario.clear();
+                        tbUsuario.rows.add(data.Data).draw();
+                    }
+                });
+            });
+
+            $("#btnNovo").click(function () {
+                $("#lblAcao").html("Novo");
+                $("#lblTitulo").html("");
+                $("#btnIncluir").show();
+                $("#btnAlterar").hide();
+
+                limparFormulario();
+                habilitarModal(true);
+
+                $("#modalUsuario").modal('show');
+            });
+
+            $("#btnIncluir").click(function () {
+
+                var usuarioDto = {};
+
+                usuarioDto.Login = $("#login").val();
+                usuarioDto.Senha = $("#senha").val();
+                usuarioDto.IdUsuarioCadastro = '@usuarioDto.Id';
+                usuarioDto.DataCadastro = '@DateTime.UtcNow';
+                usuarioDto.TrocarSenha = $("#trocarSenha").prop('checked');
+
+                usuarioDto.UsuarioGrupoDto = [];
+                $(".ckb:checked").each(function (i, a) {
+                    usuarioDto.UsuarioGrupoDto.push({ IdGrupo: $(a).val() });
+                });
+
+                $.ajax({
+                    dataType: "json",
+                    type: "POST",
+                    url: "/Usuario/Incluir",
+                    data: { usuarioDto: usuarioDto },
+                    success: function (data) {
+
+                        if (!data.Sucesso) {
+                            if (data.Erro)
+                                alert("danger", data.Mensagem);
+                            else
+                                alert("warning", data.Mensagem);
+
+                            return;
+                        }
+
+                        limparFormulario();
+
+                        tbUsuario.clear();
+                        tbUsuario.rows.add(data.Data).draw();
+
+                        $("#modalUsuario").modal('hide');
+                    }
+                });
+            });
+
+            $("#btnAlterar").click(function () {
+
+                var usuarioDto = {};
+
+                usuarioDto.Id = $("#usuarioId").val();
+                usuarioDto.Login = $("#login").val();
+                usuarioDto.Senha = $("#senha").val();
+                usuarioDto.TrocarSenha = $("#trocarSenha").prop('checked');
+
+                usuarioDto.UsuarioGrupoDto = [];
+                $(".ckb:checked").each(function (i, a) {
+                    usuarioDto.UsuarioGrupoDto.push({ IdGrupo: $(a).val(), IdUsuario: usuarioDto.Id });
+                });
+
+                $.ajax({
+                    dataType: "json",
+                    type: "POST",
+                    url: "/Usuario/Alterar",
+                    data: { usuarioDto: usuarioDto },
+                    success: function (data) {
+
+                        if (!data.Sucesso) {
+                            if (data.Erro)
+                                alert("danger", data.Mensagem);
+                            else
+                                alert("warning", data.Mensagem);
+
+                            return;
+                        }
+
+                        limparFormulario();
+
+                        var idx;
+                        $("#tbUsuario").DataTable().rows().every(function (rowIdx, tableLoop, rowLoop) {
+                            if (this.data().Id == usuarioDto.Id) {
+                                idx = rowIdx;
+                                return;
+                            }
+                        });
+
+                        $("#tbUsuario").DataTable().row(idx).invalidate().data(data.Data).draw();
+
+                        if (data.AtualizarGrupos)
+                        {
+                            var grupos = "";
+
+                            for (var i = 0; i < data.Data.UsuarioGrupoDto.length; i++) {
+                                grupos += "<li>" + data.Data.UsuarioGrupoDto[i].GrupoDto.Nome + "</li>";
+                            }
+
+                            $("#poGrupoUsuario").html(grupos);
+                        }
+
+                        $("#modalUsuario").modal('hide');
+                    }
+                });
+            });
+        });
+
+    </script>
+}
+<div>
+    <h2><i class="glyphicon glyphicon-user" style="color: #0f3456" title="Usuários"></i> Usuários</h2>
+    <hr />
+    <div class="form-group">
+        <div class="row">
+            <div class="col-md-2">
+                <input id="loginPesquisar" type="text" class="form-control" placeholder="Login" />
+            </div>
+            <div class="col-md-2">
+                @Html.DropDownList("grupoPesquisar", new SelectList(ViewBag.Grupo, "Id", "Nome"), "Grupo", new { @class = "form-control" })
+            </div>
+            <div class="col-md-1">
+                <select id="ativo" class="form-control">
+                    <option value="">Ativo</option>
+                    <option value="1">Sim</option>
+                    <option value="0">Não</option>
+                </select>
+            </div>
+            <div class="col-md-4">
+                <input id="btnPesquisar" type="button" class="btn btn-info" value="Pesquisar" />
+                <input id="btnNovo" type="button" class="btn" value="Novo Usuário" />
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="table-responsive">
+            <table id="tbUsuario" class="table nowrap">
+                <thead>
+                    <tr>
+                        <td class="text-center" style="width: 5%"><b>Id</b></td>
+                        <td class="text-center" style="width: 20%"><b>Login</b></td>
+                        <td class="text-center" style="width: 30%"><b>Grupos</b></td>
+                        <td class="text-center" style="width: 15%"><b>Data Cadastro</b></td>
+                        <td class="text-center" style="width: 15%"><b>Ativo</b></td>
+                        <td class="text-center" style="width: 15%"><b>Ação</b></td>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modalUsuario" tabindex="-1" role="dialog" aria-labelledby="ModalUsuario" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Fechar</span></button>
+                <h4 class="modal-title" id="myModalLabel"><span id="lblAcao"></span> Usuário <label id="lblTitulo"></label></h4>
+            </div>
+            <div class="modal-body">
+                <input id="usuarioId" type="hidden" />
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-lg-10">
+                            <label for="login">Login:</label>
+                            <input id="login" type="text" class="form-control" placeholder="Login" />
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-lg-10">
+                            <label for="senha">Senha:</label>
+                            <input id="senha" type="password" class="form-control" placeholder="Senha" />
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <input id="trocarSenha" type="checkbox" checked="checked" /> Exige troca de senha no primeiro login
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-lg-10">
+                            <b>Grupos:</b>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-lg-10">
+                            @{
+                                foreach (var grupoDto in (List<ProjetoTransportadora.Dto.GrupoDto>)ViewBag.Grupo)
+                                {
+                                    <div class="col-md-4">
+                                        <input type="checkbox" value="@grupoDto.Id" class="ckb" /> @grupoDto.Nome
+                                    </div>
+                                }
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button id="btnIncluir" type="button" class="btn btn-primary">Incluir</button>
+                <button id="btnAlterar" type="button" class="btn btn-warning">Alterar</button>
+            </div>
+        </div>
+    </div>
+</div>

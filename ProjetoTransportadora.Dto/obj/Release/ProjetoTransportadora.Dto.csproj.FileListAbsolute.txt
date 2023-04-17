@@ -1,0 +1,6 @@
+C:\Projetos\ProjetoTransportadora\ProjetoTransportadora.Dto\bin\Release\ProjetoTransportadora.Dto.dll
+C:\Projetos\ProjetoTransportadora\ProjetoTransportadora.Dto\bin\Release\ProjetoTransportadora.Dto.pdb
+C:\Projetos\ProjetoTransportadora\ProjetoTransportadora.Dto\obj\Release\ProjetoTransportadora.Dto.csproj.CoreCompileInputs.cache
+C:\Projetos\ProjetoTransportadora\ProjetoTransportadora.Dto\obj\Release\ProjetoTransportadora.Dto.dll
+C:\Projetos\ProjetoTransportadora\ProjetoTransportadora.Dto\obj\Release\ProjetoTransportadora.Dto.pdb
+C:\Projetos\ProjetoTransportadora\ProjetoTransportadora.Dto\obj\Release\ProjetoTransportadora.Dto.csproj.AssemblyReference.cache

@@ -1,0 +1,73 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{4DA24EAE-0115-4439-929B-1C527D1AE3AD}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>ProjetoTransportadora.Dto</RootNamespace>
+    <AssemblyName>ProjetoTransportadora.Dto</AssemblyName>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <Deterministic>true</Deterministic>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="EstadoDto.cs" />
+    <Compile Include="GrupoFuncionalidadeDto .cs" />
+    <Compile Include="FuncionalidadeDto.cs" />
+    <Compile Include="LogDto.cs" />
+    <Compile Include="GrupoDto.cs" />
+    <Compile Include="PessoaEmailDto.cs" />
+    <Compile Include="PessoaHistoricoDto.cs" />
+    <Compile Include="PessoaRelacaoDto.cs" />
+    <Compile Include="PessoaReferenciaDto.cs" />
+    <Compile Include="PessoaTelefoneDto.cs" />
+    <Compile Include="TipoPessoaDto .cs" />
+    <Compile Include="TipoRelacaoDto.cs" />
+    <Compile Include="TipoReferenciaDto.cs" />
+    <Compile Include="TipoTelefoneDto.cs" />
+    <Compile Include="UsuarioGrupoDto .cs" />
+    <Compile Include="UsuarioDto.cs" />
+    <Compile Include="VeiculoDto.cs" />
+    <Compile Include="CanalDto.cs" />
+    <Compile Include="ProdutoDto.cs" />
+    <Compile Include="FeriadoDto.cs" />
+    <Compile Include="SituacaoVeiculoDto.cs" />
+    <Compile Include="EstadoCivilDto.cs" />
+    <Compile Include="TipoResidenciaDto.cs" />
+    <Compile Include="RegimeCasamentoDto.cs" />
+    <Compile Include="MontadoraDto.cs" />
+    <Compile Include="PessoaDto.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>

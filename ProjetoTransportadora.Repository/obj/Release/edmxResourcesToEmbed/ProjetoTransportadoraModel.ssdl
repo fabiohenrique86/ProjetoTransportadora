@@ -1,0 +1,607 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="ProjetoTransportadoraModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="Canal">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Nome" Type="varchar" MaxLength="100" Nullable="false" />
+    <Property Name="Ativo" Type="bit" Nullable="false" />
+    <Property Name="IdUsuarioCadastro" Type="int" Nullable="false" />
+    <Property Name="DataCadastro" Type="datetime" Nullable="false" />
+    <Property Name="IdUsuarioInativacao" Type="int" />
+    <Property Name="DataInativacao" Type="datetime" />
+  </EntityType>
+  <EntityType Name="EstadoCivil">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Nome" Type="varchar" MaxLength="100" Nullable="false" />
+    <Property Name="Ativo" Type="bit" Nullable="false" />
+    <Property Name="IdUsuarioCadastro" Type="int" Nullable="false" />
+    <Property Name="DataCadastro" Type="datetime" Nullable="false" />
+    <Property Name="IdUsuarioInativacao" Type="int" />
+    <Property Name="DataInativacao" Type="datetime" />
+  </EntityType>
+  <EntityType Name="Feriado">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Nome" Type="varchar" MaxLength="100" Nullable="false" />
+    <Property Name="DataFeriado" Type="datetime" Nullable="false" />
+    <Property Name="Ativo" Type="bit" Nullable="false" />
+    <Property Name="IdUsuarioCadastro" Type="int" Nullable="false" />
+    <Property Name="DataCadastro" Type="datetime" Nullable="false" />
+    <Property Name="IdUsuarioInativacao" Type="int" />
+    <Property Name="DataInativacao" Type="datetime" />
+  </EntityType>
+  <EntityType Name="Funcionalidade">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" Nullable="false" />
+    <Property Name="Nome" Type="varchar" MaxLength="100" Nullable="false" />
+    <Property Name="Descricao" Type="varchar" MaxLength="100" />
+  </EntityType>
+  <EntityType Name="Grupo">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Nome" Type="varchar" MaxLength="100" Nullable="false" />
+    <Property Name="Ativo" Type="bit" Nullable="false" />
+    <Property Name="IdUsuarioCadastro" Type="int" Nullable="false" />
+    <Property Name="DataCadastro" Type="datetime" Nullable="false" />
+    <Property Name="IdUsuarioInativacao" Type="int" />
+    <Property Name="DataInativacao" Type="datetime" />
+  </EntityType>
+  <EntityType Name="GrupoFuncionalidade">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="IdGrupo" Type="int" Nullable="false" />
+    <Property Name="IdFuncionalidade" Type="int" Nullable="false" />
+    <Property Name="Inserir" Type="bit" Nullable="false" />
+    <Property Name="Ler" Type="bit" Nullable="false" />
+    <Property Name="Atualizar" Type="bit" Nullable="false" />
+    <Property Name="Excluir" Type="bit" Nullable="false" />
+    <Property Name="Executar" Type="bit" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Log">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Exception" Type="varchar(max)" Nullable="false" />
+    <Property Name="DataCadastro" Type="datetime" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Montadora">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Nome" Type="varchar" MaxLength="100" Nullable="false" />
+    <Property Name="Ativo" Type="bit" Nullable="false" />
+    <Property Name="IdUsuarioCadastro" Type="int" Nullable="false" />
+    <Property Name="DataCadastro" Type="datetime" Nullable="false" />
+    <Property Name="IdUsuarioInativacao" Type="int" />
+    <Property Name="DataInativacao" Type="datetime" />
+  </EntityType>
+  <EntityType Name="Pessoa">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Nome" Type="varchar" MaxLength="100" />
+    <Property Name="IdEstadoCivil" Type="int" />
+    <Property Name="Rg" Type="varchar" MaxLength="20" />
+    <Property Name="Cpf" Type="varchar" MaxLength="11" />
+    <Property Name="DataNascimento" Type="datetime" />
+    <Property Name="CidadeNascimento" Type="varchar" MaxLength="100" />
+    <Property Name="UfNascimento" Type="varchar" MaxLength="2" />
+    <Property Name="CepResidencia" Type="varchar" MaxLength="10" />
+    <Property Name="LogradouroResidencia" Type="varchar" MaxLength="200" />
+    <Property Name="ComplementoResidencia" Type="varchar" MaxLength="300" />
+    <Property Name="NumeroResidencia" Type="int" />
+    <Property Name="BairroResidencia" Type="varchar" MaxLength="100" />
+    <Property Name="CidadeResidencia" Type="varchar" MaxLength="100" />
+    <Property Name="UfResidencia" Type="varchar" MaxLength="2" />
+    <Property Name="Profissao" Type="varchar" MaxLength="100" />
+    <Property Name="IdTipoResidencia" Type="int" />
+    <Property Name="TempoResidencial" Type="int" />
+    <Property Name="ValorAluguel" Type="float" />
+    <Property Name="IdRegimeCasamento" Type="int" />
+    <Property Name="DataAdmissao" Type="datetime" />
+    <Property Name="Cargo" Type="varchar" MaxLength="100" />
+    <Property Name="ValorSalario" Type="float" />
+    <Property Name="DataReferenciaSalario" Type="datetime" />
+    <Property Name="ValorFrete" Type="float" />
+    <Property Name="Cnpj" Type="varchar" MaxLength="100" />
+    <Property Name="IdProduto" Type="int" />
+    <Property Name="DataAbertura" Type="datetime" />
+    <Property Name="Ativo" Type="bit" Nullable="false" />
+    <Property Name="IdUsuarioCadastro" Type="int" Nullable="false" />
+    <Property Name="DataCadastro" Type="datetime" Nullable="false" />
+    <Property Name="IdUsuarioInativacao" Type="int" />
+    <Property Name="DataInativacao" Type="datetime" />
+    <Property Name="IdTipoPessoa" Type="int" Nullable="false" />
+    <Property Name="IdPai" Type="int" />
+    <Property Name="IdMae" Type="int" />
+    <Property Name="IdConjuge" Type="int" />
+    <Property Name="IdProprietario" Type="int" />
+    <Property Name="EmpresaPessoal" Type="varchar" MaxLength="1000" />
+    <Property Name="EmpresaTrabalho" Type="varchar" MaxLength="1000" />
+  </EntityType>
+  <EntityType Name="PessoaEmail">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="IdPessoa" Type="int" Nullable="false" />
+    <Property Name="Email" Type="varchar" MaxLength="100" Nullable="false" />
+    <Property Name="NomeContato" Type="varchar" MaxLength="100" Nullable="false" />
+  </EntityType>
+  <EntityType Name="PessoaHistorico">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="IdPessoa" Type="int" Nullable="false" />
+    <Property Name="DataHistorico" Type="datetime" Nullable="false" />
+    <Property Name="Descricao" Type="varchar(max)" Nullable="false" />
+  </EntityType>
+  <EntityType Name="PessoaReferencia">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="IdPessoa" Type="int" Nullable="false" />
+    <Property Name="IdTipoReferencia" Type="int" Nullable="false" />
+    <Property Name="DataReferencia" Type="datetime" Nullable="false" />
+    <Property Name="Descricao" Type="varchar(max)" Nullable="false" />
+  </EntityType>
+  <EntityType Name="PessoaTelefone">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="IdPessoa" Type="int" Nullable="false" />
+    <Property Name="Pais" Type="varchar" MaxLength="100" Nullable="false" />
+    <Property Name="DDD" Type="int" Nullable="false" />
+    <Property Name="Numero" Type="int" Nullable="false" />
+    <Property Name="NomeContato" Type="varchar" MaxLength="100" Nullable="false" />
+    <Property Name="IdTipoTelefone" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Produto">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Nome" Type="varchar" MaxLength="100" Nullable="false" />
+    <Property Name="Ativo" Type="bit" Nullable="false" />
+    <Property Name="IdUsuarioCadastro" Type="int" Nullable="false" />
+    <Property Name="DataCadastro" Type="datetime" Nullable="false" />
+    <Property Name="IdUsuarioInativacao" Type="int" />
+    <Property Name="DataInativacao" Type="datetime" />
+  </EntityType>
+  <EntityType Name="RegimeCasamento">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Nome" Type="varchar" MaxLength="100" Nullable="false" />
+    <Property Name="Ativo" Type="bit" Nullable="false" />
+    <Property Name="IdUsuarioCadastro" Type="int" Nullable="false" />
+    <Property Name="DataCadastro" Type="datetime" Nullable="false" />
+    <Property Name="IdUsuarioInativacao" Type="int" />
+    <Property Name="DataInativacao" Type="datetime" />
+  </EntityType>
+  <EntityType Name="SituacaoVeiculo">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Nome" Type="varchar" MaxLength="100" Nullable="false" />
+    <Property Name="Ativo" Type="bit" Nullable="false" />
+    <Property Name="IdUsuarioCadastro" Type="int" Nullable="false" />
+    <Property Name="DataCadastro" Type="datetime" Nullable="false" />
+    <Property Name="IdUsuarioInativacao" Type="int" />
+    <Property Name="DataInativacao" Type="datetime" />
+  </EntityType>
+  <EntityType Name="TipoPessoa">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" Nullable="false" />
+    <Property Name="Nome" Type="varchar" MaxLength="100" Nullable="false" />
+  </EntityType>
+  <EntityType Name="TipoReferencia">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Nome" Type="varchar" MaxLength="100" Nullable="false" />
+    <Property Name="Ativo" Type="bit" Nullable="false" />
+    <Property Name="IdUsuarioCadastro" Type="int" Nullable="false" />
+    <Property Name="DataCadastro" Type="datetime" Nullable="false" />
+    <Property Name="IdUsuarioInativacao" Type="int" />
+    <Property Name="DataInativacao" Type="datetime" />
+  </EntityType>
+  <EntityType Name="TipoResidencia">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Nome" Type="varchar" MaxLength="100" Nullable="false" />
+    <Property Name="Ativo" Type="bit" Nullable="false" />
+    <Property Name="IdUsuarioCadastro" Type="int" Nullable="false" />
+    <Property Name="DataCadastro" Type="datetime" Nullable="false" />
+    <Property Name="IdUsuarioInativacao" Type="int" />
+    <Property Name="DataInativacao" Type="datetime" />
+  </EntityType>
+  <EntityType Name="TipoTelefone">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Nome" Type="varchar" MaxLength="100" Nullable="false" />
+    <Property Name="Ativo" Type="bit" Nullable="false" />
+    <Property Name="IdUsuarioCadastro" Type="int" Nullable="false" />
+    <Property Name="DataCadastro" Type="datetime" Nullable="false" />
+    <Property Name="IdUsuarioInativacao" Type="int" />
+    <Property Name="DataInativacao" Type="datetime" />
+  </EntityType>
+  <EntityType Name="Usuario">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Login" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="Senha" Type="varchar" MaxLength="100" Nullable="false" />
+    <Property Name="Ativo" Type="bit" Nullable="false" />
+    <Property Name="IdUsuarioCadastro" Type="int" Nullable="false" />
+    <Property Name="DataCadastro" Type="datetime" Nullable="false" />
+    <Property Name="IdUsuarioInativacao" Type="int" />
+    <Property Name="DataInativacao" Type="datetime" />
+    <Property Name="TrocarSenha" Type="bit" />
+  </EntityType>
+  <EntityType Name="UsuarioGrupo">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="IdUsuario" Type="int" Nullable="false" />
+    <Property Name="IdGrupo" Type="int" Nullable="false" />
+  </EntityType>
+  <Association Name="FK_GrupoFuncionalidade_Funcionalidade">
+    <End Role="Funcionalidade" Type="Self.Funcionalidade" Multiplicity="1" />
+    <End Role="GrupoFuncionalidade" Type="Self.GrupoFuncionalidade" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Funcionalidade">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="GrupoFuncionalidade">
+        <PropertyRef Name="IdFuncionalidade" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_GrupoFuncionalidade_Grupo">
+    <End Role="Grupo" Type="Self.Grupo" Multiplicity="1" />
+    <End Role="GrupoFuncionalidade" Type="Self.GrupoFuncionalidade" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Grupo">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="GrupoFuncionalidade">
+        <PropertyRef Name="IdGrupo" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Pessoa_Conjuge">
+    <End Role="Pessoa" Type="Self.Pessoa" Multiplicity="0..1" />
+    <End Role="Pessoa1" Type="Self.Pessoa" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Pessoa">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Pessoa1">
+        <PropertyRef Name="IdConjuge" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Pessoa_EstadoCivil">
+    <End Role="EstadoCivil" Type="Self.EstadoCivil" Multiplicity="0..1" />
+    <End Role="Pessoa" Type="Self.Pessoa" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="EstadoCivil">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Pessoa">
+        <PropertyRef Name="IdEstadoCivil" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Pessoa_Mae">
+    <End Role="Pessoa" Type="Self.Pessoa" Multiplicity="0..1" />
+    <End Role="Pessoa1" Type="Self.Pessoa" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Pessoa">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Pessoa1">
+        <PropertyRef Name="IdMae" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Pessoa_Pai">
+    <End Role="Pessoa" Type="Self.Pessoa" Multiplicity="0..1" />
+    <End Role="Pessoa1" Type="Self.Pessoa" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Pessoa">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Pessoa1">
+        <PropertyRef Name="IdPai" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Pessoa_Produto">
+    <End Role="Produto" Type="Self.Produto" Multiplicity="0..1" />
+    <End Role="Pessoa" Type="Self.Pessoa" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Produto">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Pessoa">
+        <PropertyRef Name="IdProduto" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Pessoa_Proprietario">
+    <End Role="Pessoa" Type="Self.Pessoa" Multiplicity="0..1" />
+    <End Role="Pessoa1" Type="Self.Pessoa" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Pessoa">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Pessoa1">
+        <PropertyRef Name="IdProprietario" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Pessoa_RegimeCasamento">
+    <End Role="RegimeCasamento" Type="Self.RegimeCasamento" Multiplicity="0..1" />
+    <End Role="Pessoa" Type="Self.Pessoa" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="RegimeCasamento">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Pessoa">
+        <PropertyRef Name="IdRegimeCasamento" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Pessoa_TipoPessoa">
+    <End Role="TipoPessoa" Type="Self.TipoPessoa" Multiplicity="1" />
+    <End Role="Pessoa" Type="Self.Pessoa" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="TipoPessoa">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Pessoa">
+        <PropertyRef Name="IdTipoPessoa" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Pessoa_TipoResidencia">
+    <End Role="TipoResidencia" Type="Self.TipoResidencia" Multiplicity="0..1" />
+    <End Role="Pessoa" Type="Self.Pessoa" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="TipoResidencia">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Pessoa">
+        <PropertyRef Name="IdTipoResidencia" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_PessoaEmail_Pessoa">
+    <End Role="Pessoa" Type="Self.Pessoa" Multiplicity="1" />
+    <End Role="PessoaEmail" Type="Self.PessoaEmail" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Pessoa">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="PessoaEmail">
+        <PropertyRef Name="IdPessoa" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_PessoaHistorico_Pessoa">
+    <End Role="Pessoa" Type="Self.Pessoa" Multiplicity="1" />
+    <End Role="PessoaHistorico" Type="Self.PessoaHistorico" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Pessoa">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="PessoaHistorico">
+        <PropertyRef Name="IdPessoa" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_PessoaReferencia_Pessoa">
+    <End Role="Pessoa" Type="Self.Pessoa" Multiplicity="1" />
+    <End Role="PessoaReferencia" Type="Self.PessoaReferencia" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Pessoa">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="PessoaReferencia">
+        <PropertyRef Name="IdPessoa" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_PessoaReferencia_TipoReferencia">
+    <End Role="TipoReferencia" Type="Self.TipoReferencia" Multiplicity="1" />
+    <End Role="PessoaReferencia" Type="Self.PessoaReferencia" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="TipoReferencia">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="PessoaReferencia">
+        <PropertyRef Name="IdTipoReferencia" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_PessoaTelefone_Pessoa">
+    <End Role="Pessoa" Type="Self.Pessoa" Multiplicity="1" />
+    <End Role="PessoaTelefone" Type="Self.PessoaTelefone" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Pessoa">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="PessoaTelefone">
+        <PropertyRef Name="IdPessoa" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_PessoaTelefone_TipoTelefone">
+    <End Role="TipoTelefone" Type="Self.TipoTelefone" Multiplicity="1" />
+    <End Role="PessoaTelefone" Type="Self.PessoaTelefone" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="TipoTelefone">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="PessoaTelefone">
+        <PropertyRef Name="IdTipoTelefone" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_UsuarioGrupo_Grupo">
+    <End Role="Grupo" Type="Self.Grupo" Multiplicity="1" />
+    <End Role="UsuarioGrupo" Type="Self.UsuarioGrupo" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Grupo">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="UsuarioGrupo">
+        <PropertyRef Name="IdGrupo" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_UsuarioGrupo_Usuario">
+    <End Role="Usuario" Type="Self.Usuario" Multiplicity="1" />
+    <End Role="UsuarioGrupo" Type="Self.UsuarioGrupo" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Usuario">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="UsuarioGrupo">
+        <PropertyRef Name="IdUsuario" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="ProjetoTransportadoraModelStoreContainer">
+    <EntitySet Name="Canal" EntityType="Self.Canal" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="EstadoCivil" EntityType="Self.EstadoCivil" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Feriado" EntityType="Self.Feriado" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Funcionalidade" EntityType="Self.Funcionalidade" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Grupo" EntityType="Self.Grupo" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="GrupoFuncionalidade" EntityType="Self.GrupoFuncionalidade" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Log" EntityType="Self.Log" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Montadora" EntityType="Self.Montadora" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Pessoa" EntityType="Self.Pessoa" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="PessoaEmail" EntityType="Self.PessoaEmail" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="PessoaHistorico" EntityType="Self.PessoaHistorico" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="PessoaReferencia" EntityType="Self.PessoaReferencia" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="PessoaTelefone" EntityType="Self.PessoaTelefone" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Produto" EntityType="Self.Produto" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="RegimeCasamento" EntityType="Self.RegimeCasamento" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="SituacaoVeiculo" EntityType="Self.SituacaoVeiculo" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="TipoPessoa" EntityType="Self.TipoPessoa" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="TipoReferencia" EntityType="Self.TipoReferencia" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="TipoResidencia" EntityType="Self.TipoResidencia" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="TipoTelefone" EntityType="Self.TipoTelefone" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Usuario" EntityType="Self.Usuario" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="UsuarioGrupo" EntityType="Self.UsuarioGrupo" Schema="dbo" store:Type="Tables" />
+    <AssociationSet Name="FK_GrupoFuncionalidade_Funcionalidade" Association="Self.FK_GrupoFuncionalidade_Funcionalidade">
+      <End Role="Funcionalidade" EntitySet="Funcionalidade" />
+      <End Role="GrupoFuncionalidade" EntitySet="GrupoFuncionalidade" />
+    </AssociationSet>
+    <AssociationSet Name="FK_GrupoFuncionalidade_Grupo" Association="Self.FK_GrupoFuncionalidade_Grupo">
+      <End Role="Grupo" EntitySet="Grupo" />
+      <End Role="GrupoFuncionalidade" EntitySet="GrupoFuncionalidade" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Pessoa_Conjuge" Association="Self.FK_Pessoa_Conjuge">
+      <End Role="Pessoa" EntitySet="Pessoa" />
+      <End Role="Pessoa1" EntitySet="Pessoa" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Pessoa_EstadoCivil" Association="Self.FK_Pessoa_EstadoCivil">
+      <End Role="EstadoCivil" EntitySet="EstadoCivil" />
+      <End Role="Pessoa" EntitySet="Pessoa" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Pessoa_Mae" Association="Self.FK_Pessoa_Mae">
+      <End Role="Pessoa" EntitySet="Pessoa" />
+      <End Role="Pessoa1" EntitySet="Pessoa" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Pessoa_Pai" Association="Self.FK_Pessoa_Pai">
+      <End Role="Pessoa" EntitySet="Pessoa" />
+      <End Role="Pessoa1" EntitySet="Pessoa" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Pessoa_Produto" Association="Self.FK_Pessoa_Produto">
+      <End Role="Produto" EntitySet="Produto" />
+      <End Role="Pessoa" EntitySet="Pessoa" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Pessoa_Proprietario" Association="Self.FK_Pessoa_Proprietario">
+      <End Role="Pessoa" EntitySet="Pessoa" />
+      <End Role="Pessoa1" EntitySet="Pessoa" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Pessoa_RegimeCasamento" Association="Self.FK_Pessoa_RegimeCasamento">
+      <End Role="RegimeCasamento" EntitySet="RegimeCasamento" />
+      <End Role="Pessoa" EntitySet="Pessoa" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Pessoa_TipoPessoa" Association="Self.FK_Pessoa_TipoPessoa">
+      <End Role="TipoPessoa" EntitySet="TipoPessoa" />
+      <End Role="Pessoa" EntitySet="Pessoa" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Pessoa_TipoResidencia" Association="Self.FK_Pessoa_TipoResidencia">
+      <End Role="TipoResidencia" EntitySet="TipoResidencia" />
+      <End Role="Pessoa" EntitySet="Pessoa" />
+    </AssociationSet>
+    <AssociationSet Name="FK_PessoaEmail_Pessoa" Association="Self.FK_PessoaEmail_Pessoa">
+      <End Role="Pessoa" EntitySet="Pessoa" />
+      <End Role="PessoaEmail" EntitySet="PessoaEmail" />
+    </AssociationSet>
+    <AssociationSet Name="FK_PessoaHistorico_Pessoa" Association="Self.FK_PessoaHistorico_Pessoa">
+      <End Role="Pessoa" EntitySet="Pessoa" />
+      <End Role="PessoaHistorico" EntitySet="PessoaHistorico" />
+    </AssociationSet>
+    <AssociationSet Name="FK_PessoaReferencia_Pessoa" Association="Self.FK_PessoaReferencia_Pessoa">
+      <End Role="Pessoa" EntitySet="Pessoa" />
+      <End Role="PessoaReferencia" EntitySet="PessoaReferencia" />
+    </AssociationSet>
+    <AssociationSet Name="FK_PessoaReferencia_TipoReferencia" Association="Self.FK_PessoaReferencia_TipoReferencia">
+      <End Role="TipoReferencia" EntitySet="TipoReferencia" />
+      <End Role="PessoaReferencia" EntitySet="PessoaReferencia" />
+    </AssociationSet>
+    <AssociationSet Name="FK_PessoaTelefone_Pessoa" Association="Self.FK_PessoaTelefone_Pessoa">
+      <End Role="Pessoa" EntitySet="Pessoa" />
+      <End Role="PessoaTelefone" EntitySet="PessoaTelefone" />
+    </AssociationSet>
+    <AssociationSet Name="FK_PessoaTelefone_TipoTelefone" Association="Self.FK_PessoaTelefone_TipoTelefone">
+      <End Role="TipoTelefone" EntitySet="TipoTelefone" />
+      <End Role="PessoaTelefone" EntitySet="PessoaTelefone" />
+    </AssociationSet>
+    <AssociationSet Name="FK_UsuarioGrupo_Grupo" Association="Self.FK_UsuarioGrupo_Grupo">
+      <End Role="Grupo" EntitySet="Grupo" />
+      <End Role="UsuarioGrupo" EntitySet="UsuarioGrupo" />
+    </AssociationSet>
+    <AssociationSet Name="FK_UsuarioGrupo_Usuario" Association="Self.FK_UsuarioGrupo_Usuario">
+      <End Role="Usuario" EntitySet="Usuario" />
+      <End Role="UsuarioGrupo" EntitySet="UsuarioGrupo" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>

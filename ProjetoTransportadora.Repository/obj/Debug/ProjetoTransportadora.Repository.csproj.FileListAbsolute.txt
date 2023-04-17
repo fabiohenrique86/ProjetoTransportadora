@@ -1,0 +1,14 @@
+C:\Projetos\ProjetoTransportadora\ProjetoTransportadora.Repository\bin\Debug\ProjetoTransportadora.Repository.dll.config
+C:\Projetos\ProjetoTransportadora\ProjetoTransportadora.Repository\bin\Debug\ProjetoTransportadora.Repository.dll
+C:\Projetos\ProjetoTransportadora\ProjetoTransportadora.Repository\bin\Debug\ProjetoTransportadora.Repository.pdb
+C:\Projetos\ProjetoTransportadora\ProjetoTransportadora.Repository\bin\Debug\EntityFramework.dll
+C:\Projetos\ProjetoTransportadora\ProjetoTransportadora.Repository\bin\Debug\EntityFramework.SqlServer.dll
+C:\Projetos\ProjetoTransportadora\ProjetoTransportadora.Repository\bin\Debug\ProjetoTransportadora.Dto.dll
+C:\Projetos\ProjetoTransportadora\ProjetoTransportadora.Repository\bin\Debug\ProjetoTransportadora.Dto.pdb
+C:\Projetos\ProjetoTransportadora\ProjetoTransportadora.Repository\bin\Debug\EntityFramework.xml
+C:\Projetos\ProjetoTransportadora\ProjetoTransportadora.Repository\bin\Debug\EntityFramework.SqlServer.xml
+C:\Projetos\ProjetoTransportadora\ProjetoTransportadora.Repository\obj\Debug\ProjetoTransportadora.Repository.csproj.AssemblyReference.cache
+C:\Projetos\ProjetoTransportadora\ProjetoTransportadora.Repository\obj\Debug\ProjetoTransportadora.Repository.csproj.CoreCompileInputs.cache
+C:\Projetos\ProjetoTransportadora\ProjetoTransportadora.Repository\obj\Debug\ProjetoTransportadora.Repository.csproj.CopyComplete
+C:\Projetos\ProjetoTransportadora\ProjetoTransportadora.Repository\obj\Debug\ProjetoTransportadora.Repository.dll
+C:\Projetos\ProjetoTransportadora\ProjetoTransportadora.Repository\obj\Debug\ProjetoTransportadora.Repository.pdb

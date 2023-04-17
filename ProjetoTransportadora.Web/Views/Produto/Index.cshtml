@@ -1,0 +1,312 @@
+﻿@using ProjetoTransportadora.Dto;
+
+@{
+    ViewBag.Title = "Produtos";
+
+    UsuarioDto usuarioDto = null;
+    if (Session[System.Configuration.ConfigurationManager.AppSettings["ProjetoTransportadoraCookieLogin"]] != null)
+    {
+        usuarioDto = (UsuarioDto)Session[System.Configuration.ConfigurationManager.AppSettings["ProjetoTransportadoraCookieLogin"]];
+    }
+}
+
+@section scripts
+{
+    <script type="text/javascript">
+
+        function habilitarModal(opcao) {
+            if (opcao)
+                $("#modalProduto input").removeProp("disabled");
+            else
+                $("#modalProduto input").prop("disabled", "disabled");
+        }
+
+        function limparFormulario() {
+            $("#produtoId").val("");
+            $("#nome").val("");
+        }
+
+        function carregarDadosModal(data) {
+            $("#nome").val(data.Nome);
+        }
+
+        function consultar(data) {
+            limparFormulario();
+            carregarDadosModal(data);
+            habilitarModal(false);
+            $("#lblAcao").text("Consultar");
+            $("#lblTitulo").text(data.Nome);
+            $("#produtoId").val("");
+            $("#btnIncluir").hide();
+            $("#btnAlterar").hide();
+            $("#modalProduto").modal('show');
+        }
+
+        function alterar(data, o) {
+            limparFormulario();
+            carregarDadosModal(data);
+            habilitarModal(true);
+            $("#produtoId").val(data.Id);
+            $("#lblAcao").text("Alterar");
+            $("#lblTitulo").text(data.Nome);
+            $("#btnIncluir").hide();
+            $("#btnAlterar").show();
+            $("#modalProduto").modal('show');
+        }
+
+        function alterarStatus(data, obj) {
+            if (confirm("Deseja " + (data.Ativo == false ? "ativar" : "inativar") + " Produto?")) {
+
+                var produtoDto = {};
+
+                produtoDto.Id = data.Id;
+                produtoDto.Ativo = !data.Ativo;
+
+                if (!produtoDto.Ativo) {
+                    produtoDto.IdUsuarioInativacao = '@usuarioDto.Id';
+                    produtoDto.DataInativacao = '@DateTime.UtcNow';
+                }
+
+                $.ajax({
+                    dataType: "json",
+                    type: "POST",
+                    url: "/Produto/AlterarStatus",
+                    data: { produtoDto: produtoDto },
+                    success: function (data) {
+
+                        if (!data.Sucesso) {
+                            if (data.Erro)
+                                alert("danger", data.Mensagem);
+                            else
+                                alert("warning", data.Mensagem);
+
+                            return;
+                        }
+
+                        $("#tbProduto").DataTable().row($(obj).parents("tr")).invalidate().data(data.Data).draw();
+                    }
+                });
+            }
+        }
+
+        $(document).ready(function () {
+
+            var tbProduto = $("#tbProduto").DataTable({
+                "ordering": false,
+                "bFilter": false,
+                "pageLength": 25,
+                "language": {
+                    "lengthMenu": "_MENU_ registros por página",
+                    "zeroRecords": "Sem registros a serem exibidos",
+                    "info": "Página _PAGE_ de _PAGES_",
+                    "infoEmpty": "Sem registros a serem exibidos",
+                    "infoFiltered": "(filtrados de _MAX_ total de registros)",
+                    "sSearch": "Pesquisar",
+                    "oPaginate": { "sNext": "Próximo", "sPrevious": "Anterior", "sFirst": "Primeiro", "sLast": "Último" }
+                },
+                "columns":
+                    [
+                        { "data": "Id", "className": "text-center" },
+                        { "data": "Nome", "className": "text-center" },
+                        { "data": function (data, type, row) { return data["DataCadastro"] != null ? moment(data["DataCadastro"]).format("DD/MM/YYYY") : "" }, "className": "text-center" },
+                        { "data": function (data, type, row) { return "<a href='#' onclick='alterarStatus(" + JSON.stringify(data) + ", this)'>" + (data.Ativo ? "Sim" : "Não") + "</a>"; }, "className": "text-center" },
+                        {
+                            "data": function (data, type, row) {
+                                var consultar = "<i class='glyphicon glyphicon-search' title='Consultar' style='cursor: pointer' onclick='consultar(" + JSON.stringify(data) + ", this)'></i>";
+                                var alterar = "<i class='glyphicon glyphicon-edit' title='Editar' style='cursor: pointer' onclick='alterar(" + JSON.stringify(data) + ", this)'></i>";
+
+                                return consultar + " " + alterar;
+
+                            }, "className": "text-center"
+                        }
+                    ]
+            });
+
+            $("#btnPesquisar").click(function () {
+
+                var produtoDto = {};
+
+                produtoDto.Nome = $("#nomePesquisar").val();
+
+                if ($("#ativo").val() == "0")
+                    produtoDto.Ativo = false;
+                else if ($("#ativo").val() == "1")
+                    produtoDto.Ativo = true;
+
+                $.ajax({
+                    dataType: "json",
+                    type: "GET",
+                    url: "/Produto/Listar",
+                    data: produtoDto,
+                    success: function (data) {
+
+                        if (!data.Sucesso) {
+                            if (data.Erro)
+                                alert("danger", data.Mensagem);
+                            else
+                                alert("warning", data.Mensagem);
+
+                            return;
+                        }
+
+                        tbProduto.clear();
+                        tbProduto.rows.add(data.Data).draw();
+                    }
+                });
+
+            });
+
+            $("#btnNovo").click(function ()
+            {
+                $("#lblAcao").html("Novo");
+                $("#lblTitulo").html("");
+                $("#btnIncluir").show();
+                $("#btnAlterar").hide();
+
+                limparFormulario();
+                habilitarModal(true);
+
+                $("#modalProduto").modal('show');
+            });
+
+            $("#btnIncluir").click(function () {
+
+                var produtoDto = {};
+
+                produtoDto.Nome = $("#nome").val();
+                produtoDto.IdUsuarioCadastro = '@usuarioDto.Id';
+                produtoDto.DataCadastro = '@DateTime.UtcNow';
+
+                $.ajax({
+                    dataType: "json",
+                    type: "POST",
+                    url: "/Produto/Incluir",
+                    data: { produtoDto: produtoDto },
+                    success: function (data) {
+
+                        if (!data.Sucesso) {
+                            if (data.Erro)
+                                alert("danger", data.Mensagem);
+                            else
+                                alert("warning", data.Mensagem);
+
+                            return;
+                        }
+
+                        limparFormulario();
+
+                        tbProduto.clear();
+                        tbProduto.rows.add(data.Data).draw();
+
+                        $("#modalProduto").modal('hide');
+                    }
+                });
+            });
+
+            $("#btnAlterar").click(function () {
+
+                var produtoDto = {};
+
+                produtoDto.Id = $("#produtoId").val();
+                produtoDto.Nome = $("#nome").val();
+
+                $.ajax({
+                    dataType: "json",
+                    type: "POST",
+                    url: "/Produto/Alterar",
+                    data: { produtoDto: produtoDto },
+                    success: function (data) {
+
+                        if (!data.Sucesso) {
+                            if (data.Erro)
+                                alert("danger", data.Mensagem);
+                            else
+                                alert("warning", data.Mensagem);
+
+                            return;
+                        }
+
+                        limparFormulario();
+
+                        var idx;
+                        $("#tbProduto").DataTable().rows().every(function (rowIdx, tableLoop, rowLoop) {
+                            if (this.data().Id == produtoDto.Id) {
+                                idx = rowIdx;
+                                return;
+                            }
+                        });
+
+                        $("#tbProduto").DataTable().row(idx).invalidate().data(data.Data).draw();
+
+                        $("#modalProduto").modal('hide');
+                    }
+                });
+            });
+        });
+
+    </script>
+}
+<div>
+    <h2><i class="glyphicon glyphicon-flash" style="color: #0f3456" title="Produtos"></i> Produtos</h2>
+    <hr />
+    <div class="form-group">
+        <div class="row">
+            <div class="col-md-2">
+                <input id="nomePesquisar" type="text" class="form-control" placeholder="Nome do Produto" />
+            </div>
+            <div class="col-md-1">
+                <select id="ativo" class="form-control">
+                    <option value="">Ativo</option>
+                    <option value="1">Sim</option>
+                    <option value="0">Não</option>
+                </select>
+            </div>
+            <div class="col-md-4">
+                <input id="btnPesquisar" type="button" class="btn btn-info" value="Pesquisar" />
+                <input id="btnNovo" type="button" class="btn" value="Novo Produto" />
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="table-responsive">
+            <table id="tbProduto" class="table nowrap">
+                <thead>
+                    <tr>
+                        <td class="text-center" style="width: 5%"><b>Id</b></td>
+                        <td class="text-center" style="width: 35%"><b>Nome</b></td>
+                        <td class="text-center" style="width: 20%"><b>Data Cadastro</b></td>
+                        <td class="text-center" style="width: 20%"><b>Ativo</b></td>
+                        <td class="text-center" style="width: 20%"><b>Ação</b></td>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modalProduto" tabindex="-1" role="dialog" aria-labelledby="ModalProduto" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Fechar</span></button>
+                <h4 class="modal-title" id="myModalLabel"><span id="lblAcao"></span> Produto <label id="lblTitulo"></label></h4>
+            </div>
+            <div class="modal-body">
+                <input id="produtoId" type="hidden" />
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-lg-10">
+                            <label for="nome">Nome:</label>
+                            <input id="nome" type="text" class="form-control" placeholder="Nome" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button id="btnIncluir" type="button" class="btn btn-primary">Incluir</button>
+                <button id="btnAlterar" type="button" class="btn btn-warning">Alterar</button>
+            </div>
+        </div>
+    </div>
+</div>

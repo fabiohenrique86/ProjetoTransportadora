@@ -1,0 +1,456 @@
+﻿@using ProjetoTransportadora.Dto;
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="author" content="Projeto Transportadora">
+    <title>@ViewBag.Title</title>
+    @Styles.Render("~/bundles/css")
+    @Styles.Render("~/bundles/jqueryuicss")
+    @RenderSection("styles", required: false)
+    <style type="text/css">
+        .error, .input-validation-error {
+            border-color: #ED5565;
+        }
+
+        .navbar-inverse {
+            background-color: #0f3456;
+            border: none;
+        }
+
+        .navbar-inverse .navbar-nav > li > a, .navbar-inverse .navbar-brand {
+            color: #fff;
+        }
+
+        .navbar-inverse .navbar-collapse, .navbar-inverse .navbar-form {
+            border-color: red;
+        }
+
+        .navbar-brand {
+            padding: 0px 15px;
+            height: auto;
+        }
+
+        .nav-tabs.nav-justified > li > a {
+            background-color: #eee;
+        }
+
+        .nav-tabs.nav-justified > .active > a, .nav-tabs.nav-justified > .active > a:focus, .nav-tabs.nav-justified > .active > a:hover {
+            background-color: lightsteelblue;
+        }
+
+        .carousel-control .glyphicon-chevron-left, .carousel-control .glyphicon-chevron-right, .carousel-control .icon-next, .carousel-control .icon-prev {
+            font-size: 40px;
+            margin-top: -35px;
+        }
+
+        .carousel-indicators li {
+            border: 1px solid #bbb;
+        }
+
+        .carousel-indicators .active {
+            background-color: #bbb;
+        }
+
+        .navbar-inverse .navbar-nav > li > a:hover {
+            color: #fff;
+        }
+
+        .carousel-inner > .item > img, .carousel-inner > .item > a > img {
+            display: block;
+            line-height: 1;
+            margin: 0 auto;
+            max-width: 80%;
+            padding: 1%;
+        }
+
+        .dropdown-menu {
+            background-color: #0f3456;
+        }
+
+        .dropdown-menu > li > a {
+            color: #fff;
+        }
+
+        .navbar-nav > li > a:hover, .nav .open > a, .nav .open > a:focus, .nav .open > a:hover {
+            background-color: #0f3456;
+            color: #fff;
+        }
+
+        .container-page {
+            padding-top: 70px;
+            padding-bottom: 20px;
+        }
+
+        .huge {
+            font-size: 30px;
+        }
+
+        .small {
+            font-size: 11px;
+            font-style: italic;
+        }
+
+        .italico {
+            font-style: italic;
+        }
+        
+        table {
+            font-size: 13px;
+        }
+
+        .table > tbody > tr > td, .table > tbody > tr > th, .table > tfoot > tr > td, .table > tfoot > tr > th, .table > thead > tr > td, .table > thead > tr > th {
+            vertical-align: middle;
+        }
+    </style>
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+<body>
+    @{
+        UsuarioDto usuarioDto = null;
+
+        if (Session[System.Configuration.ConfigurationManager.AppSettings["ProjetoTransportadoraCookieLogin"]] != null)
+        {
+            usuarioDto = (UsuarioDto)Session[System.Configuration.ConfigurationManager.AppSettings["ProjetoTransportadoraCookieLogin"]];
+        }
+    }
+    <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation" style="font-size: 14px">
+        <div class="container-full" style="padding-right: 30px">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="@Url.Content("~/Home")"><img src="@Url.Content("~/img/logo.jpg")" style="width: 250px; padding-top: 5px" /></a>
+            </div>
+            @{
+                if (usuarioDto != null)
+                {
+                    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1" style="padding-top: 30px; ">
+                        <ul class="nav navbar-nav navbar-right">
+                            <li class="dropdown">
+                                <a style="color: #fff;" href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="glyphicon glyphicon-menu-hamburger" style="color: #286090"></i> Cadastros <span class="caret"></span></a>
+                                <ul class="dropdown-menu">
+                                    <li><a href="@Url.Content("~/Grupo")"><i class="glyphicon glyphicon-ok" style="color: #286090" title="Grupos"></i> Grupos </a></li>
+                                    <li><a href="@Url.Content("~/Usuario")"><i class="glyphicon glyphicon-user" style="color: #286090" title="Usuários"></i> Usuários </a></li>
+                                    <li><a href="@Url.Content("~/Permissao")"><i class="glyphicon glyphicon-exclamation-sign" style="color: #286090" title="Permissões"></i> Permissões </a></li>
+                                    <li><a href="@Url.Content("~/Montadora")"><i class="glyphicon glyphicon-wrench" style="color: #286090" title="Montadoras"></i> Montadoras </a></li>
+                                    <li><a href="@Url.Content("~/RegimeCasamento")"><i class="glyphicon glyphicon-heart" style="color: #286090" title="Regimes de Casamento"></i> Regimes de Casamento </a></li>
+                                    <li><a href="@Url.Content("~/TipoResidencia")"><i class="glyphicon glyphicon-home" style="color: #286090" title="Tipos de Residência"></i> Tipos de Residência </a></li>
+                                    <li><a href="@Url.Content("~/EstadoCivil")"><i class="glyphicon glyphicon-plus" style="color: #286090" title="Estados Civis"></i> Estados Civis </a></li>
+                                    <li><a href="@Url.Content("~/SituacaoVeiculo")"><i class="glyphicon glyphicon-star" style="color: #286090" title="Situações de Veículo"></i> Situações de Veículo </a></li>
+                                    <li><a href="@Url.Content("~/Feriado")"><i class="glyphicon glyphicon-plane" style="color: #286090" title="Feriados"></i> Feriados </a></li>
+                                    <li><a href="@Url.Content("~/Produto")"><i class="glyphicon glyphicon-flash" style="color: #286090" title="Produtos"></i> Produtos </a></li>
+                                    <li><a href="@Url.Content("~/Canal")"><i class="glyphicon glyphicon-pushpin" style="color: #286090" title="Canais"></i> Canais </a></li>
+                                </ul>
+                            </li>
+                            <li><a href="@Url.Content("~/PessoaFisica")"><i class="glyphicon glyphicon-pushpin" style="color: #286090" title="Pessoas Físicas"></i> Pessoas Físicas </a></li>
+                            <li><a href="@Url.Content("~/PessoaJuridica")"><i class="glyphicon glyphicon-asterisk" style="color: #286090" title="Pessoas Jurídicas"></i> Pessoas Jurídicas </a></li>
+                            <li id="popover-usuario"><a href="#"><i class="glyphicon glyphicon-user" style="color: #777" title="Usuário"></i>&nbsp;<b class="caret"></b></a></li>
+                            <li><a href="@Url.Content("~/Usuario/Sair")"><i class="glyphicon glyphicon-log-out" style="color: #c9302c" title="Sair"></i> Sair</a></li>
+                        </ul>
+                    </div>
+                }
+            }
+        </div>
+    </nav>
+
+    <div id="popover-content-usuario" class="hide">
+        <div class='media' style='width: 250px'>
+            <div class='media-body text-center'>
+                @{
+                    if (usuarioDto != null)
+                    {
+                        <p style="background-color: #D9D9D9; border-radius: 15px"><b>Usuário</b></p>
+                        <p>@Html.Raw(usuarioDto.Login)</p>
+                        <p style="background-color: #ff9; border-radius: 15px"><b>Grupos</b></p>
+                        {
+                            var grupos = string.Empty;
+
+                            foreach (var item in usuarioDto.UsuarioGrupoDto)
+                            {
+                                grupos += "<li>" + item.GrupoDto.Nome + "</li>";
+                            }
+
+                            <ul id="poGrupoUsuario" style="list-style-type: none">
+                                @Html.Raw(grupos)
+                            </ul>                            
+                        }
+                    }
+                    else
+                    {
+                        <p></p>
+                    }
+                }
+            </div>
+        </div>
+    </div>
+
+    <div class="container-full" style="background-color: white; padding: 45px;">
+        <div class="modal fade" id="modalAlerta" tabindex="-1" role="dialog" aria-labelledby="modalAlerta" aria-hidden="true" style="z-index: 9999">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div id="idModalCabecalho" class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Fechar</span></button>
+                        <h4 class="modal-title" id="myModalLabel"><span id="idAlertaTextoCabecalho"></span></h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col-lg-10">
+                                    <span id="idAlertaTextoCorpo"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        @RenderBody()
+    </div>
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/jqueryui")
+    @Scripts.Render("~/bundles/jqueryval")
+    @Scripts.Render("~/bundles/globalize")
+    @Scripts.Render("~/bundles/bootstrap")
+    @Scripts.Render("~/bundles/mask")
+    @Scripts.Render("~/bundles/datatables")
+    @Scripts.Render("~/bundles/moment")
+    @Scripts.Render("~/bundles/blockUI")
+    @Scripts.Render("~/bundles/fullcalendar")
+
+
+
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+
+            // globalize
+            Globalize.culture('pt-BR');
+
+            // popover
+            $('#popover-usuario').popover({ html: true, placement: "bottom", content: function () { return $("#popover-content-usuario").html(); } });
+
+            @*@{
+                int? idUsuario = 0;
+
+                if (Session[System.Configuration.ConfigurationManager.AppSettings["ProjetoTransportadoraCookieLogin"]] != null)
+                {
+                    idUsuario = ((UsuarioDto)Session[System.Configuration.ConfigurationManager.AppSettings["ProjetoTransportadoraCookieLogin"]])?.Id;
+                }
+            }
+
+            $('#popover-usuario').popover({
+                html: true,
+                placement: 'bottom',
+                content: function () {
+
+                    $.ajax({
+                        dataType: "json",
+                        type: "GET",
+                        url: "/Usuario/Listar",
+                        data: { Id: '@idUsuario' },
+                        success: function (data) {
+
+                            if (!data.Sucesso) {
+                                alert("warning", data.Mensagem);
+                                return;
+                            }
+
+                            $("#poLogin").html(data.Data[0].Login);
+
+                            $("#poGrupoUsuario").html("");
+                            for (var i = 0; i < data.Data[0].UsuarioGrupoDto.length; i++) {
+                                $("#poGrupoUsuario").append("<li>" + data.Data[0].UsuarioGrupoDto[i].GrupoDto.Nome + "</li>");
+                            }
+                        }
+                    });
+
+                    return $("#popover-content-usuario").html();
+                }
+            });*@
+
+            // validação js número
+            $.validator.methods.number = function (value, element) {
+                return this.optional(element) || !isNaN(Globalize.parseFloat(value));
+            }
+
+            // validação js data
+            $.validator.methods.date = function (value, element) {
+                return this.optional(element) || Globalize.parseDate(value);
+            }
+
+            // datepicker
+            $(".datepicker").datepicker({
+                dateFormat: 'dd/mm/yy',
+                dayNames: ['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado'],
+                dayNamesMin: ['D', 'S', 'T', 'Q', 'Q', 'S', 'S', 'D'],
+                dayNamesShort: ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb', 'Dom'],
+                monthNames: ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'],
+                monthNamesShort: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'],
+                nextText: 'Próximo',
+                prevText: 'Anterior',
+                changeMonth: true,
+                changeYear: true
+            });
+
+            // mask
+            $(".data").mask("00/00/0000");
+            $(".valor").mask("000.000.000,00", { reverse: true });
+            $(".cpf").mask("000.000.000-00");
+            $(".cnpj").mask("00.000.000/0000-00");
+            $(".ddd").mask("00");
+            $(".fixo").mask("(99) 9999-9999");
+            $(".cep").mask("00000-000");
+            $(".celular").mask("(99) 9999-99999").focusout(function (event) {
+                var target, phone, element;
+                target = (event.currentTarget) ? event.currentTarget : event.srcElement;
+                phone = target.value.replace(/\D/g, '');
+                element = $(target);
+                element.unmask();
+                if (phone.length > 10) {
+                    element.mask("(99) 99999-9999");
+                }
+                else {
+                    element.mask("(99) 9999-99999");
+                }
+            });
+
+            $(".cep").change(function () {
+                var cep = $(this).val().replace("-", "");
+
+                // verificação cep
+                if (cep == null || cep == "") { return; }
+
+                $.ajax({
+                    dataType: "json",
+                    type: "GET",
+                    url: "https://viacep.com.br/ws/" + cep + "/json/",
+                    success: function (data) {
+
+                        if (data == null || data.erro)
+                            return;
+
+                        $("#logradouroResidencia").val("");
+                        $("#complementoResidencia").val("");
+                        $("#bairrResidenciao").val("");
+                        $("#cidadeResidencia").val("");
+                        $("#ufResidencia").val("");
+                        $("#numeroResidencia").val("");
+
+                        $("#logradouroResidencia").val(data.logradouro);
+                        $("#complementoResidencia").val(data.complemento);
+                        $("#bairroResidencia").val(data.bairro);
+                        $("#cidadeResidencia").val(data.localidade);
+                        $("#ufResidencia").val(data.uf);
+                    }
+                });
+
+            });
+
+        });
+
+        function obterNomeEstado(uf) {
+            switch (uf) {
+                case "AC":
+                    return "Acre";
+                case "AL":
+                    return "Alagoas";
+                case "AM":
+                    return "Amazonas";
+                case "AP":
+                    return "Amapá";
+                case "BA":
+                    return "Bahia";
+                case "CE":
+                    return "Ceará";
+                case "DF":
+                    return "Distrito Federal";
+                case "ES":
+                    return "Espírito Santo";
+                case "GO":
+                    return "Goiás";
+                case "MA":
+                    return "Maranhão";
+                case "MG":
+                    return "Minas Gerais";
+                case "MS":
+                    return "Mato Grosso do Sul";
+                case "MT":
+                    return "Mato Grosso";
+                case "PA":
+                    return "Pará";
+                case "PB":
+                    return "Paraíba";
+                case "PE":
+                    return "Pernambuco";
+                case "PI":
+                    return "Piauí";
+                case "PR":
+                    return "Paraná";
+                case "RJ":
+                    return "Rio de Janeiro";
+                case "RN":
+                    return "Rio Grande do Norte";
+                case "RO":
+                    return "Rondônia";
+                case "RR":
+                    return "Roraima";
+                case "RG":
+                    return "Rio Grande do Sul";
+                case "SC":
+                    return "Santa Catarina";
+                case "SE":
+                    return "Sergipe";
+                case "SP":
+                    return "São Paulo";
+                case "TO":
+                    return "Tocantis";
+                default:
+                    return "";
+            }
+        }
+
+        function alert(acao, corpo) {
+
+            var cabecalho = "Sucesso";
+            var cor = "#d4edda";
+
+            if (acao == "success") {
+                cabecalho = "Sucesso";                
+                cor = "#d4edda";
+            }
+            else if (acao == "danger") {
+                cabecalho = "Erro";
+                cor = "#f8d7da";
+            }
+            else if (acao == "warning") {
+                cabecalho = "Alerta";
+                cor = "#fff3cd";
+            }
+
+            $("#idModalCabecalho").css('background-color', cor);
+            $("#idAlertaTextoCabecalho").html(cabecalho);
+            $("#idAlertaTextoCorpo").html(corpo);
+
+            $("#modalAlerta").modal('show');
+        }
+
+        $.ajaxSetup({
+            beforeSend: function () { $.blockUI({ message: '<h5>Carregando...</h4>' }); },
+            complete: function () { $.unblockUI(); }
+        });
+    </script>
+    @RenderSection("scripts", required: false)
+</body>
+</html>

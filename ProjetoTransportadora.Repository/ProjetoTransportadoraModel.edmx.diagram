@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="7bff3ea44728440382f9100d85489464" Name="Diagram1">
+        <EntityTypeShape EntityType="ProjetoTransportadoraModel.Grupo" Width="1.5" PointX="0.75" PointY="1" IsExpanded="true" />
+        <EntityTypeShape EntityType="ProjetoTransportadoraModel.Usuario" Width="1.5" PointX="0.75" PointY="3.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="ProjetoTransportadoraModel.UsuarioGrupo" Width="1.5" PointX="3" PointY="0.875" IsExpanded="true" />
+        <AssociationConnector Association="ProjetoTransportadoraModel.FK_UsuarioGrupo_Grupo" ManuallyRouted="false" />
+        <AssociationConnector Association="ProjetoTransportadoraModel.FK_UsuarioGrupo_Usuario" ManuallyRouted="false" />
+        <EntityTypeShape EntityType="ProjetoTransportadoraModel.Log" Width="1.5" PointX="3.375" PointY="3.75" />
+        <EntityTypeShape EntityType="ProjetoTransportadoraModel.Montadora" Width="1.5" PointX="5.375" PointY="0.75" />
+        <EntityTypeShape EntityType="ProjetoTransportadoraModel.Canal" Width="1.5" PointX="5.75" PointY="4.75" />
+        <EntityTypeShape EntityType="ProjetoTransportadoraModel.EstadoCivil" Width="1.5" PointX="7.75" PointY="0.75" />
+        <EntityTypeShape EntityType="ProjetoTransportadoraModel.Feriado" Width="1.5" PointX="0.75" PointY="7.75" />
+        <EntityTypeShape EntityType="ProjetoTransportadoraModel.Produto" Width="1.5" PointX="2.75" PointY="7.75" />
+        <EntityTypeShape EntityType="ProjetoTransportadoraModel.RegimeCasamento" Width="1.5" PointX="7.75" PointY="4.75" />
+        <EntityTypeShape EntityType="ProjetoTransportadoraModel.SituacaoVeiculo" Width="1.5" PointX="4.75" PointY="8.75" />
+        <EntityTypeShape EntityType="ProjetoTransportadoraModel.TipoResidencia" Width="1.5" PointX="6.75" PointY="8.75" />
+        <EntityTypeShape EntityType="ProjetoTransportadoraModel.PessoaEmail" Width="1.5" PointX="17.5" PointY="7.25" />
+        <EntityTypeShape EntityType="ProjetoTransportadoraModel.PessoaHistorico" Width="1.5" PointX="17.25" PointY="4.5" />
+        <EntityTypeShape EntityType="ProjetoTransportadoraModel.PessoaReferencia" Width="1.5" PointX="12.25" PointY="2.125" />
+        <EntityTypeShape EntityType="ProjetoTransportadoraModel.PessoaTelefone" Width="1.5" PointX="12.5" PointY="9.25" />
+        <EntityTypeShape EntityType="ProjetoTransportadoraModel.TipoReferencia" Width="1.5" PointX="15" PointY="2.25" />
+        <EntityTypeShape EntityType="ProjetoTransportadoraModel.TipoTelefone" Width="1.5" PointX="15.125" PointY="9.375" />
+        <AssociationConnector Association="ProjetoTransportadoraModel.FK_PessoaReferencia_TipoReferencia" />
+        <AssociationConnector Association="ProjetoTransportadoraModel.FK_PessoaTelefone_TipoTelefone" />
+        <EntityTypeShape EntityType="ProjetoTransportadoraModel.Funcionalidade" Width="1.5" PointX="0.75" PointY="14.625" />
+        <EntityTypeShape EntityType="ProjetoTransportadoraModel.GrupoFuncionalidade" Width="1.5" PointX="3" PointY="0.75" />
+        <AssociationConnector Association="ProjetoTransportadoraModel.FK_GrupoFuncionalidade_Funcionalidade" />
+        <AssociationConnector Association="ProjetoTransportadoraModel.FK_GrupoFuncionalidade_Grupo" />
+        <EntityTypeShape EntityType="ProjetoTransportadoraModel.TipoPessoa" Width="1.5" PointX="7.75" PointY="13.25" />
+        <EntityTypeShape EntityType="ProjetoTransportadoraModel.Pessoa" Width="1.5" PointX="10" PointY="1.75" />
+        <AssociationConnector Association="ProjetoTransportadoraModel.FK_Pessoa_EstadoCivil" />
+        <AssociationConnector Association="ProjetoTransportadoraModel.FK_Pessoa_Conjuge" />
+        <AssociationConnector Association="ProjetoTransportadoraModel.FK_Pessoa_Mae" />
+        <AssociationConnector Association="ProjetoTransportadoraModel.FK_Pessoa_Pai" />
+        <AssociationConnector Association="ProjetoTransportadoraModel.FK_Pessoa_Produto" />
+        <AssociationConnector Association="ProjetoTransportadoraModel.FK_Pessoa_Proprietario" />
+        <AssociationConnector Association="ProjetoTransportadoraModel.FK_Pessoa_RegimeCasamento" />
+        <AssociationConnector Association="ProjetoTransportadoraModel.FK_Pessoa_TipoPessoa" />
+        <AssociationConnector Association="ProjetoTransportadoraModel.FK_Pessoa_TipoResidencia" />
+        <AssociationConnector Association="ProjetoTransportadoraModel.FK_PessoaEmail_Pessoa" />
+        <AssociationConnector Association="ProjetoTransportadoraModel.FK_PessoaHistorico_Pessoa" />
+        <AssociationConnector Association="ProjetoTransportadoraModel.FK_PessoaReferencia_Pessoa" />
+        <AssociationConnector Association="ProjetoTransportadoraModel.FK_PessoaTelefone_Pessoa" />
+        </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

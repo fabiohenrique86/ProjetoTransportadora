@@ -1,0 +1,645 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="ProjetoTransportadoraModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="Grupo">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" />
+    <Property Name="Nome" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Ativo" Type="Boolean" Nullable="false" />
+    <NavigationProperty Name="UsuarioGrupo" Relationship="Self.FK_UsuarioGrupo_Grupo" FromRole="Grupo" ToRole="UsuarioGrupo" />
+    <Property Name="IdUsuarioCadastro" Type="Int32" Nullable="false" />
+    <Property Name="DataCadastro" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="IdUsuarioInativacao" Type="Int32" />
+    <Property Name="DataInativacao" Type="DateTime" Precision="3" />
+    <NavigationProperty Name="GrupoFuncionalidade" Relationship="ProjetoTransportadoraModel.FK_GrupoFuncionalidade_Grupo" FromRole="Grupo" ToRole="GrupoFuncionalidade" />
+  </EntityType>
+  <EntityType Name="Usuario">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Login" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Senha" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Ativo" Type="Boolean" Nullable="false" />
+    <NavigationProperty Name="UsuarioGrupo" Relationship="Self.FK_UsuarioGrupo_Usuario" FromRole="Usuario" ToRole="UsuarioGrupo" />
+    <Property Name="IdUsuarioCadastro" Type="Int32" Nullable="false" />
+    <Property Name="DataCadastro" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="IdUsuarioInativacao" Type="Int32" />
+    <Property Name="DataInativacao" Type="DateTime" Precision="3" />
+    <Property Name="TrocarSenha" Type="Boolean" />
+  </EntityType>
+  <EntityType Name="UsuarioGrupo">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="IdUsuario" Type="Int32" Nullable="false" />
+    <Property Name="IdGrupo" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="Grupo" Relationship="Self.FK_UsuarioGrupo_Grupo" FromRole="UsuarioGrupo" ToRole="Grupo" />
+    <NavigationProperty Name="Usuario" Relationship="Self.FK_UsuarioGrupo_Usuario" FromRole="UsuarioGrupo" ToRole="Usuario" />
+  </EntityType>
+  <Association Name="FK_UsuarioGrupo_Grupo">
+    <End Role="Grupo" Type="Self.Grupo" Multiplicity="1" />
+    <End Role="UsuarioGrupo" Type="Self.UsuarioGrupo" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Grupo">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="UsuarioGrupo">
+        <PropertyRef Name="IdGrupo" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_UsuarioGrupo_Usuario">
+    <End Role="Usuario" Type="Self.Usuario" Multiplicity="1" />
+    <End Role="UsuarioGrupo" Type="Self.UsuarioGrupo" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Usuario">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="UsuarioGrupo">
+        <PropertyRef Name="IdUsuario" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="ProjetoTransportadoraEntities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="Grupo" EntityType="Self.Grupo" />
+    <EntitySet Name="Usuario" EntityType="Self.Usuario" />
+    <EntitySet Name="UsuarioGrupo" EntityType="Self.UsuarioGrupo" />
+    <AssociationSet Name="FK_UsuarioGrupo_Grupo" Association="Self.FK_UsuarioGrupo_Grupo">
+      <End Role="Grupo" EntitySet="Grupo" />
+      <End Role="UsuarioGrupo" EntitySet="UsuarioGrupo" />
+    </AssociationSet>
+    <AssociationSet Name="FK_UsuarioGrupo_Usuario" Association="Self.FK_UsuarioGrupo_Usuario">
+      <End Role="Usuario" EntitySet="Usuario" />
+      <End Role="UsuarioGrupo" EntitySet="UsuarioGrupo" />
+    </AssociationSet>
+    <EntitySet Name="Log" EntityType="ProjetoTransportadoraModel.Log" />
+    <EntitySet Name="Montadora" EntityType="ProjetoTransportadoraModel.Montadora" />
+    <EntitySet Name="Canal" EntityType="ProjetoTransportadoraModel.Canal" />
+    <EntitySet Name="EstadoCivil" EntityType="ProjetoTransportadoraModel.EstadoCivil" />
+    <EntitySet Name="Feriado" EntityType="ProjetoTransportadoraModel.Feriado" />
+    <EntitySet Name="Produto" EntityType="ProjetoTransportadoraModel.Produto" />
+    <EntitySet Name="RegimeCasamento" EntityType="ProjetoTransportadoraModel.RegimeCasamento" />
+    <EntitySet Name="SituacaoVeiculo" EntityType="ProjetoTransportadoraModel.SituacaoVeiculo" />
+    <EntitySet Name="TipoResidencia" EntityType="ProjetoTransportadoraModel.TipoResidencia" />
+    <EntitySet Name="PessoaEmail" EntityType="ProjetoTransportadoraModel.PessoaEmail" />
+    <EntitySet Name="PessoaHistorico" EntityType="ProjetoTransportadoraModel.PessoaHistorico" />
+    <EntitySet Name="PessoaReferencia" EntityType="ProjetoTransportadoraModel.PessoaReferencia" />
+    <EntitySet Name="PessoaTelefone" EntityType="ProjetoTransportadoraModel.PessoaTelefone" />
+    <EntitySet Name="TipoReferencia" EntityType="ProjetoTransportadoraModel.TipoReferencia" />
+    <EntitySet Name="TipoTelefone" EntityType="ProjetoTransportadoraModel.TipoTelefone" />
+    <AssociationSet Name="FK_PessoaReferencia_TipoReferencia" Association="ProjetoTransportadoraModel.FK_PessoaReferencia_TipoReferencia">
+      <End Role="TipoReferencia" EntitySet="TipoReferencia" />
+      <End Role="PessoaReferencia" EntitySet="PessoaReferencia" />
+    </AssociationSet>
+    <AssociationSet Name="FK_PessoaTelefone_TipoTelefone" Association="ProjetoTransportadoraModel.FK_PessoaTelefone_TipoTelefone">
+      <End Role="TipoTelefone" EntitySet="TipoTelefone" />
+      <End Role="PessoaTelefone" EntitySet="PessoaTelefone" />
+    </AssociationSet>
+    <EntitySet Name="Funcionalidade" EntityType="ProjetoTransportadoraModel.Funcionalidade" />
+    <EntitySet Name="GrupoFuncionalidade" EntityType="ProjetoTransportadoraModel.GrupoFuncionalidade" />
+    <AssociationSet Name="FK_GrupoFuncionalidade_Funcionalidade" Association="ProjetoTransportadoraModel.FK_GrupoFuncionalidade_Funcionalidade">
+      <End Role="Funcionalidade" EntitySet="Funcionalidade" />
+      <End Role="GrupoFuncionalidade" EntitySet="GrupoFuncionalidade" />
+    </AssociationSet>
+    <AssociationSet Name="FK_GrupoFuncionalidade_Grupo" Association="ProjetoTransportadoraModel.FK_GrupoFuncionalidade_Grupo">
+      <End Role="Grupo" EntitySet="Grupo" />
+      <End Role="GrupoFuncionalidade" EntitySet="GrupoFuncionalidade" />
+    </AssociationSet>
+    <EntitySet Name="TipoPessoa" EntityType="ProjetoTransportadoraModel.TipoPessoa" />
+    <EntitySet Name="Pessoa" EntityType="ProjetoTransportadoraModel.Pessoa" />
+    <AssociationSet Name="FK_Pessoa_EstadoCivil" Association="ProjetoTransportadoraModel.FK_Pessoa_EstadoCivil">
+      <End Role="EstadoCivil" EntitySet="EstadoCivil" />
+      <End Role="Pessoa" EntitySet="Pessoa" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Pessoa_Conjuge" Association="ProjetoTransportadoraModel.FK_Pessoa_Conjuge">
+      <End Role="Pessoa" EntitySet="Pessoa" />
+      <End Role="Pessoa1" EntitySet="Pessoa" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Pessoa_Mae" Association="ProjetoTransportadoraModel.FK_Pessoa_Mae">
+      <End Role="Pessoa" EntitySet="Pessoa" />
+      <End Role="Pessoa1" EntitySet="Pessoa" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Pessoa_Pai" Association="ProjetoTransportadoraModel.FK_Pessoa_Pai">
+      <End Role="Pessoa" EntitySet="Pessoa" />
+      <End Role="Pessoa1" EntitySet="Pessoa" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Pessoa_Produto" Association="ProjetoTransportadoraModel.FK_Pessoa_Produto">
+      <End Role="Produto" EntitySet="Produto" />
+      <End Role="Pessoa" EntitySet="Pessoa" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Pessoa_Proprietario" Association="ProjetoTransportadoraModel.FK_Pessoa_Proprietario">
+      <End Role="Pessoa" EntitySet="Pessoa" />
+      <End Role="Pessoa1" EntitySet="Pessoa" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Pessoa_RegimeCasamento" Association="ProjetoTransportadoraModel.FK_Pessoa_RegimeCasamento">
+      <End Role="RegimeCasamento" EntitySet="RegimeCasamento" />
+      <End Role="Pessoa" EntitySet="Pessoa" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Pessoa_TipoPessoa" Association="ProjetoTransportadoraModel.FK_Pessoa_TipoPessoa">
+      <End Role="TipoPessoa" EntitySet="TipoPessoa" />
+      <End Role="Pessoa" EntitySet="Pessoa" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Pessoa_TipoResidencia" Association="ProjetoTransportadoraModel.FK_Pessoa_TipoResidencia">
+      <End Role="TipoResidencia" EntitySet="TipoResidencia" />
+      <End Role="Pessoa" EntitySet="Pessoa" />
+    </AssociationSet>
+    <AssociationSet Name="FK_PessoaEmail_Pessoa" Association="ProjetoTransportadoraModel.FK_PessoaEmail_Pessoa">
+      <End Role="Pessoa" EntitySet="Pessoa" />
+      <End Role="PessoaEmail" EntitySet="PessoaEmail" />
+    </AssociationSet>
+    <AssociationSet Name="FK_PessoaHistorico_Pessoa" Association="ProjetoTransportadoraModel.FK_PessoaHistorico_Pessoa">
+      <End Role="Pessoa" EntitySet="Pessoa" />
+      <End Role="PessoaHistorico" EntitySet="PessoaHistorico" />
+    </AssociationSet>
+    <AssociationSet Name="FK_PessoaReferencia_Pessoa" Association="ProjetoTransportadoraModel.FK_PessoaReferencia_Pessoa">
+      <End Role="Pessoa" EntitySet="Pessoa" />
+      <End Role="PessoaReferencia" EntitySet="PessoaReferencia" />
+    </AssociationSet>
+    <AssociationSet Name="FK_PessoaTelefone_Pessoa" Association="ProjetoTransportadoraModel.FK_PessoaTelefone_Pessoa">
+      <End Role="Pessoa" EntitySet="Pessoa" />
+      <End Role="PessoaTelefone" EntitySet="PessoaTelefone" />
+    </AssociationSet>
+  </EntityContainer>
+  <EntityType Name="Log">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Exception" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="false" />
+    <Property Name="DataCadastro" Type="DateTime" Nullable="false" Precision="3" />
+  </EntityType>
+  <EntityType Name="Montadora">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Nome" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
+    <Property Name="Ativo" Type="Boolean" Nullable="false" />
+    <Property Name="IdUsuarioCadastro" Type="Int32" Nullable="false" />
+    <Property Name="DataCadastro" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="IdUsuarioInativacao" Type="Int32" />
+    <Property Name="DataInativacao" Type="DateTime" Precision="3" />
+  </EntityType>
+  <EntityType Name="Canal">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Nome" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
+    <Property Name="Ativo" Type="Boolean" Nullable="false" />
+    <Property Name="IdUsuarioCadastro" Type="Int32" Nullable="false" />
+    <Property Name="DataCadastro" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="IdUsuarioInativacao" Type="Int32" />
+    <Property Name="DataInativacao" Type="DateTime" Precision="3" />
+  </EntityType>
+  <EntityType Name="EstadoCivil">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Nome" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
+    <Property Name="Ativo" Type="Boolean" Nullable="false" />
+    <Property Name="IdUsuarioCadastro" Type="Int32" Nullable="false" />
+    <Property Name="DataCadastro" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="IdUsuarioInativacao" Type="Int32" />
+    <Property Name="DataInativacao" Type="DateTime" Precision="3" />
+    <NavigationProperty Name="Pessoa" Relationship="ProjetoTransportadoraModel.FK_Pessoa_EstadoCivil" FromRole="EstadoCivil" ToRole="Pessoa" />
+  </EntityType>
+  <EntityType Name="Feriado">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Nome" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
+    <Property Name="DataFeriado" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="Ativo" Type="Boolean" Nullable="false" />
+    <Property Name="IdUsuarioCadastro" Type="Int32" Nullable="false" />
+    <Property Name="DataCadastro" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="IdUsuarioInativacao" Type="Int32" />
+    <Property Name="DataInativacao" Type="DateTime" Precision="3" />
+  </EntityType>
+  <EntityType Name="Produto">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Nome" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
+    <Property Name="Ativo" Type="Boolean" Nullable="false" />
+    <Property Name="IdUsuarioCadastro" Type="Int32" Nullable="false" />
+    <Property Name="DataCadastro" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="IdUsuarioInativacao" Type="Int32" />
+    <Property Name="DataInativacao" Type="DateTime" Precision="3" />
+    <NavigationProperty Name="Pessoa" Relationship="ProjetoTransportadoraModel.FK_Pessoa_Produto" FromRole="Produto" ToRole="Pessoa" />
+  </EntityType>
+  <EntityType Name="RegimeCasamento">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Nome" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
+    <Property Name="Ativo" Type="Boolean" Nullable="false" />
+    <Property Name="IdUsuarioCadastro" Type="Int32" Nullable="false" />
+    <Property Name="DataCadastro" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="IdUsuarioInativacao" Type="Int32" />
+    <Property Name="DataInativacao" Type="DateTime" Precision="3" />
+    <NavigationProperty Name="Pessoa" Relationship="ProjetoTransportadoraModel.FK_Pessoa_RegimeCasamento" FromRole="RegimeCasamento" ToRole="Pessoa" />
+  </EntityType>
+  <EntityType Name="SituacaoVeiculo">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Nome" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
+    <Property Name="Ativo" Type="Boolean" Nullable="false" />
+    <Property Name="IdUsuarioCadastro" Type="Int32" Nullable="false" />
+    <Property Name="DataCadastro" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="IdUsuarioInativacao" Type="Int32" />
+    <Property Name="DataInativacao" Type="DateTime" Precision="3" />
+  </EntityType>
+  <EntityType Name="TipoResidencia">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Nome" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
+    <Property Name="Ativo" Type="Boolean" Nullable="false" />
+    <Property Name="IdUsuarioCadastro" Type="Int32" Nullable="false" />
+    <Property Name="DataCadastro" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="IdUsuarioInativacao" Type="Int32" />
+    <Property Name="DataInativacao" Type="DateTime" Precision="3" />
+    <NavigationProperty Name="Pessoa" Relationship="ProjetoTransportadoraModel.FK_Pessoa_TipoResidencia" FromRole="TipoResidencia" ToRole="Pessoa" />
+  </EntityType>
+  <EntityType Name="PessoaEmail">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="IdPessoa" Type="Int32" Nullable="false" />
+    <Property Name="Email" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
+    <Property Name="NomeContato" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
+    <NavigationProperty Name="Pessoa" Relationship="ProjetoTransportadoraModel.FK_PessoaEmail_Pessoa" FromRole="PessoaEmail" ToRole="Pessoa" />
+  </EntityType>
+  <EntityType Name="PessoaHistorico">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="IdPessoa" Type="Int32" Nullable="false" />
+    <Property Name="DataHistorico" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="Descricao" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="false" />
+    <NavigationProperty Name="Pessoa" Relationship="ProjetoTransportadoraModel.FK_PessoaHistorico_Pessoa" FromRole="PessoaHistorico" ToRole="Pessoa" />
+  </EntityType>
+  <EntityType Name="PessoaReferencia">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="IdPessoa" Type="Int32" Nullable="false" />
+    <Property Name="IdTipoReferencia" Type="Int32" Nullable="false" />
+    <Property Name="DataReferencia" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="Descricao" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="false" />
+    <NavigationProperty Name="TipoReferencia" Relationship="ProjetoTransportadoraModel.FK_PessoaReferencia_TipoReferencia" FromRole="PessoaReferencia" ToRole="TipoReferencia" />
+    <NavigationProperty Name="Pessoa" Relationship="ProjetoTransportadoraModel.FK_PessoaReferencia_Pessoa" FromRole="PessoaReferencia" ToRole="Pessoa" />
+  </EntityType>
+  <EntityType Name="PessoaTelefone">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="IdPessoa" Type="Int32" Nullable="false" />
+    <Property Name="Pais" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
+    <Property Name="DDD" Type="Int32" Nullable="false" />
+    <Property Name="Numero" Type="Int32" Nullable="false" />
+    <Property Name="NomeContato" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
+    <Property Name="IdTipoTelefone" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="TipoTelefone" Relationship="ProjetoTransportadoraModel.FK_PessoaTelefone_TipoTelefone" FromRole="PessoaTelefone" ToRole="TipoTelefone" />
+    <NavigationProperty Name="Pessoa" Relationship="ProjetoTransportadoraModel.FK_PessoaTelefone_Pessoa" FromRole="PessoaTelefone" ToRole="Pessoa" />
+  </EntityType>
+  <EntityType Name="TipoReferencia">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Nome" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
+    <Property Name="Ativo" Type="Boolean" Nullable="false" />
+    <Property Name="IdUsuarioCadastro" Type="Int32" Nullable="false" />
+    <Property Name="DataCadastro" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="IdUsuarioInativacao" Type="Int32" />
+    <Property Name="DataInativacao" Type="DateTime" Precision="3" />
+    <NavigationProperty Name="PessoaReferencia" Relationship="ProjetoTransportadoraModel.FK_PessoaReferencia_TipoReferencia" FromRole="TipoReferencia" ToRole="PessoaReferencia" />
+  </EntityType>
+  <EntityType Name="TipoTelefone">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Nome" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
+    <Property Name="Ativo" Type="Boolean" Nullable="false" />
+    <Property Name="IdUsuarioCadastro" Type="Int32" Nullable="false" />
+    <Property Name="DataCadastro" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="IdUsuarioInativacao" Type="Int32" />
+    <Property Name="DataInativacao" Type="DateTime" Precision="3" />
+    <NavigationProperty Name="PessoaTelefone" Relationship="ProjetoTransportadoraModel.FK_PessoaTelefone_TipoTelefone" FromRole="TipoTelefone" ToRole="PessoaTelefone" />
+  </EntityType>
+  <Association Name="FK_PessoaReferencia_TipoReferencia">
+    <End Type="ProjetoTransportadoraModel.TipoReferencia" Role="TipoReferencia" Multiplicity="1" />
+    <End Type="ProjetoTransportadoraModel.PessoaReferencia" Role="PessoaReferencia" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="TipoReferencia">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="PessoaReferencia">
+        <PropertyRef Name="IdTipoReferencia" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_PessoaTelefone_TipoTelefone">
+    <End Type="ProjetoTransportadoraModel.TipoTelefone" Role="TipoTelefone" Multiplicity="1" />
+    <End Type="ProjetoTransportadoraModel.PessoaTelefone" Role="PessoaTelefone" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="TipoTelefone">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="PessoaTelefone">
+        <PropertyRef Name="IdTipoTelefone" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityType Name="Funcionalidade">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" />
+    <Property Name="Nome" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
+    <NavigationProperty Name="GrupoFuncionalidade" Relationship="ProjetoTransportadoraModel.FK_GrupoFuncionalidade_Funcionalidade" FromRole="Funcionalidade" ToRole="GrupoFuncionalidade" />
+    <Property Name="Descricao" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+  </EntityType>
+  <EntityType Name="GrupoFuncionalidade">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="IdGrupo" Type="Int32" Nullable="false" />
+    <Property Name="IdFuncionalidade" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="Funcionalidade" Relationship="ProjetoTransportadoraModel.FK_GrupoFuncionalidade_Funcionalidade" FromRole="GrupoFuncionalidade" ToRole="Funcionalidade" />
+    <NavigationProperty Name="Grupo" Relationship="ProjetoTransportadoraModel.FK_GrupoFuncionalidade_Grupo" FromRole="GrupoFuncionalidade" ToRole="Grupo" />
+    <Property Name="Inserir" Type="Boolean" Nullable="false" />
+    <Property Name="Ler" Type="Boolean" Nullable="false" />
+    <Property Name="Atualizar" Type="Boolean" Nullable="false" />
+    <Property Name="Excluir" Type="Boolean" Nullable="false" />
+    <Property Name="Executar" Type="Boolean" Nullable="false" />
+  </EntityType>
+  <Association Name="FK_GrupoFuncionalidade_Funcionalidade">
+    <End Type="ProjetoTransportadoraModel.Funcionalidade" Role="Funcionalidade" Multiplicity="1" />
+    <End Type="ProjetoTransportadoraModel.GrupoFuncionalidade" Role="GrupoFuncionalidade" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Funcionalidade">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="GrupoFuncionalidade">
+        <PropertyRef Name="IdFuncionalidade" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_GrupoFuncionalidade_Grupo">
+    <End Type="ProjetoTransportadoraModel.Grupo" Role="Grupo" Multiplicity="1" />
+    <End Type="ProjetoTransportadoraModel.GrupoFuncionalidade" Role="GrupoFuncionalidade" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Grupo">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="GrupoFuncionalidade">
+        <PropertyRef Name="IdGrupo" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityType Name="TipoPessoa">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" />
+    <Property Name="Nome" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
+    <NavigationProperty Name="Pessoa" Relationship="ProjetoTransportadoraModel.FK_Pessoa_TipoPessoa" FromRole="TipoPessoa" ToRole="Pessoa" />
+  </EntityType>
+  <EntityType Name="Pessoa">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Nome" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+    <Property Name="IdEstadoCivil" Type="Int32" />
+    <Property Name="Rg" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+    <Property Name="Cpf" Type="String" MaxLength="11" FixedLength="false" Unicode="false" />
+    <Property Name="DataNascimento" Type="DateTime" Precision="3" />
+    <Property Name="CidadeNascimento" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+    <Property Name="UfNascimento" Type="String" MaxLength="2" FixedLength="false" Unicode="false" />
+    <Property Name="CepResidencia" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+    <Property Name="LogradouroResidencia" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+    <Property Name="ComplementoResidencia" Type="String" MaxLength="300" FixedLength="false" Unicode="false" />
+    <Property Name="NumeroResidencia" Type="Int32" />
+    <Property Name="BairroResidencia" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+    <Property Name="CidadeResidencia" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+    <Property Name="UfResidencia" Type="String" MaxLength="2" FixedLength="false" Unicode="false" />
+    <Property Name="Profissao" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+    <Property Name="IdTipoResidencia" Type="Int32" />
+    <Property Name="TempoResidencial" Type="Int32" />
+    <Property Name="ValorAluguel" Type="Double" />
+    <Property Name="IdRegimeCasamento" Type="Int32" />
+    <Property Name="DataAdmissao" Type="DateTime" Precision="3" />
+    <Property Name="Cargo" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+    <Property Name="ValorSalario" Type="Double" />
+    <Property Name="DataReferenciaSalario" Type="DateTime" Precision="3" />
+    <Property Name="ValorFrete" Type="Double" />
+    <Property Name="Cnpj" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+    <Property Name="IdProduto" Type="Int32" />
+    <Property Name="DataAbertura" Type="DateTime" Precision="3" />
+    <Property Name="Ativo" Type="Boolean" Nullable="false" />
+    <Property Name="IdUsuarioCadastro" Type="Int32" Nullable="false" />
+    <Property Name="DataCadastro" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="IdUsuarioInativacao" Type="Int32" />
+    <Property Name="DataInativacao" Type="DateTime" Precision="3" />
+    <Property Name="IdTipoPessoa" Type="Int32" Nullable="false" />
+    <Property Name="IdPai" Type="Int32" />
+    <Property Name="IdMae" Type="Int32" />
+    <Property Name="IdConjuge" Type="Int32" />
+    <Property Name="IdProprietario" Type="Int32" />
+    <Property Name="EmpresaPessoal" Type="String" MaxLength="1000" FixedLength="false" Unicode="false" />
+    <Property Name="EmpresaTrabalho" Type="String" MaxLength="1000" FixedLength="false" Unicode="false" />
+    <NavigationProperty Name="EstadoCivil" Relationship="ProjetoTransportadoraModel.FK_Pessoa_EstadoCivil" FromRole="Pessoa" ToRole="EstadoCivil" />
+    <NavigationProperty Name="Pessoa1" Relationship="ProjetoTransportadoraModel.FK_Pessoa_Conjuge" FromRole="Pessoa" ToRole="Pessoa1" />
+    <NavigationProperty Name="PessoaConjuge" Relationship="ProjetoTransportadoraModel.FK_Pessoa_Conjuge" FromRole="Pessoa1" ToRole="Pessoa" />
+    <NavigationProperty Name="Pessoa11" Relationship="ProjetoTransportadoraModel.FK_Pessoa_Mae" FromRole="Pessoa" ToRole="Pessoa1" />
+    <NavigationProperty Name="PessoaMae" Relationship="ProjetoTransportadoraModel.FK_Pessoa_Mae" FromRole="Pessoa1" ToRole="Pessoa" />
+    <NavigationProperty Name="Pessoa12" Relationship="ProjetoTransportadoraModel.FK_Pessoa_Pai" FromRole="Pessoa" ToRole="Pessoa1" />
+    <NavigationProperty Name="PessoaPai" Relationship="ProjetoTransportadoraModel.FK_Pessoa_Pai" FromRole="Pessoa1" ToRole="Pessoa" />
+    <NavigationProperty Name="Produto" Relationship="ProjetoTransportadoraModel.FK_Pessoa_Produto" FromRole="Pessoa" ToRole="Produto" />
+    <NavigationProperty Name="Pessoa13" Relationship="ProjetoTransportadoraModel.FK_Pessoa_Proprietario" FromRole="Pessoa" ToRole="Pessoa1" />
+    <NavigationProperty Name="PessoaProprietario" Relationship="ProjetoTransportadoraModel.FK_Pessoa_Proprietario" FromRole="Pessoa1" ToRole="Pessoa" />
+    <NavigationProperty Name="RegimeCasamento" Relationship="ProjetoTransportadoraModel.FK_Pessoa_RegimeCasamento" FromRole="Pessoa" ToRole="RegimeCasamento" />
+    <NavigationProperty Name="TipoPessoa" Relationship="ProjetoTransportadoraModel.FK_Pessoa_TipoPessoa" FromRole="Pessoa" ToRole="TipoPessoa" />
+    <NavigationProperty Name="TipoResidencia" Relationship="ProjetoTransportadoraModel.FK_Pessoa_TipoResidencia" FromRole="Pessoa" ToRole="TipoResidencia" />
+    <NavigationProperty Name="PessoaEmail" Relationship="ProjetoTransportadoraModel.FK_PessoaEmail_Pessoa" FromRole="Pessoa" ToRole="PessoaEmail" />
+    <NavigationProperty Name="PessoaHistorico" Relationship="ProjetoTransportadoraModel.FK_PessoaHistorico_Pessoa" FromRole="Pessoa" ToRole="PessoaHistorico" />
+    <NavigationProperty Name="PessoaReferencia" Relationship="ProjetoTransportadoraModel.FK_PessoaReferencia_Pessoa" FromRole="Pessoa" ToRole="PessoaReferencia" />
+    <NavigationProperty Name="PessoaTelefone" Relationship="ProjetoTransportadoraModel.FK_PessoaTelefone_Pessoa" FromRole="Pessoa" ToRole="PessoaTelefone" />
+  </EntityType>
+  <Association Name="FK_Pessoa_EstadoCivil">
+    <End Type="ProjetoTransportadoraModel.EstadoCivil" Role="EstadoCivil" Multiplicity="0..1" />
+    <End Type="ProjetoTransportadoraModel.Pessoa" Role="Pessoa" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="EstadoCivil">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Pessoa">
+        <PropertyRef Name="IdEstadoCivil" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Pessoa_Conjuge">
+    <End Type="ProjetoTransportadoraModel.Pessoa" Role="Pessoa" Multiplicity="0..1" />
+    <End Type="ProjetoTransportadoraModel.Pessoa" Role="Pessoa1" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Pessoa">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Pessoa1">
+        <PropertyRef Name="IdConjuge" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Pessoa_Mae">
+    <End Type="ProjetoTransportadoraModel.Pessoa" Role="Pessoa" Multiplicity="0..1" />
+    <End Type="ProjetoTransportadoraModel.Pessoa" Role="Pessoa1" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Pessoa">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Pessoa1">
+        <PropertyRef Name="IdMae" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Pessoa_Pai">
+    <End Type="ProjetoTransportadoraModel.Pessoa" Role="Pessoa" Multiplicity="0..1" />
+    <End Type="ProjetoTransportadoraModel.Pessoa" Role="Pessoa1" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Pessoa">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Pessoa1">
+        <PropertyRef Name="IdPai" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Pessoa_Produto">
+    <End Type="ProjetoTransportadoraModel.Produto" Role="Produto" Multiplicity="0..1" />
+    <End Type="ProjetoTransportadoraModel.Pessoa" Role="Pessoa" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Produto">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Pessoa">
+        <PropertyRef Name="IdProduto" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Pessoa_Proprietario">
+    <End Type="ProjetoTransportadoraModel.Pessoa" Role="Pessoa" Multiplicity="0..1" />
+    <End Type="ProjetoTransportadoraModel.Pessoa" Role="Pessoa1" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Pessoa">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Pessoa1">
+        <PropertyRef Name="IdProprietario" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Pessoa_RegimeCasamento">
+    <End Type="ProjetoTransportadoraModel.RegimeCasamento" Role="RegimeCasamento" Multiplicity="0..1" />
+    <End Type="ProjetoTransportadoraModel.Pessoa" Role="Pessoa" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="RegimeCasamento">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Pessoa">
+        <PropertyRef Name="IdRegimeCasamento" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Pessoa_TipoPessoa">
+    <End Type="ProjetoTransportadoraModel.TipoPessoa" Role="TipoPessoa" Multiplicity="1" />
+    <End Type="ProjetoTransportadoraModel.Pessoa" Role="Pessoa" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="TipoPessoa">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Pessoa">
+        <PropertyRef Name="IdTipoPessoa" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Pessoa_TipoResidencia">
+    <End Type="ProjetoTransportadoraModel.TipoResidencia" Role="TipoResidencia" Multiplicity="0..1" />
+    <End Type="ProjetoTransportadoraModel.Pessoa" Role="Pessoa" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="TipoResidencia">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Pessoa">
+        <PropertyRef Name="IdTipoResidencia" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_PessoaEmail_Pessoa">
+    <End Type="ProjetoTransportadoraModel.Pessoa" Role="Pessoa" Multiplicity="1" />
+    <End Type="ProjetoTransportadoraModel.PessoaEmail" Role="PessoaEmail" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Pessoa">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="PessoaEmail">
+        <PropertyRef Name="IdPessoa" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_PessoaHistorico_Pessoa">
+    <End Type="ProjetoTransportadoraModel.Pessoa" Role="Pessoa" Multiplicity="1" />
+    <End Type="ProjetoTransportadoraModel.PessoaHistorico" Role="PessoaHistorico" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Pessoa">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="PessoaHistorico">
+        <PropertyRef Name="IdPessoa" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_PessoaReferencia_Pessoa">
+    <End Type="ProjetoTransportadoraModel.Pessoa" Role="Pessoa" Multiplicity="1" />
+    <End Type="ProjetoTransportadoraModel.PessoaReferencia" Role="PessoaReferencia" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Pessoa">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="PessoaReferencia">
+        <PropertyRef Name="IdPessoa" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_PessoaTelefone_Pessoa">
+    <End Type="ProjetoTransportadoraModel.Pessoa" Role="Pessoa" Multiplicity="1" />
+    <End Type="ProjetoTransportadoraModel.PessoaTelefone" Role="PessoaTelefone" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Pessoa">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="PessoaTelefone">
+        <PropertyRef Name="IdPessoa" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+</Schema>
