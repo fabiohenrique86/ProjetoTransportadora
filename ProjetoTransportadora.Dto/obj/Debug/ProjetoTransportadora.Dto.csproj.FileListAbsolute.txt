@@ -1,6 +1,0 @@
-C:\Projetos\ProjetoTransportadora\ProjetoTransportadora.Dto\bin\Debug\ProjetoTransportadora.Dto.dll
-C:\Projetos\ProjetoTransportadora\ProjetoTransportadora.Dto\bin\Debug\ProjetoTransportadora.Dto.pdb
-C:\Projetos\ProjetoTransportadora\ProjetoTransportadora.Dto\obj\Debug\ProjetoTransportadora.Dto.csproj.CoreCompileInputs.cache
-C:\Projetos\ProjetoTransportadora\ProjetoTransportadora.Dto\obj\Debug\ProjetoTransportadora.Dto.dll
-C:\Projetos\ProjetoTransportadora\ProjetoTransportadora.Dto\obj\Debug\ProjetoTransportadora.Dto.pdb
-C:\Projetos\ProjetoTransportadora\ProjetoTransportadora.Dto\obj\Debug\ProjetoTransportadora.Dto.csproj.AssemblyReference.cache
