@@ -93,8 +93,18 @@
     <Compile Include="PessoaReferencia.cs">
       <DependentUpon>ProjetoTransportadoraModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="PessoaRelacaoRepository.cs" />
     <Compile Include="PessoaReferenciaRepository.cs" />
+    <Compile Include="SituacaoMulta.cs">
+      <DependentUpon>ProjetoTransportadoraModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SituacaoMultaRepository.cs" />
+    <Compile Include="VeiculoHistorico.cs">
+      <DependentUpon>ProjetoTransportadoraModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="VeiculoMulta.cs">
+      <DependentUpon>ProjetoTransportadoraModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="VeiculoRepository.cs" />
     <Compile Include="PessoaTelefone.cs">
       <DependentUpon>ProjetoTransportadoraModel.tt</DependentUpon>
     </Compile>
@@ -155,6 +165,9 @@
     <Compile Include="UsuarioRepository.cs" />
     <Compile Include="PessoaRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Veiculo.cs">
+      <DependentUpon>ProjetoTransportadoraModel.tt</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ProjetoTransportadora.Dto\ProjetoTransportadora.Dto.csproj">

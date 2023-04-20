@@ -49,9 +49,10 @@
     <Compile Include="EstadoCivilBusiness.cs" />
     <Compile Include="FeriadoBusiness.cs" />
     <Compile Include="CanalBusiness.cs" />
+    <Compile Include="SituacaoMultaBusiness.cs" />
+    <Compile Include="VeiculoBusiness.cs" />
     <Compile Include="PessoaEmailBusiness.cs" />
     <Compile Include="PessoaHistoricoBusiness.cs" />
-    <Compile Include="PessoaRelacaoBusiness.cs" />
     <Compile Include="PessoaReferenciaBusiness.cs" />
     <Compile Include="PessoaTelefoneBusiness.cs" />
     <Compile Include="ProdutoBusiness.cs" />

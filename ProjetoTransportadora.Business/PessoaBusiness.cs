@@ -14,7 +14,6 @@ namespace ProjetoTransportadora.Business
         PessoaEmailBusiness pessoaEmailBusiness;
         PessoaHistoricoBusiness pessoaHistoricoBusiness;
         PessoaReferenciaBusiness pessoaReferenciaBusiness;
-        PessoaRelacaoBusiness pessoaRelacaoBusiness;
         public PessoaBusiness()
         {
             pessoaRepository = new PessoaRepository();
@@ -22,7 +21,6 @@ namespace ProjetoTransportadora.Business
             pessoaEmailBusiness = new PessoaEmailBusiness();
             pessoaHistoricoBusiness = new PessoaHistoricoBusiness();
             pessoaReferenciaBusiness = new PessoaReferenciaBusiness();
-            pessoaRelacaoBusiness = new PessoaRelacaoBusiness();
         }
 
         public List<PessoaDto> ListarAutoComplete(PessoaDto pessoaDto = null)

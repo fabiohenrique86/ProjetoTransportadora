@@ -12,23 +12,15 @@ namespace ProjetoTransportadora.Repository
     using System;
     using System.Collections.Generic;
     
-    public partial class SituacaoVeiculo
+    public partial class VeiculoHistorico
     {
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public SituacaoVeiculo()
-        {
-            this.Veiculo = new HashSet<Veiculo>();
-        }
-    
         public int Id { get; set; }
-        public string Nome { get; set; }
-        public bool Ativo { get; set; }
+        public int IdVeiculo { get; set; }
+        public System.DateTime DataHistorico { get; set; }
+        public string Descricao { get; set; }
         public int IdUsuarioCadastro { get; set; }
         public System.DateTime DataCadastro { get; set; }
-        public Nullable<int> IdUsuarioInativacao { get; set; }
-        public Nullable<System.DateTime> DataInativacao { get; set; }
     
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Veiculo> Veiculo { get; set; }
+        public virtual Veiculo Veiculo { get; set; }
     }
 }

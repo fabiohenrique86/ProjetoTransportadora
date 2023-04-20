@@ -48,9 +48,9 @@
     <Compile Include="GrupoDto.cs" />
     <Compile Include="PessoaEmailDto.cs" />
     <Compile Include="PessoaHistoricoDto.cs" />
-    <Compile Include="PessoaRelacaoDto.cs" />
     <Compile Include="PessoaReferenciaDto.cs" />
     <Compile Include="PessoaTelefoneDto.cs" />
+    <Compile Include="SituacaoMultaDto.cs" />
     <Compile Include="TipoPessoaDto .cs" />
     <Compile Include="TipoRelacaoDto.cs" />
     <Compile Include="TipoReferenciaDto.cs" />
@@ -68,6 +68,8 @@
     <Compile Include="MontadoraDto.cs" />
     <Compile Include="PessoaDto.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="VeiculoHistoricoDto.cs" />
+    <Compile Include="VeiculoMultaDto.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

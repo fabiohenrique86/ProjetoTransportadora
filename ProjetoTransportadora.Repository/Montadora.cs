@@ -14,6 +14,12 @@ namespace ProjetoTransportadora.Repository
     
     public partial class Montadora
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public Montadora()
+        {
+            this.Veiculo = new HashSet<Veiculo>();
+        }
+    
         public int Id { get; set; }
         public string Nome { get; set; }
         public bool Ativo { get; set; }
@@ -21,5 +27,8 @@ namespace ProjetoTransportadora.Repository
         public System.DateTime DataCadastro { get; set; }
         public Nullable<int> IdUsuarioInativacao { get; set; }
         public Nullable<System.DateTime> DataInativacao { get; set; }
+    
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Veiculo> Veiculo { get; set; }
     }
 }

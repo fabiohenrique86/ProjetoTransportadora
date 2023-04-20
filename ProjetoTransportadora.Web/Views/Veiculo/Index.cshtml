@@ -1,0 +1,1132 @@
+﻿@using ProjetoTransportadora.Dto;
+
+@{
+    ViewBag.Title = "Veículos";
+
+    UsuarioDto usuarioDto = null;
+    if (Session[System.Configuration.ConfigurationManager.AppSettings["ProjetoTransportadoraCookieLogin"]] != null)
+    {
+        usuarioDto = (UsuarioDto)Session[System.Configuration.ConfigurationManager.AppSettings["ProjetoTransportadoraCookieLogin"]];
+    }
+}
+
+@section styles
+{
+    <style type="text/css">
+        .modal-lg {
+            width: 85%;
+        }
+
+        .modal-body {
+            padding: 40px;
+        }
+
+        .ui-autocomplete {
+            z-index: 2147483647;
+        }
+    </style>
+}
+
+@section scripts
+{
+    <script type="text/javascript">
+
+        function habilitarModal(opcao) {
+            if (opcao) {
+                $("#modalVeiculo input, #modalPessoaJuridica select, #modalPessoaJuridica textarea").removeProp("disabled");
+                $("i.glyphicon-remove").show();
+            }
+            else {
+                $("#modalVeiculo input, #modalPessoaJuridica select, #modalPessoaJuridica textarea").prop("disabled", "disabled");
+                $("i.glyphicon-remove").hide();
+            }
+        }
+
+        function limparFormulario() {
+
+            $("#frmVeiculo").trigger("reset");
+
+            $("#idVeiculo").val("");
+            $("#idProprietarioAnterior").val("");
+            $("#idProprietarioAtual").val("");
+
+            $("#tbVeiculoMulta").DataTable().clear().draw();
+            $("#tbVeiculoHistorico").DataTable().clear().draw();
+        }
+
+        function carregarDadosModal(data) {
+
+            // aba - dados do veículo
+
+            $("#placa").val(data.Placa);
+            $("#renavam").val(data.Renavam);
+            $("#modelo").val(data.Modelo);
+            $("#anoFabricacao").val(data.AnoFabricacao);
+            $("#anoModelo").val(data.AnoModelo);
+            $("#cor").val(data.Cor);
+            $("#chassi").val(data.Chassi);
+            $("#situacaoVeiculo").val(data.IdSituacaoVeiculo);
+            $("#rastreador").val(data.Rastreador);
+
+            // aba - proprietário
+
+            if (data.PessoaProprietarioAtualDto != null && data.PessoaProprietarioAtualDto.Nome != "") {
+                $("#idProprietarioAtual").val(data.PessoaProprietarioAtualDto.Id);
+                $("#proprietarioAtual").val(data.PessoaProprietarioAtualDto.Nome);
+            }
+
+            if (data.PessoaProprietarioAnteriorDto != null && data.PessoaProprietarioAnteriorDto.Nome != "") {
+                $("#idProprietarioAnterior").val(data.PessoaProprietarioAnteriorDto.Id);
+                $("#proprietarioAnterior").val(data.PessoaProprietarioAnteriorDto.Nome);
+            }
+
+            // aba - implemento
+
+            $("#implemento").val(data.Implemento);
+            $("#comprimento").val(data.Comprimento);
+            $("#altura").val(data.Altura);
+            $("#largura").val(data.Largura);
+
+            // aba - valores
+
+            if (data.DataAquisicao != null)
+                $("#dataAquisicao").val(moment(data.DataAquisicao).format("DD/MM/YYYY"));
+
+            $("#valorAquisicao").val(Globalize.format(data.ValorAquisicao, "n2"));
+
+            if (data.DataVenda != null)
+                $("#dataVenda").val(moment(data.DataVenda).format("DD/MM/YYYY"));
+
+            $("#valorVenda").val(Globalize.format(data.ValorVenda, "n2"));
+
+            if (data.DataRecuperacao != null)
+                $("#dataRecuperacao").val(moment(data.DataRecuperacao).format("DD/MM/YYYY"));
+
+            if (data.DataValorFIPE != null)
+                $("#dataValorFIPE").val(moment(data.DataValorFIPE).format("DD/MM/YYYY"));
+
+            $("#valorFIPE").val(Globalize.format(data.ValorFIPE, "n2"));
+            $("#valorTransportadora").val(Globalize.format(data.ValorTransportadora, "n2"));
+
+            // aba - multas
+
+            var situacaoMultaDto = @Html.Raw(Json.Encode(ViewBag.SituacaoMulta));
+
+            $("#tbVeiculoMulta").DataTable().clear().draw();
+            $(data.VeiculoMultaDto).each(function (i, o) {
+
+                var id = Math.floor((Math.random() * 100000000) + 1);
+
+                var selectSituacaoMulta = "<select id=" + id + " name='situacaoMulta' class='form-control situacaoMulta'>"
+                selectSituacaoMulta += "<option value=''>Situação Multa</option>";
+                $(situacaoMultaDto).each(function (i, e) {
+                    selectSituacaoMulta += "<option value='" + e.Id + "'>" + e.Nome + "</option>";
+                });
+                selectSituacaoMulta += '</select>';
+
+                $("#tbVeiculoMulta").DataTable().rows.add([
+                    {
+                        "Id": o.Id,
+                        "DataMulta": "<input type='text' class='form-control data datepicker text-center dataMulta' value='" + moment(o.DataMulta).format("DD/MM/YYYY") + "' />",
+                        "Local": "<input type='text' class='form-control text-center local' value='" + o.Local + "' />",
+                        "Condutor": "<input type='text' class='form-control text-center condutor' value='" + o.PessoaCondutorDto.Nome + "' />",
+                        "DataVencimentoMulta": "<input type='text' class='form-control data datepicker text-center dataVencimentoMulta' value='" + moment(o.DataVencimentoMulta).format("DD/MM/YYYY") + "' />",
+                        "ValorMulta": "<input type='text' class='form-control valor text-center valorMulta' value='" + Globalize.format(o.ValorMulta, "n2") + "' />",
+                        "IdSituacaoMulta": selectSituacaoMulta,
+                        "Acao": "<i class='glyphicon glyphicon-remove' title='Excluir' style='cursor: pointer'></i>"
+                    }]).draw();
+
+                $("#" + id).val(o.IdSituacaoMulta);
+            });
+
+            // aba - histórico
+
+            $("#tbVeiculoHistorico").DataTable().clear().draw();
+            $(data.VeiculoHistoricoDto).each(function (i, o) {
+
+                $("#tbVeiculoHistorico").DataTable().rows.add([
+                {
+                    "Id": o.Id,
+                    "DataHistorico": "<input type='text' class='form-control data datepicker text-center dataHistorico' value='" + moment(o.DataHistorico).format("DD/MM/YYYY") + "' />",
+                    "Descricao": "<textarea class='form-control descricaoHistorico' rows='3'>" + o.Descricao + "</textarea>",
+                    "Acao": "<i class='glyphicon glyphicon-remove' title='Excluir' style='cursor: pointer'></i>"
+                }]).draw();
+            });
+
+            // reaplica máscaras
+            $(".valorMulta").mask("000.000.000,00", { reverse: true });
+
+            $(".data").mask("00/00/0000");
+            $(".data").datepicker({
+                dateFormat: 'dd/mm/yy',
+                dayNames: ['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado'],
+                dayNamesMin: ['D', 'S', 'T', 'Q', 'Q', 'S', 'S', 'D'],
+                dayNamesShort: ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb', 'Dom'],
+                monthNames: ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'],
+                monthNamesShort: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'],
+                nextText: 'Próximo',
+                prevText: 'Anterior',
+                changeMonth: true,
+                changeYear: true
+            });
+        }
+
+        function consultar(data) {
+            limparFormulario();
+            carregarDadosModal(data);
+            habilitarModal(false);
+            $("#lblAcao").text("Consultar");
+            $("#lblTitulo").text(data.Nome);
+            $("#idVeiculo").val("");
+            $("#btnIncluir").hide();
+            $("#btnAlterar").hide();
+            $("#modalVeiculo").modal('show');
+            $('#dadosveiculo-tab').click();
+        }
+
+        function alterar(data, o) {
+            limparFormulario();
+            carregarDadosModal(data);
+            habilitarModal(true);
+            $("#idVeiculo").val(data.Id);
+            $("#lblAcao").text("Alterar");
+            $("#lblTitulo").text(data.Nome);
+            $("#btnIncluir").hide();
+            $("#btnAlterar").show();
+            $("#modalVeiculo").modal('show');
+            $('#dadosveiculo-tab').click();
+        }
+
+        function alterarStatus(data, obj) {
+            if (confirm("Deseja " + (data.Ativo == false ? "ativar" : "inativar") + " veículo?")) {
+
+                var veiculoDto = {};
+
+                veiculoDto.Id = data.Id;
+                veiculoDto.Ativo = !data.Ativo;
+
+                if (!veiculoDto.Ativo) {
+                    veiculoDto.IdUsuarioInativacao = '@usuarioDto.Id';
+                    veiculoDto.DataInativacao = '@DateTime.UtcNow';
+                }
+
+                $.ajax({
+                    dataType: "json",
+                    type: "POST",
+                    url: "/Veiculo/AlterarStatus",
+                    data: { veiculoDto: veiculoDto },
+                    success: function (data) {
+
+                        if (!data.Sucesso) {
+                            if (data.Erro)
+                                alert("danger", data.Mensagem);
+                            else
+                                alert("warning", data.Mensagem);
+
+                            return;
+                        }
+
+                        $("#tbVeiculo").DataTable().row($(obj).parents("tr")).invalidate().data(data.Data).draw();
+                    }
+                });
+            }
+        }
+
+        $(document).ready(function () {
+
+            var tbVeiculo = $("#tbVeiculo").DataTable({
+                "ordering": false,
+                "bFilter": false,
+                "paging": false,
+                "ordering": false,
+                "info": false,
+                "searching": false,
+                "language": {
+                    "lengthMenu": "_MENU_ registros por página",
+                    "zeroRecords": "Sem registros a serem exibidos",
+                    "info": "Página _PAGE_ de _PAGES_",
+                    "infoEmpty": "Sem registros a serem exibidos",
+                    "infoFiltered": "(filtrados de _MAX_ total de registros)",
+                    "sSearch": "Pesquisar",
+                    "oPaginate": { "sNext": "Próximo", "sPrevious": "Anterior", "sFirst": "Primeiro", "sLast": "Último" }
+                },
+                "columns":
+                    [
+                        { "data": "Id", "className": "text-center", "visible": false },
+                        { "data": "Placa", "className": "text-center" },
+                        { "data": "Renavam", "className": "text-center" },
+                        {
+                            "data": function (data, type, row)
+                            {
+                                var nome = "";
+
+                                if (data.PessoaProprietarioAtualDto != null)
+                                    nome = data.PessoaProprietarioAtualDto.Nome;
+
+                                return nome;
+
+                            }, "className": "text-center"
+                        },
+                        { "data": "Modelo", "className": "text-center" },
+                        {
+                            "data": function (data, type, row) {
+                                var nome = "";
+
+                                if (data.MontadoraDto != null)
+                                    nome = data.MontadoraDto.Nome;
+
+                                return nome;
+
+                            }, "className": "text-center"
+                        },
+                        { "data": function (data, type, row) { return "<a href='#' onclick='alterarStatus(" + JSON.stringify(data) + ", this)'>" + (data.Ativo ? "Sim" : "Não") + "</a>"; }, "className": "text-center" },
+                        {
+                            "data": function (data, type, row) {
+                                var consultar = "<i class='glyphicon glyphicon-search' title='Consultar' style='cursor: pointer' onclick='consultar(" + JSON.stringify(data) + ", this)'></i>";
+                                var alterar = "<i class='glyphicon glyphicon-edit' title='Editar' style='cursor: pointer' onclick='alterar(" + JSON.stringify(data) + ", this)'></i>";
+
+                                return consultar + " " + alterar;
+
+                            }, "className": "text-center"
+                        }
+                    ]
+            });
+
+            var tbVeiculoMulta = $("#tbVeiculoMulta").DataTable({
+                "ordering": false,
+                "bFilter": false,
+                "paging": false,
+                "ordering": false,
+                "info": false,
+                "searching": false,
+                "autoWidth": false,
+                "language": {
+                    "lengthMenu": "_MENU_ registros por página",
+                    "zeroRecords": "Sem registros a serem exibidos",
+                    "info": "Página _PAGE_ de _PAGES_",
+                    "infoEmpty": "Sem registros a serem exibidos",
+                    "infoFiltered": "(filtrados de _MAX_ total de registros)",
+                    "sSearch": "Pesquisar",
+                    "oPaginate": { "sNext": "Próximo", "sPrevious": "Anterior", "sFirst": "Primeiro", "sLast": "Último" }
+                },
+                "columns":
+                    [
+                        { "data": "Id", "className": "text-center", "visible": false, "width": "5%" },
+                        { "data": "DataMulta", "className": "text-center", "width": "15%" },
+                        { "data": "Local", "className": "text-center", "width": "15%" },
+                        { "data": "PessoaCondutorDto.Nome", "className": "text-center", "width": "15%" },
+                        { "data": "DataVencimento", "className": "text-center", "width": "15%" },
+                        { "data": "ValorMulta", "className": "text-center", "width": "15%" },
+                        { "data": "SituacaoMultaDto.Nome", "className": "text-center", "width": "15%" },
+                        { "data": "Acao", "className": "text-center", "width": "5%" }
+                    ]
+            });
+
+            var tbVeiculoHistorico = $("#tbVeiculoHistorico").DataTable({
+                "ordering": false,
+                "bFilter": false,
+                "paging": false,
+                "ordering": false,
+                "info": false,
+                "searching": false,
+                "autoWidth": false,
+                "language": {
+                    "lengthMenu": "_MENU_ registros por página",
+                    "zeroRecords": "Sem registros a serem exibidos",
+                    "info": "Página _PAGE_ de _PAGES_",
+                    "infoEmpty": "Sem registros a serem exibidos",
+                    "infoFiltered": "(filtrados de _MAX_ total de registros)",
+                    "sSearch": "Pesquisar",
+                    "oPaginate": { "sNext": "Próximo", "sPrevious": "Anterior", "sFirst": "Primeiro", "sLast": "Último" }
+                },
+                "columns":
+                    [
+                        { "data": "Id", "className": "text-center", "visible": false, "width": "5%" },
+                        { "data": "DataHistorico", "className": "text-center", "width": "5%" },
+                        { "data": "Descricao", "className": "text-center", "width": "85%" },
+                        { "data": "Acao", "className": "text-center", "width": "5%" }
+                    ]
+            });
+
+            // botão excluir tbVeiculoMulta
+            $('#tbVeiculoMulta tbody').on('click', 'i.glyphicon-remove', function () {
+                if (confirm("Deseja realmente excluir a multa?")) {
+                    tbVeiculoMulta.row($(this).parents('tr')).remove().draw();
+                }
+            });
+
+            // botão excluir tbVeiculoHistorico
+            $('#tbVeiculoHistorico tbody').on('click', 'i.glyphicon-remove', function () {
+                if (confirm("Deseja realmente excluir o histórico?")) {
+                    tbVeiculoHistorico.row($(this).parents('tr')).remove().draw();
+                }
+            });
+
+            $("#proprietarioAnterior").autocomplete({
+                minLength: 3,
+                source: function (request, response)
+                {
+                    var nome = null;
+                    var cpf = null;
+                    var cnpj = null;
+                    var numero = parseInt(request.term);
+
+                    if (isNaN(numero))
+                        nome = request.term;
+                    else
+                    {
+                        cpf = request.term;
+                        cnpj = request.term;
+                    }
+
+                    $.getJSON("/PessoaJuridica/ListarAutoComplete", { Nome: nome, Cpf: cpf, Cnpj: cnpj, Ativo: true }, function (data, status, xhr) {
+                        // se não houver pessoa cadastrada, retorna mensagem ao usuário
+                        if (data == null || data.Data.length <= 0) {
+                            data.Data.push({ Id: 0, Nome: "Pessoa não cadastrada" });
+                        }
+                        response($.map(data.Data, function (pessoa) {
+                            return { label: pessoa.Nome, value: pessoa.Id }
+                        }));
+                    });
+                },
+                select: function (event, ui) {
+                    // apaga a pesquisa do cliente selecionado
+                    if (ui.item.label == "Pessoa não cadastrada") {
+                        ui.item.label = "";
+                        ui.item.value = "";
+                        return;
+                    }
+                    $("#idProprietarioAnterior").val(ui.item.value);
+                    ui.item.label = ui.item.label;
+                    ui.item.value = ui.item.label;
+                },
+                change: function (event, ui) {
+                    if (ui == null || ui.item == undefined || ui.item == null) {
+                        $("#proprietarioAnterior").val("");
+                        $("#idProprietarioAnterior").val("");
+                    }
+                }
+            });
+
+            $("#proprietarioAtual").autocomplete({
+                minLength: 3,
+                source: function (request, response) {
+                    var nome = null;
+                    var cpf = null;
+                    var cnpj = null;
+                    var numero = parseInt(request.term);
+
+                    if (isNaN(numero))
+                        nome = request.term;
+                    else {
+                        cpf = request.term;
+                        cnpj = request.term;
+                    }
+
+                    $.getJSON("/PessoaJuridica/ListarAutoComplete", { Nome: nome, Cpf: cpf, Cnpj: cnpj, Ativo: true }, function (data, status, xhr) {
+                        // se não houver pessoa cadastrada, retorna mensagem ao usuário
+                        if (data == null || data.Data.length <= 0) {
+                            data.Data.push({ Id: 0, Nome: "Pessoa não cadastrada" });
+                        }
+                        response($.map(data.Data, function (pessoa) {
+                            return { label: pessoa.Nome, value: pessoa.Id }
+                        }));
+                    });
+                },
+                select: function (event, ui) {
+                    // apaga a pesquisa do cliente selecionado
+                    if (ui.item.label == "Pessoa não cadastrada") {
+                        ui.item.label = "";
+                        ui.item.value = "";
+                        return;
+                    }
+                    $("#idProprietarioAtual").val(ui.item.value);
+                    ui.item.label = ui.item.label;
+                    ui.item.value = ui.item.label;
+                },
+                change: function (event, ui) {
+                    if (ui == null || ui.item == undefined || ui.item == null) {
+                        $("#proprietarioAtual").val("");
+                        $("#idProprietarioAtual").val("");
+                    }
+                }
+            });
+
+            $("#proprietarioAtualPesquisar").autocomplete({
+                minLength: 3,
+                source: function (request, response) {
+                    var nome = null;
+                    var cpf = null;
+                    var cnpj = null;
+                    var numero = parseInt(request.term);
+
+                    if (isNaN(numero))
+                        nome = request.term;
+                    else {
+                        cpf = request.term;
+                        cnpj = request.term;
+                    }
+
+                    $.getJSON("/PessoaJuridica/ListarAutoComplete", { Nome: nome, Cpf: cpf, Cnpj: cnpj, Ativo: true }, function (data, status, xhr) {
+                        // se não houver pessoa cadastrada, retorna mensagem ao usuário
+                        if (data == null || data.Data.length <= 0) {
+                            data.Data.push({ Id: 0, Nome: "Pessoa não cadastrada" });
+                        }
+                        response($.map(data.Data, function (pessoa) {
+                            return { label: pessoa.Nome, value: pessoa.Id }
+                        }));
+                    });
+                },
+                select: function (event, ui) {
+                    // apaga a pesquisa do cliente selecionado
+                    if (ui.item.label == "Pessoa não cadastrada") {
+                        ui.item.label = "";
+                        ui.item.value = "";
+                        return;
+                    }
+                    $("#idProprietarioAtualPesquisar").val(ui.item.value);
+                    ui.item.label = ui.item.label;
+                    ui.item.value = ui.item.label;
+                },
+                change: function (event, ui)
+                {
+                    if (ui == null || ui.item == undefined || ui.item == null) {
+                        $("#proprietarioAtualPesquisar").val("");
+                        $("#idProprietarioAtualPesquisar").val("");
+                    }
+                }
+            });
+
+            $("#btnPesquisar").click(function () {
+
+                var veiculoDto = {};
+
+                veiculoDto.Placa = $("#placaPesquisar").val();
+                veiculoDto.Renavam = $("#renavamPesquisar").val();
+                veiculoDto.IdProprietarioAtual = $("#idProprietarioAtualPesquisar").val();
+                veiculoDto.Modelo = $("#modeloPesquisar").val();
+
+                if ($("#ativo").val() == "0")
+                    veiculoDto.Ativo = false;
+                else if ($("#ativo").val() == "1")
+                    veiculoDto.Ativo = true;
+
+                $.ajax({
+                    dataType: "json",
+                    type: "GET",
+                    url: "/Veiculo/Listar",
+                    data: veiculoDto,
+                    success: function (data) {
+
+                        if (!data.Sucesso) {
+                            if (data.Erro)
+                                alert("danger", data.Mensagem);
+                            else
+                                alert("warning", data.Mensagem);
+
+                            return;
+                        }
+
+                        tbVeiculo.clear();
+                        tbVeiculo.rows.add(data.Data).draw();
+                    }
+                });
+
+            });
+
+            $("#btnNovo").click(function () {
+
+                $("#lblAcao").html("Novo");
+                $("#lblTitulo").html("");
+                $("#btnIncluir").show();
+                $("#btnAlterar").hide();
+
+                limparFormulario();
+                habilitarModal(true);
+
+                $("#modalVeiculo").modal('show');
+                $('#dadosveiculo-tab').click();
+            });
+
+            $("#btnIncluir,#btnAlterar").click(function () {
+
+                var veiculoDto = {};
+
+                veiculoDto.Id = $("#idVeiculo").val();
+
+                // aba - dados veículo
+
+                veiculoDto.Placa = $("#placa").val();
+                veiculoDto.Renavam = $("#renavam").val();
+
+                veiculoDto.Placa = $("#placa").val();
+                veiculoDto.Renavam = $("#renavam").val();
+                veiculoDto.Modelo = $("#modelo").val();
+                veiculoDto.AnoFabricacao = $("#anoFabricacao").val();
+                veiculoDto.AnoModelo = $("#anoModelo").val();
+                veiculoDto.Cor = $("#cor").val();
+                veiculoDto.Chassi = $("#chassi").val();
+                veiculoDto.IdSituacaoVeiculo = $("#situacaoVeiculo").val();
+                veiculoDto.Rastreador = $("#rastreador").val();
+
+                // aba - proprietário
+
+                veiculoDto.IdProprietarioAtual = $("#idProprietarioAtual").val();
+                veiculoDto.IdProprietarioAnterior = $("#idProprietarioAnterior").val();
+
+                // aba - implemento
+
+                veiculoDto.Implemento = $("#implemento").val();
+                veiculoDto.Comprimento = $("#comprimento").val();
+                veiculoDto.Altura = $("#altura").val();
+                veiculoDto.Largura = $("#largura").val();
+
+                 // aba - valores
+
+                veiculoDto.DataAquisicao = $("#dataAquisicao").val();
+                veiculoDto.ValorAquisicao = $("#valorAquisicao").val();
+                veiculoDto.DataVenda = $("#dataVenda").val();
+                veiculoDto.ValorVenda = $("#valorVenda").val();
+                veiculoDto.DataRecuperacao = $("#dataRecuperacao").val();
+                veiculoDto.DataValorFIPE = $("#dataValorFIPE").val();
+                veiculoDto.ValorFIPE= $("#valorFIPE").val();
+                veiculoDto.ValorTransportadora = $("#valorTransportadora").val();
+
+                // aba - multas
+
+                veiculoDto.VeiculoMultaDto = [];
+                tbVeiculoMulta.rows().every(function (rowIdx, tableLoop, rowLoop) {
+                    veiculoDto.VeiculoMultaDto.push
+                        ({
+                            "Id": this.data().Id,
+                            "IdVeiculo": veiculoDto.Id,
+                            "DataMulta": $($($(".dataMulta")[rowIdx]).parents("tr").children().eq(0)).children().val(),
+                            "Local": $($($(".local")[rowIdx]).parents("tr").children().eq(1)).children().val(),
+                            "IdCondutor": $($($(".condutor")[rowIdx]).parents("tr").children().eq(2)).children().val(),
+                            "DataVencimentoMulta": $($($(".dataVencimentoMulta")[rowIdx]).parents("tr").children().eq(3)).children().val(),
+                            "ValorMulta": $($($(".valorMulta")[rowIdx]).parents("tr").children().eq(4)).children().val(),
+                            "IdSituacaoMulta": $($($(".situacaoMulta")[rowIdx]).parents("tr").children().eq(5)).children().val(),
+                            "IdUsuarioCadastro": '@usuarioDto.Id',
+                            "DataCadastro": '@DateTime.UtcNow'
+                        });
+                });
+
+                // aba - histórico
+
+                veiculoDto.VeiculoHistoricoDto = [];
+                tbVeiculoHistorico.rows().every(function (rowIdx, tableLoop, rowLoop)
+                {
+                    veiculoDto.VeiculoHistoricoDto.push
+                        ({
+                            "Id": this.data().Id,
+                            "IdPessoa": pessoaDto.Id,
+                            "DataHistorico": $($($(".dataHistorico")[rowIdx]).parents("tr").children().eq(0)).children().val(),
+                            "Descricao": $($($(".descricaoHistorico")[rowIdx]).parents("tr").children().eq(1)).children().val()
+                        });
+                });
+
+                var url = "";
+                if (veiculoDto.Id == null || veiculoDto.Id <= 0)
+                {
+                    veiculoDto.IdUsuarioCadastro = '@usuarioDto.Id';
+                    veiculoDto.DataCadastro = '@DateTime.UtcNow';
+                    url = "/Veiculo/Incluir";
+                }
+                else
+                    url = "/Veiculo/Alterar";
+
+                $.ajax({
+                    dataType: "json",
+                    type: "POST",
+                    url: url,
+                    data: { veiculoDto: veiculoDto },
+                    success: function (data) {
+
+                        if (!data.Sucesso) {
+                            if (data.Erro)
+                                alert("danger", data.Mensagem);
+                            else
+                                alert("warning", data.Mensagem);
+
+                            return;
+                        }
+
+                        limparFormulario();
+
+                        var idx;
+
+                        if (veiculoDto.Id == null || veiculoDto.Id <= 0) {
+                            tbVeiculo.clear();
+                            tbVeiculo.rows.add(data.Data).draw();
+                        }
+                        else
+                        {
+                            $("#tbVeiculo").DataTable().rows().every(function (rowIdx, tableLoop, rowLoop) {
+                                if (this.data().Id == veiculoDto.Id) {
+                                    idx = rowIdx;
+                                    return;
+                                }
+                            });
+
+                            $("#tbVeiculo").DataTable().row(idx).invalidate().data(data.Data).draw();
+                        }
+
+
+                        $("#modalVeiculo").modal('hide');
+                    }
+                });
+            });
+
+            $("#btnAdicionarVeiculoMulta").click(function () {
+
+                var situacaoMultaDto = @Html.Raw(Json.Encode(ViewBag.SituacaoMulta));
+
+                var id = Math.floor((Math.random() * 100000000) + 1);
+
+                var selectSituacaoMulta = "<select id=" + id + " name='situacaoMulta' class='form-control situacaoMulta'>"
+                selectSituacaoMulta += "<option value=''>Situação Multa</option>";
+                $(situacaoMultaDto).each(function (i, e) {
+                    selectSituacaoMulta += "<option value='" + e.Id + "'>" + e.Nome + "</option>";
+                });
+                selectSituacaoMulta += '</select>';
+
+                tbVeiculoMulta.rows.add([
+                    {
+                        "Id": 0,
+                        "DataMulta": "<input type='text' class='form-control data datepicker text-center dataMulta' />",
+                        "Local": "<input type='text' class='form-control text-center local' />",
+                        "Condutor": "<input type='text' class='form-control text-center condutor' />",
+                        "DataVencimentoMulta": "<input type='text' class='form-control data datepicker text-center dataVencimentoMulta' />",
+                        "ValorMulta": "<input type='text' class='form-control valor text-center valorMulta' />",
+                        "IdSituacaoMulta": selectSituacaoMulta,
+                        "Acao": "<i class='glyphicon glyphicon-remove' title='Excluir' style='cursor: pointer'></i>"
+                    }]).draw();
+
+                $(".valorMulta").mask("000.000.000,00", { reverse: true });
+
+                $(".dataVencimentoMulta, .dataMulta").mask("00/00/0000");
+
+                $(".dataVencimentoMulta, .dataMulta").datepicker({
+                    dateFormat: 'dd/mm/yy',
+                    dayNames: ['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado'],
+                    dayNamesMin: ['D', 'S', 'T', 'Q', 'Q', 'S', 'S', 'D'],
+                    dayNamesShort: ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb', 'Dom'],
+                    monthNames: ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'],
+                    monthNamesShort: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'],
+                    nextText: 'Próximo',
+                    prevText: 'Anterior',
+                    changeMonth: true,
+                    changeYear: true
+                });
+            });
+
+            $("#btnAdicionarVeiculoHistorico").click(function () {
+
+                tbVeiculoHistorico.rows.add([
+                {
+                    "Id": 0,
+                    "DataHistorico": "<input type='text' class='form-control data datepicker text-center dataHistorico' />",
+                    "Descricao": "<textarea class='form-control descricaoHistorico' rows='3'></textarea>",
+                    "Acao": "<i class='glyphicon glyphicon-remove' title='Excluir' style='cursor: pointer'></i>"
+                }]).draw();
+
+                $(".dataHistorico").mask("00/00/0000");
+
+                $(".dataHistorico").datepicker({
+                    dateFormat: 'dd/mm/yy',
+                    dayNames: ['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado'],
+                    dayNamesMin: ['D', 'S', 'T', 'Q', 'Q', 'S', 'S', 'D'],
+                    dayNamesShort: ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb', 'Dom'],
+                    monthNames: ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'],
+                    monthNamesShort: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'],
+                    nextText: 'Próximo',
+                    prevText: 'Anterior',
+                    changeMonth: true,
+                    changeYear: true
+                });
+            });
+
+            $("#btnExportar").click(function () {
+
+                var existeRegistroGrid = false;
+
+                tbVeiculo.rows().every(function (rowIdx, tableLoop, rowLoop) {
+                    existeRegistroGrid = true;
+                    return;
+                });
+
+                if (!existeRegistroGrid) {
+                    alert("warning", "Não há registros a serem exportados");
+                    return;
+                }
+
+                window.location.href = "@Url.Action("Exportar", "Veiculo")?Placa=" + $("#placaPesquisar").val() + "&Renavam=" + $("#renavamPesquisar").val() + "&IdProprietarioAtual=" + $("#idProprietarioAtualPesquisar").val() + "&Modelo=" + $("#modeloPesquisar").val();
+            });
+
+            document.getElementById('frmVeiculoImportar').onsubmit = function () {
+
+                var formdata = new FormData();
+                var fileInput = document.getElementById('arquivo');
+
+                var existeArquivo = fileInput.files[0] != undefined ? true : false;
+
+                if (!existeArquivo) {
+                    alert("warning","Selecione um arquivo para importar");
+                    return false;
+                }
+
+                $.blockUI({ message: '<h5>Carregando...</h4>' });
+
+                formdata.append(fileInput.files[0].name, fileInput.files[0]);
+
+                var xhr = new XMLHttpRequest();
+
+                xhr.open('POST', '/Veiculo/Importar');
+                xhr.send(formdata);
+
+                xhr.onreadystatechange = function () {
+                    if (xhr.readyState == 4 && xhr.status == 200) {
+                        var response = JSON.parse(xhr.responseText);
+                        $.unblockUI();
+                        alert("success", response.Mensagem);
+                    }
+                }
+
+                return false;
+            }
+        });
+
+    </script>
+}
+<div>
+    <h2><i class="glyphicon glyphicon-asterisk" style="color: #0f3456" title="Veículos"></i> Veículos</h2>
+    <hr />
+    <input id="idVeiculo" type="hidden" />
+    <div class="form-group">
+        <div class="row">
+            <div class="col-md-1">
+                <input id="placaPesquisar" type="text" class="form-control" placeholder="Placa" />
+            </div>
+            <div class="col-md-2">
+                <input id="renavamPesquisar" type="text" class="form-control" placeholder="Renavam" />
+            </div>
+            <div class="col-md-3">
+                <input id="proprietarioAtualPesquisar" name="proprietarioAtualPesquisar" type="text" class="form-control" placeholder="Proprietário (Mínimo de 3 caracteres - CPF ou CNPJ ou Nome)" />
+                <input type="hidden" name="idProprietarioAtualPesquisar" id="idProprietarioAtualPesquisar" />
+            </div>
+            <div class="col-md-1">
+                <input id="modeloPesquisar" type="text" class="form-control" placeholder="Modelo" />
+            </div>
+            <div class="col-md-1">
+                <select id="ativo" class="form-control">
+                    <option value="">Ativo</option>
+                    <option value="1">Sim</option>
+                    <option value="0">Não</option>
+                </select>
+            </div>
+            <div class="col-md-4">
+                <input id="btnPesquisar" type="button" class="btn btn-info" value="Pesquisar" />
+                <input id="btnNovo" type="button" class="btn" value="Novo Veículo" />
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="row">
+            <div class="col-md-12">
+                <input id="btnExportar" type="button" class="btn btn-success" value="Exportar" />
+                <form id="frmVeiculoImportar" style="display: inline-flex">
+                    <input id="arquivo" name="arquivo" type="file" />
+                    <input id="btnImportar" type="submit" class="btn btn-warning" value="Importar" />
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="table-responsive">
+            <table id="tbVeiculo" class="table nowrap">
+                <thead>
+                    <tr>
+                        <td class="text-center" style="width: 5%"><b>Id</b></td>
+                        <td class="text-center" style="width: 10%"><b>Placa</b></td>
+                        <td class="text-center" style="width: 12.5%"><b>Renavam</b></td>
+                        <td class="text-center" style="width: 12.5%"><b>Proprietário Atual</b></td>
+                        <td class="text-center" style="width: 15%"><b>Modelo</b></td>
+                        <td class="text-center" style="width: 15%"><b>Montadora</b></td>
+                        <td class="text-center" style="width: 15%"><b>Ativo</b></td>
+                        <td class="text-center" style="width: 15%"><b>Ação</b></td>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modalVeiculo" tabindex="-1" role="dialog" aria-labelledby="ModalVeiculo" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Fechar</span></button>
+                <h4 class="modal-title" id="myModalLabel"><span id="lblAcao"></span> Veículo <label id="lblTitulo"></label></h4>
+            </div>
+            <div class="modal-body">
+                <form id="frmVeiculo" action="#">
+                    <input id="idVeiculo" type="hidden" />
+                    <div class="form-group">
+                        <div class="row">
+                            <ul id="myTab" class="nav nav-tabs nav-justified" role="tablist">
+                                <li class="nav-item">
+                                    <a class="nav-link active" id="dadosveiculo-tab" data-toggle="tab" href="#dadosveiculo" role="tab" aria-controls="dadosveiculo" aria-selected="true">Dados Veículo</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" id="proprietario-tab" data-toggle="tab" href="#proprietario" role="tab" aria-controls="proprietario" aria-selected="false">Proprietário</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" id="implemento-tab" data-toggle="tab" href="#implemento" role="tab" aria-controls="implemento" aria-selected="false">Implemento</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" id="valores-tab" data-toggle="tab" href="#valores" role="tab" aria-controls="valores" aria-selected="false">Valores</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" id="multas-tab" data-toggle="tab" href="#multas" role="tab" aria-controls="multas" aria-selected="false">Multas</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" id="historico-tab" data-toggle="tab" href="#historico" role="tab" aria-controls="historico" aria-selected="false">Histórico</a>
+                                </li>
+                            </ul>
+                            <div class="tab-content">
+                                <br />
+                                <div class="tab-pane active" id="dadosveiculo" role="tabpanel" aria-labelledby="dadosveiculo-tab">
+                                    <div class="form-group">
+                                        <div class="row">
+                                            <div class="col-md-1">
+                                                <label for="placa">Placa:</label>
+                                                <input id="placa" type="text" class="form-control" placeholder="Placa" />
+                                            </div>
+                                            <div class="col-md-3">
+                                                <label for="renavam">Renavam:</label>
+                                                <input id="renavam" type="text" class="form-control" placeholder="Renavam" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="row">
+                                            <div class="col-md-2">
+                                                <label for="modelo">Modelo:</label>
+                                                <input id="modelo" type="text" class="form-control" placeholder="Modelo" />
+                                            </div>
+                                            <div class="col-md-2">
+                                                <label for="cor">Cor:</label>
+                                                <input id="cor" type="text" class="form-control" placeholder="Cor" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="row">
+                                            <div class="col-md-2">
+                                                <label for="anoModelo">Ano do Modelo:</label>
+                                                <input id="anoModelo" type="text" class="form-control ano" placeholder="Ano do Modelo" />
+                                            </div>
+                                            <div class="col-md-2">
+                                                <label for="anoFabricacao">Ano de Fabricação:</label>
+                                                <input id="anoFabricacao" type="text" class="form-control ano" placeholder="Ano de Fabricação" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="row">
+                                            <div class="col-md-4">
+                                                <label for="chassi">Chassi:</label>
+                                                <input id="chassi" type="text" class="form-control" placeholder="Chassi" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="row">
+                                            <div class="col-md-4">
+                                                <label for="situacaoVeiculo">Situação do Veículo:</label>
+                                                @Html.DropDownList("situacaoVeiculo", new SelectList(ViewBag.SituacaoVeiculo, "Id", "Nome"), "Situação do Veículo", new { @class = "form-control" })
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="row">
+                                            <div class="col-md-4">
+                                                <label for="rastreador">Rastreador:</label>
+                                                <input id="rastreador" type="text" class="form-control" placeholder="Rastreador" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="tab-pane" id="proprietario" role="tabpanel" aria-labelledby="proprietario-tab">
+                                    <div class="form-group">
+                                        <div class="row">
+                                            <div class="col-md-4">
+                                                <label for="proprietarioAtual">Proprietário Atual:</label>
+                                                <input id="proprietarioAtual" name="proprietarioAtual" type="text" class="form-control" placeholder="Proprietário Atual (Mínimo de 3 caracteres - CPF ou CNPJ ou Nome)" />
+                                                <input type="hidden" name="idProprietarioAtual" id="idProprietarioAtual" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="row">
+                                            <div class="col-md-4">
+                                                <label for="proprietarioAnterior">Proprietário Anterior:</label>
+                                                <input id="proprietarioAnterior" name="proprietarioAnterior" type="text" class="form-control" placeholder="Proprietário Anterior (Mínimo de 3 caracteres - CPF ou CNPJ ou Nome)" />
+                                                <input type="hidden" name="idProprietarioAnterior" id="idProprietarioAnterior" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="tab-pane" id="implemento" role="tabpanel" aria-labelledby="implemento-tab">
+                                    <div class="form-group">
+                                        <div class="row">
+                                            <div class="col-md-2">
+                                                <label for="implemento">Implemento:</label>
+                                                <input id="implemento" name="implemento" type="text" class="form-control" placeholder="Implemento" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="row">
+                                            <div class="col-md-2">
+                                                <label for="comprimento">Comprimento:</label>
+                                                <input id="comprimento" name="comprimento" type="text" class="form-control comprimento" placeholder="Comprimento" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="row">
+                                            <div class="col-md-2">
+                                                <label for="altura">Altura:</label>
+                                                <input id="altura" name="altura" type="text" class="form-control altura" placeholder="Altura" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="row">
+                                            <div class="col-md-2">
+                                                <label for="largura">Largura:</label>
+                                                <input id="largura" name="largura" type="text" class="form-control largura" placeholder="Largura" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="tab-pane" id="valores" role="tabpanel" aria-labelledby="valores-tab">
+                                    <div class="form-group">
+                                        <div class="row">
+                                            <div class="col-md-2">
+                                                <label for="dataAquisicao">Data da Aquisição:</label>
+                                                <input id="dataAquisicao" name="dataAquisicao" type="text" class="form-control data datepicker" placeholder="Data da Aquisição" />
+                                            </div>
+                                            <div class="col-md-2">
+                                                <label for="valorAquisicao">Valor Aquisição:</label>
+                                                <input id="valorAquisicao" name="valorAquisicao" type="text" class="form-control valor" placeholder="Valor Aquisição" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="row">
+                                            <div class="col-md-2">
+                                                <label for="dataVenda">Data da Venda:</label>
+                                                <input id="dataVenda" name="dataVenda" type="text" class="form-control data datepicker" placeholder="Data da Venda" />
+                                            </div>
+                                            <div class="col-md-2">
+                                                <label for="valorVenda">Valor Venda:</label>
+                                                <input id="valorVenda" name="valorVenda" type="text" class="form-control valor" placeholder="Valor Venda" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="row">
+                                            <div class="col-md-2">
+                                                <label for="dataRecuperacao">Data da Recuperação:</label>
+                                                <input id="dataRecuperacao" name="dataRecuperacao" type="text" class="form-control data datepicker" placeholder="Data da Recuperação" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="row">
+                                            <div class="col-md-2">
+                                                <label for="dataValorFIPE">Data do Valor FIPE:</label>
+                                                <input id="dataValorFIPE" name="dataValorFIPE" type="text" class="form-control data datepicker" placeholder="Data do Valor FIPE" />
+                                            </div>
+                                            <div class="col-md-2">
+                                                <label for="valorFIPE">Valor FIPE:</label>
+                                                <input id="valorFIPE" name="valorFIPE" type="text" class="form-control valor" placeholder="Valor FIPE" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="row">
+                                            <div class="col-md-2">
+                                                <label for="valorTransportadora">Valor Transportadora:</label>
+                                                <input id="valorTransportadora" name="valorTransportadora" type="text" class="form-control valor" placeholder="Valor Transportadora" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="tab-pane" id="multas" role="tabpanel" aria-labelledby="multas-tab">
+                                    <div class="form-group">
+                                        <div class="row">
+                                            <div class="col-md-12 text-right">
+                                                <input id="btnAdicionarVeiculoMulta" type="button" class="btn" value="Adicionar Multa" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="table-responsive">
+                                            <table id="tbVeiculoMulta" class="table nowrap" style="width: 100%">
+                                                <thead>
+                                                    <tr>
+                                                        <td class="text-center"><b>Id</b></td>
+                                                        <td class="text-center"><b>Data Multa</b></td>
+                                                        <td class="text-center"><b>Local</b></td>
+                                                        <td class="text-center"><b>Condutor</b></td>
+                                                        <td class="text-center"><b>Data Vencimento</b></td>
+                                                        <td class="text-center"><b>Valor Multa</b></td>
+                                                        <td class="text-center"><b>Situação</b></td>
+                                                        <td class="text-center"><b>Ação</b></td>
+                                                    </tr>
+                                                </thead>
+                                                <tbody></tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="tab-pane" id="historico" role="tabpanel" aria-labelledby="historico-tab">
+                                    <div class="form-group">
+                                        <div class="row">
+                                            <div class="col-md-12 text-right">
+                                                <input id="btnAdicionarPessoaHistorico" type="button" class="btn" value="Adicionar Histórico" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="table-responsive">
+                                            <table id="tbPessoaHistorico" class="table nowrap" style="width: 100%">
+                                                <thead>
+                                                    <tr>
+                                                        <td class="text-center"><b>Id</b></td>
+                                                        <td class="text-center"><b>Data Histórico</b></td>
+                                                        <td class="text-center"><b>Descrição</b></td>
+                                                        <td class="text-center"><b>Ação</b></td>
+                                                    </tr>
+                                                </thead>
+                                                <tbody></tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <input id="btnIncluir" type="button" class="btn btn-primary" value="Incluir" />
+                <input id="btnAlterar" type="button" class="btn btn-warning" value="Alterar" />
+            </div>
+        </div>
+    </div>
+</div>
