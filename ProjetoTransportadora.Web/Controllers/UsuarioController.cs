@@ -34,7 +34,7 @@ namespace ProjetoTransportadora.Web.Controllers
                 usuario.Senha = null;
                 Session[ConfigurationManager.AppSettings["ProjetoTransportadoraSessionUsuarioTrocarSenha"]] = usuario;
 
-                return Json(new { Sucesso = false, Mensagem = "Usuário necessita trocar a senha", Data = "", TrocarSenha = true }, JsonRequestBehavior.AllowGet);
+                return Json(new { Sucesso = true, Mensagem = "Usuário necessita trocar a senha", Data = "", TrocarSenha = true }, JsonRequestBehavior.AllowGet);
             }
 
             LogIn(usuario);

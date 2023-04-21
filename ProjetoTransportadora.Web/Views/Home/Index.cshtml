@@ -28,24 +28,22 @@
                         login: $("#login").val(),
                         senha: $("#senha").val()
                     },
-                    success: function (data)
-                    {
-                        if (!data.Sucesso)
-                        {
-                            if (data.TrocarSenha) {
-                                window.location.href = "/UsuarioTrocarSenha/Index";
-                                return;
-                            }
+                    success: function (data) {
 
-                            alert("warning", data.Mensagem);
+                        if (!data.Sucesso) {
+                            alert(data.Erro ? "danger" : "warning", data.Mensagem);
                             return;
                         }
 
-                        window.location.href = "/Transportadora/Index";
+                        if (data.TrocarSenha)
+                            window.location.href = "/UsuarioTrocarSenha/Index";
+                        else
+                            window.location.href = "/Transportadora/Index";
                     }
-
                 });
+
             });
+
         });
 
     </script>

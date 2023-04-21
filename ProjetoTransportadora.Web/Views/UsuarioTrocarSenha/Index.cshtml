@@ -16,23 +16,31 @@
 
         $(document).ready(function () {
 
+            $("#senha").focus();
+
+            $("input").on("keydown", function (event) {
+                if (event.keyCode == $.ui.keyCode.ENTER) {
+                    $("#btnAlterar").trigger("click");
+                    return false;
+                }
+            });
+
             $("#btnAlterar").click(function () {
-
-                var usuarioDto = {};
-
-                usuarioDto.Id = '@usuarioDto.Id';
-                usuarioDto.Senha = $("#senha").val();
-                usuarioDto.TrocarSenha = false;
 
                 $.ajax({
                     dataType: "json",
                     type: "POST",
                     url: "/Usuario/AlterarSenha",
-                    data: { usuarioDto: usuarioDto },
+                    data:
+                    {
+                        Id: '@usuarioDto.Id',
+                        Senha: $("#senha").val(),
+                        TrocarSenha: false
+                    },
                     success: function (data) {
 
                         if (!data.Sucesso) {
-                            alert("warning", data.Mensagem);
+                            alert(data.Erro ? "danger" : "warning", data.Mensagem);
                             return;
                         }
 
@@ -51,7 +59,7 @@
     <div class="form-group">
         <div class="row">
             <div class="col-md-3">
-                <input id="senha" type="text" class="form-control" placeholder="Nova Senha" />
+                <input id="senha" type="password" class="form-control" placeholder="Nova Senha" />
             </div>
         </div>
     </div>

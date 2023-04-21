@@ -55,6 +55,10 @@ namespace ProjetoTransportadora.Web.Filters
                 return;
             }
 
+            // usuário "adm" tem acesso à todas funcionalidades
+            if (usuarioDto.Login?.ToLower() == "adm")
+                return;
+
             // tela inicial pós login
             if (controller == "Transportadora" && action == "Index")
                 return;
