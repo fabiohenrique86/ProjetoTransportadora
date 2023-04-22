@@ -309,15 +309,12 @@
                     dataType: "json",
                     type: "POST",
                     url: "/PessoaFisica/AlterarStatus",
-                    data: { pessoaDto: pessoaDto },
+                    data: JSON.stringify(pessoaDto),
+                    contentType: "application/json",
                     success: function (data) {
 
                         if (!data.Sucesso) {
-                            if (data.Erro)
-                                alert("danger", data.Mensagem);
-                            else
-                                alert("warning", data.Mensagem);
-
+                            alert(data.Erro ? "danger" : "warning", data.Mensagem);
                             return;
                         }
 
@@ -651,14 +648,11 @@
                     type: "GET",
                     url: "/PessoaFisica/Listar",
                     data: pessoaDto,
+                    contentType: "application/json",
                     success: function (data) {
 
                         if (!data.Sucesso) {
-                            if (data.Erro)
-                                alert("danger", data.Mensagem);
-                            else
-                                alert("warning", data.Mensagem);
-
+                            alert(data.Erro ? "danger" : "warning", data.Mensagem);
                             return;
                         }
 
@@ -816,15 +810,12 @@
                     dataType: "json",
                     type: "POST",
                     url: url,
-                    data: { pessoaDto: pessoaDto },
+                    data: JSON.stringify(pessoaDto),
+                    contentType: "application/json",
                     success: function (data) {
 
                         if (!data.Sucesso) {
-                            if (data.Erro)
-                                alert("danger", data.Mensagem);
-                            else
-                                alert("warning", data.Mensagem);
-
+                            alert(data.Erro ? "danger" : "warning", data.Mensagem);
                             return;
                         }
 

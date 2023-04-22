@@ -31,7 +31,7 @@
         }
 
         function consultar(data) {
-            limparFormulario();            
+            limparFormulario();
             carregarDadosModal(data);
             habilitarModal(false);
             $("#lblAcao").text("Consultar");
@@ -43,7 +43,7 @@
         }
 
         function alterar(data, o) {
-            limparFormulario();            
+            limparFormulario();
             carregarDadosModal(data);
             habilitarModal(true);
             $("#canalId").val(data.Id);
@@ -71,15 +71,12 @@
                     dataType: "json",
                     type: "POST",
                     url: "/Canal/AlterarStatus",
-                    data: { canalDto: canalDto },
+                    data: JSON.stringify(canalDto),
+                    contentType: "application/json",
                     success: function (data) {
 
                         if (!data.Sucesso) {
-                            if (data.Erro)
-                                alert("danger", data.Mensagem);
-                            else
-                                alert("warning", data.Mensagem);
-
+                            alert(data.Erro ? "danger" : "warning", data.Mensagem);
                             return;
                         }
 
@@ -139,14 +136,11 @@
                     type: "GET",
                     url: "/Canal/Listar",
                     data: canalDto,
+                    contentType: "application/json",
                     success: function (data) {
 
                         if (!data.Sucesso) {
-                            if (data.Erro)
-                                alert("danger", data.Mensagem);
-                            else
-                                alert("warning", data.Mensagem);
-
+                            alert(data.Erro ? "danger" : "warning", data.Mensagem);
                             return;
                         }
 
@@ -159,7 +153,7 @@
 
             $("#btnNovo").click(function () {
 
-                $("#lblAcao").html("Nova");
+                $("#lblAcao").html("Novo");
                 $("#lblTitulo").html("");
                 $("#btnIncluir").show();
                 $("#btnAlterar").hide();
@@ -182,15 +176,12 @@
                     dataType: "json",
                     type: "POST",
                     url: "/Canal/Incluir",
-                    data: { canalDto: canalDto },
+                    data: JSON.stringify(canalDto),
+                    contentType: "application/json",
                     success: function (data) {
 
                         if (!data.Sucesso) {
-                            if (data.Erro)
-                                alert("danger", data.Mensagem);
-                            else
-                                alert("warning", data.Mensagem);
-
+                            alert(data.Erro ? "danger" : "warning", data.Mensagem);
                             return;
                         }
 
@@ -215,15 +206,12 @@
                     dataType: "json",
                     type: "POST",
                     url: "/Canal/Alterar",
-                    data: { canalDto: canalDto },
+                    data: JSON.stringify(canalDto),
+                    contentType: "application/json",
                     success: function (data) {
 
                         if (!data.Sucesso) {
-                            if (data.Erro)
-                                alert("danger", data.Mensagem);
-                            else
-                                alert("warning", data.Mensagem);
-
+                            alert(data.Erro ? "danger" : "warning", data.Mensagem);
                             return;
                         }
 

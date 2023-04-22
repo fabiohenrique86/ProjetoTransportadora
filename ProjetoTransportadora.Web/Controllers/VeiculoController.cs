@@ -14,13 +14,17 @@ namespace ProjetoTransportadora.Web.Controllers
     {
         private VeiculoBusiness veiculoBusiness;
         private SituacaoVeiculoBusiness situacaoVeiculoBusiness;
-        private SituacaoVeiculoBusiness situacaoMultaBusiness;
+        private SituacaoMultaBusiness situacaoMultaBusiness;
+        private MontadoraBusiness montadoraBusiness;
+        private PessoaBusiness pessoaBusiness;
 
         public VeiculoController()
         {
             veiculoBusiness = new VeiculoBusiness();
             situacaoVeiculoBusiness = new SituacaoVeiculoBusiness();
-            situacaoMultaBusiness = new SituacaoVeiculoBusiness();
+            situacaoMultaBusiness = new SituacaoMultaBusiness();
+            montadoraBusiness = new MontadoraBusiness();
+            pessoaBusiness = new PessoaBusiness();
         }
 
         public ActionResult Index()
@@ -40,9 +44,9 @@ namespace ProjetoTransportadora.Web.Controllers
         }
 
         [HttpPost]
-        public JsonResult Incluir(VeiculoDto VeiculoDto)
+        public JsonResult Incluir(VeiculoDto veiculoDto)
         {
-            veiculoBusiness.Incluir(VeiculoDto);
+            veiculoBusiness.Incluir(veiculoDto);
 
             var lista = veiculoBusiness.Listar();
 
@@ -70,29 +74,41 @@ namespace ProjetoTransportadora.Web.Controllers
         }
 
         [HttpGet]
-        public FileContentResult Exportar(VeiculoDto VeiculoDto)
+        public FileContentResult Exportar(VeiculoDto veiculoDto)
         {
-            var lista = veiculoBusiness.Listar(VeiculoDto);
+            var lista = veiculoBusiness.Listar(veiculoDto);
 
-            string csv = "Nome Empresa; Cnpj; Proprietário; Cep; Logradouro; Número; Complemento; Bairro; Cidade; Uf; Produto; Data Abertura" + Environment.NewLine;
+            string csv = "Montadora; Modelo; Ano Fabricação; Ano Modelo; Cor; Placa; Proprietário Atual; Proprietário Anterior; Renavam; Chassi; Data Aquisição; Valor Aquisição; Data Venda; Valor Venda; Data Recuperação; Data Valor FIPE; Valor FIPE; Valor Transportadora; Implemento; Comprimento; Altura; Largura; Rastreador; Situação" + Environment.NewLine;
 
-            //foreach (var item in lista)
-            //{
-            //    csv += item.Nome + ";";
-            //    csv += item.Cnpj + ";";
-            //    csv += (item.VeiculoProprietarioDto == null ? "" : item.VeiculoProprietarioDto.Nome) + ";";
-            //    csv += item.CepResidencia + ";";
-            //    csv += item.LogradouroResidencia + ";";
-            //    csv += item.NumeroResidencia + ";";
-            //    csv += item.ComplementoResidencia + ";";
-            //    csv += item.BairroResidencia + ";";
-            //    csv += item.CidadeResidencia + ";";
-            //    csv += item.UfResidencia + ";";
-            //    csv += (item.ProdutoDto == null ? "" : item.ProdutoDto.Nome) + ";";
-            //    csv += (item.DataAbertura == null ? "" : item.DataAbertura.GetValueOrDefault().ToString("dd/MM/yyyy")) + ";";
+            foreach (var item in lista)
+            {
+                csv += (item.MontadoraDto.Nome == null ? "" : item.MontadoraDto.Nome) + ";";
+                csv += item.Modelo + ";";
+                csv += item.AnoFabricacao + ";";
+                csv += item.AnoModelo + ";";
+                csv += item.Cor + ";";
+                csv += item.Placa + ";";
+                csv += (item.PessoaProprietarioAtualDto == null ? "" : item.PessoaProprietarioAtualDto.Nome) + ";";
+                csv += (item.PessoaProprietarioAnteriorDto == null ? "" : item.PessoaProprietarioAnteriorDto.Nome) + ";";
+                csv += item.Renavam + ";";
+                csv += item.Chassi + ";";
+                csv += (item.DataAquisicao == null ? "" : item.DataAquisicao.GetValueOrDefault().ToString("dd/MM/yyyy")) + ";";
+                csv += (item.ValorAquisicao == null ? "" : item.ValorAquisicao.GetValueOrDefault().ToString("C")) + ";";
+                csv += (item.DataVenda == null ? "" : item.DataVenda.GetValueOrDefault().ToString("dd/MM/yyyy")) + ";";
+                csv += (item.ValorVenda == null ? "" : item.ValorVenda.GetValueOrDefault().ToString("C")) + ";";
+                csv += (item.DataRecuperacao == null ? "" : item.DataRecuperacao.GetValueOrDefault().ToString("dd/MM/yyyy")) + ";";
+                csv += (item.DataValorFIPE == null ? "" : item.DataValorFIPE.GetValueOrDefault().ToString("dd/MM/yyyy")) + ";";
+                csv += (item.ValorFIPE == null ? "" : item.ValorFIPE.GetValueOrDefault().ToString("C")) + ";";
+                csv += (item.ValorTransportadora == null ? "" : item.ValorTransportadora.GetValueOrDefault().ToString("C")) + ";";
+                csv += item.Implemento + ";";
+                csv += item.Comprimento + ";";
+                csv += item.Altura + ";";
+                csv += item.Largura + ";";
+                csv += item.Rastreador + ";";
+                csv += (item.SituacaoVeiculoDto == null ? "" : item.SituacaoVeiculoDto.Nome) + ";";
 
-            //    csv += Environment.NewLine;
-            //}
+                csv += Environment.NewLine;
+            }
 
             return File(Encoding.UTF8.GetPreamble().Concat(Encoding.UTF8.GetBytes(csv)).ToArray(), "text/csv", "veículo-exportar-" + DateTime.Now.ToString("ddMMyyyy_HHmmss") + ".csv");
         }
@@ -109,7 +125,7 @@ namespace ProjetoTransportadora.Web.Controllers
             var streamArquivo = file.InputStream;
             var conteudoArquivo = string.Empty;
             var mensagem = string.Empty;
-            var nome = string.Empty;
+            var placa = string.Empty;
 
             if (tamanhoArquivo <= 0)
                 return Json("Arquivo está vazio", JsonRequestBehavior.AllowGet);
@@ -123,72 +139,151 @@ namespace ProjetoTransportadora.Web.Controllers
             var idUsuario = UsuarioLogado().Id;
             var dataCadastro = DateTime.UtcNow;
 
-            //foreach (var item in conteudoArquivo.Split(Environment.NewLine.ToCharArray(), StringSplitOptions.RemoveEmptyEntries).Skip(1))
-            //{
-            //    try
-            //    {
-            //        var linhaArquivo = item.Split(";".ToCharArray(), StringSplitOptions.None);
+            foreach (var item in conteudoArquivo.Split(Environment.NewLine.ToCharArray(), StringSplitOptions.RemoveEmptyEntries).Skip(1))
+            {
+                try
+                {
+                    var linhaArquivo = item.Split(";".ToCharArray(), StringSplitOptions.None);
 
-            //        nome = linhaArquivo[0];
-            //        var cnpj = linhaArquivo[1];
-            //        var proprietario = linhaArquivo[2];
-            //        var cepResidencia = linhaArquivo[3];
-            //        var logradouroResidencia = linhaArquivo[4];
-            //        var numeroResidencia = linhaArquivo[5];
-            //        var complementoResidencia = linhaArquivo[6];
-            //        var bairroResidencia = linhaArquivo[7];
-            //        var cidadeResidencia = linhaArquivo[8];
-            //        var ufResidencia = linhaArquivo[9];
-            //        var produto = linhaArquivo[10];
-            //        var dataAbertura = linhaArquivo[11];
+                    var montadora = linhaArquivo[0]?.Trim();
+                    var modelo = linhaArquivo[1]?.Trim();
+                    var anoFabricacao = linhaArquivo[2]?.Trim();
+                    var anoModelo = linhaArquivo[3]?.Trim();
+                    var cor = linhaArquivo[4]?.Trim();
+                    placa = linhaArquivo[5]?.Trim();
+                    var proprietarioAtual = linhaArquivo[6]?.Trim();
+                    var proprietarioAnterior = linhaArquivo[7]?.Trim();
+                    var renavam = linhaArquivo[8]?.Trim();
+                    var chassi = linhaArquivo[9]?.Trim();
+                    var dataAquisicao = linhaArquivo[10]?.Trim();
+                    var valorAquisicao = linhaArquivo[11]?.Trim();
+                    var dataVenda = linhaArquivo[12]?.Trim();
+                    var valorVenda = linhaArquivo[13]?.Trim();
+                    var dataRecuperacao = linhaArquivo[14]?.Trim();
+                    var dataValorFIPE = linhaArquivo[15]?.Trim();
+                    var valorFIPE = linhaArquivo[16]?.Trim();
+                    var valorTranpostadora = linhaArquivo[17]?.Trim();
+                    var implemento = linhaArquivo[18]?.Trim();
+                    var comprimento = linhaArquivo[19]?.Trim();
+                    var altura = linhaArquivo[20]?.Trim();
+                    var largura = linhaArquivo[21]?.Trim();
+                    var rastreador = linhaArquivo[22]?.Trim();
+                    var situacaoVeiculo = linhaArquivo[23]?.Trim();
 
-            //        DateTime dtAbertura;
-            //        DateTime.TryParse(dataAbertura, out dtAbertura);
+                    DateTime dtAquisicao;
+                    DateTime.TryParse(dataAquisicao, out dtAquisicao);
 
-            //        int nroResidencia;
-            //        int.TryParse(numeroResidencia, out nroResidencia);
+                    DateTime dtVenda;
+                    DateTime.TryParse(dataVenda, out dtVenda);
 
-            //        var idProduto = produtoBusiness.Listar(new ProdutoDto() { Nome = produto }).FirstOrDefault()?.Id;
+                    DateTime dtRecuperacao;
+                    DateTime.TryParse(dataRecuperacao, out dtRecuperacao);
 
-            //        var VeiculoDto = new VeiculoDto()
-            //        {
-            //            Nome = nome,
-            //            Cnpj = cnpj,
-            //            CepResidencia = cepResidencia,
-            //            LogradouroResidencia = logradouroResidencia,
-            //            NumeroResidencia = nroResidencia,
-            //            ComplementoResidencia = complementoResidencia,
-            //            BairroResidencia = bairroResidencia,
-            //            CidadeResidencia = cidadeResidencia,
-            //            UfResidencia = ufResidencia,
-            //            IdProduto = idProduto,
-            //            DataAbertura = dtAbertura,
-            //            IdUsuarioCadastro = idUsuario,
-            //            DataCadastro = dataCadastro,
-            //            IdTipoVeiculo = (int)TipoVeiculoDto.TipoVeiculo.VeiculoJurídica
-            //        };
+                    DateTime dtValorFIPE;
+                    DateTime.TryParse(dataValorFIPE, out dtValorFIPE);
 
-            //        if (!string.IsNullOrEmpty(proprietario))
-            //        {
-            //            var VeiculoProprietarioDto = veiculoBusiness.Listar(new VeiculoDto() { Nome = proprietario }).FirstOrDefault();
+                    int aFabricacao;
+                    int.TryParse(anoFabricacao, out aFabricacao);
 
-            //            if (VeiculoProprietarioDto != null)
-            //                VeiculoDto.IdProprietario = VeiculoProprietarioDto.Id;
-            //        }
+                    int aModelo;
+                    int.TryParse(anoModelo, out aModelo);
 
-            //        veiculoBusiness.Incluir(VeiculoDto);
+                    double vlAquisicao;
+                    double.TryParse(valorAquisicao, out vlAquisicao);
 
-            //        mensagem += $"Veículo ({nome}) incluída com sucesso" + Environment.NewLine;
-            //    }
-            //    catch (BusinessException ex)
-            //    {
-            //        mensagem += $"Erro ao incluir Veículo ({nome}): " + ex.Message + Environment.NewLine;
-            //    }
-            //    catch (Exception ex)
-            //    {
-            //        mensagem += $"Erro ao incluir Veículo ({nome}): " + ex.Message + Environment.NewLine;
-            //    }
-            //}
+                    double vlVenda;
+                    double.TryParse(valorVenda, out vlVenda);
+
+                    double vlFIPE;
+                    double.TryParse(valorFIPE, out vlFIPE);
+
+                    double vlTransportadora;
+                    double.TryParse(valorTranpostadora, out vlTransportadora);
+
+                    decimal dComprimento;
+                    decimal.TryParse(comprimento, out dComprimento);
+
+                    decimal dAltura;
+                    decimal.TryParse(altura, out dAltura);
+
+                    decimal dLargura;
+                    decimal.TryParse(largura, out dLargura);
+
+                    var idMontadora = 0;                    
+                    var montadoraDto = montadoraBusiness.Obter(new MontadoraDto() { Nome = montadora });
+                    
+                    if (montadoraDto != null)
+                        idMontadora = montadoraDto.Id;
+
+                    int? idProprietarioAtual = null;
+                    if (!string.IsNullOrEmpty(proprietarioAtual))
+                    {
+                        var pessoaProprietarioAtualDto = pessoaBusiness.Listar(new PessoaDto() { Nome = proprietarioAtual }).FirstOrDefault();
+
+                        if (pessoaProprietarioAtualDto != null)
+                            idProprietarioAtual = pessoaProprietarioAtualDto.Id;
+                    }
+
+                    int? idProprietarioAnterior = null;
+                    if (!string.IsNullOrEmpty(proprietarioAnterior))
+                    {
+                        var pessoaProprietarioAnteriorDto = pessoaBusiness.Listar(new PessoaDto() { Nome = proprietarioAnterior }).FirstOrDefault();
+
+                        if (pessoaProprietarioAnteriorDto != null)
+                            idProprietarioAnterior = pessoaProprietarioAnteriorDto.Id;
+                    }
+
+                    int? idSituacaoVeiculo = null;
+                    if (!string.IsNullOrEmpty(situacaoVeiculo))
+                    {
+                        var situacaoVeiculoDto = situacaoVeiculoBusiness.Obter(new SituacaoVeiculoDto() { Nome = situacaoVeiculo });
+
+                        if (situacaoVeiculoDto != null)
+                            idSituacaoVeiculo = situacaoVeiculoDto.Id;
+                    }
+
+                    var veiculoDto = new VeiculoDto()
+                    {
+                        IdMontadora = idMontadora,
+                        Modelo = modelo,
+                        AnoFabricacao = aFabricacao,
+                        AnoModelo = aModelo,
+                        Cor = cor,
+                        Placa = placa,
+                        IdProprietarioAtual = idProprietarioAtual,
+                        IdProprietarioAnterior = idProprietarioAnterior,
+                        Renavam = renavam,
+                        Chassi = chassi,
+                        DataAquisicao = dtAquisicao,
+                        ValorAquisicao = vlAquisicao,
+                        DataVenda = dtVenda,
+                        DataRecuperacao = dtRecuperacao,
+                        DataValorFIPE = dtValorFIPE,
+                        ValorFIPE = vlFIPE,
+                        ValorTransportadora = vlTransportadora,
+                        Implemento = implemento,
+                        Comprimento = dComprimento,
+                        Altura = dAltura,
+                        Largura = dLargura,
+                        Rastreador = rastreador,
+                        IdSituacaoVeiculo = idSituacaoVeiculo,
+                        IdUsuarioCadastro = idUsuario,
+                        DataCadastro = dataCadastro
+                    };
+
+                    veiculoBusiness.Incluir(veiculoDto);
+
+                    mensagem += $"Veículo ({placa}) incluído com sucesso" + Environment.NewLine;
+                }
+                catch (BusinessException ex)
+                {
+                    mensagem += $"Erro ao incluir Veículo ({placa}): " + ex.Message + Environment.NewLine;
+                }
+                catch (Exception ex)
+                {
+                    mensagem += $"Erro ao incluir Veículo ({placa}): " + ex.Message + Environment.NewLine;
+                }
+            }
 
             return Json(new { Sucesso = true, Mensagem = mensagem }, JsonRequestBehavior.AllowGet);
         }

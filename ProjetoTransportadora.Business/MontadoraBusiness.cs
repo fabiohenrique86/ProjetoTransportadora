@@ -14,6 +14,11 @@ namespace ProjetoTransportadora.Business
             montadoraRepository = new MontadoraRepository();
         }
 
+        public MontadoraDto Obter(MontadoraDto montadoraDto = null)
+        {
+            return montadoraRepository.Obter(montadoraDto);
+        }
+
         public List<MontadoraDto> Listar(MontadoraDto montadoraDto = null)
         {
             return montadoraRepository.Listar(montadoraDto);

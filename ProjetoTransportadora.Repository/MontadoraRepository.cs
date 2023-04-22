@@ -21,6 +21,9 @@ namespace ProjetoTransportadora.Repository
             if (montadoraDto.Id > 0)
                 query = query.Where(x => x.Id == montadoraDto.Id);
 
+            if (!string.IsNullOrEmpty(montadoraDto.Nome))
+                query = query.Where(x => x.Nome == montadoraDto.Nome);
+
             return query.Select(x => new MontadoraDto() { Id = x.Id, Nome = x.Nome }).FirstOrDefault();
         }
 

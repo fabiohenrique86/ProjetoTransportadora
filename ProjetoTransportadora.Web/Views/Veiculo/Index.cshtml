@@ -214,15 +214,12 @@
                     dataType: "json",
                     type: "POST",
                     url: "/Veiculo/AlterarStatus",
-                    data: { veiculoDto: veiculoDto },
+                    data: JSON.stringify(veiculoDto),
+                    contentType: "application/json",
                     success: function (data) {
 
                         if (!data.Sucesso) {
-                            if (data.Erro)
-                                alert("danger", data.Mensagem);
-                            else
-                                alert("warning", data.Mensagem);
-
+                            alert(data.Erro ? "danger" : "warning", data.Mensagem);
                             return;
                         }
 
@@ -516,14 +513,11 @@
                     type: "GET",
                     url: "/Veiculo/Listar",
                     data: veiculoDto,
+                    contentType: "application/json",
                     success: function (data) {
 
                         if (!data.Sucesso) {
-                            if (data.Erro)
-                                alert("danger", data.Mensagem);
-                            else
-                                alert("warning", data.Mensagem);
-
+                            alert(data.Erro ? "danger" : "warning", data.Mensagem);
                             return;
                         }
 
@@ -639,15 +633,12 @@
                     dataType: "json",
                     type: "POST",
                     url: url,
-                    data: { veiculoDto: veiculoDto },
+                    data: JSON.stringify(veiculoDto),
+                    contentType: "application/json",
                     success: function (data) {
 
                         if (!data.Sucesso) {
-                            if (data.Erro)
-                                alert("danger", data.Mensagem);
-                            else
-                                alert("warning", data.Mensagem);
-
+                            alert(data.Erro ? "danger" : "warning", data.Mensagem);
                             return;
                         }
 

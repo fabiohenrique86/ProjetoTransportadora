@@ -71,15 +71,12 @@
                     dataType: "json",
                     type: "POST",
                     url: "/Montadora/AlterarStatus",
-                    data: { montadoraDto: montadoraDto },
+                    data: JSON.stringify(montadoraDto),
+                    contentType: "application/json",
                     success: function (data) {
 
                         if (!data.Sucesso) {
-                            if (data.Erro)
-                                alert("danger", data.Mensagem);
-                            else
-                                alert("warning", data.Mensagem);
-
+                            alert(data.Erro ? "danger" : "warning", data.Mensagem);
                             return;
                         }
 
@@ -138,14 +135,11 @@
                     type: "GET",
                     url: "/Montadora/Listar",
                     data: montadoraDto,
+                    contentType: "application/json",
                     success: function (data) {
 
                         if (!data.Sucesso) {
-                            if (data.Erro)
-                                alert("danger", data.Mensagem);
-                            else
-                                alert("warning", data.Mensagem);
-
+                            alert(data.Erro ? "danger" : "warning", data.Mensagem);
                             return;
                         }
 
@@ -181,15 +175,12 @@
                     dataType: "json",
                     type: "POST",
                     url: "/Montadora/Incluir",
-                    data: { montadoraDto: montadoraDto },
+                    data: JSON.stringify(montadoraDto),
+                    contentType: "application/json",
                     success: function (data) {
 
                         if (!data.Sucesso) {
-                            if (data.Erro)
-                                alert("danger", data.Mensagem);
-                            else
-                                alert("warning", data.Mensagem);
-
+                            alert(data.Erro ? "danger" : "warning", data.Mensagem);
                             return;
                         }
 
@@ -214,15 +205,12 @@
                     dataType: "json",
                     type: "POST",
                     url: "/Montadora/Alterar",
-                    data: { montadoraDto: montadoraDto },
+                    data: JSON.stringify(montadoraDto),
+                    contentType: "application/json",
                     success: function (data) {
 
                         if (!data.Sucesso) {
-                            if (data.Erro)
-                                alert("danger", data.Mensagem);
-                            else
-                                alert("warning", data.Mensagem);
-
+                            alert(data.Erro ? "danger" : "warning", data.Mensagem);
                             return;
                         }
 

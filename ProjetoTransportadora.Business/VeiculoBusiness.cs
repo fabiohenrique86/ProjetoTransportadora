@@ -10,11 +10,11 @@ namespace ProjetoTransportadora.Business
     public class VeiculoBusiness : BaseBusiness
     {
         VeiculoRepository veiculoRepository;
-        //VeiculoHistoricoBusiness VeiculoHistoricoBusiness;
+        VeiculoHistoricoBusiness veiculoHistoricoBusiness;
         public VeiculoBusiness()
         {
             veiculoRepository = new VeiculoRepository();
-            //VeiculoHistoricoBusiness = new VeiculoHistoricoBusiness();
+            veiculoHistoricoBusiness = new VeiculoHistoricoBusiness();
         }
 
         public List<VeiculoDto> Listar(VeiculoDto veiculoDto = null)
@@ -49,11 +49,11 @@ namespace ProjetoTransportadora.Business
             {
                 idVeiculo = veiculoRepository.Incluir(veiculoDto);
 
-                //foreach (var VeiculoHistoricoDto in veiculoDto.VeiculoHistoricoDto)
-                //{
-                //    VeiculoHistoricoDto.IdVeiculo = idVeiculo;
-                //    VeiculoHistoricoBusiness.Incluir(VeiculoHistoricoDto);
-                //}
+                foreach (var veiculoHistoricoDto in veiculoDto.VeiculoHistoricoDto)
+                {
+                    veiculoHistoricoDto.IdVeiculo = idVeiculo;
+                    veiculoHistoricoBusiness.Incluir(veiculoHistoricoDto);
+                }
 
                 scope.Complete();
             }
@@ -92,9 +92,9 @@ namespace ProjetoTransportadora.Business
                 veiculoRepository.Alterar(veiculoDto);
 
                 // Veiculo historico
-                //VeiculoHistoricoBusiness.Excluir(VeiculoDto.Id);
-                //foreach (var VeiculoHistoricoDto in VeiculoDto.VeiculoHistoricoDto)
-                //    VeiculoHistoricoBusiness.Incluir(VeiculoHistoricoDto);
+                veiculoHistoricoBusiness.Excluir(veiculoDto.Id);
+                foreach (var veiculoHistoricoDto in veiculoDto.VeiculoHistoricoDto)
+                    veiculoHistoricoBusiness.Incluir(veiculoHistoricoDto);
 
                 scope.Complete();
             }

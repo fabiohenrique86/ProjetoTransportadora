@@ -75,7 +75,8 @@
                     dataType: "json",
                     type: "POST",
                     url: "/Feriado/AlterarStatus",
-                    data: { feriadoDto: feriadoDto },
+                    data: JSON.stringify(feriadoDto),
+                    contentType: "application/json",
                     success: function (data) {
 
                         if (!data.Sucesso) {
@@ -141,6 +142,7 @@
                     type: "GET",
                     url: "/Feriado/Listar",
                     data: feriadoDto,
+                    contentType: "application/json",
                     success: function (data) {
 
                         if (!data.Sucesso) {
@@ -181,7 +183,8 @@
                     dataType: "json",
                     type: "POST",
                     url: "/Feriado/Incluir",
-                    data: { feriadoDto: feriadoDto },
+                    data: JSON.stringify(feriadoDto),
+                    contentType: "application/json",
                     success: function (data) {
 
                         if (!data.Sucesso) {
@@ -211,7 +214,8 @@
                     dataType: "json",
                     type: "POST",
                     url: "/Feriado/Alterar",
-                    data: { feriadoDto: feriadoDto },
+                    data: JSON.stringify(feriadoDto),
+                    contentType: "application/json",
                     success: function (data) {
 
                         if (!data.Sucesso) {

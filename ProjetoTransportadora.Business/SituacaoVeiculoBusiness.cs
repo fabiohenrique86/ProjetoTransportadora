@@ -14,6 +14,11 @@ namespace ProjetoTransportadora.Business
             situacaoVeiculoRepository = new SituacaoVeiculoRepository();
         }
 
+        public SituacaoVeiculoDto Obter(SituacaoVeiculoDto situacaoVeiculoDto = null)
+        {
+            return situacaoVeiculoRepository.Obter(situacaoVeiculoDto);
+        }
+
         public List<SituacaoVeiculoDto> Listar(SituacaoVeiculoDto situacaoVeiculoDto = null)
         {
             return situacaoVeiculoRepository.Listar(situacaoVeiculoDto);

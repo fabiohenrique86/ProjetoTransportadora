@@ -40,15 +40,12 @@
                     dataType: "json",
                     type: "POST",
                     url: "/Permissao/AlterarStatus",
-                    data: { grupoFuncionalidadeDto: grupoFuncionalidadeDto },
+                    data: JSON.stringify(grupoFuncionalidadeDto),
+                    contentType: "application/json",
                     success: function (data) {
 
                         if (!data.Sucesso) {
-                            if (data.Erro)
-                                alert("danger", data.Mensagem);
-                            else
-                                alert("warning", data.Mensagem);
-
+                            alert(data.Erro ? "danger" : "warning", data.Mensagem);
                             return;
                         }
 
@@ -97,14 +94,11 @@
                     type: "GET",
                     url: "/Permissao/Listar",
                     data: grupoFuncionalidadeDto,
+                    contentType: "application/json",
                     success: function (data) {
 
                         if (!data.Sucesso) {
-                            if (data.Erro)
-                                alert("danger", data.Mensagem);
-                            else
-                                alert("warning", data.Mensagem);
-
+                            alert(data.Erro ? "danger" : "warning", data.Mensagem);
                             return;
                         }
 

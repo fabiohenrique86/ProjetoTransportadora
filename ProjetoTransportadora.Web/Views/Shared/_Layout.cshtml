@@ -341,6 +341,7 @@
                     dataType: "json",
                     type: "GET",
                     url: "https://viacep.com.br/ws/" + cep + "/json/",
+                    contentType: "application/json",
                     success: function (data) {
 
                         if (data == null || data.erro)

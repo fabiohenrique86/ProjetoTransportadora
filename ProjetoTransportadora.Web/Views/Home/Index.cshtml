@@ -28,6 +28,7 @@
                         login: $("#login").val(),
                         senha: $("#senha").val()
                     },
+                    contentType: "application/json",
                     success: function (data) {
 
                         if (!data.Sucesso) {

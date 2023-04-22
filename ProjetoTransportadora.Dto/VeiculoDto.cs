@@ -23,13 +23,13 @@ namespace ProjetoTransportadora.Dto
         public string Renavam { get; set; }
         public string Chassi { get; set; }
         public Nullable<System.DateTime> DataAquisicao { get; set; }
-        public Nullable<decimal> ValorAquisicao { get; set; }
+        public Nullable<double> ValorAquisicao { get; set; }
         public Nullable<System.DateTime> DataVenda { get; set; }
-        public Nullable<decimal> ValorVenda { get; set; }
+        public Nullable<double> ValorVenda { get; set; }
         public Nullable<System.DateTime> DataRecuperacao { get; set; }
         public Nullable<System.DateTime> DataValorFIPE { get; set; }
-        public Nullable<decimal> ValorFIPE { get; set; }
-        public Nullable<decimal> ValorTransportadora { get; set; }
+        public Nullable<double> ValorFIPE { get; set; }
+        public Nullable<double> ValorTransportadora { get; set; }
         public string Implemento { get; set; }
         public Nullable<decimal> Comprimento { get; set; }
         public Nullable<decimal> Altura { get; set; }

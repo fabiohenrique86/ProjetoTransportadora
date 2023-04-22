@@ -225,15 +225,12 @@
                     dataType: "json",
                     type: "POST",
                     url: "/PessoaJuridica/AlterarStatus",
-                    data: { pessoaDto: pessoaDto },
+                    data: JSON.stringify(pessoaDto),
+                    contentType: "application/json",
                     success: function (data) {
 
                         if (!data.Sucesso) {
-                            if (data.Erro)
-                                alert("danger", data.Mensagem);
-                            else
-                                alert("warning", data.Mensagem);
-
+                            alert(data.Erro ? "danger" : "warning", data.Mensagem);
                             return;
                         }
 
@@ -502,21 +499,16 @@
                 else if ($("#ativo").val() == "1")
                     pessoaDto.Ativo = true;
 
-                console.log('pessoaDto', pessoaDto);
-
                 $.ajax({
                     dataType: "json",
                     type: "GET",
                     url: "/PessoaJuridica/Listar",
                     data: pessoaDto,
+                    contentType: "application/json",
                     success: function (data) {
 
                         if (!data.Sucesso) {
-                            if (data.Erro)
-                                alert("danger", data.Mensagem);
-                            else
-                                alert("warning", data.Mensagem);
-
+                            alert(data.Erro ? "danger" : "warning", data.Mensagem);
                             return;
                         }
 
@@ -628,7 +620,8 @@
                     dataType: "json",
                     type: "POST",
                     url: url,
-                    data: { pessoaDto: pessoaDto },
+                    data: JSON.stringify(pessoaDto),
+                    contentType: "application/json",
                     success: function (data) {
 
                         if (!data.Sucesso) {

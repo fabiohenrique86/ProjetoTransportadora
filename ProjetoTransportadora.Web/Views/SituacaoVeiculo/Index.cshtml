@@ -71,15 +71,12 @@
                     dataType: "json",
                     type: "POST",
                     url: "/SituacaoVeiculo/AlterarStatus",
-                    data: { situacaoVeiculoDto: situacaoVeiculoDto },
+                    data: JSON.stringify(situacaoVeiculoDto),
+                    contentType: "application/json",
                     success: function (data) {
 
                         if (!data.Sucesso) {
-                            if (data.Erro)
-                                alert("danger", data.Mensagem);
-                            else
-                                alert("warning", data.Mensagem);
-
+                            alert(data.Erro ? "danger" : "warning", data.Mensagem);
                             return;
                         }
 
@@ -138,14 +135,11 @@
                     type: "GET",
                     url: "/SituacaoVeiculo/Listar",
                     data: situacaoVeiculoDto,
+                    contentType: "application/json",
                     success: function (data) {
 
                         if (!data.Sucesso) {
-                            if (data.Erro)
-                                alert("danger", data.Mensagem);
-                            else
-                                alert("warning", data.Mensagem);
-
+                            alert(data.Erro ? "danger" : "warning", data.Mensagem);
                             return;
                         }
 
@@ -180,15 +174,12 @@
                     dataType: "json",
                     type: "POST",
                     url: "/SituacaoVeiculo/Incluir",
-                    data: { situacaoVeiculoDto: situacaoVeiculoDto },
+                    data: JSON.stringify(situacaoVeiculoDto),
+                    contentType: "application/json",
                     success: function (data) {
 
                         if (!data.Sucesso) {
-                            if (data.Erro)
-                                alert("danger", data.Mensagem);
-                            else
-                                alert("warning", data.Mensagem);
-
+                            alert(data.Erro ? "danger" : "warning", data.Mensagem);
                             return;
                         }
 
@@ -213,15 +204,12 @@
                     dataType: "json",
                     type: "POST",
                     url: "/SituacaoVeiculo/Alterar",
-                    data: { situacaoVeiculoDto: situacaoVeiculoDto },
+                    data: JSON.stringify(situacaoVeiculoDto),
+                    contentType: "application/json",
                     success: function (data) {
 
                         if (!data.Sucesso) {
-                            if (data.Erro)
-                                alert("danger", data.Mensagem);
-                            else
-                                alert("warning", data.Mensagem);
-
+                            alert(data.Erro ? "danger" : "warning", data.Mensagem);
                             return;
                         }
 

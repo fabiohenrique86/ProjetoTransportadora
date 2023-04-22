@@ -91,15 +91,12 @@
                     dataType: "json",
                     type: "POST",
                     url: "/Usuario/AlterarStatus",
-                    data: { usuarioDto: usuarioDto },
+                    data: JSON.stringify(usuarioDto),
+                    contentType: "application/json",
                     success: function (data) {
 
                         if (!data.Sucesso) {
-                            if (data.Erro)
-                                alert("danger", data.Mensagem);
-                            else
-                                alert("warning", data.Mensagem);
-
+                            alert(data.Erro ? "danger" : "warning", data.Mensagem);
                             return;
                         }
 
@@ -175,14 +172,11 @@
                     dataType: "json",
                     type: "GET",
                     url: "/Usuario/Listar?Login=" + $("#loginPesquisar").val() + "&UsuarioGrupoDto[0].IdGrupo=" + $("#grupoPesquisar").val() + "&Ativo=" + ativo,
+                    contentType: "application/json",
                     success: function (data) {
 
                         if (!data.Sucesso) {
-                            if (data.Erro)
-                                alert("danger", data.Mensagem);
-                            else
-                                alert("warning", data.Mensagem);
-
+                            alert(data.Erro ? "danger" : "warning", data.Mensagem);
                             return;
                         }
 
@@ -223,15 +217,12 @@
                     dataType: "json",
                     type: "POST",
                     url: "/Usuario/Incluir",
-                    data: { usuarioDto: usuarioDto },
+                    data: JSON.stringify(usuarioDto),
+                    contentType: "application/json",
                     success: function (data) {
 
                         if (!data.Sucesso) {
-                            if (data.Erro)
-                                alert("danger", data.Mensagem);
-                            else
-                                alert("warning", data.Mensagem);
-
+                            alert(data.Erro ? "danger" : "warning", data.Mensagem);
                             return;
                         }
 
@@ -263,15 +254,12 @@
                     dataType: "json",
                     type: "POST",
                     url: "/Usuario/Alterar",
-                    data: { usuarioDto: usuarioDto },
+                    data: JSON.stringify(usuarioDto),
+                    contentType: "application/json",
                     success: function (data) {
 
                         if (!data.Sucesso) {
-                            if (data.Erro)
-                                alert("danger", data.Mensagem);
-                            else
-                                alert("warning", data.Mensagem);
-
+                            alert(data.Erro ? "danger" : "warning", data.Mensagem);
                             return;
                         }
 
