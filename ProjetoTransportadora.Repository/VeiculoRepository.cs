@@ -70,16 +70,16 @@ namespace ProjetoTransportadora.Repository
             {
                 Id = x.Id,
                 IdMontadora = x.IdMontadora,
-                MontadoraDto = new MontadoraDto { Id = x.Montadora.Id, Nome = x.Montadora.Nome, Ativo = x.Montadora.Ativo, DataCadastro = x.Montadora.DataCadastro, DataInativacao = x.Montadora.DataInativacao, IdUsuarioCadastro = x.Montadora.IdUsuarioCadastro, IdUsuarioInativacao = x.Montadora.IdUsuarioInativacao },
+                MontadoraDto = x.Montadora == null ? null : new MontadoraDto { Id = x.Montadora.Id, Nome = x.Montadora.Nome, Ativo = x.Montadora.Ativo, DataCadastro = x.Montadora.DataCadastro, DataInativacao = x.Montadora.DataInativacao, IdUsuarioCadastro = x.Montadora.IdUsuarioCadastro, IdUsuarioInativacao = x.Montadora.IdUsuarioInativacao },
                 Modelo = x.Modelo,
                 Placa = x.Placa,
                 AnoFabricacao = x.AnoFabricacao,
                 AnoModelo = x.AnoModelo,
                 Cor = x.Cor,
                 IdProprietarioAtual = x.IdProprietarioAtual,
-                PessoaProprietarioAtualDto = x.PessoaProprietarioAtual == null ? null : new PessoaDto { Id = x.PessoaProprietarioAtual.Id, Ativo = x.PessoaProprietarioAtual.Ativo, Cpf = x.PessoaProprietarioAtual.Cpf, Cnpj = x.PessoaProprietarioAtual.Cnpj },
+                PessoaProprietarioAtualDto = x.PessoaProprietarioAtual == null ? null : new PessoaDto { Id = x.PessoaProprietarioAtual.Id, Nome = x.PessoaProprietarioAtual.Nome, Ativo = x.PessoaProprietarioAtual.Ativo, Cpf = x.PessoaProprietarioAtual.Cpf, Cnpj = x.PessoaProprietarioAtual.Cnpj },
                 IdProprietarioAnterior = x.IdProprietarioAnterior,
-                PessoaProprietarioAnteriorDto = x.PessoaProprietarioAnterior == null ? null : new PessoaDto { Id = x.PessoaProprietarioAnterior.Id, Ativo = x.PessoaProprietarioAnterior.Ativo, Cpf = x.PessoaProprietarioAnterior.Cpf, Cnpj = x.PessoaProprietarioAnterior.Cnpj },
+                PessoaProprietarioAnteriorDto = x.PessoaProprietarioAnterior == null ? null : new PessoaDto { Id = x.PessoaProprietarioAnterior.Id, Nome = x.PessoaProprietarioAnterior.Nome, Ativo = x.PessoaProprietarioAnterior.Ativo, Cpf = x.PessoaProprietarioAnterior.Cpf, Cnpj = x.PessoaProprietarioAnterior.Cnpj },
                 Renavam = x.Renavam,
                 Chassi = x.Chassi,
                 DataAquisicao = x.DataAquisicao,
@@ -87,7 +87,7 @@ namespace ProjetoTransportadora.Repository
                 DataVenda = x.DataVenda,
                 ValorVenda = x.ValorVenda,
                 DataRecuperacao = x.DataRecuperacao,
-                DataValorFIPE= x.DataValorFIPE,
+                DataValorFIPE = x.DataValorFIPE,
                 ValorFIPE = x.ValorFIPE,
                 ValorTransportadora = x.ValorTransportadora,
                 Implemento = x.Implemento,
@@ -101,50 +101,46 @@ namespace ProjetoTransportadora.Repository
                 IdUsuarioCadastro = x.IdUsuarioCadastro,
                 DataCadastro = x.DataCadastro,
                 IdUsuarioInativacao = x.IdUsuarioInativacao,
-                DataInativacao = x.DataInativacao//,
-                //VeiculoHistoricoDto = x.VeiculoHistorico.Select(w => new VeiculoHistoricoDto()
-                //{
-                //    Id = w.Id,
-                //    IdVeiculo = w.IdVeiculo,
-                //    DataHistorico = w.DataHistorico,
-                //    Descricao = w.Descricao
-                //}).ToList()
+                DataInativacao = x.DataInativacao,
+                VeiculoMultaDto = x.VeiculoMulta.Select(w => new VeiculoMultaDto()
+                {
+                    Id = w.Id,
+                    IdVeiculo = w.IdVeiculo,
+                    DataMulta = w.DataMulta,
+                    Local = w.Local,
+                    IdCondutor = w.IdCondutor,                    
+                    DataVencimentoMulta = w.DataVencimentoMulta,
+                    ValorMulta = w.ValorMulta,
+                    IdSituacaoMulta = w.IdSituacaoMulta,                    
+                    IdUsuarioCadastro = w.IdUsuarioCadastro,
+                    DataCadastro = w.DataCadastro,
+                    //PessoaCondutorDto = new PessoaDto() { Id = w.PessoaCondutor.Id, Nome = w.PessoaCondutor.Nome, Cpf = w.PessoaCondutor.Cpf },
+                    SituacaoMultaDto = w.SituacaoMulta == null ? null : new SituacaoMultaDto() { Id = w.SituacaoMulta.Id, Nome = w.SituacaoMulta.Nome }
+                }).ToList(),
+                VeiculoHistoricoDto = x.VeiculoHistorico.Select(w => new VeiculoHistoricoDto()
+                {
+                    Id = w.Id,
+                    IdVeiculo = w.IdVeiculo,
+                    DataHistorico = w.DataHistorico,
+                    Descricao = w.Descricao,
+                    IdUsuarioCadastro = w.IdUsuarioCadastro,
+                    DataCadastro = w.DataCadastro                    
+                }).ToList()
             }).ToList();
 
-            //foreach (var p in VeiculosDto)
-            //{
-            //    if (p.IdPai > 0)
-            //    {
-            //        var VeiculoPai = projetoTransportadoraEntities.Veiculo.FirstOrDefault(x => x.Id == p.IdPai);
+            foreach (var v in veiculosDto)
+            {
+                foreach (var vm in v.VeiculoMultaDto)
+                {
+                    if (vm.IdCondutor > 0)
+                    {
+                        var pessoaCondutor = projetoTransportadoraEntities.Pessoa.FirstOrDefault(x => x.Id == vm.IdCondutor);
 
-            //        if (VeiculoPai != null)
-            //            p.VeiculoPaiDto = new VeiculoDto() { Id = VeiculoPai.Id, Nome = VeiculoPai.Nome, Cpf = VeiculoPai.Cpf, Cnpj = VeiculoPai.Cnpj, IdTipoVeiculo = VeiculoPai.IdTipoVeiculo };
-            //    }
-
-            //    if (p.IdMae > 0)
-            //    {
-            //        var VeiculoMae = projetoTransportadoraEntities.Veiculo.FirstOrDefault(x => x.Id == p.IdMae);
-
-            //        if (VeiculoMae != null)
-            //            p.VeiculoMaeDto = new VeiculoDto() { Id = VeiculoMae.Id, Nome = VeiculoMae.Nome, Cpf = VeiculoMae.Cpf, Cnpj = VeiculoMae.Cnpj, IdTipoVeiculo = VeiculoMae.IdTipoVeiculo };
-            //    }
-
-            //    if (p.IdConjuge > 0)
-            //    {
-            //        var VeiculoConjuge = projetoTransportadoraEntities.Veiculo.FirstOrDefault(x => x.Id == p.IdConjuge);
-
-            //        if (VeiculoConjuge != null)
-            //            p.VeiculoConjugeDto = new VeiculoDto() { Id = VeiculoConjuge.Id, Nome = VeiculoConjuge.Nome, Cpf = VeiculoConjuge.Cpf, Cnpj = VeiculoConjuge.Cnpj, IdTipoVeiculo = VeiculoConjuge.IdTipoVeiculo };
-            //    }
-
-            //    if (p.IdProprietario > 0)
-            //    {
-            //        var VeiculoProprietario = projetoTransportadoraEntities.Veiculo.FirstOrDefault(x => x.Id == p.IdProprietario);
-
-            //        if (VeiculoProprietario != null)
-            //            p.VeiculoProprietarioDto = new VeiculoDto() { Id = VeiculoProprietario.Id, Nome = VeiculoProprietario.Nome, Cpf = VeiculoProprietario.Cpf, Cnpj = VeiculoProprietario.Cnpj, IdTipoVeiculo = VeiculoProprietario.IdTipoVeiculo };
-            //    }
-            //}
+                        if (pessoaCondutor != null)
+                            vm.PessoaCondutorDto = new PessoaDto() { Id = pessoaCondutor.Id, Nome = pessoaCondutor.Nome, Cpf = pessoaCondutor.Cpf };
+                    }
+                }
+            }
 
             return veiculosDto;
         }

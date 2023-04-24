@@ -10,21 +10,23 @@ namespace ProjetoTransportadora.Web.Controllers
     {
         private PessoaBusiness pessoaBusiness;
         private UsuarioBusiness usuarioBusiness;
+        private VeiculoBusiness veiculoBusiness;
 
         public TransportadoraController()
         {
             pessoaBusiness = new PessoaBusiness();
             usuarioBusiness = new UsuarioBusiness();
+            veiculoBusiness = new VeiculoBusiness();
         }
 
         public ActionResult Index()
         {
             var listaPessoaDto = pessoaBusiness.Listar(new PessoaDto() { Ativo = true });
-            var listaUsuarioDto = usuarioBusiness.Listar(new UsuarioDto() { Ativo = true });
 
             ViewBag.QuantidadePessoasFisicas = listaPessoaDto?.Where(x => x.DataCadastro.Month == DateTime.Now.Month && x.DataCadastro.Year == DateTime.Now.Year && x.IdTipoPessoa == (int)TipoPessoaDto.TipoPessoa.PessoaFísica).Count();
             ViewBag.QuantidadePessoasJuridicas = listaPessoaDto?.Where(x => x.DataCadastro.Month == DateTime.Now.Month && x.DataCadastro.Year == DateTime.Now.Year && x.IdTipoPessoa == (int)TipoPessoaDto.TipoPessoa.PessoaJurídica).Count();
-            ViewBag.QuantidadeUsuarios = listaUsuarioDto?.Where(x => x.DataCadastro.Month == DateTime.Now.Month && x.DataCadastro.Year == DateTime.Now.Year).Count();
+            ViewBag.QuantidadeUsuarios = usuarioBusiness.Listar(new UsuarioDto() { Ativo = true })?.Where(x => x.DataCadastro.Month == DateTime.Now.Month && x.DataCadastro.Year == DateTime.Now.Year).Count();
+            ViewBag.QuantidadeVeiculos = veiculoBusiness.Listar(new VeiculoDto() { Ativo = true })?.Where(x => x.DataCadastro.Month == DateTime.Now.Month && x.DataCadastro.Year == DateTime.Now.Year).Count();
 
             return View();
         }

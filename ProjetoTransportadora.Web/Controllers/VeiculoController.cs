@@ -31,6 +31,7 @@ namespace ProjetoTransportadora.Web.Controllers
         {
             ViewBag.SituacaoVeiculo = situacaoVeiculoBusiness.Listar(new SituacaoVeiculoDto() { Ativo = true });
             ViewBag.SituacaoMulta = situacaoMultaBusiness.Listar();
+            ViewBag.Montadora = montadoraBusiness.Listar();
 
             return View();
         }
@@ -200,14 +201,14 @@ namespace ProjetoTransportadora.Web.Controllers
                     double vlTransportadora;
                     double.TryParse(valorTranpostadora, out vlTransportadora);
 
-                    decimal dComprimento;
-                    decimal.TryParse(comprimento, out dComprimento);
+                    double dComprimento;
+                    double.TryParse(comprimento, out dComprimento);
 
-                    decimal dAltura;
-                    decimal.TryParse(altura, out dAltura);
+                    double dAltura;
+                    double.TryParse(altura, out dAltura);
 
-                    decimal dLargura;
-                    decimal.TryParse(largura, out dLargura);
+                    double dLargura;
+                    double.TryParse(largura, out dLargura);
 
                     var idMontadora = 0;                    
                     var montadoraDto = montadoraBusiness.Obter(new MontadoraDto() { Nome = montadora });

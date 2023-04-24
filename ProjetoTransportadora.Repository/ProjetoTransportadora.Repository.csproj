@@ -99,6 +99,10 @@
     <Compile Include="Veiculo.cs">
       <DependentUpon>ProjetoTransportadoraModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="VeiculoMulta.cs">
+      <DependentUpon>ProjetoTransportadoraModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="VeiculoMultaRepository.cs" />
     <Compile Include="VeiculoHistoricoRepository.cs" />
     <Compile Include="PessoaHistoricoRepository.cs" />
     <Compile Include="PessoaReferencia.cs">
@@ -110,9 +114,6 @@
     </Compile>
     <Compile Include="SituacaoMultaRepository.cs" />
     <Compile Include="VeiculoHistorico.cs">
-      <DependentUpon>ProjetoTransportadoraModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="VeiculoMulta.cs">
       <DependentUpon>ProjetoTransportadoraModel.tt</DependentUpon>
     </Compile>
     <Compile Include="VeiculoRepository.cs" />

@@ -11,10 +11,12 @@ namespace ProjetoTransportadora.Business
     {
         VeiculoRepository veiculoRepository;
         VeiculoHistoricoBusiness veiculoHistoricoBusiness;
+        VeiculoMultaBusiness veiculoMultaBusiness;
         public VeiculoBusiness()
         {
             veiculoRepository = new VeiculoRepository();
             veiculoHistoricoBusiness = new VeiculoHistoricoBusiness();
+            veiculoMultaBusiness = new VeiculoMultaBusiness();
         }
 
         public List<VeiculoDto> Listar(VeiculoDto veiculoDto = null)
@@ -53,6 +55,12 @@ namespace ProjetoTransportadora.Business
                 {
                     veiculoHistoricoDto.IdVeiculo = idVeiculo;
                     veiculoHistoricoBusiness.Incluir(veiculoHistoricoDto);
+                }
+
+                foreach (var veiculoMultaDto in veiculoDto.VeiculoMultaDto)
+                {
+                    veiculoMultaDto.IdVeiculo = idVeiculo;
+                    veiculoMultaBusiness.Incluir(veiculoMultaDto);
                 }
 
                 scope.Complete();
@@ -95,6 +103,11 @@ namespace ProjetoTransportadora.Business
                 veiculoHistoricoBusiness.Excluir(veiculoDto.Id);
                 foreach (var veiculoHistoricoDto in veiculoDto.VeiculoHistoricoDto)
                     veiculoHistoricoBusiness.Incluir(veiculoHistoricoDto);
+
+                // Veiculo multa
+                veiculoMultaBusiness.Excluir(veiculoDto.Id);
+                foreach (var veiculoMultaDto in veiculoDto.VeiculoMultaDto)
+                    veiculoMultaBusiness.Incluir(veiculoMultaDto);
 
                 scope.Complete();
             }

@@ -96,7 +96,7 @@
 
                 var id = Math.floor((Math.random() * 100000000) + 1);
 
-                var selectTipoTelefone = "<select id=" + id + " name='tipoTelefone' class='form-control tipoTelefone'>"
+                var selectTipoTelefone = "<select id='" + id + "' name='tipoTelefone' class='form-control tipoTelefone'>"
                 selectTipoTelefone += "<option value=''>Tipo Telefone</option>";
                 $(tipoTelefoneDto).each(function (i, e) {
                     selectTipoTelefone += "<option value='" + e.Id + "'>" + e.Nome + "</option>";

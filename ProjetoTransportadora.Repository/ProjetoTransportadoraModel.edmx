@@ -312,9 +312,9 @@
           <Property Name="ValorFIPE" Type="float" />
           <Property Name="ValorTransportadora" Type="float" />
           <Property Name="Implemento" Type="varchar" MaxLength="100" />
-          <Property Name="Comprimento" Type="decimal" Precision="18" Scale="0" />
-          <Property Name="Altura" Type="decimal" Precision="18" Scale="0" />
-          <Property Name="Largura" Type="decimal" Precision="18" Scale="0" />
+          <Property Name="Comprimento" Type="float" />
+          <Property Name="Altura" Type="float" />
+          <Property Name="Largura" Type="float" />
           <Property Name="Rastreador" Type="varchar" MaxLength="100" />
           <Property Name="IdSituacaoVeiculo" Type="int" />
           <Property Name="Ativo" Type="bit" Nullable="false" />
@@ -669,7 +669,7 @@
               <PropertyRef Name="Id" />
             </Principal>
             <Dependent Role="VeiculoMulta">
-              <PropertyRef Name="IdCondutor" />
+              <PropertyRef Name="IdVeiculo" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -1582,9 +1582,9 @@
           <Property Name="ValorFIPE" Type="Double" />
           <Property Name="ValorTransportadora" Type="Double" />
           <Property Name="Implemento" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
-          <Property Name="Comprimento" Type="Decimal" Precision="18" Scale="0" />
-          <Property Name="Altura" Type="Decimal" Precision="18" Scale="0" />
-          <Property Name="Largura" Type="Decimal" Precision="18" Scale="0" />
+          <Property Name="Comprimento" Type="Double" />
+          <Property Name="Altura" Type="Double" />
+          <Property Name="Largura" Type="Double" />
           <Property Name="Rastreador" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
           <Property Name="IdSituacaoVeiculo" Type="Int32" />
           <Property Name="Ativo" Type="Boolean" Nullable="false" />
@@ -1667,7 +1667,7 @@
               <PropertyRef Name="Id" />
             </Principal>
             <Dependent Role="VeiculoMulta">
-              <PropertyRef Name="IdCondutor" />
+              <PropertyRef Name="IdVeiculo" />
             </Dependent>
           </ReferentialConstraint>
         </Association>

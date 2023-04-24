@@ -31,9 +31,9 @@ namespace ProjetoTransportadora.Dto
         public Nullable<double> ValorFIPE { get; set; }
         public Nullable<double> ValorTransportadora { get; set; }
         public string Implemento { get; set; }
-        public Nullable<decimal> Comprimento { get; set; }
-        public Nullable<decimal> Altura { get; set; }
-        public Nullable<decimal> Largura { get; set; }
+        public Nullable<double> Comprimento { get; set; }
+        public Nullable<double> Altura { get; set; }
+        public Nullable<double> Largura { get; set; }
         public string Rastreador { get; set; }
         public Nullable<int> IdSituacaoVeiculo { get; set; }
         public bool? Ativo { get; set; }
