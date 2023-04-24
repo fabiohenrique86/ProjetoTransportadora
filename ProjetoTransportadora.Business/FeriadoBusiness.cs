@@ -21,16 +21,19 @@ namespace ProjetoTransportadora.Business
             DateTime dtInicial = DateTime.MinValue;
             DateTime dtFinal = DateTime.MinValue;
 
-            if (!string.IsNullOrEmpty(feriadoDto.DataFeriadoInicial))
+            if (feriadoDto != null)
             {
-                if (!DateTime.TryParseExact(feriadoDto.DataFeriadoInicial, "dd/MM/yyyy", cultureInfo, System.Globalization.DateTimeStyles.None, out dtInicial))
-                    throw new BusinessException("Data Feriado Inicial é inválida");
-            }
+                if (!string.IsNullOrEmpty(feriadoDto.DataFeriadoInicial))
+                {
+                    if (!DateTime.TryParseExact(feriadoDto.DataFeriadoInicial, "dd/MM/yyyy", cultureInfo, System.Globalization.DateTimeStyles.None, out dtInicial))
+                        throw new BusinessException("Data Feriado Inicial é inválida");
+                }
 
-            if (!string.IsNullOrEmpty(feriadoDto.DataFeriadoFinal))
-            {
-                if (!DateTime.TryParseExact(feriadoDto.DataFeriadoFinal, "dd/MM/yyyy", cultureInfo, System.Globalization.DateTimeStyles.None, out dtFinal))
-                    throw new BusinessException("Data Feriado Final é inválida");
+                if (!string.IsNullOrEmpty(feriadoDto.DataFeriadoFinal))
+                {
+                    if (!DateTime.TryParseExact(feriadoDto.DataFeriadoFinal, "dd/MM/yyyy", cultureInfo, System.Globalization.DateTimeStyles.None, out dtFinal))
+                        throw new BusinessException("Data Feriado Final é inválida");
+                }
             }
 
             return feriadoRepository.Listar(feriadoDto, dtInicial, dtFinal);

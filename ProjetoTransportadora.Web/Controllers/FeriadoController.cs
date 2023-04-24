@@ -122,7 +122,7 @@ namespace ProjetoTransportadora.Web.Controllers
 
                     feriadoBusiness.Incluir(new FeriadoDto() { Nome = nome, DataFeriado = dtFeriado, IdUsuarioCadastro = idUsuario, DataCadastro = dataCadastro });
 
-                    mensagem += $"feriado ({nome} - {dataFeriado}) incluído com sucesso" + Environment.NewLine;
+                    mensagem += $"Feriado ({nome} - {dataFeriado}) incluído com sucesso" + Environment.NewLine;
                 }
                 catch (BusinessException ex)
                 {
