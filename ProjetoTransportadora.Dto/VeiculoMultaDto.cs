@@ -8,7 +8,7 @@
         public string Local { get; set; }
         public int IdCondutor { get; set; }
         public System.DateTime DataVencimentoMulta { get; set; }
-        public decimal ValorMulta { get; set; }
+        public double ValorMulta { get; set; }
         public int IdSituacaoMulta { get; set; }
         public int IdUsuarioCadastro { get; set; }
         public System.DateTime DataCadastro { get; set; }

@@ -113,6 +113,7 @@
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="Controllers\SimulacaoController.cs" />
     <Compile Include="Controllers\VeiculoController.cs" />
     <Compile Include="Controllers\PessoaJuridicaController.cs" />
     <Compile Include="Controllers\UsuarioTrocarSenhaController.cs" />
@@ -216,6 +217,7 @@
     <Content Include="Views\UsuarioTrocarSenha\Index.cshtml" />
     <Content Include="Views\PessoaJuridica\Index.cshtml" />
     <Content Include="Views\Veiculo\Index.cshtml" />
+    <Content Include="Views\Simulacao\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -1,0 +1,282 @@
+﻿@using ProjetoTransportadora.Dto;
+
+@{
+    ViewBag.Title = "Simulação";
+
+    UsuarioDto usuarioDto = null;
+    if (Session[System.Configuration.ConfigurationManager.AppSettings["ProjetoTransportadoraCookieLogin"]] != null)
+    {
+        usuarioDto = (UsuarioDto)Session[System.Configuration.ConfigurationManager.AppSettings["ProjetoTransportadoraCookieLogin"]];
+    }
+}
+
+@section styles
+{
+    <style type="text/css">
+        .modal-lg {
+            width: 85%;
+        }
+
+        .modal-body {
+            padding: 40px;
+        }
+
+        .ui-autocomplete {
+            z-index: 2147483647;
+        }
+    </style>
+}
+
+@section scripts
+{
+    <script type="text/javascript">
+
+        function habilitar(opcao) {
+            if (opcao)
+                $("input").not(':button').removeProp("disabled");
+            else
+                $("input").not(':button').prop("disabled", "disabled");
+        }
+
+        function limparFormulario() {
+            $("input").not(':button').val("");
+            $("#tbParcela").DataTable().clear().draw();
+        }
+
+        function calcularValorFinanciado() {
+
+            var valorPrincipal = Globalize.parseFloat($("#valorPrincipal").val());
+            if (isNaN(valorPrincipal))
+                valorPrincipal = 0;
+
+            var valorDocumentacao = Globalize.parseFloat($("#valorDocumentacao").val());
+            if (isNaN(valorDocumentacao))
+                valorDocumentacao = 0;
+
+            var valorTarifa = Globalize.parseFloat($("#valorTarifa").val());
+            if (isNaN(valorTarifa))
+                valorTarifa = 0;
+
+            var valorDesconto = Globalize.parseFloat($("#valorDesconto").val());
+            if (isNaN(valorDesconto))
+                valorDesconto = 0;
+
+            var valorBens = Globalize.parseFloat($("#valorBens").val());
+            if (isNaN(valorBens))
+                valorBens = 0;
+
+            var valorDinheiro = Globalize.parseFloat($("#valorDinheiro").val());
+            if (isNaN(valorDinheiro))
+                valorDinheiro = 0;
+
+            var valorFinanciado = valorPrincipal + valorDocumentacao + valorTarifa - valorDesconto - valorBens - valorDinheiro;
+
+            $("#valorFinanciado").val(Globalize.format(valorFinanciado, "n2"));
+        }
+
+        $(document).ready(function () {
+
+            $('#btnGerarParcela').show();
+            $('#btnGerarContrato').hide();
+            $('#btnNovaSimulacao').hide();
+
+            $('#simulacao-tab').click();
+
+            var tbParcela = $("#tbParcela").DataTable({
+                "ordering": false,
+                "bFilter": false,
+                "paging": false,
+                "ordering": false,
+                "info": false,
+                "searching": false,
+                "language": {
+                    "lengthMenu": "_MENU_ registros por página",
+                    "zeroRecords": "Sem registros a serem exibidos",
+                    "info": "Página _PAGE_ de _PAGES_",
+                    "infoEmpty": "Sem registros a serem exibidos",
+                    "infoFiltered": "(filtrados de _MAX_ total de registros)",
+                    "sSearch": "Pesquisar",
+                    "oPaginate": { "sNext": "Próximo", "sPrevious": "Anterior", "sFirst": "Primeiro", "sLast": "Último" }
+                },
+                "columns":
+                    [
+                        { "data": "Id", "className": "text-center" },
+                        { "data": function (data, type, row) { return data["DataVencimento"] != null ? moment(data["DataVencimento"]).format("DD/MM/YYYY") : "" }, "className": "text-center" },
+                        { "data": "DiasContrato", "className": "text-center" },
+                        { "data": "DiasParcela", "className": "text-center" },
+                        { "data": function (data, type, row) { return data["Fator"] != null ? Globalize.format(data.Fator, "n6") : "" }, "className": "text-center" },
+                        { "data": function (data, type, row) { return data["FatorInvertido"] != null ? Globalize.format(data.FatorInvertido, "n6") : "" }, "className": "text-center" },
+                        { "data": function (data, type, row) { return data["ValorParcela"] != null ? Globalize.format(data.ValorParcela, "n2") : "" }, "className": "text-center" },
+                        { "data": function (data, type, row) { return data["ValorSaldoAnterior"] != null ? Globalize.format(data.ValorSaldoAnterior, "n2") : "" }, "className": "text-center" },
+                        { "data": function (data, type, row) { return data["ValorJuros"] != null ? Globalize.format(data.ValorJuros, "n2") : "" }, "className": "text-center" },
+                        { "data": function (data, type, row) { return data["ValorAmortizacao"] != null ? Globalize.format(data.ValorAmortizacao, "n2") : "" }, "className": "text-center" },
+                        { "data": function (data, type, row) { return data["ValorSaldoAtual"] != null ? Globalize.format(data.ValorSaldoAtual, "n2") : "" }, "className": "text-center" }
+                    ]
+            });
+
+            $("#btnGerarParcela").click(function () {
+
+                var simulacaoDto = {};
+
+                simulacaoDto.DataInicio = $("#dataInicio").val();
+                simulacaoDto.ValorPrincipal = $("#valorPrincipal").val();
+                simulacaoDto.DataPrimeiraParcela = $("#dataPrimeiraParcela").val();
+                simulacaoDto.QuantidadeParcela = $("#quantidadeParcela").val();
+                simulacaoDto.TaxaMensalJuros = $("#taxaMensalJuros").val();
+                simulacaoDto.ValorDocumentacao = $("#valorDocumentacao").val();
+                simulacaoDto.ValorTarifa = $("#valorTarifa").val();
+                simulacaoDto.ValorDesconto = $("#valorDesconto").val();
+                simulacaoDto.ValorBens = $("#valorBens").val();
+                simulacaoDto.ValorDinheiro = $("#valorDinheiro").val();
+                simulacaoDto.ValorFinanciado = $("#valorFinanciado").val();
+
+                $.ajax({
+                    dataType: "json",
+                    type: "POST",
+                    url: "/Simulacao/GerarParcelas",
+                    data: JSON.stringify(simulacaoDto),
+                    contentType: "application/json",
+                    success: function (data) {
+
+                        if (!data.Sucesso) {
+                            alert(data.Erro ? "danger" : "warning", data.Mensagem);
+                            return;
+                        }
+
+                        tbParcela.clear();
+                        tbParcela.rows.add(data.Data).draw();
+
+                        habilitar(false);
+                        $('#btnGerarParcela').hide();
+                        $('#btnGerarContrato').show();
+                        $('#btnNovaSimulacao').show();
+
+                        $('#parcelas-tab').click();
+                    }
+                });
+
+            });
+
+            $("#btnGerarContrato").click(function () {
+                alert('A fazer na fase 3');
+            });
+
+            $("#btnNovaSimulacao").click(function () {
+                limparFormulario();
+                habilitar(true);
+                $('#btnGerarParcela').show();
+                $('#btnGerarContrato').hide();
+                $('#btnNovaSimulacao').hide();
+                $('#simulacao-tab').click();
+            });
+
+        });
+
+    </script>
+}
+<div>
+    <h2><i class="glyphicon glyphicon-search" style="color: #0f3456" title="Simulação"></i> Simulação </h2>
+    <hr />
+    <div class="form-group">
+        <div class="row">
+            <div class="col-md-8">
+                <input id="btnGerarParcela" type="button" class="btn btn-info" value="Gerar Parcelas" />
+                <input id="btnGerarContrato" type="button" class="btn btn-success" value="Gerar Contrato" />
+                <input id="btnNovaSimulacao" type="button" class="btn" value="Nova Simulação" />
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="row">
+            <ul id="myTab" class="nav nav-tabs nav-justified" role="tablist">
+                <li class="nav-item">
+                    <a class="nav-link active" id="simulacao-tab" data-toggle="tab" href="#simulacao" role="tab" aria-controls="simulacao" aria-selected="true">Simulação</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="parcelas-tab" data-toggle="tab" href="#parcelas" role="tab" aria-controls="parcelas" aria-selected="false">Parcelas</a>
+                </li>
+            </ul>
+            <div class="tab-content">
+                <br />
+                <div class="tab-pane active" id="simulacao" role="tabpanel" aria-labelledby="simulacao-tab">
+                    <div class="form-group">
+                        <div class="row">
+                            <div class="col-md-2">
+                                <label for="dataInicio">Data Início:</label>
+                                <input id="dataInicio" type="text" class="form-control data datepicker" placeholder="Data Início" />
+                            </div>
+                            <div class="col-md-2">
+                                <label for="valorPrincipal">Valor Principal:</label>
+                                <input id="valorPrincipal" type="text" class="form-control valor" placeholder="Valor Principal" onchange="calcularValorFinanciado()" />
+                            </div>
+                            <div class="col-md-2">
+                                <label for="dataPrimeiraParcela">Data Primeira Parcela:</label>
+                                <input id="dataPrimeiraParcela" name="dataPrimeiraParcela" type="text" class="form-control data datepicker" placeholder="Data Primeira Parcela" />
+                            </div>
+                            <div class="col-md-2">
+                                <label for="quantidadeParcela">Quantidade Parcelas:</label>
+                                <input id="quantidadeParcela" name="quantidadeParcela" type="text" class="form-control parcela" placeholder="Quantidade Parcelas" />
+                            </div>
+                            <div class="col-md-2">
+                                <label for="taxaMensalJuros">Taxa Mensal Juros:</label>
+                                <input id="taxaMensalJuros" name="taxaMensalJuros" type="text" class="form-control taxa" placeholder="Taxa Mensal Juros" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="row">
+                            <div class="col-md-2">
+                                <label for="valorDocumentacao">Valor Documentação:</label>
+                                <input id="valorDocumentacao" type="text" class="form-control valor" placeholder="Valor Documentação" onchange="calcularValorFinanciado()" />
+                            </div>
+                            <div class="col-md-2">
+                                <label for="valorTarifa">Valor Tarifa:</label>
+                                <input id="valorTarifa" type="text" class="form-control valor" placeholder="Valor Tarifa" onchange="calcularValorFinanciado()" />
+                            </div>
+                            <div class="col-md-2">
+                                <label for="valorDesconto">Valor Desconto:</label>
+                                <input id="valorDesconto" type="text" class="form-control valor" placeholder="Valor Desconto" onchange="calcularValorFinanciado()" />
+                            </div>
+                            <div class="col-md-2">
+                                <label for="valorBens">Valor Bens:</label>
+                                <input id="valorBens" type="text" class="form-control valor" placeholder="Valor Bens" onchange="calcularValorFinanciado()" />
+                            </div>
+                            <div class="col-md-2">
+                                <label for="valorDinheiro">Valor Dinheiro:</label>
+                                <input id="valorDinheiro" type="text" class="form-control valor" placeholder="Valor Dinheiro" onchange="calcularValorFinanciado()" />
+                            </div>
+                            <div class="col-md-2">
+                                <label for="valorFinanciado">Valor Financiado:</label>
+                                <input id="valorFinanciado" type="text" class="form-control valor" disabled="disabled" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="tab-pane" id="parcelas" role="tabpanel" aria-labelledby="parcelas-tab">
+                    <div class="form-group">
+                        <div class="table-responsive">
+                            <table id="tbParcela" class="table nowrap" style="width: 100%">
+                                <thead>
+                                    <tr>
+                                        <td class="text-center"><b>Parcela</b></td>
+                                        <td class="text-center"><b>Data Vencimento</b></td>
+                                        <td class="text-center"><b>Dias Contrato</b></td>
+                                        <td class="text-center"><b>Dias Parcela</b></td>
+                                        <td class="text-center"><b>Fator</b></td>
+                                        <td class="text-center"><b>Fator Invertido</b></td>
+                                        <td class="text-center"><b>Valor Parcela</b></td>
+                                        <td class="text-center"><b>Valor Saldo Anterior</b></td>
+                                        <td class="text-center"><b>Valor Juros</b></td>
+                                        <td class="text-center"><b>Valor Amortização</b></td>
+                                        <td class="text-center"><b>Valor Saldo Atual</b></td>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

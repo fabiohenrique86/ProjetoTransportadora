@@ -50,6 +50,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BaseBusiness.cs" />
+    <Compile Include="ParcelaBusiness.cs" />
     <Compile Include="FuncionalidadeBusiness.cs" />
     <Compile Include="EstadoBusiness.cs" />
     <Compile Include="Exceptions\BusinessException.cs" />

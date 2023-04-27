@@ -48,15 +48,15 @@
         <AssociationConnector Association="ProjetoTransportadoraModel.FK_PessoaTelefone_Pessoa" />
         <EntityTypeShape EntityType="ProjetoTransportadoraModel.SituacaoMulta" Width="1.5" PointX="15" PointY="0.75" />
         <EntityTypeShape EntityType="ProjetoTransportadoraModel.VeiculoHistorico" Width="1.5" PointX="20.5" PointY="14.875" />
-        <EntityTypeShape EntityType="ProjetoTransportadoraModel.VeiculoMulta" Width="1.5" PointX="20.5" PointY="7.875" />
-        <AssociationConnector Association="ProjetoTransportadoraModel.FK_VeiculoMulta_Pessoa" />
-        <AssociationConnector Association="ProjetoTransportadoraModel.FK_VeiculoMulta_SituacaoMulta" />
         <EntityTypeShape EntityType="ProjetoTransportadoraModel.Veiculo" Width="1.5" PointX="18.25" PointY="10.5" />
         <AssociationConnector Association="ProjetoTransportadoraModel.FK_Veiculo_Montadora" />
         <AssociationConnector Association="ProjetoTransportadoraModel.FK_Veiculo_Pessoa_ProprietarioAnterior" />
         <AssociationConnector Association="ProjetoTransportadoraModel.FK_Veiculo_Pessoa_ProprietarioAtual" />
         <AssociationConnector Association="ProjetoTransportadoraModel.FK_Veiculo_SituacaoVeiculo" />
         <AssociationConnector Association="ProjetoTransportadoraModel.FK_VeiculoHistorico_Veiculo" />
+        <EntityTypeShape EntityType="ProjetoTransportadoraModel.VeiculoMulta" Width="1.5" PointX="20.5" PointY="7.875" />
+        <AssociationConnector Association="ProjetoTransportadoraModel.FK_VeiculoMulta_Pessoa" />
+        <AssociationConnector Association="ProjetoTransportadoraModel.FK_VeiculoMulta_SituacaoMulta" />
         <AssociationConnector Association="ProjetoTransportadoraModel.FK_VeiculoMulta_Veiculo" />
         </Diagram>
     </edmx:Diagrams>

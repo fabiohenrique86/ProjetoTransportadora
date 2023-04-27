@@ -49,7 +49,7 @@ namespace ProjetoTransportadora.Repository
         public virtual DbSet<Pessoa> Pessoa { get; set; }
         public virtual DbSet<SituacaoMulta> SituacaoMulta { get; set; }
         public virtual DbSet<VeiculoHistorico> VeiculoHistorico { get; set; }
-        public virtual DbSet<VeiculoMulta> VeiculoMulta { get; set; }
         public virtual DbSet<Veiculo> Veiculo { get; set; }
+        public virtual DbSet<VeiculoMulta> VeiculoMulta { get; set; }
     }
 }

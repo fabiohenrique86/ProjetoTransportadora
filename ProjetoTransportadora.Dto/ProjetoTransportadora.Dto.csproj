@@ -49,6 +49,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="EstadoDto.cs" />
+    <Compile Include="ParcelaDto.cs" />
+    <Compile Include="SimulacaoDto.cs" />
     <Compile Include="GrupoFuncionalidadeDto .cs" />
     <Compile Include="FuncionalidadeDto.cs" />
     <Compile Include="LogDto.cs" />

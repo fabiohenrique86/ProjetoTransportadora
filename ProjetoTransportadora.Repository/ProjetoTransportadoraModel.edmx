@@ -344,7 +344,7 @@
           <Property Name="Local" Type="varchar" MaxLength="1000" Nullable="false" />
           <Property Name="IdCondutor" Type="int" Nullable="false" />
           <Property Name="DataVencimentoMulta" Type="datetime" Nullable="false" />
-          <Property Name="ValorMulta" Type="decimal" Precision="18" Scale="0" Nullable="false" />
+          <Property Name="ValorMulta" Type="float" Nullable="false" />
           <Property Name="IdSituacaoMulta" Type="int" Nullable="false" />
           <Property Name="IdUsuarioCadastro" Type="int" Nullable="false" />
           <Property Name="DataCadastro" Type="datetime" Nullable="false" />
@@ -977,15 +977,6 @@
           </AssociationSet>
           <EntitySet Name="SituacaoMulta" EntityType="ProjetoTransportadoraModel.SituacaoMulta" />
           <EntitySet Name="VeiculoHistorico" EntityType="ProjetoTransportadoraModel.VeiculoHistorico" />
-          <EntitySet Name="VeiculoMulta" EntityType="ProjetoTransportadoraModel.VeiculoMulta" />
-          <AssociationSet Name="FK_VeiculoMulta_Pessoa" Association="ProjetoTransportadoraModel.FK_VeiculoMulta_Pessoa">
-            <End Role="Pessoa" EntitySet="Pessoa" />
-            <End Role="VeiculoMulta" EntitySet="VeiculoMulta" />
-          </AssociationSet>
-          <AssociationSet Name="FK_VeiculoMulta_SituacaoMulta" Association="ProjetoTransportadoraModel.FK_VeiculoMulta_SituacaoMulta">
-            <End Role="SituacaoMulta" EntitySet="SituacaoMulta" />
-            <End Role="VeiculoMulta" EntitySet="VeiculoMulta" />
-          </AssociationSet>
           <EntitySet Name="Veiculo" EntityType="ProjetoTransportadoraModel.Veiculo" />
           <AssociationSet Name="FK_Veiculo_Montadora" Association="ProjetoTransportadoraModel.FK_Veiculo_Montadora">
             <End Role="Montadora" EntitySet="Montadora" />
@@ -1006,6 +997,15 @@
           <AssociationSet Name="FK_VeiculoHistorico_Veiculo" Association="ProjetoTransportadoraModel.FK_VeiculoHistorico_Veiculo">
             <End Role="Veiculo" EntitySet="Veiculo" />
             <End Role="VeiculoHistorico" EntitySet="VeiculoHistorico" />
+          </AssociationSet>
+          <EntitySet Name="VeiculoMulta" EntityType="ProjetoTransportadoraModel.VeiculoMulta" />
+          <AssociationSet Name="FK_VeiculoMulta_Pessoa" Association="ProjetoTransportadoraModel.FK_VeiculoMulta_Pessoa">
+            <End Role="Pessoa" EntitySet="Pessoa" />
+            <End Role="VeiculoMulta" EntitySet="VeiculoMulta" />
+          </AssociationSet>
+          <AssociationSet Name="FK_VeiculoMulta_SituacaoMulta" Association="ProjetoTransportadoraModel.FK_VeiculoMulta_SituacaoMulta">
+            <End Role="SituacaoMulta" EntitySet="SituacaoMulta" />
+            <End Role="VeiculoMulta" EntitySet="VeiculoMulta" />
           </AssociationSet>
           <AssociationSet Name="FK_VeiculoMulta_Veiculo" Association="ProjetoTransportadoraModel.FK_VeiculoMulta_Veiculo">
             <End Role="Veiculo" EntitySet="Veiculo" />
@@ -1336,9 +1336,9 @@
           <NavigationProperty Name="PessoaHistorico" Relationship="ProjetoTransportadoraModel.FK_PessoaHistorico_Pessoa" FromRole="Pessoa" ToRole="PessoaHistorico" />
           <NavigationProperty Name="PessoaReferencia" Relationship="ProjetoTransportadoraModel.FK_PessoaReferencia_Pessoa" FromRole="Pessoa" ToRole="PessoaReferencia" />
           <NavigationProperty Name="PessoaTelefone" Relationship="ProjetoTransportadoraModel.FK_PessoaTelefone_Pessoa" FromRole="Pessoa" ToRole="PessoaTelefone" />
-          <NavigationProperty Name="VeiculoMulta" Relationship="ProjetoTransportadoraModel.FK_VeiculoMulta_Pessoa" FromRole="Pessoa" ToRole="VeiculoMulta" />
           <NavigationProperty Name="Veiculo" Relationship="ProjetoTransportadoraModel.FK_Veiculo_Pessoa_ProprietarioAnterior" FromRole="Pessoa" ToRole="Veiculo" />
           <NavigationProperty Name="Veiculo1" Relationship="ProjetoTransportadoraModel.FK_Veiculo_Pessoa_ProprietarioAtual" FromRole="Pessoa" ToRole="Veiculo" />
+          <NavigationProperty Name="VeiculoMulta" Relationship="ProjetoTransportadoraModel.FK_VeiculoMulta_Pessoa" FromRole="Pessoa" ToRole="VeiculoMulta" />
         </EntityType>
         <Association Name="FK_Pessoa_EstadoCivil">
           <End Type="ProjetoTransportadoraModel.EstadoCivil" Role="EstadoCivil" Multiplicity="0..1" />
@@ -1516,48 +1516,6 @@
           <Property Name="DataCadastro" Type="DateTime" Nullable="false" Precision="3" />
           <NavigationProperty Name="Veiculo" Relationship="ProjetoTransportadoraModel.FK_VeiculoHistorico_Veiculo" FromRole="VeiculoHistorico" ToRole="Veiculo" />
         </EntityType>
-        <EntityType Name="VeiculoMulta">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="IdVeiculo" Type="Int32" Nullable="false" />
-          <Property Name="DataMulta" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="Local" Type="String" Nullable="false" MaxLength="1000" FixedLength="false" Unicode="false" />
-          <Property Name="IdCondutor" Type="Int32" Nullable="false" />
-          <Property Name="DataVencimentoMulta" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="ValorMulta" Type="Decimal" Nullable="false" Precision="18" Scale="0" />
-          <Property Name="IdSituacaoMulta" Type="Int32" Nullable="false" />
-          <Property Name="IdUsuarioCadastro" Type="Int32" Nullable="false" />
-          <Property Name="DataCadastro" Type="DateTime" Nullable="false" Precision="3" />
-          <NavigationProperty Name="PessoaCondutor" Relationship="ProjetoTransportadoraModel.FK_VeiculoMulta_Pessoa" FromRole="VeiculoMulta" ToRole="Pessoa" />
-          <NavigationProperty Name="SituacaoMulta" Relationship="ProjetoTransportadoraModel.FK_VeiculoMulta_SituacaoMulta" FromRole="VeiculoMulta" ToRole="SituacaoMulta" />
-          <NavigationProperty Name="Veiculo" Relationship="ProjetoTransportadoraModel.FK_VeiculoMulta_Veiculo" FromRole="VeiculoMulta" ToRole="Veiculo" />
-        </EntityType>
-        <Association Name="FK_VeiculoMulta_Pessoa">
-          <End Type="ProjetoTransportadoraModel.Pessoa" Role="Pessoa" Multiplicity="1" />
-          <End Type="ProjetoTransportadoraModel.VeiculoMulta" Role="VeiculoMulta" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Pessoa">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="VeiculoMulta">
-              <PropertyRef Name="IdCondutor" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_VeiculoMulta_SituacaoMulta">
-          <End Type="ProjetoTransportadoraModel.SituacaoMulta" Role="SituacaoMulta" Multiplicity="1" />
-          <End Type="ProjetoTransportadoraModel.VeiculoMulta" Role="VeiculoMulta" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="SituacaoMulta">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="VeiculoMulta">
-              <PropertyRef Name="IdSituacaoMulta" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <EntityType Name="Veiculo">
           <Key>
             <PropertyRef Name="Id" />
@@ -1656,6 +1614,48 @@
             </Principal>
             <Dependent Role="VeiculoHistorico">
               <PropertyRef Name="IdVeiculo" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="VeiculoMulta">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="IdVeiculo" Type="Int32" Nullable="false" />
+          <Property Name="DataMulta" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Local" Type="String" Nullable="false" MaxLength="1000" FixedLength="false" Unicode="false" />
+          <Property Name="IdCondutor" Type="Int32" Nullable="false" />
+          <Property Name="DataVencimentoMulta" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="ValorMulta" Type="Double" Nullable="false" />
+          <Property Name="IdSituacaoMulta" Type="Int32" Nullable="false" />
+          <Property Name="IdUsuarioCadastro" Type="Int32" Nullable="false" />
+          <Property Name="DataCadastro" Type="DateTime" Nullable="false" Precision="3" />
+          <NavigationProperty Name="Pessoa" Relationship="ProjetoTransportadoraModel.FK_VeiculoMulta_Pessoa" FromRole="VeiculoMulta" ToRole="Pessoa" />
+          <NavigationProperty Name="SituacaoMulta" Relationship="ProjetoTransportadoraModel.FK_VeiculoMulta_SituacaoMulta" FromRole="VeiculoMulta" ToRole="SituacaoMulta" />
+          <NavigationProperty Name="Veiculo" Relationship="ProjetoTransportadoraModel.FK_VeiculoMulta_Veiculo" FromRole="VeiculoMulta" ToRole="Veiculo" />
+        </EntityType>
+        <Association Name="FK_VeiculoMulta_Pessoa">
+          <End Type="ProjetoTransportadoraModel.Pessoa" Role="Pessoa" Multiplicity="1" />
+          <End Type="ProjetoTransportadoraModel.VeiculoMulta" Role="VeiculoMulta" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Pessoa">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="VeiculoMulta">
+              <PropertyRef Name="IdCondutor" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_VeiculoMulta_SituacaoMulta">
+          <End Type="ProjetoTransportadoraModel.SituacaoMulta" Role="SituacaoMulta" Multiplicity="1" />
+          <End Type="ProjetoTransportadoraModel.VeiculoMulta" Role="VeiculoMulta" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SituacaoMulta">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="VeiculoMulta">
+              <PropertyRef Name="IdSituacaoMulta" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -1995,22 +1995,6 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="VeiculoMulta">
-            <EntityTypeMapping TypeName="ProjetoTransportadoraModel.VeiculoMulta">
-              <MappingFragment StoreEntitySet="VeiculoMulta">
-                <ScalarProperty Name="DataCadastro" ColumnName="DataCadastro" />
-                <ScalarProperty Name="IdUsuarioCadastro" ColumnName="IdUsuarioCadastro" />
-                <ScalarProperty Name="IdSituacaoMulta" ColumnName="IdSituacaoMulta" />
-                <ScalarProperty Name="ValorMulta" ColumnName="ValorMulta" />
-                <ScalarProperty Name="DataVencimentoMulta" ColumnName="DataVencimentoMulta" />
-                <ScalarProperty Name="IdCondutor" ColumnName="IdCondutor" />
-                <ScalarProperty Name="Local" ColumnName="Local" />
-                <ScalarProperty Name="DataMulta" ColumnName="DataMulta" />
-                <ScalarProperty Name="IdVeiculo" ColumnName="IdVeiculo" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="Veiculo">
             <EntityTypeMapping TypeName="ProjetoTransportadoraModel.Veiculo">
               <MappingFragment StoreEntitySet="Veiculo">
@@ -2043,6 +2027,22 @@
                 <ScalarProperty Name="Placa" ColumnName="Placa" />
                 <ScalarProperty Name="Modelo" ColumnName="Modelo" />
                 <ScalarProperty Name="IdMontadora" ColumnName="IdMontadora" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="VeiculoMulta">
+            <EntityTypeMapping TypeName="ProjetoTransportadoraModel.VeiculoMulta">
+              <MappingFragment StoreEntitySet="VeiculoMulta">
+                <ScalarProperty Name="DataCadastro" ColumnName="DataCadastro" />
+                <ScalarProperty Name="IdUsuarioCadastro" ColumnName="IdUsuarioCadastro" />
+                <ScalarProperty Name="IdSituacaoMulta" ColumnName="IdSituacaoMulta" />
+                <ScalarProperty Name="ValorMulta" ColumnName="ValorMulta" />
+                <ScalarProperty Name="DataVencimentoMulta" ColumnName="DataVencimentoMulta" />
+                <ScalarProperty Name="IdCondutor" ColumnName="IdCondutor" />
+                <ScalarProperty Name="Local" ColumnName="Local" />
+                <ScalarProperty Name="DataMulta" ColumnName="DataMulta" />
+                <ScalarProperty Name="IdVeiculo" ColumnName="IdVeiculo" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>

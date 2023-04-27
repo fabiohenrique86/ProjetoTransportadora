@@ -114,7 +114,6 @@ namespace ProjetoTransportadora.Repository
                     IdSituacaoMulta = w.IdSituacaoMulta,                    
                     IdUsuarioCadastro = w.IdUsuarioCadastro,
                     DataCadastro = w.DataCadastro,
-                    //PessoaCondutorDto = new PessoaDto() { Id = w.PessoaCondutor.Id, Nome = w.PessoaCondutor.Nome, Cpf = w.PessoaCondutor.Cpf },
                     SituacaoMultaDto = w.SituacaoMulta == null ? null : new SituacaoMultaDto() { Id = w.SituacaoMulta.Id, Nome = w.SituacaoMulta.Nome }
                 }).ToList(),
                 VeiculoHistoricoDto = x.VeiculoHistorico.Select(w => new VeiculoHistoricoDto()

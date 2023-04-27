@@ -156,6 +156,7 @@
                             <li><a href="@Url.Content("~/Veiculo")"><i class="glyphicon glyphicon-road" style="color: #286090" title="Veículos"></i> Veículos </a></li>
                             <li><a href="@Url.Content("~/PessoaFisica")"><i class="glyphicon glyphicon-pushpin" style="color: #286090" title="Pessoas Físicas"></i> Pessoas Físicas </a></li>
                             <li><a href="@Url.Content("~/PessoaJuridica")"><i class="glyphicon glyphicon-asterisk" style="color: #286090" title="Pessoas Jurídicas"></i> Pessoas Jurídicas </a></li>
+                            <li><a href="@Url.Content("~/Simulacao")"><i class="glyphicon glyphicon-search" style="color: #286090" title="Simulação"></i> Simulação </a></li>
                             <li id="popover-usuario"><a href="#"><i class="glyphicon glyphicon-user" style="color: #777" title="Usuário"></i>&nbsp;<b class="caret"></b></a></li>
                             <li><a href="@Url.Content("~/Usuario/Sair")"><i class="glyphicon glyphicon-log-out" style="color: #c9302c" title="Sair"></i> Sair</a></li>
                         </ul>
@@ -310,7 +311,8 @@
             $(".comprimento").mask("#0,00");
             $(".altura").mask("#0,00");
             $(".largura").mask("#0,00");
-            $(".ano").mask("0000");
+            $(".taxa").mask("##,##", { reverse: true });
+            $(".parcela").mask("000");
             $(".data").mask("00/00/0000");
             $(".valor").mask("000.000.000,00", { reverse: true });
             $(".cpf").mask("000.000.000-00");
@@ -451,6 +453,13 @@
             $("#idAlertaTextoCorpo").html(corpo);
 
             $("#modalAlerta").modal('show');
+        }
+
+        // dd/MM/yyyy -> yyyy-mm-dd
+        function converterData(dataOriginal)
+        {
+            var dataConvertida = dataOriginal.substring(6, 10) + "-" + dataOriginal.substring(5, 3) + "-" + dataOriginal.substring(0, 2);
+            return dataConvertida;
         }
 
         $.ajaxSetup({
