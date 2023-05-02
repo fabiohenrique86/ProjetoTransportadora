@@ -209,7 +209,7 @@
                         <div class="form-group">
                             <div class="row">
                                 <div class="col-lg-10">
-                                    <span id="idAlertaTextoCorpo"></span>
+                                    <span id="idAlertaTextoCorpo" style="white-space: pre"></span>
                                 </div>
                             </div>
                         </div>
@@ -446,6 +446,10 @@
             else if (acao == "warning") {
                 cabecalho = "Alerta";
                 cor = "#fff3cd";
+            }
+            else if (acao == "info") {
+                cabecalho = "Informação";
+                cor = "#5bc0de";
             }
 
             $("#idModalCabecalho").css('background-color', cor);

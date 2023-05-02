@@ -56,8 +56,6 @@
 
         function carregarDadosModal(data) {
 
-            console.log('data', data);
-
             // aba - dados do veículo
 
             $("#placa").val(data.Placa);
@@ -854,7 +852,7 @@
                     if (xhr.readyState == 4 && xhr.status == 200) {
                         var response = JSON.parse(xhr.responseText);
                         $.unblockUI();
-                        alert("success", response.Mensagem);
+                        alert("info", response.Mensagem);
                     }
                 }
 
@@ -870,7 +868,7 @@
     <input id="idVeiculo" type="hidden" />
     <div class="form-group">
         <div class="row">
-            <div class="col-md-1">
+            <div class="col-md-2">
                 <input id="placaPesquisar" type="text" class="form-control" placeholder="Placa" />
             </div>
             <div class="col-md-2">
@@ -890,7 +888,7 @@
                     <option value="0">Não</option>
                 </select>
             </div>
-            <div class="col-md-4">
+            <div class="col-md-3">
                 <input id="btnPesquisar" type="button" class="btn btn-info" value="Pesquisar" />
                 <input id="btnNovo" type="button" class="btn" value="Novo Veículo" />
             </div>
@@ -965,7 +963,7 @@
                                 <div class="tab-pane active" id="dadosveiculo" role="tabpanel" aria-labelledby="dadosveiculo-tab">
                                     <div class="form-group">
                                         <div class="row">
-                                            <div class="col-md-1">
+                                            <div class="col-md-2">
                                                 <label for="placa">Placa:</label>
                                                 <input id="placa" type="text" class="form-control" placeholder="Placa" />
                                             </div>

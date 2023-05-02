@@ -12,6 +12,8 @@ namespace ProjetoTransportadora.Business
         {
             var parcelasDto = new List<ParcelaDto>();
 
+            // validações
+
             if (simulacaoDto == null)
                 throw new BusinessException("simulacaoDto é obrigatório");
 
@@ -30,8 +32,13 @@ namespace ProjetoTransportadora.Business
             if (simulacaoDto.TaxaMensalJuros <= 0)
                 throw new BusinessException("Taxa Mensal Juros é obrigatório");
 
+            // regras
+
             if (simulacaoDto.DataPrimeiraParcela < simulacaoDto.DataInicio)
                 throw new BusinessException("Data Primeira Parcela deve ser posterior a Data de Início.");
+
+            if (simulacaoDto.DataInicio.DayOfWeek == DayOfWeek.Saturday || simulacaoDto.DataInicio.DayOfWeek == DayOfWeek.Sunday)
+                throw new BusinessException("Data de Início deve ser dia útil");
 
             double somaFatorInvertido = 0;
             DateTime dataVencimento;
@@ -48,11 +55,11 @@ namespace ProjetoTransportadora.Business
                 fatorInvertido = 0;
                 var parcelaAnterior = i == 1 ? null : parcelasDto[i - 2];
 
-                dataVencimento = i == 1 ? simulacaoDto.DataPrimeiraParcela : simulacaoDto.DataPrimeiraParcela.AddMonths(i - 1);
+                dataVencimento = CalcularDataVencimento(i == 1 ? simulacaoDto.DataPrimeiraParcela : simulacaoDto.DataPrimeiraParcela.AddMonths(i - 1));
                 diasContrato = Convert.ToDouble(dataVencimento.Subtract(simulacaoDto.DataInicio).Days);
                 diasParcela = parcelaAnterior == null ? diasContrato : Convert.ToDouble(dataVencimento.Subtract(parcelaAnterior.DataVencimento).Days);
 
-                fator = Math.Round(Math.Pow((1 + simulacaoDto.TaxaMensalJuros), (diasContrato / 30D)), 6);
+                fator = Math.Round(Math.Pow((1 + (simulacaoDto.TaxaMensalJuros/100)), (diasContrato / 30D)), 6);
                 fatorInvertido = Math.Round(1 / fator, 6);
                 somaFatorInvertido += fatorInvertido;
 
@@ -85,18 +92,43 @@ namespace ProjetoTransportadora.Business
 
                 valorParcela = Math.Round(simulacaoDto.ValorFinanciado / somaFatorInvertido, 2);
                 valorSaldoAnterior = i == 0 ? simulacaoDto.ValorFinanciado : parcelaAnterior.ValorSaldoAnterior - parcelaAnterior.ValorAmortizacao;
-                valorJuros = i == simulacaoDto.QuantidadeParcela - 1 ? Math.Round(valorParcela - valorSaldoAnterior, 2) : Math.Round(valorSaldoAnterior * (Math.Pow((1 + simulacaoDto.TaxaMensalJuros), (Convert.ToDouble(parcelasDto[i].DiasParcela) / 30D)) - 1), 2);
+                valorJuros = i == simulacaoDto.QuantidadeParcela - 1 ? Math.Round(valorParcela - valorSaldoAnterior, 2) : Math.Round(valorSaldoAnterior * (Math.Pow((1 + (simulacaoDto.TaxaMensalJuros/100)), (Convert.ToDouble(parcelasDto[i].DiasParcela) / 30D)) - 1), 2);
                 valorAmortizacao = i == simulacaoDto.QuantidadeParcela - 1 ? valorSaldoAnterior - valorAmortizacao : valorParcela - valorJuros;
                 valorSaldoAtual = i == 0 ? simulacaoDto.ValorFinanciado - valorAmortizacao : valorSaldoAnterior - valorAmortizacao;
 
                 parcelasDto[i].ValorParcela = valorParcela;
-                parcelasDto[i].ValorSaldoAnterior = valorSaldoAnterior;                
+                parcelasDto[i].ValorSaldoAnterior = valorSaldoAnterior;
                 parcelasDto[i].ValorJuros = valorJuros;
                 parcelasDto[i].ValorAmortizacao = valorAmortizacao;
                 parcelasDto[i].ValorSaldoAtual = valorSaldoAtual;
             }
 
             return parcelasDto;
+        }
+
+        private DateTime CalcularDataVencimento(DateTime dataVencimentoOriginal)
+        {
+            DateTime dataVencimentoCalculada = dataVencimentoOriginal;
+
+            // data de vencimento deve ser dia útil
+            if (dataVencimentoOriginal.DayOfWeek == DayOfWeek.Saturday)
+                dataVencimentoCalculada = dataVencimentoOriginal.AddDays(2);
+            else if (dataVencimentoOriginal.DayOfWeek == DayOfWeek.Sunday)
+                dataVencimentoCalculada = dataVencimentoOriginal.AddDays(1);
+
+            if (dataVencimentoOriginal.Month != dataVencimentoCalculada.Month)
+            {
+                // obtém último dia útil do vencimento original
+                dataVencimentoCalculada = new DateTime(dataVencimentoOriginal.Year, dataVencimentoOriginal.Month, DateTime.DaysInMonth(dataVencimentoOriginal.Year, dataVencimentoOriginal.Month));
+
+                // nova data de vencimento deve ser dia útil
+                if (dataVencimentoCalculada.DayOfWeek == DayOfWeek.Saturday)
+                    dataVencimentoCalculada = dataVencimentoCalculada.AddDays(-1);
+                else if (dataVencimentoCalculada.DayOfWeek == DayOfWeek.Sunday)
+                    dataVencimentoCalculada = dataVencimentoCalculada.AddDays(-2);
+            }
+
+            return dataVencimentoCalculada;
         }
     }
 }
