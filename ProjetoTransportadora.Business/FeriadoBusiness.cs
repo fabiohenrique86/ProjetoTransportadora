@@ -14,6 +14,11 @@ namespace ProjetoTransportadora.Business
             feriadoRepository = new FeriadoRepository();
         }
 
+        public bool Existe(FeriadoDto feriadoDto)
+        {
+            return feriadoRepository.Existe(feriadoDto);
+        }
+
         public List<FeriadoDto> Listar(FeriadoDto feriadoDto = null)
         {
             var cultureInfo = new System.Globalization.CultureInfo("pt-BR");
