@@ -134,12 +134,12 @@ namespace ProjetoTransportadora.Business
                 if (dataVencimentoCalculada.DayOfWeek == DayOfWeek.Saturday)
                 {
                     existeFeriadoOuFimDeSemana = true;
-                    dataVencimentoCalculada = dataVencimentoOriginal.AddDays(2); // data de vencimento deve ser dia útil                    
+                    dataVencimentoCalculada = dataVencimentoCalculada.AddDays(2); // data de vencimento deve ser dia útil                    
                 }
                 else if (dataVencimentoCalculada.DayOfWeek == DayOfWeek.Sunday)
                 {
                     existeFeriadoOuFimDeSemana = true;
-                    dataVencimentoCalculada = dataVencimentoOriginal.AddDays(1); // data de vencimento deve ser dia útil
+                    dataVencimentoCalculada = dataVencimentoCalculada.AddDays(1); // data de vencimento deve ser dia útil
                 }
             }
             while (existeFeriadoOuFimDeSemana);
@@ -165,13 +165,13 @@ namespace ProjetoTransportadora.Business
 
                     if (dataVencimentoCalculada.DayOfWeek == DayOfWeek.Saturday)
                     {
-                        dataVencimentoCalculada = dataVencimentoOriginal.AddDays(-2); // data de vencimento deve ser dia útil
+                        dataVencimentoCalculada = dataVencimentoCalculada.AddDays(-2); // data de vencimento deve ser dia útil
                         existeFeriadoOuFimDeSemana = true;
                     }
                     else if (dataVencimentoCalculada.DayOfWeek == DayOfWeek.Sunday)
                     {
                         existeFeriadoOuFimDeSemana = true;
-                        dataVencimentoCalculada = dataVencimentoOriginal.AddDays(-1); // data de vencimento deve ser dia útil
+                        dataVencimentoCalculada = dataVencimentoCalculada.AddDays(-1); // data de vencimento deve ser dia útil
                     }
                 }
                 while (existeFeriadoOuFimDeSemana);
