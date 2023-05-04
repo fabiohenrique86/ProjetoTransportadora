@@ -75,6 +75,10 @@ namespace ProjetoTransportadora.Web.Filters
             if (action == "ListarAutoComplete")
                 return;
 
+            // gerar parcelas
+            if (action == "GerarParcelas")
+                return;
+
             var temPermissao = false;
 
             if (action == "Listar" || action == "Index")
