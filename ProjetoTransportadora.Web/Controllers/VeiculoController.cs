@@ -31,7 +31,7 @@ namespace ProjetoTransportadora.Web.Controllers
         {
             ViewBag.SituacaoVeiculo = situacaoVeiculoBusiness.Listar(new SituacaoVeiculoDto() { Ativo = true });
             ViewBag.SituacaoMulta = situacaoMultaBusiness.Listar();
-            ViewBag.Montadora = montadoraBusiness.Listar();
+            ViewBag.Montadora = montadoraBusiness.Listar(new MontadoraDto() { Ativo = true });
 
             return View();
         }

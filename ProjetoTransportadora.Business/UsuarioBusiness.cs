@@ -18,6 +18,11 @@ namespace ProjetoTransportadora.Business
             usuarioGrupoBusiness = new UsuarioGrupoBusiness();
         }
 
+        public int ListarTotal(UsuarioDto usuarioDto = null)
+        {
+            return usuarioRepository.ListarTotal(usuarioDto);
+        }
+
         public UsuarioDto Login(UsuarioDto usuarioDto)
         {
             if (usuarioDto == null)

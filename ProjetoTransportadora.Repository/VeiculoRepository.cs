@@ -15,6 +15,19 @@ namespace ProjetoTransportadora.Repository
             projetoTransportadoraEntities = new ProjetoTransportadoraEntities();
         }
 
+        public int ListarTotal(VeiculoDto veiculoDto)
+        {
+            IQueryable<Veiculo> query = projetoTransportadoraEntities.Veiculo;
+
+            if (veiculoDto.DataCadastro != DateTime.MinValue)
+                query = query.Where(x => x.DataCadastro.Month == veiculoDto.DataCadastro.Month && x.DataCadastro.Year == veiculoDto.DataCadastro.Year);
+            
+            if (veiculoDto.Ativo.HasValue)
+                query = query.Where(x => x.Ativo == veiculoDto.Ativo.Value);
+
+            return query.Count();
+        }
+
         public bool Existe(VeiculoDto veiculoDto)
         {
             IQueryable<Veiculo> query = projetoTransportadoraEntities.Veiculo;

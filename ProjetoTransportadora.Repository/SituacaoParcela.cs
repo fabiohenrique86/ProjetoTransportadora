@@ -12,12 +12,12 @@ namespace ProjetoTransportadora.Repository
     using System;
     using System.Collections.Generic;
     
-    public partial class Canal
+    public partial class SituacaoParcela
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public Canal()
+        public SituacaoParcela()
         {
-            this.Contrato = new HashSet<Contrato>();
+            this.ContratoParcela = new HashSet<ContratoParcela>();
         }
     
         public int Id { get; set; }
@@ -29,6 +29,6 @@ namespace ProjetoTransportadora.Repository
         public Nullable<System.DateTime> DataInativacao { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Contrato> Contrato { get; set; }
+        public virtual ICollection<ContratoParcela> ContratoParcela { get; set; }
     }
 }

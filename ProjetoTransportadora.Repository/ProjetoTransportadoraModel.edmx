@@ -17,6 +17,74 @@
           <Property Name="IdUsuarioInativacao" Type="int" />
           <Property Name="DataInativacao" Type="datetime" />
         </EntityType>
+        <EntityType Name="Contrato">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="NumeroContrato" Type="int" Nullable="false" />
+          <Property Name="IdCliente" Type="int" Nullable="false" />
+          <Property Name="IdVeiculo" Type="int" Nullable="false" />
+          <Property Name="IdProduto" Type="int" Nullable="false" />
+          <Property Name="IdSituacaoContrato" Type="int" Nullable="false" />
+          <Property Name="IdCanal" Type="int" />
+          <Property Name="DataContrato" Type="datetime" Nullable="false" />
+          <Property Name="IdFiador" Type="int" />
+          <Property Name="IdIndicacao" Type="int" />
+          <Property Name="IdPromotor" Type="int" />
+          <Property Name="DataPrimeiraParcela" Type="datetime" Nullable="false" />
+          <Property Name="DataBaixa" Type="datetime" />
+          <Property Name="DataAntecipacao" Type="datetime" />
+          <Property Name="ValorAntecipacao" Type="float" />
+          <Property Name="ValorVeiculo" Type="float" />
+          <Property Name="ValorEntrada" Type="float" />
+          <Property Name="ValorDocumentacao" Type="float" />
+          <Property Name="ValorDesconto" Type="float" />
+          <Property Name="ValorFinanciadoVeiculo" Type="float" />
+          <Property Name="ValorFinanciadoDocumentacao" Type="float" />
+          <Property Name="IdVeiculoEntrada" Type="int" />
+          <Property Name="ValorFinanciado" Type="float" Nullable="false" />
+          <Property Name="ValorCaixa" Type="float" />
+          <Property Name="ValorDepositado" Type="float" />
+          <Property Name="TaxaJuros" Type="float" Nullable="false" />
+          <Property Name="Ativo" Type="bit" Nullable="false" />
+          <Property Name="IdUsuarioCadastro" Type="int" Nullable="false" />
+          <Property Name="DataCadastro" Type="datetime" Nullable="false" />
+          <Property Name="IdUsuarioInativacao" Type="int" />
+          <Property Name="DataInativacao" Type="datetime" />
+        </EntityType>
+        <EntityType Name="ContratoHistorico">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="IdContrato" Type="int" Nullable="false" />
+          <Property Name="DataHistorico" Type="datetime" Nullable="false" />
+          <Property Name="Descricao" Type="varchar(max)" Nullable="false" />
+          <Property Name="IdUsuarioCadastro" Type="int" Nullable="false" />
+          <Property Name="DataCadastro" Type="datetime" Nullable="false" />
+        </EntityType>
+        <EntityType Name="ContratoParcela">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="NumeroParcela" Type="int" Nullable="false" />
+          <Property Name="IdContrato" Type="int" Nullable="false" />
+          <Property Name="IdSituacaoParcela" Type="int" Nullable="false" />
+          <Property Name="DataVencimento" Type="datetime" Nullable="false" />
+          <Property Name="DiasParcela" Type="int" Nullable="false" />
+          <Property Name="DiasContrato" Type="int" Nullable="false" />
+          <Property Name="DataPagamento" Type="datetime" />
+          <Property Name="DataEmissao" Type="datetime" Nullable="false" />
+          <Property Name="ValorOriginal" Type="float" Nullable="false" />
+          <Property Name="ValorAmortizacao" Type="float" />
+          <Property Name="ValorJuros" Type="float" />
+          <Property Name="ValorMulta" Type="float" />
+          <Property Name="ValorMora" Type="float" />
+          <Property Name="ValorDesconto" Type="float" />
+          <Property Name="ValorParcela" Type="float" Nullable="false" />
+        </EntityType>
         <EntityType Name="EstadoCivil">
           <Key>
             <PropertyRef Name="Id" />
@@ -140,6 +208,14 @@
           <Property Name="EmpresaPessoal" Type="varchar" MaxLength="1000" />
           <Property Name="EmpresaTrabalho" Type="varchar" MaxLength="1000" />
         </EntityType>
+        <EntityType Name="PessoaAvalista">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="IdPessoa" Type="int" Nullable="false" />
+          <Property Name="IdAvalista" Type="int" Nullable="false" />
+        </EntityType>
         <EntityType Name="PessoaEmail">
           <Key>
             <PropertyRef Name="Id" />
@@ -204,12 +280,36 @@
           <Property Name="IdUsuarioInativacao" Type="int" />
           <Property Name="DataInativacao" Type="datetime" />
         </EntityType>
+        <EntityType Name="SituacaoContrato">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" Nullable="false" />
+          <Property Name="Nome" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="Ativo" Type="bit" Nullable="false" />
+          <Property Name="IdUsuarioCadastro" Type="int" Nullable="false" />
+          <Property Name="DataCadastro" Type="datetime" Nullable="false" />
+          <Property Name="IdUsuarioInativacao" Type="int" />
+          <Property Name="DataInativacao" Type="datetime" />
+        </EntityType>
         <EntityType Name="SituacaoMulta">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Nome" Type="varchar" MaxLength="100" Nullable="false" />
+        </EntityType>
+        <EntityType Name="SituacaoParcela">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" Nullable="false" />
+          <Property Name="Nome" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="Ativo" Type="bit" Nullable="false" />
+          <Property Name="IdUsuarioCadastro" Type="int" Nullable="false" />
+          <Property Name="DataCadastro" Type="datetime" Nullable="false" />
+          <Property Name="IdUsuarioInativacao" Type="int" />
+          <Property Name="DataInativacao" Type="datetime" />
         </EntityType>
         <EntityType Name="SituacaoVeiculo">
           <Key>
@@ -349,6 +449,150 @@
           <Property Name="IdUsuarioCadastro" Type="int" Nullable="false" />
           <Property Name="DataCadastro" Type="datetime" Nullable="false" />
         </EntityType>
+        <Association Name="FK_Contrato_Canal">
+          <End Role="Canal" Type="Self.Canal" Multiplicity="0..1" />
+          <End Role="Contrato" Type="Self.Contrato" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Canal">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Contrato">
+              <PropertyRef Name="IdCanal" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Contrato_Pessoa_Cliente">
+          <End Role="Pessoa" Type="Self.Pessoa" Multiplicity="1" />
+          <End Role="Contrato" Type="Self.Contrato" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Pessoa">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Contrato">
+              <PropertyRef Name="IdCliente" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Contrato_Pessoa_Fiador">
+          <End Role="Pessoa" Type="Self.Pessoa" Multiplicity="0..1" />
+          <End Role="Contrato" Type="Self.Contrato" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Pessoa">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Contrato">
+              <PropertyRef Name="IdFiador" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Contrato_Pessoa_Indicacao">
+          <End Role="Pessoa" Type="Self.Pessoa" Multiplicity="0..1" />
+          <End Role="Contrato" Type="Self.Contrato" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Pessoa">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Contrato">
+              <PropertyRef Name="IdIndicacao" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Contrato_Pessoa_Promotor">
+          <End Role="Pessoa" Type="Self.Pessoa" Multiplicity="0..1" />
+          <End Role="Contrato" Type="Self.Contrato" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Pessoa">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Contrato">
+              <PropertyRef Name="IdPromotor" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Contrato_Produto">
+          <End Role="Produto" Type="Self.Produto" Multiplicity="1" />
+          <End Role="Contrato" Type="Self.Contrato" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Produto">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Contrato">
+              <PropertyRef Name="IdProduto" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Contrato_SituacaoContrato">
+          <End Role="SituacaoContrato" Type="Self.SituacaoContrato" Multiplicity="1" />
+          <End Role="Contrato" Type="Self.Contrato" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SituacaoContrato">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Contrato">
+              <PropertyRef Name="IdSituacaoContrato" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Contrato_Veiculo">
+          <End Role="Veiculo" Type="Self.Veiculo" Multiplicity="1" />
+          <End Role="Contrato" Type="Self.Contrato" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Veiculo">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Contrato">
+              <PropertyRef Name="IdVeiculo" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Contrato_VeiculoEntrada">
+          <End Role="Veiculo" Type="Self.Veiculo" Multiplicity="0..1" />
+          <End Role="Contrato" Type="Self.Contrato" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Veiculo">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Contrato">
+              <PropertyRef Name="IdVeiculoEntrada" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ContratoHistorico_Contrato">
+          <End Role="Contrato" Type="Self.Contrato" Multiplicity="1" />
+          <End Role="ContratoHistorico" Type="Self.ContratoHistorico" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Contrato">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ContratoHistorico">
+              <PropertyRef Name="IdContrato" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ContratoParcela_Contrato">
+          <End Role="Contrato" Type="Self.Contrato" Multiplicity="1" />
+          <End Role="ContratoParcela" Type="Self.ContratoParcela" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Contrato">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ContratoParcela">
+              <PropertyRef Name="IdContrato" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ContratoParcela_SituacaoParcela">
+          <End Role="SituacaoParcela" Type="Self.SituacaoParcela" Multiplicity="1" />
+          <End Role="ContratoParcela" Type="Self.ContratoParcela" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SituacaoParcela">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ContratoParcela">
+              <PropertyRef Name="IdSituacaoParcela" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_GrupoFuncionalidade_Funcionalidade">
           <End Role="Funcionalidade" Type="Self.Funcionalidade" Multiplicity="1" />
           <End Role="GrupoFuncionalidade" Type="Self.GrupoFuncionalidade" Multiplicity="*" />
@@ -478,6 +722,30 @@
             </Principal>
             <Dependent Role="Pessoa">
               <PropertyRef Name="IdTipoResidencia" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PessoaAvalista_Avalista">
+          <End Role="Pessoa" Type="Self.Pessoa" Multiplicity="1" />
+          <End Role="PessoaAvalista" Type="Self.PessoaAvalista" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Pessoa">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="PessoaAvalista">
+              <PropertyRef Name="IdAvalista" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PessoaAvalista_Pessoa">
+          <End Role="Pessoa" Type="Self.Pessoa" Multiplicity="1" />
+          <End Role="PessoaAvalista" Type="Self.PessoaAvalista" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Pessoa">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="PessoaAvalista">
+              <PropertyRef Name="IdPessoa" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -675,6 +943,9 @@
         </Association>
         <EntityContainer Name="ProjetoTransportadoraModelStoreContainer">
           <EntitySet Name="Canal" EntityType="Self.Canal" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Contrato" EntityType="Self.Contrato" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ContratoHistorico" EntityType="Self.ContratoHistorico" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ContratoParcela" EntityType="Self.ContratoParcela" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="EstadoCivil" EntityType="Self.EstadoCivil" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Feriado" EntityType="Self.Feriado" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Funcionalidade" EntityType="Self.Funcionalidade" Schema="dbo" store:Type="Tables" />
@@ -683,13 +954,16 @@
           <EntitySet Name="Log" EntityType="Self.Log" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Montadora" EntityType="Self.Montadora" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Pessoa" EntityType="Self.Pessoa" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="PessoaAvalista" EntityType="Self.PessoaAvalista" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PessoaEmail" EntityType="Self.PessoaEmail" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PessoaHistorico" EntityType="Self.PessoaHistorico" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PessoaReferencia" EntityType="Self.PessoaReferencia" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PessoaTelefone" EntityType="Self.PessoaTelefone" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Produto" EntityType="Self.Produto" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="RegimeCasamento" EntityType="Self.RegimeCasamento" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="SituacaoContrato" EntityType="Self.SituacaoContrato" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="SituacaoMulta" EntityType="Self.SituacaoMulta" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="SituacaoParcela" EntityType="Self.SituacaoParcela" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="SituacaoVeiculo" EntityType="Self.SituacaoVeiculo" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="TipoPessoa" EntityType="Self.TipoPessoa" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="TipoReferencia" EntityType="Self.TipoReferencia" Schema="dbo" store:Type="Tables" />
@@ -700,6 +974,54 @@
           <EntitySet Name="Veiculo" EntityType="Self.Veiculo" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="VeiculoHistorico" EntityType="Self.VeiculoHistorico" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="VeiculoMulta" EntityType="Self.VeiculoMulta" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_Contrato_Canal" Association="Self.FK_Contrato_Canal">
+            <End Role="Canal" EntitySet="Canal" />
+            <End Role="Contrato" EntitySet="Contrato" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Contrato_Pessoa_Cliente" Association="Self.FK_Contrato_Pessoa_Cliente">
+            <End Role="Pessoa" EntitySet="Pessoa" />
+            <End Role="Contrato" EntitySet="Contrato" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Contrato_Pessoa_Fiador" Association="Self.FK_Contrato_Pessoa_Fiador">
+            <End Role="Pessoa" EntitySet="Pessoa" />
+            <End Role="Contrato" EntitySet="Contrato" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Contrato_Pessoa_Indicacao" Association="Self.FK_Contrato_Pessoa_Indicacao">
+            <End Role="Pessoa" EntitySet="Pessoa" />
+            <End Role="Contrato" EntitySet="Contrato" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Contrato_Pessoa_Promotor" Association="Self.FK_Contrato_Pessoa_Promotor">
+            <End Role="Pessoa" EntitySet="Pessoa" />
+            <End Role="Contrato" EntitySet="Contrato" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Contrato_Produto" Association="Self.FK_Contrato_Produto">
+            <End Role="Produto" EntitySet="Produto" />
+            <End Role="Contrato" EntitySet="Contrato" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Contrato_SituacaoContrato" Association="Self.FK_Contrato_SituacaoContrato">
+            <End Role="SituacaoContrato" EntitySet="SituacaoContrato" />
+            <End Role="Contrato" EntitySet="Contrato" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Contrato_Veiculo" Association="Self.FK_Contrato_Veiculo">
+            <End Role="Veiculo" EntitySet="Veiculo" />
+            <End Role="Contrato" EntitySet="Contrato" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Contrato_VeiculoEntrada" Association="Self.FK_Contrato_VeiculoEntrada">
+            <End Role="Veiculo" EntitySet="Veiculo" />
+            <End Role="Contrato" EntitySet="Contrato" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ContratoHistorico_Contrato" Association="Self.FK_ContratoHistorico_Contrato">
+            <End Role="Contrato" EntitySet="Contrato" />
+            <End Role="ContratoHistorico" EntitySet="ContratoHistorico" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ContratoParcela_Contrato" Association="Self.FK_ContratoParcela_Contrato">
+            <End Role="Contrato" EntitySet="Contrato" />
+            <End Role="ContratoParcela" EntitySet="ContratoParcela" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ContratoParcela_SituacaoParcela" Association="Self.FK_ContratoParcela_SituacaoParcela">
+            <End Role="SituacaoParcela" EntitySet="SituacaoParcela" />
+            <End Role="ContratoParcela" EntitySet="ContratoParcela" />
+          </AssociationSet>
           <AssociationSet Name="FK_GrupoFuncionalidade_Funcionalidade" Association="Self.FK_GrupoFuncionalidade_Funcionalidade">
             <End Role="Funcionalidade" EntitySet="Funcionalidade" />
             <End Role="GrupoFuncionalidade" EntitySet="GrupoFuncionalidade" />
@@ -743,6 +1065,14 @@
           <AssociationSet Name="FK_Pessoa_TipoResidencia" Association="Self.FK_Pessoa_TipoResidencia">
             <End Role="TipoResidencia" EntitySet="TipoResidencia" />
             <End Role="Pessoa" EntitySet="Pessoa" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PessoaAvalista_Avalista" Association="Self.FK_PessoaAvalista_Avalista">
+            <End Role="Pessoa" EntitySet="Pessoa" />
+            <End Role="PessoaAvalista" EntitySet="PessoaAvalista" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PessoaAvalista_Pessoa" Association="Self.FK_PessoaAvalista_Pessoa">
+            <End Role="Pessoa" EntitySet="Pessoa" />
+            <End Role="PessoaAvalista" EntitySet="PessoaAvalista" />
           </AssociationSet>
           <AssociationSet Name="FK_PessoaEmail_Pessoa" Association="Self.FK_PessoaEmail_Pessoa">
             <End Role="Pessoa" EntitySet="Pessoa" />
@@ -1011,6 +1341,68 @@
             <End Role="Veiculo" EntitySet="Veiculo" />
             <End Role="VeiculoMulta" EntitySet="VeiculoMulta" />
           </AssociationSet>
+          <EntitySet Name="Contrato" EntityType="ProjetoTransportadoraModel.Contrato" />
+          <EntitySet Name="ContratoHistorico" EntityType="ProjetoTransportadoraModel.ContratoHistorico" />
+          <EntitySet Name="ContratoParcela" EntityType="ProjetoTransportadoraModel.ContratoParcela" />
+          <AssociationSet Name="FK_Contrato_Canal" Association="ProjetoTransportadoraModel.FK_Contrato_Canal">
+            <End Role="Canal" EntitySet="Canal" />
+            <End Role="Contrato" EntitySet="Contrato" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Contrato_Pessoa_Cliente" Association="ProjetoTransportadoraModel.FK_Contrato_Pessoa_Cliente">
+            <End Role="Pessoa" EntitySet="Pessoa" />
+            <End Role="Contrato" EntitySet="Contrato" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Contrato_Pessoa_Fiador" Association="ProjetoTransportadoraModel.FK_Contrato_Pessoa_Fiador">
+            <End Role="Pessoa" EntitySet="Pessoa" />
+            <End Role="Contrato" EntitySet="Contrato" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Contrato_Pessoa_Indicacao" Association="ProjetoTransportadoraModel.FK_Contrato_Pessoa_Indicacao">
+            <End Role="Pessoa" EntitySet="Pessoa" />
+            <End Role="Contrato" EntitySet="Contrato" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Contrato_Pessoa_Promotor" Association="ProjetoTransportadoraModel.FK_Contrato_Pessoa_Promotor">
+            <End Role="Pessoa" EntitySet="Pessoa" />
+            <End Role="Contrato" EntitySet="Contrato" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Contrato_Produto" Association="ProjetoTransportadoraModel.FK_Contrato_Produto">
+            <End Role="Produto" EntitySet="Produto" />
+            <End Role="Contrato" EntitySet="Contrato" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Contrato_Veiculo" Association="ProjetoTransportadoraModel.FK_Contrato_Veiculo">
+            <End Role="Veiculo" EntitySet="Veiculo" />
+            <End Role="Contrato" EntitySet="Contrato" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Contrato_VeiculoEntrada" Association="ProjetoTransportadoraModel.FK_Contrato_VeiculoEntrada">
+            <End Role="Veiculo" EntitySet="Veiculo" />
+            <End Role="Contrato" EntitySet="Contrato" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ContratoHistorico_Contrato" Association="ProjetoTransportadoraModel.FK_ContratoHistorico_Contrato">
+            <End Role="Contrato" EntitySet="Contrato" />
+            <End Role="ContratoHistorico" EntitySet="ContratoHistorico" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ContratoParcela_Contrato" Association="ProjetoTransportadoraModel.FK_ContratoParcela_Contrato">
+            <End Role="Contrato" EntitySet="Contrato" />
+            <End Role="ContratoParcela" EntitySet="ContratoParcela" />
+          </AssociationSet>
+          <EntitySet Name="SituacaoContrato" EntityType="ProjetoTransportadoraModel.SituacaoContrato" />
+          <EntitySet Name="SituacaoParcela" EntityType="ProjetoTransportadoraModel.SituacaoParcela" />
+          <AssociationSet Name="FK_Contrato_SituacaoContrato" Association="ProjetoTransportadoraModel.FK_Contrato_SituacaoContrato">
+            <End Role="SituacaoContrato" EntitySet="SituacaoContrato" />
+            <End Role="Contrato" EntitySet="Contrato" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ContratoParcela_SituacaoParcela" Association="ProjetoTransportadoraModel.FK_ContratoParcela_SituacaoParcela">
+            <End Role="SituacaoParcela" EntitySet="SituacaoParcela" />
+            <End Role="ContratoParcela" EntitySet="ContratoParcela" />
+          </AssociationSet>
+          <EntitySet Name="PessoaAvalista" EntityType="ProjetoTransportadoraModel.PessoaAvalista" />
+          <AssociationSet Name="FK_PessoaAvalista_Avalista" Association="ProjetoTransportadoraModel.FK_PessoaAvalista_Avalista">
+            <End Role="Pessoa" EntitySet="Pessoa" />
+            <End Role="PessoaAvalista" EntitySet="PessoaAvalista" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PessoaAvalista_Pessoa" Association="ProjetoTransportadoraModel.FK_PessoaAvalista_Pessoa">
+            <End Role="Pessoa" EntitySet="Pessoa" />
+            <End Role="PessoaAvalista" EntitySet="PessoaAvalista" />
+          </AssociationSet>
           </EntityContainer>
         <EntityType Name="Log">
           <Key>
@@ -1044,6 +1436,7 @@
           <Property Name="DataCadastro" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="IdUsuarioInativacao" Type="Int32" />
           <Property Name="DataInativacao" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="Contrato" Relationship="ProjetoTransportadoraModel.FK_Contrato_Canal" FromRole="Canal" ToRole="Contrato" />
         </EntityType>
         <EntityType Name="EstadoCivil">
           <Key>
@@ -1083,6 +1476,7 @@
           <Property Name="IdUsuarioInativacao" Type="Int32" />
           <Property Name="DataInativacao" Type="DateTime" Precision="3" />
           <NavigationProperty Name="Pessoa" Relationship="ProjetoTransportadoraModel.FK_Pessoa_Produto" FromRole="Produto" ToRole="Pessoa" />
+          <NavigationProperty Name="Contrato" Relationship="ProjetoTransportadoraModel.FK_Contrato_Produto" FromRole="Produto" ToRole="Contrato" />
         </EntityType>
         <EntityType Name="RegimeCasamento">
           <Key>
@@ -1339,7 +1733,13 @@
           <NavigationProperty Name="Veiculo" Relationship="ProjetoTransportadoraModel.FK_Veiculo_Pessoa_ProprietarioAnterior" FromRole="Pessoa" ToRole="Veiculo" />
           <NavigationProperty Name="Veiculo1" Relationship="ProjetoTransportadoraModel.FK_Veiculo_Pessoa_ProprietarioAtual" FromRole="Pessoa" ToRole="Veiculo" />
           <NavigationProperty Name="VeiculoMulta" Relationship="ProjetoTransportadoraModel.FK_VeiculoMulta_Pessoa" FromRole="Pessoa" ToRole="VeiculoMulta" />
-        </EntityType>
+          <NavigationProperty Name="Contrato" Relationship="ProjetoTransportadoraModel.FK_Contrato_Pessoa_Cliente" FromRole="Pessoa" ToRole="Contrato" />
+          <NavigationProperty Name="Contrato1" Relationship="ProjetoTransportadoraModel.FK_Contrato_Pessoa_Fiador" FromRole="Pessoa" ToRole="Contrato" />
+          <NavigationProperty Name="Contrato2" Relationship="ProjetoTransportadoraModel.FK_Contrato_Pessoa_Indicacao" FromRole="Pessoa" ToRole="Contrato" />
+          <NavigationProperty Name="Contrato3" Relationship="ProjetoTransportadoraModel.FK_Contrato_Pessoa_Promotor" FromRole="Pessoa" ToRole="Contrato" />
+          <NavigationProperty Name="PessoaAvalista1" Relationship="ProjetoTransportadoraModel.FK_PessoaAvalista_Avalista" FromRole="Pessoa" ToRole="PessoaAvalista" />
+          <NavigationProperty Name="PessoaAvalista" Relationship="ProjetoTransportadoraModel.FK_PessoaAvalista_Pessoa" FromRole="Pessoa" ToRole="PessoaAvalista" />
+          </EntityType>
         <Association Name="FK_Pessoa_EstadoCivil">
           <End Type="ProjetoTransportadoraModel.EstadoCivil" Role="EstadoCivil" Multiplicity="0..1" />
           <End Type="ProjetoTransportadoraModel.Pessoa" Role="Pessoa" Multiplicity="*" />
@@ -1556,6 +1956,8 @@
           <NavigationProperty Name="SituacaoVeiculo" Relationship="ProjetoTransportadoraModel.FK_Veiculo_SituacaoVeiculo" FromRole="Veiculo" ToRole="SituacaoVeiculo" />
           <NavigationProperty Name="VeiculoHistorico" Relationship="ProjetoTransportadoraModel.FK_VeiculoHistorico_Veiculo" FromRole="Veiculo" ToRole="VeiculoHistorico" />
           <NavigationProperty Name="VeiculoMulta" Relationship="ProjetoTransportadoraModel.FK_VeiculoMulta_Veiculo" FromRole="Veiculo" ToRole="VeiculoMulta" />
+          <NavigationProperty Name="Contrato" Relationship="ProjetoTransportadoraModel.FK_Contrato_Veiculo" FromRole="Veiculo" ToRole="Contrato" />
+          <NavigationProperty Name="Contrato1" Relationship="ProjetoTransportadoraModel.FK_Contrato_VeiculoEntrada" FromRole="Veiculo" ToRole="Contrato" />
         </EntityType>
         <Association Name="FK_Veiculo_Montadora">
           <End Type="ProjetoTransportadoraModel.Montadora" Role="Montadora" Multiplicity="1" />
@@ -1668,6 +2070,292 @@
             </Principal>
             <Dependent Role="VeiculoMulta">
               <PropertyRef Name="IdVeiculo" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="Contrato">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="NumeroContrato" Type="Int32" Nullable="false" />
+          <Property Name="IdCliente" Type="Int32" Nullable="false" />
+          <Property Name="IdVeiculo" Type="Int32" Nullable="false" />
+          <Property Name="IdProduto" Type="Int32" Nullable="false" />
+          <Property Name="IdSituacaoContrato" Type="Int32" Nullable="false" />
+          <Property Name="IdCanal" Type="Int32" />
+          <Property Name="DataContrato" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="IdFiador" Type="Int32" />
+          <Property Name="IdIndicacao" Type="Int32" />
+          <Property Name="IdPromotor" Type="Int32" />
+          <Property Name="DataPrimeiraParcela" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="DataBaixa" Type="DateTime" Precision="3" />
+          <Property Name="DataAntecipacao" Type="DateTime" Precision="3" />
+          <Property Name="ValorAntecipacao" Type="Double" />
+          <Property Name="ValorVeiculo" Type="Double" />
+          <Property Name="ValorEntrada" Type="Double" />
+          <Property Name="ValorDocumentacao" Type="Double" />
+          <Property Name="ValorDesconto" Type="Double" />
+          <Property Name="ValorFinanciadoVeiculo" Type="Double" />
+          <Property Name="ValorFinanciadoDocumentacao" Type="Double" />
+          <Property Name="IdVeiculoEntrada" Type="Int32" />
+          <Property Name="ValorFinanciado" Type="Double" Nullable="false" />
+          <Property Name="ValorCaixa" Type="Double" />
+          <Property Name="ValorDepositado" Type="Double" />
+          <Property Name="TaxaJuros" Type="Double" Nullable="false" />
+          <Property Name="Ativo" Type="Boolean" Nullable="false" />
+          <Property Name="IdUsuarioCadastro" Type="Int32" Nullable="false" />
+          <Property Name="DataCadastro" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="IdUsuarioInativacao" Type="Int32" />
+          <Property Name="DataInativacao" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="Canal" Relationship="ProjetoTransportadoraModel.FK_Contrato_Canal" FromRole="Contrato" ToRole="Canal" />
+          <NavigationProperty Name="PessoaCliente" Relationship="ProjetoTransportadoraModel.FK_Contrato_Pessoa_Cliente" FromRole="Contrato" ToRole="Pessoa" />
+          <NavigationProperty Name="PessoaFiador" Relationship="ProjetoTransportadoraModel.FK_Contrato_Pessoa_Fiador" FromRole="Contrato" ToRole="Pessoa" />
+          <NavigationProperty Name="PessoaIndicacao" Relationship="ProjetoTransportadoraModel.FK_Contrato_Pessoa_Indicacao" FromRole="Contrato" ToRole="Pessoa" />
+          <NavigationProperty Name="PessoaPromotor" Relationship="ProjetoTransportadoraModel.FK_Contrato_Pessoa_Promotor" FromRole="Contrato" ToRole="Pessoa" />
+          <NavigationProperty Name="Produto" Relationship="ProjetoTransportadoraModel.FK_Contrato_Produto" FromRole="Contrato" ToRole="Produto" />
+          <NavigationProperty Name="Veiculo" Relationship="ProjetoTransportadoraModel.FK_Contrato_Veiculo" FromRole="Contrato" ToRole="Veiculo" />
+          <NavigationProperty Name="VeiculoEntrada" Relationship="ProjetoTransportadoraModel.FK_Contrato_VeiculoEntrada" FromRole="Contrato" ToRole="Veiculo" />
+          <NavigationProperty Name="ContratoHistorico" Relationship="ProjetoTransportadoraModel.FK_ContratoHistorico_Contrato" FromRole="Contrato" ToRole="ContratoHistorico" />
+          <NavigationProperty Name="ContratoParcela" Relationship="ProjetoTransportadoraModel.FK_ContratoParcela_Contrato" FromRole="Contrato" ToRole="ContratoParcela" />
+          <NavigationProperty Name="SituacaoContrato" Relationship="ProjetoTransportadoraModel.FK_Contrato_SituacaoContrato" FromRole="Contrato" ToRole="SituacaoContrato" />
+        </EntityType>
+        <EntityType Name="ContratoHistorico">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="IdContrato" Type="Int32" Nullable="false" />
+          <Property Name="DataHistorico" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Descricao" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="IdUsuarioCadastro" Type="Int32" Nullable="false" />
+          <Property Name="DataCadastro" Type="DateTime" Nullable="false" Precision="3" />
+          <NavigationProperty Name="Contrato" Relationship="ProjetoTransportadoraModel.FK_ContratoHistorico_Contrato" FromRole="ContratoHistorico" ToRole="Contrato" />
+        </EntityType>
+        <EntityType Name="ContratoParcela">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="NumeroParcela" Type="Int32" Nullable="false" />
+          <Property Name="IdContrato" Type="Int32" Nullable="false" />
+          <Property Name="IdSituacaoParcela" Type="Int32" Nullable="false" />
+          <Property Name="DataVencimento" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="DiasParcela" Type="Int32" Nullable="false" />
+          <Property Name="DiasContrato" Type="Int32" Nullable="false" />
+          <Property Name="DataPagamento" Type="DateTime" Precision="3" />
+          <Property Name="DataEmissao" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="ValorOriginal" Type="Double" Nullable="false" />
+          <Property Name="ValorAmortizacao" Type="Double" />
+          <Property Name="ValorJuros" Type="Double" />
+          <Property Name="ValorMulta" Type="Double" />
+          <Property Name="ValorMora" Type="Double" />
+          <Property Name="ValorDesconto" Type="Double" />
+          <Property Name="ValorParcela" Type="Double" Nullable="false" />
+          <NavigationProperty Name="Contrato" Relationship="ProjetoTransportadoraModel.FK_ContratoParcela_Contrato" FromRole="ContratoParcela" ToRole="Contrato" />
+          <NavigationProperty Name="SituacaoParcela" Relationship="ProjetoTransportadoraModel.FK_ContratoParcela_SituacaoParcela" FromRole="ContratoParcela" ToRole="SituacaoParcela" />
+        </EntityType>
+        <Association Name="FK_Contrato_Canal">
+          <End Type="ProjetoTransportadoraModel.Canal" Role="Canal" Multiplicity="0..1" />
+          <End Type="ProjetoTransportadoraModel.Contrato" Role="Contrato" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Canal">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Contrato">
+              <PropertyRef Name="IdCanal" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Contrato_Pessoa_Cliente">
+          <End Type="ProjetoTransportadoraModel.Pessoa" Role="Pessoa" Multiplicity="1" />
+          <End Type="ProjetoTransportadoraModel.Contrato" Role="Contrato" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Pessoa">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Contrato">
+              <PropertyRef Name="IdCliente" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Contrato_Pessoa_Fiador">
+          <End Type="ProjetoTransportadoraModel.Pessoa" Role="Pessoa" Multiplicity="0..1" />
+          <End Type="ProjetoTransportadoraModel.Contrato" Role="Contrato" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Pessoa">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Contrato">
+              <PropertyRef Name="IdFiador" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Contrato_Pessoa_Indicacao">
+          <End Type="ProjetoTransportadoraModel.Pessoa" Role="Pessoa" Multiplicity="0..1" />
+          <End Type="ProjetoTransportadoraModel.Contrato" Role="Contrato" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Pessoa">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Contrato">
+              <PropertyRef Name="IdIndicacao" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Contrato_Pessoa_Promotor">
+          <End Type="ProjetoTransportadoraModel.Pessoa" Role="Pessoa" Multiplicity="0..1" />
+          <End Type="ProjetoTransportadoraModel.Contrato" Role="Contrato" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Pessoa">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Contrato">
+              <PropertyRef Name="IdPromotor" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Contrato_Produto">
+          <End Type="ProjetoTransportadoraModel.Produto" Role="Produto" Multiplicity="1" />
+          <End Type="ProjetoTransportadoraModel.Contrato" Role="Contrato" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Produto">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Contrato">
+              <PropertyRef Name="IdProduto" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Contrato_Veiculo">
+          <End Type="ProjetoTransportadoraModel.Veiculo" Role="Veiculo" Multiplicity="1" />
+          <End Type="ProjetoTransportadoraModel.Contrato" Role="Contrato" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Veiculo">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Contrato">
+              <PropertyRef Name="IdVeiculo" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Contrato_VeiculoEntrada">
+          <End Type="ProjetoTransportadoraModel.Veiculo" Role="Veiculo" Multiplicity="0..1" />
+          <End Type="ProjetoTransportadoraModel.Contrato" Role="Contrato" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Veiculo">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Contrato">
+              <PropertyRef Name="IdVeiculoEntrada" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ContratoHistorico_Contrato">
+          <End Type="ProjetoTransportadoraModel.Contrato" Role="Contrato" Multiplicity="1" />
+          <End Type="ProjetoTransportadoraModel.ContratoHistorico" Role="ContratoHistorico" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Contrato">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ContratoHistorico">
+              <PropertyRef Name="IdContrato" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ContratoParcela_Contrato">
+          <End Type="ProjetoTransportadoraModel.Contrato" Role="Contrato" Multiplicity="1" />
+          <End Type="ProjetoTransportadoraModel.ContratoParcela" Role="ContratoParcela" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Contrato">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ContratoParcela">
+              <PropertyRef Name="IdContrato" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="SituacaoContrato">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" />
+          <Property Name="Nome" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="Ativo" Type="Boolean" Nullable="false" />
+          <Property Name="IdUsuarioCadastro" Type="Int32" Nullable="false" />
+          <Property Name="DataCadastro" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="IdUsuarioInativacao" Type="Int32" />
+          <Property Name="DataInativacao" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="Contrato" Relationship="ProjetoTransportadoraModel.FK_Contrato_SituacaoContrato" FromRole="SituacaoContrato" ToRole="Contrato" />
+        </EntityType>
+        <EntityType Name="SituacaoParcela">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" />
+          <Property Name="Nome" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="Ativo" Type="Boolean" Nullable="false" />
+          <Property Name="IdUsuarioCadastro" Type="Int32" Nullable="false" />
+          <Property Name="DataCadastro" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="IdUsuarioInativacao" Type="Int32" />
+          <Property Name="DataInativacao" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="ContratoParcela" Relationship="ProjetoTransportadoraModel.FK_ContratoParcela_SituacaoParcela" FromRole="SituacaoParcela" ToRole="ContratoParcela" />
+        </EntityType>
+        <Association Name="FK_Contrato_SituacaoContrato">
+          <End Type="ProjetoTransportadoraModel.SituacaoContrato" Role="SituacaoContrato" Multiplicity="1" />
+          <End Type="ProjetoTransportadoraModel.Contrato" Role="Contrato" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SituacaoContrato">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Contrato">
+              <PropertyRef Name="IdSituacaoContrato" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ContratoParcela_SituacaoParcela">
+          <End Type="ProjetoTransportadoraModel.SituacaoParcela" Role="SituacaoParcela" Multiplicity="1" />
+          <End Type="ProjetoTransportadoraModel.ContratoParcela" Role="ContratoParcela" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SituacaoParcela">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ContratoParcela">
+              <PropertyRef Name="IdSituacaoParcela" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="PessoaAvalista">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="IdPessoa" Type="Int32" Nullable="false" />
+          <Property Name="IdAvalista" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Avalista" Relationship="ProjetoTransportadoraModel.FK_PessoaAvalista_Avalista" FromRole="PessoaAvalista" ToRole="Pessoa" />
+          <NavigationProperty Name="Pessoa" Relationship="ProjetoTransportadoraModel.FK_PessoaAvalista_Pessoa" FromRole="PessoaAvalista" ToRole="Pessoa" />
+        </EntityType>
+        <Association Name="FK_PessoaAvalista_Avalista">
+          <End Type="ProjetoTransportadoraModel.Pessoa" Role="Pessoa" Multiplicity="1" />
+          <End Type="ProjetoTransportadoraModel.PessoaAvalista" Role="PessoaAvalista" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Pessoa">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="PessoaAvalista">
+              <PropertyRef Name="IdAvalista" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PessoaAvalista_Pessoa">
+          <End Type="ProjetoTransportadoraModel.Pessoa" Role="Pessoa" Multiplicity="1" />
+          <End Type="ProjetoTransportadoraModel.PessoaAvalista" Role="PessoaAvalista" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Pessoa">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="PessoaAvalista">
+              <PropertyRef Name="IdPessoa" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -2043,6 +2731,112 @@
                 <ScalarProperty Name="Local" ColumnName="Local" />
                 <ScalarProperty Name="DataMulta" ColumnName="DataMulta" />
                 <ScalarProperty Name="IdVeiculo" ColumnName="IdVeiculo" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Contrato">
+            <EntityTypeMapping TypeName="ProjetoTransportadoraModel.Contrato">
+              <MappingFragment StoreEntitySet="Contrato">
+                <ScalarProperty Name="DataInativacao" ColumnName="DataInativacao" />
+                <ScalarProperty Name="IdUsuarioInativacao" ColumnName="IdUsuarioInativacao" />
+                <ScalarProperty Name="DataCadastro" ColumnName="DataCadastro" />
+                <ScalarProperty Name="IdUsuarioCadastro" ColumnName="IdUsuarioCadastro" />
+                <ScalarProperty Name="Ativo" ColumnName="Ativo" />
+                <ScalarProperty Name="TaxaJuros" ColumnName="TaxaJuros" />
+                <ScalarProperty Name="ValorDepositado" ColumnName="ValorDepositado" />
+                <ScalarProperty Name="ValorCaixa" ColumnName="ValorCaixa" />
+                <ScalarProperty Name="ValorFinanciado" ColumnName="ValorFinanciado" />
+                <ScalarProperty Name="IdVeiculoEntrada" ColumnName="IdVeiculoEntrada" />
+                <ScalarProperty Name="ValorFinanciadoDocumentacao" ColumnName="ValorFinanciadoDocumentacao" />
+                <ScalarProperty Name="ValorFinanciadoVeiculo" ColumnName="ValorFinanciadoVeiculo" />
+                <ScalarProperty Name="ValorDesconto" ColumnName="ValorDesconto" />
+                <ScalarProperty Name="ValorDocumentacao" ColumnName="ValorDocumentacao" />
+                <ScalarProperty Name="ValorEntrada" ColumnName="ValorEntrada" />
+                <ScalarProperty Name="ValorVeiculo" ColumnName="ValorVeiculo" />
+                <ScalarProperty Name="ValorAntecipacao" ColumnName="ValorAntecipacao" />
+                <ScalarProperty Name="DataAntecipacao" ColumnName="DataAntecipacao" />
+                <ScalarProperty Name="DataBaixa" ColumnName="DataBaixa" />
+                <ScalarProperty Name="DataPrimeiraParcela" ColumnName="DataPrimeiraParcela" />
+                <ScalarProperty Name="IdPromotor" ColumnName="IdPromotor" />
+                <ScalarProperty Name="IdIndicacao" ColumnName="IdIndicacao" />
+                <ScalarProperty Name="IdFiador" ColumnName="IdFiador" />
+                <ScalarProperty Name="DataContrato" ColumnName="DataContrato" />
+                <ScalarProperty Name="IdCanal" ColumnName="IdCanal" />
+                <ScalarProperty Name="IdSituacaoContrato" ColumnName="IdSituacaoContrato" />
+                <ScalarProperty Name="IdProduto" ColumnName="IdProduto" />
+                <ScalarProperty Name="IdVeiculo" ColumnName="IdVeiculo" />
+                <ScalarProperty Name="IdCliente" ColumnName="IdCliente" />
+                <ScalarProperty Name="NumeroContrato" ColumnName="NumeroContrato" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ContratoHistorico">
+            <EntityTypeMapping TypeName="ProjetoTransportadoraModel.ContratoHistorico">
+              <MappingFragment StoreEntitySet="ContratoHistorico">
+                <ScalarProperty Name="DataCadastro" ColumnName="DataCadastro" />
+                <ScalarProperty Name="IdUsuarioCadastro" ColumnName="IdUsuarioCadastro" />
+                <ScalarProperty Name="Descricao" ColumnName="Descricao" />
+                <ScalarProperty Name="DataHistorico" ColumnName="DataHistorico" />
+                <ScalarProperty Name="IdContrato" ColumnName="IdContrato" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ContratoParcela">
+            <EntityTypeMapping TypeName="ProjetoTransportadoraModel.ContratoParcela">
+              <MappingFragment StoreEntitySet="ContratoParcela">
+                <ScalarProperty Name="ValorParcela" ColumnName="ValorParcela" />
+                <ScalarProperty Name="ValorDesconto" ColumnName="ValorDesconto" />
+                <ScalarProperty Name="ValorMora" ColumnName="ValorMora" />
+                <ScalarProperty Name="ValorMulta" ColumnName="ValorMulta" />
+                <ScalarProperty Name="ValorJuros" ColumnName="ValorJuros" />
+                <ScalarProperty Name="ValorAmortizacao" ColumnName="ValorAmortizacao" />
+                <ScalarProperty Name="ValorOriginal" ColumnName="ValorOriginal" />
+                <ScalarProperty Name="DataEmissao" ColumnName="DataEmissao" />
+                <ScalarProperty Name="DataPagamento" ColumnName="DataPagamento" />
+                <ScalarProperty Name="DiasContrato" ColumnName="DiasContrato" />
+                <ScalarProperty Name="DiasParcela" ColumnName="DiasParcela" />
+                <ScalarProperty Name="DataVencimento" ColumnName="DataVencimento" />
+                <ScalarProperty Name="IdSituacaoParcela" ColumnName="IdSituacaoParcela" />
+                <ScalarProperty Name="IdContrato" ColumnName="IdContrato" />
+                <ScalarProperty Name="NumeroParcela" ColumnName="NumeroParcela" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="SituacaoContrato">
+            <EntityTypeMapping TypeName="ProjetoTransportadoraModel.SituacaoContrato">
+              <MappingFragment StoreEntitySet="SituacaoContrato">
+                <ScalarProperty Name="DataInativacao" ColumnName="DataInativacao" />
+                <ScalarProperty Name="IdUsuarioInativacao" ColumnName="IdUsuarioInativacao" />
+                <ScalarProperty Name="DataCadastro" ColumnName="DataCadastro" />
+                <ScalarProperty Name="IdUsuarioCadastro" ColumnName="IdUsuarioCadastro" />
+                <ScalarProperty Name="Ativo" ColumnName="Ativo" />
+                <ScalarProperty Name="Nome" ColumnName="Nome" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="SituacaoParcela">
+            <EntityTypeMapping TypeName="ProjetoTransportadoraModel.SituacaoParcela">
+              <MappingFragment StoreEntitySet="SituacaoParcela">
+                <ScalarProperty Name="DataInativacao" ColumnName="DataInativacao" />
+                <ScalarProperty Name="IdUsuarioInativacao" ColumnName="IdUsuarioInativacao" />
+                <ScalarProperty Name="DataCadastro" ColumnName="DataCadastro" />
+                <ScalarProperty Name="IdUsuarioCadastro" ColumnName="IdUsuarioCadastro" />
+                <ScalarProperty Name="Ativo" ColumnName="Ativo" />
+                <ScalarProperty Name="Nome" ColumnName="Nome" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PessoaAvalista">
+            <EntityTypeMapping TypeName="ProjetoTransportadoraModel.PessoaAvalista">
+              <MappingFragment StoreEntitySet="PessoaAvalista">
+                <ScalarProperty Name="IdAvalista" ColumnName="IdAvalista" />
+                <ScalarProperty Name="IdPessoa" ColumnName="IdPessoa" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>

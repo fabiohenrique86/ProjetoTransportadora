@@ -11,22 +11,23 @@ namespace ProjetoTransportadora.Web.Controllers
         private PessoaBusiness pessoaBusiness;
         private UsuarioBusiness usuarioBusiness;
         private VeiculoBusiness veiculoBusiness;
+        private ContratoBusiness contratoBusiness;
 
         public TransportadoraController()
         {
             pessoaBusiness = new PessoaBusiness();
             usuarioBusiness = new UsuarioBusiness();
             veiculoBusiness = new VeiculoBusiness();
+            contratoBusiness = new ContratoBusiness();
         }
 
         public ActionResult Index()
         {
-            var listaPessoaDto = pessoaBusiness.Listar(new PessoaDto() { Ativo = true });
-
-            ViewBag.QuantidadePessoasFisicas = listaPessoaDto?.Where(x => x.DataCadastro.Month == DateTime.Now.Month && x.DataCadastro.Year == DateTime.Now.Year && x.IdTipoPessoa == (int)TipoPessoaDto.TipoPessoa.PessoaFísica).Count();
-            ViewBag.QuantidadePessoasJuridicas = listaPessoaDto?.Where(x => x.DataCadastro.Month == DateTime.Now.Month && x.DataCadastro.Year == DateTime.Now.Year && x.IdTipoPessoa == (int)TipoPessoaDto.TipoPessoa.PessoaJurídica).Count();
-            ViewBag.QuantidadeUsuarios = usuarioBusiness.Listar(new UsuarioDto() { Ativo = true })?.Where(x => x.DataCadastro.Month == DateTime.Now.Month && x.DataCadastro.Year == DateTime.Now.Year).Count();
-            ViewBag.QuantidadeVeiculos = veiculoBusiness.Listar(new VeiculoDto() { Ativo = true })?.Where(x => x.DataCadastro.Month == DateTime.Now.Month && x.DataCadastro.Year == DateTime.Now.Year).Count();
+            ViewBag.QuantidadePessoasFisicas = pessoaBusiness.ListarTotal(new PessoaDto() { Ativo = true, DataCadastro = DateTime.Now, IdTipoPessoa = (int)TipoPessoaDto.TipoPessoa.PessoaFísica });
+            ViewBag.QuantidadePessoasJuridicas = pessoaBusiness.ListarTotal(new PessoaDto() { Ativo = true, DataCadastro = DateTime.Now, IdTipoPessoa = (int)TipoPessoaDto.TipoPessoa.PessoaJurídica });
+            ViewBag.QuantidadeUsuarios = usuarioBusiness.ListarTotal(new UsuarioDto() { Ativo = true, DataCadastro = DateTime.Now });
+            ViewBag.QuantidadeContratos = contratoBusiness.ListarTotal(new ContratoDto() { Ativo = true, DataCadastro = DateTime.Now });
+            ViewBag.QuantidadeVeiculos = veiculoBusiness.ListarTotal(new VeiculoDto() { Ativo = true, DataCadastro = DateTime.Now });
 
             return View();
         }

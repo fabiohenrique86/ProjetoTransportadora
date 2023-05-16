@@ -12,10 +12,10 @@ namespace ProjetoTransportadora.Repository
     using System;
     using System.Collections.Generic;
     
-    public partial class Canal
+    public partial class SituacaoContrato
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public Canal()
+        public SituacaoContrato()
         {
             this.Contrato = new HashSet<Contrato>();
         }

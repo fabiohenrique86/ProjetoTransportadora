@@ -19,6 +19,8 @@ namespace ProjetoTransportadora.Repository
         {
             this.VeiculoHistorico = new HashSet<VeiculoHistorico>();
             this.VeiculoMulta = new HashSet<VeiculoMulta>();
+            this.Contrato = new HashSet<Contrato>();
+            this.Contrato1 = new HashSet<Contrato>();
         }
     
         public int Id { get; set; }
@@ -60,5 +62,9 @@ namespace ProjetoTransportadora.Repository
         public virtual ICollection<VeiculoHistorico> VeiculoHistorico { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<VeiculoMulta> VeiculoMulta { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Contrato> Contrato { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Contrato> Contrato1 { get; set; }
     }
 }

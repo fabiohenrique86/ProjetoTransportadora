@@ -1,25 +1,41 @@
 ﻿using ProjetoTransportadora.Business.Exceptions;
 using ProjetoTransportadora.Dto;
+using ProjetoTransportadora.Repository;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace ProjetoTransportadora.Business
 {
-    public class ParcelaBusiness : BaseBusiness
+    public class ContratoParcelaBusiness : BaseBusiness
     {
         FeriadoBusiness feriadoBusiness;
+        ContratoParcelaRepository contratoParcelaRepository;
 
-        public ParcelaBusiness()
+        public ContratoParcelaBusiness()
         {
             feriadoBusiness = new FeriadoBusiness();
+            contratoParcelaRepository = new ContratoParcelaRepository();
         }
 
-        public List<ParcelaDto> Gerar(SimulacaoDto simulacaoDto)
+        public int Incluir(ContratoParcelaDto contratoParcelaDto)
         {
-            var parcelasDto = new List<ParcelaDto>();
+            var idContratoParcela = 0;
 
-            // validações
+            if (contratoParcelaDto == null)
+                throw new BusinessException("contratoParcelaDto é nulo");
+
+            if (contratoParcelaDto.IdContrato <= 0)
+                throw new BusinessException("Contrato é obrigatório");
+
+            idContratoParcela = contratoParcelaRepository.Incluir(contratoParcelaDto);
+
+            return idContratoParcela;
+        }
+
+        public List<ContratoParcelaDto> Gerar(SimulacaoDto simulacaoDto)
+        {
+            var parcelasDto = new List<ContratoParcelaDto>();
 
             if (simulacaoDto == null)
                 throw new BusinessException("simulacaoDto é obrigatório");
@@ -38,8 +54,6 @@ namespace ProjetoTransportadora.Business
 
             if (simulacaoDto.TaxaMensalJuros <= 0)
                 throw new BusinessException("Taxa Mensal Juros é obrigatório");
-
-            // regras
 
             if (simulacaoDto.DataPrimeiraParcela < simulacaoDto.DataInicio)
                 throw new BusinessException("Data Primeira Parcela deve ser posterior a Data de Início.");
@@ -75,14 +89,15 @@ namespace ProjetoTransportadora.Business
                 fatorInvertido = Math.Round(1 / fator, 6);
                 somaFatorInvertido += fatorInvertido;
 
-                parcelasDto.Add(new ParcelaDto()
+                parcelasDto.Add(new ContratoParcelaDto()
                 {
-                    Id = i,
+                    NumeroParcela = i,
                     DataVencimento = dataVencimento,
                     DiasContrato = Convert.ToInt32(diasContrato),
                     DiasParcela = Convert.ToInt32(diasParcela),
                     Fator = fator,
-                    FatorInvertido = fatorInvertido
+                    FatorInvertido = fatorInvertido,
+                    IdSituacaoParcela = SituacaoParcelaDto.EnumSituacaoParcela.Pendente.GetHashCode()                    
                 });
             }
 
@@ -98,7 +113,7 @@ namespace ProjetoTransportadora.Business
                 var parcelaAnterior = i == 0 ? null : parcelasDto[i - 1];
 
                 valorParcela = Math.Round(simulacaoDto.ValorFinanciado / somaFatorInvertido, 2);
-                valorSaldoAnterior = i == 0 ? simulacaoDto.ValorFinanciado : parcelaAnterior.ValorSaldoAnterior - parcelaAnterior.ValorAmortizacao;
+                valorSaldoAnterior = i == 0 ? simulacaoDto.ValorFinanciado : parcelaAnterior.ValorSaldoAnterior - parcelaAnterior.ValorAmortizacao.GetValueOrDefault();
                 valorJuros = i == simulacaoDto.QuantidadeParcela - 1 ? Math.Round(valorParcela - valorSaldoAnterior, 2) : Math.Round(valorSaldoAnterior * (Math.Pow((1 + (simulacaoDto.TaxaMensalJuros / 100)), (Convert.ToDouble(parcelasDto[i].DiasParcela) / 30D)) - 1), 2);
                 valorAmortizacao = i == simulacaoDto.QuantidadeParcela - 1 ? valorSaldoAnterior - valorAmortizacao : valorParcela - valorJuros;
                 valorSaldoAtual = i == 0 ? simulacaoDto.ValorFinanciado - valorAmortizacao : valorSaldoAnterior - valorAmortizacao;
@@ -108,6 +123,9 @@ namespace ProjetoTransportadora.Business
                 parcelasDto[i].ValorJuros = valorJuros;
                 parcelasDto[i].ValorAmortizacao = valorAmortizacao;
                 parcelasDto[i].ValorSaldoAtual = valorSaldoAtual;
+                parcelasDto[i].ValorMora = 0;
+                parcelasDto[i].ValorDesconto = 0;
+                parcelasDto[i].ValorMulta = 0;
             }
 
             return parcelasDto;

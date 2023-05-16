@@ -11,6 +11,7 @@ namespace ProjetoTransportadora.Dto
             this.PessoaTelefoneDto = new List<PessoaTelefoneDto>();
             this.PessoaHistoricoDto = new List<PessoaHistoricoDto>();
             this.PessoaReferenciaDto = new List<PessoaReferenciaDto>();
+            this.PessoaAvalistaDto = new List<PessoaAvalistaDto>();
         }
 
         public int Id { get; set; }
@@ -66,5 +67,6 @@ namespace ProjetoTransportadora.Dto
         public virtual List<PessoaTelefoneDto> PessoaTelefoneDto { get; set; }
         public virtual List<PessoaHistoricoDto> PessoaHistoricoDto { get; set; }
         public virtual List<PessoaReferenciaDto> PessoaReferenciaDto { get; set; }
+        public virtual List<PessoaAvalistaDto> PessoaAvalistaDto { get; set; }
     }
 }

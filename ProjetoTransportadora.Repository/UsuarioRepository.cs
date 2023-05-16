@@ -1,4 +1,5 @@
 ﻿using ProjetoTransportadora.Dto;
+using System;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
@@ -12,6 +13,19 @@ namespace ProjetoTransportadora.Repository
         public UsuarioRepository()
         {
             projetoTransportadoraEntities = new ProjetoTransportadoraEntities();
+        }
+
+        public int ListarTotal(UsuarioDto usuarioDto)
+        {
+            IQueryable<Usuario> query = projetoTransportadoraEntities.Usuario;
+
+            if (usuarioDto.DataCadastro != DateTime.MinValue)
+                query = query.Where(x => x.DataCadastro.Month == usuarioDto.DataCadastro.Month && x.DataCadastro.Year == usuarioDto.DataCadastro.Year);
+
+            if (usuarioDto.Ativo.HasValue)
+                query = query.Where(x => x.Ativo == usuarioDto.Ativo.Value);
+
+            return query.Count();
         }
 
         public UsuarioDto Obter(UsuarioDto UsuarioDto)

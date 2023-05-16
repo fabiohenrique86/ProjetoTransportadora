@@ -60,6 +60,15 @@
     <Compile Include="Canal.cs">
       <DependentUpon>ProjetoTransportadoraModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Contrato.cs">
+      <DependentUpon>ProjetoTransportadoraModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ContratoHistorico.cs">
+      <DependentUpon>ProjetoTransportadoraModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ContratoParcela.cs">
+      <DependentUpon>ProjetoTransportadoraModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="EstadoCivil.cs">
       <DependentUpon>ProjetoTransportadoraModel.tt</DependentUpon>
     </Compile>
@@ -89,19 +98,32 @@
     <Compile Include="Pessoa.cs">
       <DependentUpon>ProjetoTransportadoraModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="PessoaAvalista.cs">
+      <DependentUpon>ProjetoTransportadoraModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="PessoaEmail.cs">
       <DependentUpon>ProjetoTransportadoraModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="PessoaAvalistaRepository.cs" />
     <Compile Include="PessoaEmailRepository.cs" />
     <Compile Include="PessoaHistorico.cs">
+      <DependentUpon>ProjetoTransportadoraModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SituacaoContrato.cs">
+      <DependentUpon>ProjetoTransportadoraModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SituacaoContratoRepository.cs" />
+    <Compile Include="SituacaoParcela.cs">
       <DependentUpon>ProjetoTransportadoraModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Veiculo.cs">
       <DependentUpon>ProjetoTransportadoraModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="ContratoHistoricoRepository.cs" />
     <Compile Include="VeiculoMulta.cs">
       <DependentUpon>ProjetoTransportadoraModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="ContratoParcelaRepository.cs" />
     <Compile Include="VeiculoMultaRepository.cs" />
     <Compile Include="VeiculoHistoricoRepository.cs" />
     <Compile Include="PessoaHistoricoRepository.cs" />
@@ -116,6 +138,7 @@
     <Compile Include="VeiculoHistorico.cs">
       <DependentUpon>ProjetoTransportadoraModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="ContratoRepository.cs" />
     <Compile Include="VeiculoRepository.cs" />
     <Compile Include="PessoaTelefone.cs">
       <DependentUpon>ProjetoTransportadoraModel.tt</DependentUpon>

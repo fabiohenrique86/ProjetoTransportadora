@@ -28,6 +28,12 @@ namespace ProjetoTransportadora.Repository
             this.Veiculo = new HashSet<Veiculo>();
             this.Veiculo1 = new HashSet<Veiculo>();
             this.VeiculoMulta = new HashSet<VeiculoMulta>();
+            this.Contrato = new HashSet<Contrato>();
+            this.Contrato1 = new HashSet<Contrato>();
+            this.Contrato2 = new HashSet<Contrato>();
+            this.Contrato3 = new HashSet<Contrato>();
+            this.PessoaAvalista1 = new HashSet<PessoaAvalista>();
+            this.PessoaAvalista = new HashSet<PessoaAvalista>();
         }
     
         public int Id { get; set; }
@@ -102,5 +108,17 @@ namespace ProjetoTransportadora.Repository
         public virtual ICollection<Veiculo> Veiculo1 { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<VeiculoMulta> VeiculoMulta { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Contrato> Contrato { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Contrato> Contrato1 { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Contrato> Contrato2 { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Contrato> Contrato3 { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<PessoaAvalista> PessoaAvalista1 { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<PessoaAvalista> PessoaAvalista { get; set; }
     }
 }

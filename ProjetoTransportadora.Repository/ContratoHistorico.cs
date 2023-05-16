@@ -12,23 +12,15 @@ namespace ProjetoTransportadora.Repository
     using System;
     using System.Collections.Generic;
     
-    public partial class Canal
+    public partial class ContratoHistorico
     {
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public Canal()
-        {
-            this.Contrato = new HashSet<Contrato>();
-        }
-    
         public int Id { get; set; }
-        public string Nome { get; set; }
-        public bool Ativo { get; set; }
+        public int IdContrato { get; set; }
+        public System.DateTime DataHistorico { get; set; }
+        public string Descricao { get; set; }
         public int IdUsuarioCadastro { get; set; }
         public System.DateTime DataCadastro { get; set; }
-        public Nullable<int> IdUsuarioInativacao { get; set; }
-        public Nullable<System.DateTime> DataInativacao { get; set; }
     
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Contrato> Contrato { get; set; }
+        public virtual Contrato Contrato { get; set; }
     }
 }

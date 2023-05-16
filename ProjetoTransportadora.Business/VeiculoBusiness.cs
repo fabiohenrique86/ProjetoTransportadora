@@ -19,6 +19,11 @@ namespace ProjetoTransportadora.Business
             veiculoMultaBusiness = new VeiculoMultaBusiness();
         }
 
+        public int ListarTotal(VeiculoDto veiculoDto = null)
+        {
+            return veiculoRepository.ListarTotal(veiculoDto);
+        }
+
         public List<VeiculoDto> Listar(VeiculoDto veiculoDto = null)
         {
             return veiculoRepository.Listar(veiculoDto);

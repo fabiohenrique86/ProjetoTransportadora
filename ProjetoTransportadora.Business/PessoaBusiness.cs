@@ -14,6 +14,7 @@ namespace ProjetoTransportadora.Business
         PessoaEmailBusiness pessoaEmailBusiness;
         PessoaHistoricoBusiness pessoaHistoricoBusiness;
         PessoaReferenciaBusiness pessoaReferenciaBusiness;
+        PessoaAvalistaBusiness pessoaAvalistaBusiness;
         public PessoaBusiness()
         {
             pessoaRepository = new PessoaRepository();
@@ -21,6 +22,12 @@ namespace ProjetoTransportadora.Business
             pessoaEmailBusiness = new PessoaEmailBusiness();
             pessoaHistoricoBusiness = new PessoaHistoricoBusiness();
             pessoaReferenciaBusiness = new PessoaReferenciaBusiness();
+            pessoaAvalistaBusiness = new PessoaAvalistaBusiness();
+        }
+
+        public int ListarTotal(PessoaDto pessoaDto = null)
+        {
+            return pessoaRepository.ListarTotal(pessoaDto);
         }
 
         public List<PessoaDto> ListarAutoComplete(PessoaDto pessoaDto = null)
@@ -79,6 +86,12 @@ namespace ProjetoTransportadora.Business
                 using (TransactionScope scope = new TransactionScope(TransactionScopeOption.Required))
                 {
                     idPessoa = pessoaRepository.Incluir(pessoaDto);
+
+                    foreach (var pessoaAvalistaDto in pessoaDto.PessoaAvalistaDto)
+                    {
+                        pessoaAvalistaDto.IdPessoa = idPessoa;
+                        pessoaAvalistaBusiness.Incluir(pessoaAvalistaDto);
+                    }
 
                     foreach (var pessoaTelefoneDto in pessoaDto.PessoaTelefoneDto)
                     {
@@ -220,22 +233,22 @@ namespace ProjetoTransportadora.Business
             {
                 pessoaRepository.Alterar(pessoaDto);
 
-                // pessoa telefone
+                pessoaAvalistaBusiness.Excluir(pessoaDto.Id);
+                foreach (var pessoaAvalistaDto in pessoaDto.PessoaAvalistaDto)
+                    pessoaAvalistaBusiness.Incluir(pessoaAvalistaDto);
+
                 pessoaTelefoneBusiness.Excluir(pessoaDto.Id);
                 foreach (var pessoaTelefoneDto in pessoaDto.PessoaTelefoneDto)
                     pessoaTelefoneBusiness.Incluir(pessoaTelefoneDto);
 
-                // pessoa email
                 pessoaEmailBusiness.Excluir(pessoaDto.Id);
                 foreach (var pessoaEmailDto in pessoaDto.PessoaEmailDto)
                     pessoaEmailBusiness.Incluir(pessoaEmailDto);
 
-                // pessoa historico
                 pessoaHistoricoBusiness.Excluir(pessoaDto.Id);
                 foreach (var pessoaHistoricoDto in pessoaDto.PessoaHistoricoDto)
                     pessoaHistoricoBusiness.Incluir(pessoaHistoricoDto);
 
-                // pessoa referencia
                 pessoaReferenciaBusiness.Excluir(pessoaDto.Id);
                 foreach (var pessoaReferenciaDto in pessoaDto.PessoaReferenciaDto)
                     pessoaReferenciaBusiness.Incluir(pessoaReferenciaDto);

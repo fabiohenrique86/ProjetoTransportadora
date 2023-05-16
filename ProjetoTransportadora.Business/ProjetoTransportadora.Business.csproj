@@ -50,14 +50,17 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BaseBusiness.cs" />
-    <Compile Include="ParcelaBusiness.cs" />
+    <Compile Include="ContratoParcelaBusiness.cs" />
     <Compile Include="FuncionalidadeBusiness.cs" />
     <Compile Include="EstadoBusiness.cs" />
     <Compile Include="Exceptions\BusinessException.cs" />
     <Compile Include="EstadoCivilBusiness.cs" />
     <Compile Include="FeriadoBusiness.cs" />
     <Compile Include="CanalBusiness.cs" />
+    <Compile Include="PessoaAvalistaBusiness.cs" />
     <Compile Include="SituacaoMultaBusiness.cs" />
+    <Compile Include="SituacaoContratoBusiness.cs" />
+    <Compile Include="ContratoBusiness.cs" />
     <Compile Include="VeiculoBusiness.cs" />
     <Compile Include="PessoaEmailBusiness.cs" />
     <Compile Include="PessoaHistoricoBusiness.cs" />
@@ -77,6 +80,7 @@
     <Compile Include="UsuarioBusiness.cs" />
     <Compile Include="PessoaBusiness.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ContratoHistoricoBusiness.cs" />
     <Compile Include="VeiculoMultaBusiness.cs" />
     <Compile Include="VeiculoHistoricoBusiness.cs" />
   </ItemGroup>

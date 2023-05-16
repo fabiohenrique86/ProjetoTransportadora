@@ -15,6 +15,22 @@ namespace ProjetoTransportadora.Repository
             projetoTransportadoraEntities = new ProjetoTransportadoraEntities();
         }
 
+        public int ListarTotal(PessoaDto pessoaDto)
+        {
+            IQueryable<Pessoa> query = projetoTransportadoraEntities.Pessoa;
+
+            if (pessoaDto.DataCadastro != DateTime.MinValue)
+                query = query.Where(x => x.DataCadastro.Month == pessoaDto.DataCadastro.Month && x.DataCadastro.Year == pessoaDto.DataCadastro.Year);
+
+            if (pessoaDto.IdTipoPessoa > 0)
+                query = query.Where(x => x.IdTipoPessoa == pessoaDto.IdTipoPessoa);
+
+            if (pessoaDto.Ativo.HasValue)
+                query = query.Where(x => x.Ativo == pessoaDto.Ativo.Value);
+
+            return query.Count();
+        }
+
         public bool Existe(PessoaDto pessoaDto)
         {
             IQueryable<Pessoa> query = projetoTransportadoraEntities.Pessoa;
@@ -155,6 +171,12 @@ namespace ProjetoTransportadora.Repository
                 IdProprietario = x.IdProprietario,
                 EmpresaPessoal = x.EmpresaPessoal,
                 EmpresaTrabalho = x.EmpresaTrabalho,
+                PessoaAvalistaDto = x.PessoaAvalista.Select(w => new PessoaAvalistaDto()
+                {
+                    Id = w.Id,
+                    IdPessoa = w.IdPessoa,
+                    IdAvalista = w.IdAvalista
+                }).ToList(),
                 PessoaTelefoneDto = x.PessoaTelefone.Select(w => new PessoaTelefoneDto()
                 {
                     Id = w.Id,
@@ -221,6 +243,14 @@ namespace ProjetoTransportadora.Repository
 
                     if (pessoaProprietario != null)
                         p.PessoaProprietarioDto = new PessoaDto() { Id = pessoaProprietario.Id, Nome = pessoaProprietario.Nome, Cpf = pessoaProprietario.Cpf, Cnpj = pessoaProprietario.Cnpj, IdTipoPessoa = pessoaProprietario.IdTipoPessoa };
+                }
+
+                foreach (var item in p.PessoaAvalistaDto)
+                {
+                    var pessoaAvalista = projetoTransportadoraEntities.Pessoa.FirstOrDefault(x => x.Id == item.IdAvalista);
+
+                    if (pessoaAvalista != null)
+                        item.AvalistaDto = new PessoaDto() { Id = pessoaAvalista.Id, Nome = pessoaAvalista.Nome, IdTipoPessoa = pessoaAvalista.IdTipoPessoa, Cpf = pessoaAvalista.Cpf };
                 }
             }
 

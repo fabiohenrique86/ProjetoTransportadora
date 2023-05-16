@@ -7,10 +7,10 @@ namespace ProjetoTransportadora.Web.Controllers
 {
     public class SimulacaoController : BaseController
     {
-        private ParcelaBusiness parcelaBusiness;
+        private ContratoParcelaBusiness parcelaBusiness;
         public SimulacaoController()
         {
-            parcelaBusiness = new ParcelaBusiness();
+            parcelaBusiness = new ContratoParcelaBusiness();
         }
 
         public ActionResult Index()

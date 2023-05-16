@@ -48,10 +48,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ContratoDto.cs" />
     <Compile Include="EstadoDto.cs" />
-    <Compile Include="ParcelaDto.cs" />
+    <Compile Include="ContratoParcelaDto.cs" />
+    <Compile Include="PessoaAvalistaDto.cs" />
     <Compile Include="SimulacaoDto.cs" />
-    <Compile Include="GrupoFuncionalidadeDto .cs" />
+    <Compile Include="GrupoFuncionalidadeDto.cs" />
     <Compile Include="FuncionalidadeDto.cs" />
     <Compile Include="LogDto.cs" />
     <Compile Include="GrupoDto.cs" />
@@ -60,6 +62,8 @@
     <Compile Include="PessoaReferenciaDto.cs" />
     <Compile Include="PessoaTelefoneDto.cs" />
     <Compile Include="SituacaoMultaDto.cs" />
+    <Compile Include="SituacaoContratoDto.cs" />
+    <Compile Include="SituacaoParcelaDto.cs" />
     <Compile Include="TipoPessoaDto .cs" />
     <Compile Include="TipoRelacaoDto.cs" />
     <Compile Include="TipoReferenciaDto.cs" />
@@ -77,6 +81,7 @@
     <Compile Include="MontadoraDto.cs" />
     <Compile Include="PessoaDto.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ContratoHistoricoDto.cs" />
     <Compile Include="VeiculoHistoricoDto.cs" />
     <Compile Include="VeiculoMultaDto.cs" />
   </ItemGroup>

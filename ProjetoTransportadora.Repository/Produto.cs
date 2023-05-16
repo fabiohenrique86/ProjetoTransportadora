@@ -18,6 +18,7 @@ namespace ProjetoTransportadora.Repository
         public Produto()
         {
             this.Pessoa = new HashSet<Pessoa>();
+            this.Contrato = new HashSet<Contrato>();
         }
     
         public int Id { get; set; }
@@ -30,5 +31,7 @@ namespace ProjetoTransportadora.Repository
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Pessoa> Pessoa { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Contrato> Contrato { get; set; }
     }
 }
