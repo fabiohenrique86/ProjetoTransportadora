@@ -21,7 +21,7 @@ namespace ProjetoTransportadora.Repository
 
             if (veiculoDto.DataCadastro != DateTime.MinValue)
                 query = query.Where(x => x.DataCadastro.Month == veiculoDto.DataCadastro.Month && x.DataCadastro.Year == veiculoDto.DataCadastro.Year);
-            
+
             if (veiculoDto.Ativo.HasValue)
                 query = query.Where(x => x.Ativo == veiculoDto.Ativo.Value);
 
@@ -52,6 +52,34 @@ namespace ProjetoTransportadora.Repository
                 query = query.Where(x => x.Placa == veiculoDto.Placa);
 
             return query.Select(x => new VeiculoDto() { Id = x.Id, Placa = x.Placa }).FirstOrDefault();
+        }
+
+        public List<VeiculoDto> ListarAutoComplete(VeiculoDto pessoaDto)
+        {
+            IQueryable<Veiculo> query = projetoTransportadoraEntities.Veiculo;
+
+            if (pessoaDto != null)
+            {
+                if (pessoaDto.Id > 0)
+                    query = query.Where(x => x.Id == pessoaDto.Id);
+
+                if (!string.IsNullOrEmpty(pessoaDto.Placa))
+                    query = query.Where(x => x.Placa.Contains(pessoaDto.Placa));
+
+                if (!string.IsNullOrEmpty(pessoaDto.Modelo))
+                    query = query.Where(x => x.Modelo.Contains(pessoaDto.Modelo));
+
+                query = query.Where(x => x.Ativo == pessoaDto.Ativo.Value);
+            }
+
+            return query.Select(x => new VeiculoDto()
+            {
+                Id = x.Id,
+                IdMontadora = x.IdMontadora,
+                MontadoraDto = new MontadoraDto() { Id = x.Montadora.Id, Nome = x.Montadora.Nome },
+                Modelo = x.Modelo,
+                Placa = x.Placa
+            }).OrderBy(x => x.Modelo).ToList();
         }
 
         public List<VeiculoDto> Listar(VeiculoDto veiculoDto)
@@ -121,10 +149,10 @@ namespace ProjetoTransportadora.Repository
                     IdVeiculo = w.IdVeiculo,
                     DataMulta = w.DataMulta,
                     Local = w.Local,
-                    IdCondutor = w.IdCondutor,                    
+                    IdCondutor = w.IdCondutor,
                     DataVencimentoMulta = w.DataVencimentoMulta,
                     ValorMulta = w.ValorMulta,
-                    IdSituacaoMulta = w.IdSituacaoMulta,                    
+                    IdSituacaoMulta = w.IdSituacaoMulta,
                     IdUsuarioCadastro = w.IdUsuarioCadastro,
                     DataCadastro = w.DataCadastro,
                     SituacaoMultaDto = w.SituacaoMulta == null ? null : new SituacaoMultaDto() { Id = w.SituacaoMulta.Id, Nome = w.SituacaoMulta.Nome }
@@ -136,7 +164,7 @@ namespace ProjetoTransportadora.Repository
                     DataHistorico = w.DataHistorico,
                     Descricao = w.Descricao,
                     IdUsuarioCadastro = w.IdUsuarioCadastro,
-                    DataCadastro = w.DataCadastro                    
+                    DataCadastro = w.DataCadastro
                 }).ToList()
             }).ToList();
 

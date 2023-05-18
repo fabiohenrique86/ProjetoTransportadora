@@ -22,30 +22,20 @@ namespace ProjetoTransportadora.Business
             if (pessoaAvalistaDto.IdPessoa <= 0)
                 throw new BusinessException("IdPessoa é obrigatório");
 
+            if (pessoaAvalistaDto.IdAvalista <= 0)
+                throw new BusinessException("IdAvalista é obrigatório");
+
+            if (pessoaAvalistaDto.IdPessoa == pessoaAvalistaDto.IdAvalista)
+                throw new BusinessException("Avalista não pode ser a própria Pessoa");
+
             var pessoaAvalistaExistePorAvalista = pessoaAvalistaRepository.Existe(new PessoaAvalistaDto() { IdPessoa = pessoaAvalistaDto.IdPessoa, IdAvalista = pessoaAvalistaDto.IdAvalista });
 
             if (pessoaAvalistaExistePorAvalista)
-                throw new BusinessException($"Avalista com Id ({pessoaAvalistaDto.IdAvalista}) já está cadastrado para a pessoa ${pessoaAvalistaDto.IdPessoa}");
+                throw new BusinessException("Avalista duplicado");
 
             idPessoaAvalista = pessoaAvalistaRepository.Incluir(pessoaAvalistaDto);
 
             return idPessoaAvalista;
-        }
-
-        public void Alterar(PessoaAvalistaDto pessoaAvalistaDto)
-        {
-            if (pessoaAvalistaDto == null)
-                throw new BusinessException("PessoaAvalistaDto é nulo");
-
-            if (pessoaAvalistaDto.Id <= 0)
-                throw new BusinessException("Id é obrigatório");
-
-            var pessoaAvalistaExistePorId = pessoaAvalistaRepository.Existe(new PessoaAvalistaDto() { Id = pessoaAvalistaDto.Id });
-
-            if (!pessoaAvalistaExistePorId)
-                throw new BusinessException($"Pessoa com Id {pessoaAvalistaDto.Id} não está cadastrada");
-
-            pessoaAvalistaRepository.Alterar(pessoaAvalistaDto);
         }
 
         public void Excluir(int idPessoa)

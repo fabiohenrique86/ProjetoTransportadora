@@ -122,7 +122,18 @@
 
             // aba - parcelas
 
-            $("#tbContratoParcela").DataTable().clear().draw();
+            //$("#tbContratoParcela").DataTable().clear().draw();
+            //$(data.ContratoParcelaDto).each(function (i, o) {
+
+            //    $("#tbContratoParcela").DataTable().rows.add([
+            //        {
+            //            "Id": o.Id,
+            //            "NumeroParcela": o.NumeroParcela,
+            //            "IdContrato": o.IdContrato,
+            //            "Descricao": "<textarea class='form-control descricaoHistorico' rows='3'>" + o.Descricao + "</textarea>",
+            //            "Acao": "<i class='glyphicon glyphicon-remove' title='Excluir' style='cursor: pointer'></i>"
+            //        }]).draw();
+            //});
 
             // aba - histórico
 
@@ -220,36 +231,40 @@
                 },
                 "columns":
                     [
-                        { "data": "Id", "className": "text-center", "visible": false },
-                        { "data": "NumeroContrato", "className": "text-center" },
+                        { "data": "Id", "className": "text-center" },
                         { "data": "PessoaClienteDto.Nome", "className": "text-center" },
-                        //{
-                        //    "data": function (data, type, row)
-                        //    {
-                        //        var nome = "";
-
-                        //        if (data.ClienteDto != null)
-                        //            nome = data.ClienteDto.Nome;
-
-                        //        return nome;
-
-                        //    }, "className": "text-center"
-                        //},
                         { "data": "VeiculoDto.Placa", "className": "text-center" },
-                        { "data": "SituacaoContratoDto.Nome", "className": "text-center" },
-                        //{
-                        //    "data": function (data, type, row) {
-                        //        var nome = "";
-
-                        //        if (data.SituacaoContratoDto != null)
-                        //            nome = data.SituacaoContratoDto.Nome;
-
-                        //        return nome;
-
-                        //    }, "className": "text-center"
-                        //},
+                        { "data": "VeiculoDto.Modelo", "className": "text-center" },
                         { "data": function (data, type, row) { return data["DataContrato"] != null ? moment(data["DataContrato"]).format("DD/MM/YYYY") : "" }, "className": "text-center" },
-                        { "data": "VeiculoDto.Modelo", "className": "text-center" }
+                        { "data": function (data, type, row) { return data["ValorFinanciado"] != null ? Globalize.format(data.ValorFinanciado, "n2") : "" }, "className": "text-center" },
+                        { "data": "SituacaoContratoDto.Nome", "className": "text-center" }
+                    ]
+            });
+
+            var tbContratoResumo = $("#tbContratoResumo").DataTable({
+                "ordering": false,
+                "bFilter": false,
+                "paging": false,
+                "ordering": false,
+                "info": false,
+                "searching": false,
+                "autoWidth": false,
+                "language": {
+                    "lengthMenu": "_MENU_ registros por página",
+                    "zeroRecords": "Sem registros a serem exibidos",
+                    "info": "Página _PAGE_ de _PAGES_",
+                    "infoEmpty": "Sem registros a serem exibidos",
+                    "infoFiltered": "(filtrados de _MAX_ total de registros)",
+                    "sSearch": "Pesquisar",
+                    "oPaginate": { "sNext": "Próximo", "sPrevious": "Anterior", "sFirst": "Primeiro", "sLast": "Último" }
+                },
+                "columns":
+                    [
+                        { "data": "SituacaoContrato", "className": "text-center", "width": "20%" },
+                        { "data": "Produto", "className": "text-center", "width": "20%" },
+                        { "data": "Quantidade", "className": "text-center", "width": "15%" },
+                        { "data": function (data, type, row) { return data["ValorEntrada"] != null ? Globalize.format(data.ValorEntrada, "n2") : "" }, "className": "text-center", "width": "15%" },
+                        { "data": function (data, type, row) { return data["ValorFinanciado"] != null ? Globalize.format(data.ValorFinanciado, "n2") : "" }, "className": "text-center", "width": "15%" },
                     ]
             });
 
@@ -275,13 +290,16 @@
                         { "data": function (data, type, row) { return data["DataVencimento"] != null ? moment(data["DataVencimento"]).format("DD/MM/YYYY") : "" }, "className": "text-center" },
                         { "data": "DiasContrato", "className": "text-center" },
                         { "data": "DiasParcela", "className": "text-center" },
-                        { "data": function (data, type, row) { return data["Fator"] != null ? Globalize.format(data.Fator, "n6") : "" }, "className": "text-center" },
-                        { "data": function (data, type, row) { return data["FatorInvertido"] != null ? Globalize.format(data.FatorInvertido, "n6") : "" }, "className": "text-center" },
-                        { "data": function (data, type, row) { return data["ValorParcela"] != null ? Globalize.format(data.ValorParcela, "n2") : "" }, "className": "text-center" },
-                        { "data": function (data, type, row) { return data["ValorSaldoAnterior"] != null ? Globalize.format(data.ValorSaldoAnterior, "n2") : "" }, "className": "text-center" },
-                        { "data": function (data, type, row) { return data["ValorJuros"] != null ? Globalize.format(data.ValorJuros, "n2") : "" }, "className": "text-center" },
+                        { "data": function (data, type, row) { return data["DataPagamento"] != null ? moment(data["DataPagamento"]).format("DD/MM/YYYY") : "" }, "className": "text-center" },
+                        { "data": function (data, type, row) { return data["DataEmissao"] != null ? moment(data["DataEmissao"]).format("DD/MM/YYYY") : "" }, "className": "text-center" },
+                        { "data": function (data, type, row) { return data["ValorOriginal"] != null ? Globalize.format(data.ValorOriginal, "n2") : "" }, "className": "text-center" },
                         { "data": function (data, type, row) { return data["ValorAmortizacao"] != null ? Globalize.format(data.ValorAmortizacao, "n2") : "" }, "className": "text-center" },
-                        { "data": function (data, type, row) { return data["ValorSaldoAtual"] != null ? Globalize.format(data.ValorSaldoAtual, "n2") : "" }, "className": "text-center" }
+                        { "data": function (data, type, row) { return data["ValorJuros"] != null ? Globalize.format(data.ValorJuros, "n2") : "" }, "className": "text-center" },
+                        { "data": function (data, type, row) { return data["ValorMulta"] != null ? Globalize.format(data.ValorMulta, "n2") : "" }, "className": "text-center" },
+                        { "data": function (data, type, row) { return data["ValorMora"] != null ? Globalize.format(data.ValorMora, "n2") : "" }, "className": "text-center" },
+                        { "data": function (data, type, row) { return data["ValorDesconto"] != null ? Globalize.format(data.ValorDesconto, "n2") : "" }, "className": "text-center" },
+                        { "data": function (data, type, row) { return data["ValorParcela"] != null ? Globalize.format(data.ValorParcela, "n2") : "" }, "className": "text-center" },
+                        { "data": "SituacaoParcelaDto.Nome", "className": "text-center" }
                     ]
             });
 
@@ -359,6 +377,50 @@
                     if (ui == null || ui.item == undefined || ui.item == null) {
                         $("#clientePesquisar").val("");
                         $("#idClientePesquisar").val("");
+                    }
+                }
+            });
+
+            $("#cliente").autocomplete({
+                minLength: 3,
+                source: function (request, response) {
+                    var nome = null;
+                    var cpf = null;
+                    var cnpj = null;
+                    var numero = parseInt(request.term);
+
+                    if (isNaN(numero))
+                        nome = request.term;
+                    else {
+                        cpf = request.term;
+                        cnpj = request.term;
+                    }
+
+                    $.getJSON("/PessoaJuridica/ListarAutoComplete", { Nome: nome, Cpf: cpf, Cnpj: cnpj, Ativo: true }, function (data, status, xhr) {
+                        // se não houver pessoa cadastrada, retorna mensagem ao usuário
+                        if (data == null || data.Data.length <= 0) {
+                            data.Data.push({ Id: 0, Nome: "Pessoa não cadastrada" });
+                        }
+                        response($.map(data.Data, function (pessoa) {
+                            return { label: pessoa.Nome, value: pessoa.Id }
+                        }));
+                    });
+                },
+                select: function (event, ui) {
+                    // apaga a pesquisa do cliente selecionado
+                    if (ui.item.label == "Pessoa não cadastrada") {
+                        ui.item.label = "";
+                        ui.item.value = "";
+                        return;
+                    }
+                    $("#idCliente").val(ui.item.value);
+                    ui.item.label = ui.item.label;
+                    ui.item.value = ui.item.label;
+                },
+                change: function (event, ui) {
+                    if (ui == null || ui.item == undefined || ui.item == null) {
+                        $("#cliente").val("");
+                        $("#idCliente").val("");
                     }
                 }
             });
@@ -495,25 +557,114 @@
                 }
             });
 
+            $("#veiculo").autocomplete({
+                minLength: 3,
+                source: function (request, response) {
+
+                    var modelo = null;
+                    var placa = null;
+
+                    if (isNaN(parseInt(request.term)))
+                        placa = request.term;
+                    else
+                        placa = request.term;
+
+                    $.getJSON("/Veiculo/ListarAutoComplete", { Modelo: modelo, Placa: placa, Ativo: true }, function (data, status, xhr) {
+                        // se não houver veículo cadastrado, retorna mensagem ao usuário
+                        if (data == null || data.Data.length <= 0) {
+                            data.Data.push({ Id: 0, Descricao: "Veículo não cadastrado" });
+                        }
+                        response($.map(data.Data, function (veiculo) {
+                            if (veiculo.Id == 0)
+                                return { label: veiculo.Descricao, value: veiculo.Id }
+                            else
+                                return { label: veiculo.MontadoraDto.Nome + ' - ' + veiculo.Modelo + ' - ' + veiculo.Placa, value: veiculo.Id }
+                        }));
+                    });
+                },
+                select: function (event, ui) {
+                    // apaga a pesquisa do veículo selecionado
+                    if (ui.item.label == "Veículo não cadastrado") {
+                        ui.item.label = "";
+                        ui.item.value = "";
+                        return;
+                    }
+                    $("#idVeiculo").val(ui.item.value);
+                    ui.item.label = ui.item.label;
+                    ui.item.value = ui.item.label;
+                },
+                change: function (event, ui) {
+                    if (ui == null || ui.item == undefined || ui.item == null) {
+                        $("#veiculo").val("");
+                        $("#idVeiculo").val("");
+                    }
+                }
+            });
+
+            $("#veiculoEntrada").autocomplete({
+                minLength: 3,
+                source: function (request, response) {
+
+                    var modelo = null;
+                    var placa = null;
+
+                    if (isNaN(parseInt(request.term)))
+                        placa = request.term;
+                    else
+                        placa = request.term;
+
+                    $.getJSON("/Veiculo/ListarAutoComplete", { Modelo: modelo, Placa: placa, Ativo: true }, function (data, status, xhr) {
+                        // se não houver veículo cadastrado, retorna mensagem ao usuário
+                        if (data == null || data.Data.length <= 0) {
+                            data.Data.push({ Id: 0, Descricao: "Veículo não cadastrado" });
+                        }
+                        response($.map(data.Data, function (veiculo) {
+                            if (veiculo.Id == 0)
+                                return { label: veiculo.Descricao, value: veiculo.Id }
+                            else
+                                return { label: veiculo.MontadoraDto.Nome + ' - ' + veiculo.Modelo + ' - ' + veiculo.Placa, value: veiculo.Id }
+                        }));
+                    });
+                },
+                select: function (event, ui) {
+                    // apaga a pesquisa do veículo selecionado
+                    if (ui.item.label == "Veículo não cadastrado") {
+                        ui.item.label = "";
+                        ui.item.value = "";
+                        return;
+                    }
+                    $("#idVeiculoEntrada").val(ui.item.value);
+                    ui.item.label = ui.item.label;
+                    ui.item.value = ui.item.label;
+                },
+                change: function (event, ui) {
+                    if (ui == null || ui.item == undefined || ui.item == null) {
+                        $("#veiculoEntrada").val("");
+                        $("#idVeiculoEntrada").val("");
+                    }
+                }
+            });
+
             $("#btnPesquisar").click(function () {
 
                 var contratoDto = {};
 
-                contratoDto.Placa = $("#placaPesquisar").val();
-                contratoDto.Renavam = $("#renavamPesquisar").val();
-                contratoDto.IdProprietarioAtual = $("#idProprietarioAtualPesquisar").val();
-                contratoDto.Modelo = $("#modeloPesquisar").val();
+                contratoDto.Id = $("#numeroContratoPesquisar").val();
+                contratoDto.IdCliente = $("#idClientePesquisar").val();
+                contratoDto.IdProduto = $("#produtoPesquisar").val();
 
-                if ($("#ativo").val() == "0")
-                    contratoDto.Ativo = false;
-                else if ($("#ativo").val() == "1")
-                    contratoDto.Ativo = true;
+                if ($("#placaPesquisar").val() != "")
+                    contratoDto.VeiculoDto = { Placa: $("#placaPesquisar").val() };
+
+                contratoDto.IdSituacaoContrato = $("#situacaoContratoPesquisar").val();
+                contratoDto.DataContratoInicial = $("#peridoInicioPesquisar").val();
+                contratoDto.DataContratoFinal = $("#peridoFimPesquisar").val();
 
                 $.ajax({
                     dataType: "json",
-                    type: "GET",
+                    type: "POST",
                     url: "/Contrato/Listar",
-                    data: contratoDto,
+                    data: JSON.stringify(contratoDto),
                     contentType: "application/json",
                     success: function (data) {
 
@@ -524,6 +675,9 @@
 
                         tbContrato.clear();
                         tbContrato.rows.add(data.Data).draw();
+
+                        tbContratoResumo.clear();
+                        tbContratoResumo.rows.add(data.Resumo).draw();
                     }
                 });
 
@@ -541,8 +695,8 @@
 
                 $("#valorParcela").prop("disabled", "disabled");
                 $("#valorFinanciado").prop("disabled", "disabled");
-                $("#situacaoContrato").prop("disabled", "disabled");
-                $("#situacaoContrato").val('@SituacaoContratoDto.EnumSituacaoContrato.Ativo.GetHashCode()');
+                @*$("#situacaoContrato").prop("disabled", "disabled");
+                $("#situacaoContrato").val('@SituacaoContratoDto.EnumSituacaoContrato.Ativo.GetHashCode()');*@
 
                 $("#modalContrato").modal('show');
                 $('#dados-tab').click();
@@ -554,30 +708,61 @@
 
                 contratoDto.Id = $("#idContrato").val();
 
-                // aba - dados contrato
+                // aba - dados
 
-                contratoDto.Placa = $("#placa").val();
-                contratoDto.Renavam = $("#renavam").val();
-                contratoDto.IdMontadora = $("#montadora").val();
-                contratoDto.Modelo = $("#modelo").val();
-                contratoDto.Cor = $("#cor").val();
-                contratoDto.AnoFabricacao = $("#anoFabricacao").val();
-                contratoDto.AnoModelo = $("#anoModelo").val();
-                contratoDto.Chassi = $("#chassi").val();
-                contratoDto.IdSituacaoContrato = $("#situacaoContrato").val();
-                contratoDto.Rastreador = $("#rastreador").val();
+                contratoDto.DataContrato = $("#dataContrato").val();
+                contratoDto.IdCliente = $("#idCliente").val();
+                contratoDto.IdProduto = $("#produto").val();
+                contratoDto.IdVeiculo = $("#idVeiculo").val();
+                contratoDto.IdFiador = $("#idFiador").val();
+                contratoDto.IdIndicacao = $("#idIndicacao").val();
+                contratoDto.IdPromotor = $("#idPromotor").val();
+                contratoDto.IdCanal = $("#canal").val();
+                contratoDto.DataPrimeiraParcela = $("#dataPrimeiraParcela").val();
+                contratoDto.DataBaixa = $("#dataBaixa").val();
 
-                // aba - valores contrato
+                // aba - valores
 
-                contratoDto.IdProprietarioAtual = $("#idProprietarioAtual").val();
-                contratoDto.IdProprietarioAnterior = $("#idProprietarioAnterior").val();
+                contratoDto.ValorVeiculo = $("#valorVeiculo").val();
+                contratoDto.ValorEntrada = $("#valorEntrada").val();
+                contratoDto.ValorDocumentacao = $("#valorDocumentacao").val();
+                contratoDto.ValorDesconto = $("#valorDesconto").val();
+                contratoDto.ValorFinanciadoVeiculo = $("#valorFinanciadoVeiculo").val();
+                contratoDto.ValorFinanciadoDocumentacao = $("#valorFinanciadoDocumentacao").val();
+                contratoDto.IdVeiculoEntrada = $("#idVeiculoEntrada").val();
+                contratoDto.ValorVeiculoEntrada = $("#valorVeiculoEntrada").val();
+                contratoDto.ValorDepositado = $("#valorDepositado").val();
+                contratoDto.ValorCaixa = $("#valorCaixa").val();
+                contratoDto.ValorTarifa = $("#valorTarifa").val();
+
+                contratoDto.ValorFinanciado = $("#valorFinanciado").val();
+                contratoDto.TaxaJuros = $("#taxaMensalJuros").val();
 
                 // aba - parcelas
 
-                contratoDto.Implemento = $("#implementoV").val();
-                contratoDto.Comprimento = $("#comprimento").val();
-                contratoDto.Altura = $("#altura").val();
-                contratoDto.Largura = $("#largura").val();
+                contratoDto.ContratoParcelaDto = [];
+                tbContratoParcela.rows().every(function (rowIdx, tableLoop, rowLoop)
+                {
+                    var data = this.data();
+
+                    contratoDto.ContratoParcelaDto.push
+                        ({
+                            "NumeroParcela": data.NumeroParcela,
+                            "DataVencimento": moment(data.DataVencimento).format("YYYY/MM/DD"),
+                            "DiasContrato": data.DiasContrato,
+                            "DiasParcela": data.DiasParcela,
+                            "DataPagamento": moment(data.DataPagamento).format("YYYY/MM/DD"),
+                            "DataEmissao": moment(data.DataEmissao).format("YYYY/MM/DD"),
+                            "ValorOriginal": data.ValorOriginal,
+                            "ValorAmortizacao": data.ValorAmortizacao,
+                            "ValorJuros": data.ValorJuros,
+                            "ValorMulta": data.ValorMulta,
+                            "ValorMora": data.ValorMora,
+                            "ValorDesconto": data.ValorDesconto,
+                            "ValorParcela": data.ValorParcela,
+                            "IdSituacaoParcela": data.SituacaoParcelaDto.Id
+                        });
+                });
 
                 // aba - histórico
 
@@ -587,7 +772,7 @@
                     contratoDto.ContratoHistoricoDto.push
                         ({
                             "Id": this.data().Id,
-                            "IdContrato": ContratoDto.Id,
+                            "IdContrato": contratoDto.Id,
                             "DataHistorico": $($($(".dataHistorico")[rowIdx]).parents("tr").children().eq(0)).children().val(),
                             "Descricao": $($($(".descricaoHistorico")[rowIdx]).parents("tr").children().eq(1)).children().val(),
                             "IdUsuarioCadastro": '@usuarioDto.Id',
@@ -598,6 +783,7 @@
                 var url = "";
                 if (contratoDto.Id == null || contratoDto.Id <= 0)
                 {
+                    contratoDto.IdSituacaoContrato = '@SituacaoContratoDto.EnumSituacaoContrato.Ativo.GetHashCode()';
                     contratoDto.IdUsuarioCadastro = '@usuarioDto.Id';
                     contratoDto.DataCadastro = '@DateTime.UtcNow';
                     url = "/Contrato/Incluir";
@@ -622,9 +808,13 @@
 
                         var idx;
 
-                        if (contratoDto.Id == null || contratoDto.Id <= 0) {
+                        if (contratoDto.Id == null || contratoDto.Id <= 0)
+                        {
                             tbContrato.clear();
                             tbContrato.rows.add(data.Data).draw();
+
+                            tbContratoResumo.clear();
+                            tbContratoResumo.rows.add(data.Resumo).draw();
                         }
                         else
                         {
@@ -701,7 +891,7 @@
                 //simulacaoDto.ValorTarifa = $("#valorTarifa").val();
                 //simulacaoDto.ValorDesconto = $("#valorDesconto").val();
                 //simulacaoDto.ValorBens = $("#valorBens").val();
-                //simulacaoDto.ValorDinheiro = $("#valorDinheiro").val();                
+                //simulacaoDto.ValorDinheiro = $("#valorDinheiro").val();
 
                 $.ajax({
                     dataType: "json",
@@ -763,6 +953,8 @@
 
                 return false;
             }
+
+            $('#consultaPesquisa-tab').click();
         });
 
     </script>
@@ -832,336 +1024,367 @@
         </div>
     </div>
     <div class="form-group">
-        <div class="table-responsive">
-            <table id="tbContrato" class="table nowrap">
-                <thead>
-                    <tr>
-                        <td class="text-center" style="width: 5%"><b>Id</b></td>
-                        <td class="text-center" style="width: 10%"><b>Número Contrato</b></td>
-                        <td class="text-center" style="width: 12.5%"><b>Cliente</b></td>
-                        <td class="text-center" style="width: 12.5%"><b>Placa</b></td>
-                        <td class="text-center" style="width: 15%"><b>Situação Contrato</b></td>
-                        <td class="text-center" style="width: 15%"><b>Data Contrato</b></td>
-                        <td class="text-center" style="width: 15%"><b>Modelo</b></td>
-                    </tr>
-                </thead>
-                <tbody></tbody>
-            </table>
+        <ul id="myTab2" class="nav nav-tabs nav-justified" role="tablist">
+            <li class="nav-item">
+                <a class="nav-link active" id="consultaPesquisa-tab" data-toggle="tab" href="#consultaPesquisa" role="tab" aria-controls="consultaPesquisa" aria-selected="true">Consulta</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" id="resumoPesquisa-tab" data-toggle="tab" href="#resumoPesquisa" role="tab" aria-controls="resumoPesquisa" aria-selected="false">Resumo</a>
+            </li>
+        </ul>
+        <div class="tab-content">
+            <div class="tab-pane active" id="consultaPesquisa" role="tabpanel" aria-labelledby="consultaPesquisa-tab">
+                <div class="table-responsive">
+                    <table id="tbContrato" class="table nowrap">
+                        <thead>
+                            <tr>
+                                <td class="text-center" style="width: 10%"><b>Número Contrato</b></td>
+                                <td class="text-center" style="width: 15%"><b>Cliente</b></td>
+                                <td class="text-center" style="width: 15%"><b>Placa</b></td>
+                                <td class="text-center" style="width: 15%"><b>Modelo</b></td>
+                                <td class="text-center" style="width: 15%"><b>Data Contrato</b></td>
+                                <td class="text-center" style="width: 15%"><b>Valor Financiado</b></td>
+                                <td class="text-center" style="width: 15%"><b>Situação Contrato</b></td>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="tab-pane" id="resumoPesquisa" role="tabpanel" aria-labelledby="resumoPesquisa-tab">
+                <div class="table-responsive">
+                    <table id="tbContratoResumo" class="table nowrap">
+                        <thead>
+                            <tr>
+                                <td class="text-center" style="width: 15%"><b>Situação Contrato</b></td>
+                                <td class="text-center" style="width: 15%"><b>Produto</b></td>
+                                <td class="text-center" style="width: 15%"><b>Quantidade</b></td>
+                                <td class="text-center" style="width: 15%"><b>Valor Entrada</b></td>
+                                <td class="text-center" style="width: 15%"><b>Valor Financiado</b></td>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
         </div>
     </div>
 </div>
 
 <div class="modal fade" id="modalContrato" tabindex="-1" role="dialog" aria-labelledby="ModalContrato" aria-hidden="true">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Fechar</span></button>
-                    <h4 class="modal-title" id="myModalLabel"><span id="lblAcao"></span> Contrato <label id="lblTitulo"></label></h4>
-                </div>
-                <div class="modal-body">
-                    <form id="frmContrato" action="#">
-                        <input id="idContrato" type="hidden" />
-                        <div class="form-group">
-                            <div class="row">
-                                <ul id="myTab" class="nav nav-tabs nav-justified" role="tablist">
-                                    <li class="nav-item">
-                                        <a class="nav-link active" id="dados-tab" data-toggle="tab" href="#dados" role="tab" aria-controls="dados" aria-selected="true">Dados</a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link" id="valores-tab" data-toggle="tab" href="#valores" role="tab" aria-controls="valores" aria-selected="false">Valores</a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link" id="parcelas-tab" data-toggle="tab" href="#parcelas" role="tab" aria-controls="parcelas" aria-selected="false">Parcelas</a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link" id="historico-tab" data-toggle="tab" href="#historico" role="tab" aria-controls="historico" aria-selected="false">Histórico</a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link" id="resumo-tab" data-toggle="tab" href="#resumo" role="tab" aria-controls="resumo" aria-selected="false">Resumo</a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link" id="antecipacao-tab" data-toggle="tab" href="#antecipacao" role="tab" aria-controls="antecipacao" aria-selected="false">Antecipação</a>
-                                    </li>
-                                </ul>
-                                <div class="tab-content">
-                                    <br />
-                                    <div class="tab-pane active" id="dados" role="tabpanel" aria-labelledby="dados-tab">
-                                        <div class="form-group">
-                                            <div class="row">
-                                                <div class="col-md-2">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Fechar</span></button>
+                <h4 class="modal-title" id="myModalLabel"><span id="lblAcao"></span> Contrato <label id="lblTitulo"></label></h4>
+            </div>
+            <div class="modal-body">
+                <form id="frmContrato" action="#">
+                    <input id="idContrato" type="hidden" />
+                    <div class="form-group">
+                        <div class="row">
+                            <ul id="myTab" class="nav nav-tabs nav-justified" role="tablist">
+                                <li class="nav-item">
+                                    <a class="nav-link active" id="dados-tab" data-toggle="tab" href="#dados" role="tab" aria-controls="dados" aria-selected="true">Dados</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" id="valores-tab" data-toggle="tab" href="#valores" role="tab" aria-controls="valores" aria-selected="false">Valores</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" id="parcelas-tab" data-toggle="tab" href="#parcelas" role="tab" aria-controls="parcelas" aria-selected="false">Parcelas</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" id="historico-tab" data-toggle="tab" href="#historico" role="tab" aria-controls="historico" aria-selected="false">Histórico</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" id="resumo-tab" data-toggle="tab" href="#resumo" role="tab" aria-controls="resumo" aria-selected="false">Resumo</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" id="antecipacao-tab" data-toggle="tab" href="#antecipacao" role="tab" aria-controls="antecipacao" aria-selected="false">Antecipação</a>
+                                </li>
+                            </ul>
+                            <div class="tab-content">
+                                <br />
+                                <div class="tab-pane active" id="dados" role="tabpanel" aria-labelledby="dados-tab">
+                                    <div class="form-group">
+                                        <div class="row">
+                                            @*<div class="col-md-2">
                                                     <label for="numeroContrato">Número Contrato:</label>
                                                     <input id="numeroContrato" type="text" class="form-control" />
-                                                </div>
-                                                <div class="col-md-2">
-                                                    <label for="dataContrato">Data Contrato:</label>
-                                                    <input id="dataContrato" type="text" class="form-control data datepicker" />
-                                                </div>
-                                                <div class="col-md-3">
-                                                    <label for="cliente">Cliente:</label>
-                                                    <input id="cliente" type="text" class="form-control" placeholder="Cliente (Mínimo de 3 caracteres - CPF ou CNPJ ou Nome)" />
-                                                    <input id="idCliente" type="hidden" />
-                                                </div>
-                                                <div class="col-md-2">
-                                                    <label for="produto">Produto:</label>
-                                                    @Html.DropDownList("produto", new SelectList(ViewBag.Produto, "Id", "Nome"), "Selecione", new { @class = "form-control" })
-                                                </div>
-                                                <div class="col-md-3">
-                                                    <label for="veiculo">Veículo:</label>
-                                                    <input id="veiculo" type="text" class="form-control" placeholder="Veículo (Mínimo de 3 caracteres - Placa ou Modelo)" />
-                                                    <input id="idVeiculo" type="hidden" />
-                                                </div>
+                                                </div>*@
+                                            <div class="col-md-2">
+                                                <label for="dataContrato">Data Contrato:</label>
+                                                <input id="dataContrato" type="text" class="form-control data datepicker" />
+                                            </div>
+                                            <div class="col-md-3">
+                                                <label for="cliente">Cliente:</label>
+                                                <input id="cliente" type="text" class="form-control" placeholder="Cliente (Mínimo de 3 caracteres - CPF ou CNPJ ou Nome)" />
+                                                <input id="idCliente" type="hidden" />
+                                            </div>
+                                            <div class="col-md-2">
+                                                <label for="produto">Produto:</label>
+                                                @Html.DropDownList("produto", new SelectList(ViewBag.Produto, "Id", "Nome"), "Selecione", new { @class = "form-control" })
+                                            </div>
+                                            <div class="col-md-3">
+                                                <label for="veiculo">Veículo:</label>
+                                                <input id="veiculo" type="text" class="form-control" placeholder="Veículo (Mínimo de 3 caracteres - Placa)" />
+                                                <input id="idVeiculo" type="hidden" />
                                             </div>
                                         </div>
-                                        <div class="form-group">
-                                            <div class="row">
-                                                <div class="col-md-3">
-                                                    <label for="fiador">Fiador:</label>
-                                                    <input id="fiador" type="text" class="form-control" placeholder="Fiador (Mínimo de 3 caracteres - CPF ou CNPJ ou Nome)" />
-                                                    <input id="idFiador" type="hidden" />
-                                                </div>
-                                                <div class="col-md-3">
-                                                    <label for="indicacao">Indicação:</label>
-                                                    <input id="indicacao" type="text" class="form-control" placeholder="Indicação (Mínimo de 3 caracteres - CPF ou CNPJ ou Nome)" />
-                                                    <input id="idIndicacao" type="hidden" />
-                                                </div>
-                                                <div class="col-md-3">
-                                                    <label for="promotor">Promotor:</label>
-                                                    <input id="promotor" type="text" class="form-control" placeholder="Promotor (Mínimo de 3 caracteres - CPF ou CNPJ ou Nome)" />
-                                                    <input id="idPromotor" type="hidden" />
-                                                </div>
-                                                <div class="col-md-3">
-                                                    <label for="canal">Canal:</label>
-                                                    @Html.DropDownList("canal", new SelectList(ViewBag.Canal, "Id", "Nome"), "Selecione", new { @class = "form-control" })
-                                                </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="row">
+                                            <div class="col-md-3">
+                                                <label for="fiador">Fiador:</label>
+                                                <input id="fiador" type="text" class="form-control" placeholder="Fiador (Mínimo de 3 caracteres - CPF ou CNPJ ou Nome)" />
+                                                <input id="idFiador" type="hidden" />
+                                            </div>
+                                            <div class="col-md-3">
+                                                <label for="indicacao">Indicação:</label>
+                                                <input id="indicacao" type="text" class="form-control" placeholder="Indicação (Mínimo de 3 caracteres - CPF ou CNPJ ou Nome)" />
+                                                <input id="idIndicacao" type="hidden" />
+                                            </div>
+                                            <div class="col-md-3">
+                                                <label for="promotor">Promotor:</label>
+                                                <input id="promotor" type="text" class="form-control" placeholder="Promotor (Mínimo de 3 caracteres - CPF ou CNPJ ou Nome)" />
+                                                <input id="idPromotor" type="hidden" />
+                                            </div>
+                                            <div class="col-md-3">
+                                                <label for="canal">Canal:</label>
+                                                @Html.DropDownList("canal", new SelectList(ViewBag.Canal, "Id", "Nome"), "Selecione", new { @class = "form-control" })
                                             </div>
                                         </div>
-                                        <div class="form-group">
-                                            <div class="row">
-                                                <div class="col-md-2">
-                                                    <label for="dataPrimeiraParcela">Data Primeira Parcela:</label>
-                                                    <input id="dataPrimeiraParcela" type="text" class="form-control data datepicker" />
-                                                </div>
-                                                <div class="col-md-2">
-                                                    <label for="valorParcela">Valor Parcela:</label>
-                                                    <input id="valorParcela" type="text" class="form-control valor" />
-                                                </div>
-                                                <div class="col-md-2">
-                                                    <label for="dataBaixa">Data Baixa:</label>
-                                                    <input id="dataBaixa" type="text" class="form-control data datepicker" />
-                                                </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="row">
+                                            <div class="col-md-2">
+                                                <label for="dataPrimeiraParcela">Data Primeira Parcela:</label>
+                                                <input id="dataPrimeiraParcela" type="text" class="form-control data datepicker" />
                                             </div>
-                                        </div>                                        
-                                        <div class="form-group">
+                                            <div class="col-md-2">
+                                                <label for="valorParcela">Valor Parcela:</label>
+                                                <input id="valorParcela" type="text" class="form-control valor" />
+                                            </div>
+                                            <div class="col-md-2">
+                                                <label for="dataBaixa">Data Baixa:</label>
+                                                <input id="dataBaixa" type="text" class="form-control data datepicker" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    @*<div class="form-group">
                                             <div class="row">
                                                 <div class="col-md-2">
                                                     <label for="situacaoContrato">Situação Contrato:</label>
                                                     @Html.DropDownList("situacaoContrato", new SelectList(ViewBag.SituacaoContrato, "Id", "Nome"), "Selecione", new { @class = "form-control" })
                                                 </div>
                                             </div>
-                                        </div>
-                                    </div>
-                                    <div class="tab-pane" id="valores" role="tabpanel" aria-labelledby="valores-tab">
-                                        <div class="form-group">
-                                            <div class="row">
-                                                <div class="col-md-2">
-                                                    <label for="valorVeiculo">Valor Veículo:</label>
-                                                    <input id="valorVeiculo" type="text" class="form-control valor" onchange="calcularValorFinanciado()" />
-                                                </div>
-                                                <div class="col-md-2">
-                                                    <label for="valorEntrada">Valor Entrada:</label>
-                                                    <input id="valorEntrada" type="text" class="form-control valor" onchange="calcularValorFinanciado()" />
-                                                </div>
-                                                <div class="col-md-2">
-                                                    <label for="valorDocumentacao">Valor Documentação:</label>
-                                                    <input id="valorDocumentacao" type="text" class="form-control valor" onchange="calcularValorFinanciado()" />
-                                                </div>
-                                                <div class="col-md-2">
-                                                    <label for="valorDesconto">Valor Desconto:</label>
-                                                    <input id="valorDesconto" type="text" class="form-control valor" onchange="calcularValorFinanciado()" />
-                                                </div>
-                                                <div class="col-md-2">
-                                                    <label for="valorFinanciadoVeiculo">Valor Financiado Veículo:</label>
-                                                    <input id="valorFinanciadoVeiculo" type="text" class="form-control valor" />
-                                                </div>
-                                                <div class="col-md-2">
-                                                    <label for="valorFinanciadoDocumentacao">Valor Financiado Documentação:</label>
-                                                    <input id="valorFinanciadoDocumentacao" type="text" class="form-control valor" />
-                                                </div>
+                                        </div>*@
+                                </div>
+                                <div class="tab-pane" id="valores" role="tabpanel" aria-labelledby="valores-tab">
+                                    <div class="form-group">
+                                        <div class="row">
+                                            <div class="col-md-2">
+                                                <label for="valorVeiculo">Valor Veículo:</label>
+                                                <input id="valorVeiculo" type="text" class="form-control valor" onchange="calcularValorFinanciado()" />
                                             </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <div class="row">
-                                                <div class="col-md-4">
-                                                    <label for="veiculoEntrada">Veículo Entrada:</label>
-                                                    <input id="veiculoEntrada" type="text" class="form-control" placeholder="Veículo Entrada (Mínimo de 3 caracteres - Placa ou Modelo)" />
-                                                    <input id="idVeiculoEntrada" type="hidden" />
-                                                </div>
-                                                <div class="col-md-2">
-                                                    <label for="valorVeiculoEntrada">Valor Veículo Entrada:</label>
-                                                    <input id="valorVeiculoEntrada" type="text" class="form-control valor" onchange="calcularValorFinanciado()" />
-                                                </div>
-                                                <div class="col-md-2">
-                                                    <label for="valorDepositado">Valor Depositado:</label>
-                                                    <input id="valorDepositado" type="text" class="form-control valor" onchange="calcularValorFinanciado()" />
-                                                </div>
-                                                <div class="col-md-2">
-                                                    <label for="valorCaixa">Valor Caixa:</label>
-                                                    <input id="valorCaixa" type="text" class="form-control valor" onchange="calcularValorFinanciado()" />
-                                                </div>
-                                                <div class="col-md-2">
-                                                    <label for="valorTarifa">Valor Tarifa:</label>
-                                                    <input id="valorTarifa" type="text" class="form-control valor" onchange="calcularValorFinanciado()" />
-                                                </div>
+                                            <div class="col-md-2">
+                                                <label for="valorEntrada">Valor Entrada:</label>
+                                                <input id="valorEntrada" type="text" class="form-control valor" onchange="calcularValorFinanciado()" />
                                             </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <div class="row">
-                                                <div class="col-md-2">
-                                                    <label for="valorFinanciado">Valor Financiado Total:</label>
-                                                    <input id="valorFinanciado" type="text" class="form-control valor" disabled="disabled" />
-                                                </div>
-                                                <div class="col-md-2">
-                                                    <label for="taxaMensalJuros">Taxa Juros:</label>
-                                                    <input id="taxaMensalJuros" type="text" class="form-control taxa" />
-                                                </div>
-                                                <div class="col-md-2">
-                                                    <label for="quantidadeParcela">Quantidade Parcelas:</label>
-                                                    <input id="quantidadeParcela" type="text" class="form-control parcela" />
-                                                </div>
+                                            <div class="col-md-2">
+                                                <label for="valorDocumentacao">Valor Documentação:</label>
+                                                <input id="valorDocumentacao" type="text" class="form-control valor" onchange="calcularValorFinanciado()" />
                                             </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <div class="row">
-                                                <div class="col-md-12 text-right">
-                                                    <input id="btnGerarParcela" type="button" class="btn btn-info" value="Gerar Parcelas" />
-                                                </div>
+                                            <div class="col-md-2">
+                                                <label for="valorDesconto">Valor Desconto:</label>
+                                                <input id="valorDesconto" type="text" class="form-control valor" onchange="calcularValorFinanciado()" />
+                                            </div>
+                                            <div class="col-md-2">
+                                                <label for="valorFinanciadoVeiculo">Valor Financiado Veículo:</label>
+                                                <input id="valorFinanciadoVeiculo" type="text" class="form-control valor" />
+                                            </div>
+                                            <div class="col-md-2">
+                                                <label for="valorFinanciadoDocumentacao">Valor Financiado Documentação:</label>
+                                                <input id="valorFinanciadoDocumentacao" type="text" class="form-control valor" />
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="tab-pane" id="parcelas" role="tabpanel" aria-labelledby="parcelas-tab">
-                                        <div class="form-group">
-                                            <div class="table-responsive">
-                                                <table id="tbContratoParcela" class="table nowrap" style="width: 100%">
-                                                    <thead>
-                                                        <tr>
-                                                            <td class="text-center"><b>Parcela</b></td>
-                                                            <td class="text-center"><b>Data Vencimento</b></td>
-                                                            <td class="text-center"><b>Dias Contrato</b></td>
-                                                            <td class="text-center"><b>Dias Parcela</b></td>
-                                                            <td class="text-center"><b>Fator</b></td>
-                                                            <td class="text-center"><b>Fator Invertido</b></td>
-                                                            <td class="text-center"><b>Valor Parcela</b></td>
-                                                            <td class="text-center"><b>Valor Saldo Anterior</b></td>
-                                                            <td class="text-center"><b>Valor Juros</b></td>
-                                                            <td class="text-center"><b>Valor Amortização</b></td>
-                                                            <td class="text-center"><b>Valor Saldo Atual</b></td>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody></tbody>
-                                                </table>
+                                    <div class="form-group">
+                                        <div class="row">
+                                            <div class="col-md-4">
+                                                <label for="veiculoEntrada">Veículo Entrada:</label>
+                                                <input id="veiculoEntrada" type="text" class="form-control" placeholder="Veículo Entrada (Mínimo de 3 caracteres - Placa)" />
+                                                <input id="idVeiculoEntrada" type="hidden" />
+                                            </div>
+                                            <div class="col-md-2">
+                                                <label for="valorVeiculoEntrada">Valor Veículo Entrada:</label>
+                                                <input id="valorVeiculoEntrada" type="text" class="form-control valor" onchange="calcularValorFinanciado()" />
+                                            </div>
+                                            <div class="col-md-2">
+                                                <label for="valorDepositado">Valor Depositado:</label>
+                                                <input id="valorDepositado" type="text" class="form-control valor" onchange="calcularValorFinanciado()" />
+                                            </div>
+                                            <div class="col-md-2">
+                                                <label for="valorCaixa">Valor Caixa:</label>
+                                                <input id="valorCaixa" type="text" class="form-control valor" onchange="calcularValorFinanciado()" />
+                                            </div>
+                                            <div class="col-md-2">
+                                                <label for="valorTarifa">Valor Tarifa:</label>
+                                                <input id="valorTarifa" type="text" class="form-control valor" onchange="calcularValorFinanciado()" />
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="tab-pane" id="valores" role="tabpanel" aria-labelledby="valores-tab">
-                                        <div class="form-group">
-                                            <div class="row">
-                                                <div class="col-md-2">
-                                                    <label for="dataAquisicao">Data da Aquisição:</label>
-                                                    <input id="dataAquisicao" name="dataAquisicao" type="text" class="form-control data datepicker" placeholder="Data da Aquisição" />
-                                                </div>
-                                                <div class="col-md-2">
-                                                    <label for="valorAquisicao">Valor Aquisição:</label>
-                                                    <input id="valorAquisicao" name="valorAquisicao" type="text" class="form-control valor" placeholder="Valor Aquisição" />
-                                                </div>
+                                    <div class="form-group">
+                                        <div class="row">
+                                            <div class="col-md-2">
+                                                <label for="valorFinanciado">Valor Financiado Total:</label>
+                                                <input id="valorFinanciado" type="text" class="form-control valor" disabled="disabled" />
                                             </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <div class="row">
-                                                <div class="col-md-2">
-                                                    <label for="dataVenda">Data da Venda:</label>
-                                                    <input id="dataVenda" name="dataVenda" type="text" class="form-control data datepicker" placeholder="Data da Venda" />
-                                                </div>
-                                                <div class="col-md-2">
-                                                    <label for="valorVenda">Valor Venda:</label>
-                                                    <input id="valorVenda" name="valorVenda" type="text" class="form-control valor" placeholder="Valor Venda" />
-                                                </div>
+                                            <div class="col-md-2">
+                                                <label for="taxaMensalJuros">Taxa Juros:</label>
+                                                <input id="taxaMensalJuros" type="text" class="form-control taxa" />
                                             </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <div class="row">
-                                                <div class="col-md-2">
-                                                    <label for="dataRecuperacao">Data da Recuperação:</label>
-                                                    <input id="dataRecuperacao" name="dataRecuperacao" type="text" class="form-control data datepicker" placeholder="Data da Recuperação" />
-                                                </div>
-                                                <div class="col-md-2">
-                                                    <label for="valorTransportadora">Valor Transportadora:</label>
-                                                    <input id="valorTransportadora" name="valorTransportadora" type="text" class="form-control valor" placeholder="Valor Transportadora" />
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <div class="row">
-                                                <div class="col-md-2">
-                                                    <label for="dataValorFIPE">Data do Valor FIPE:</label>
-                                                    <input id="dataValorFIPE" name="dataValorFIPE" type="text" class="form-control data datepicker" placeholder="Data do Valor FIPE" />
-                                                </div>
-                                                <div class="col-md-2">
-                                                    <label for="valorFIPE">Valor FIPE:</label>
-                                                    <input id="valorFIPE" name="valorFIPE" type="text" class="form-control valor" placeholder="Valor FIPE" />
-                                                </div>
+                                            <div class="col-md-2">
+                                                <label for="quantidadeParcela">Quantidade Parcelas:</label>
+                                                <input id="quantidadeParcela" type="text" class="form-control parcela" />
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="tab-pane" id="historico" role="tabpanel" aria-labelledby="historico-tab">
-                                        <div class="form-group">
-                                            <div class="row">
-                                                <div class="col-md-12 text-right">
-                                                    <input id="btnAdicionarContratoHistorico" type="button" class="btn" value="Adicionar Histórico" />
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <div class="table-responsive">
-                                                <table id="tbContratoHistorico" class="table nowrap" style="width: 100%">
-                                                    <thead>
-                                                        <tr>
-                                                            <td class="text-center"><b>Id</b></td>
-                                                            <td class="text-center"><b>Data Histórico</b></td>
-                                                            <td class="text-center"><b>Descrição</b></td>
-                                                            <td class="text-center"><b>Ação</b></td>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody></tbody>
-                                                </table>
+                                    <div class="form-group">
+                                        <div class="row">
+                                            <div class="col-md-12 text-right">
+                                                <input id="btnGerarParcela" type="button" class="btn btn-info" value="Gerar Parcelas" />
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="tab-pane" id="resumo" role="tabpanel" aria-labelledby="resumo-tab">
-                                        Resumo
+                                </div>
+                                <div class="tab-pane" id="parcelas" role="tabpanel" aria-labelledby="parcelas-tab">
+                                    <div class="form-group">
+                                        <div class="table-responsive" style="overflow-x: hidden; overflow-y: scroll; height: 350px">
+                                            <table id="tbContratoParcela" class="table nowrap" style="width: 100%">
+                                                <thead>
+                                                    <tr>
+                                                        <td class="text-center"><b>Parcela</b></td>
+                                                        <td class="text-center"><b>Data Vencimento</b></td>
+                                                        <td class="text-center"><b>Dias Contrato</b></td>
+                                                        <td class="text-center"><b>Dias Parcela</b></td>
+                                                        <td class="text-center"><b>Data Pagamento</b></td>
+                                                        <td class="text-center"><b>Data Emissão</b></td>
+                                                        <td class="text-center"><b>Valor Original</b></td>
+                                                        <td class="text-center"><b>Valor Amortização</b></td>
+                                                        <td class="text-center"><b>Valor Juros</b></td>
+                                                        <td class="text-center"><b>Valor Multa</b></td>
+                                                        <td class="text-center"><b>Valor Mora</b></td>
+                                                        <td class="text-center"><b>Valor Desconto</b></td>
+                                                        <td class="text-center"><b>Valor Parcela</b></td>
+                                                        <td class="text-center"><b>Situação</b></td>
+                                                    </tr>
+                                                </thead>
+                                                <tbody></tbody>
+                                            </table>
+                                        </div>
                                     </div>
-                                    <div class="tab-pane" id="antecipacao" role="tabpanel" aria-labelledby="antecipacao-tab">
-                                        <div class="form-group">
-                                            <div class="row">
-                                                <div class="col-md-2">
-                                                    <label for="dataAntecipacao">Data Antecipação:</label>
-                                                    <input id="dataAntecipacao" type="text" class="form-control data datepicker" />
-                                                </div>
-                                                <div class="col-md-2">
-                                                    <label for="valorAntecipacao">Valor Antecipação:</label>
-                                                    <input id="valorAntecipacao" type="text" class="form-control valor" />
-                                                </div>
+                                </div>
+                                <div class="tab-pane" id="valores" role="tabpanel" aria-labelledby="valores-tab">
+                                    <div class="form-group">
+                                        <div class="row">
+                                            <div class="col-md-2">
+                                                <label for="dataAquisicao">Data da Aquisição:</label>
+                                                <input id="dataAquisicao" name="dataAquisicao" type="text" class="form-control data datepicker" placeholder="Data da Aquisição" />
+                                            </div>
+                                            <div class="col-md-2">
+                                                <label for="valorAquisicao">Valor Aquisição:</label>
+                                                <input id="valorAquisicao" name="valorAquisicao" type="text" class="form-control valor" placeholder="Valor Aquisição" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="row">
+                                            <div class="col-md-2">
+                                                <label for="dataVenda">Data da Venda:</label>
+                                                <input id="dataVenda" name="dataVenda" type="text" class="form-control data datepicker" placeholder="Data da Venda" />
+                                            </div>
+                                            <div class="col-md-2">
+                                                <label for="valorVenda">Valor Venda:</label>
+                                                <input id="valorVenda" name="valorVenda" type="text" class="form-control valor" placeholder="Valor Venda" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="row">
+                                            <div class="col-md-2">
+                                                <label for="dataRecuperacao">Data da Recuperação:</label>
+                                                <input id="dataRecuperacao" name="dataRecuperacao" type="text" class="form-control data datepicker" placeholder="Data da Recuperação" />
+                                            </div>
+                                            <div class="col-md-2">
+                                                <label for="valorTransportadora">Valor Transportadora:</label>
+                                                <input id="valorTransportadora" name="valorTransportadora" type="text" class="form-control valor" placeholder="Valor Transportadora" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="row">
+                                            <div class="col-md-2">
+                                                <label for="dataValorFIPE">Data do Valor FIPE:</label>
+                                                <input id="dataValorFIPE" name="dataValorFIPE" type="text" class="form-control data datepicker" placeholder="Data do Valor FIPE" />
+                                            </div>
+                                            <div class="col-md-2">
+                                                <label for="valorFIPE">Valor FIPE:</label>
+                                                <input id="valorFIPE" name="valorFIPE" type="text" class="form-control valor" placeholder="Valor FIPE" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="tab-pane" id="historico" role="tabpanel" aria-labelledby="historico-tab">
+                                    <div class="form-group">
+                                        <div class="row">
+                                            <div class="col-md-12 text-right">
+                                                <input id="btnAdicionarContratoHistorico" type="button" class="btn" value="Adicionar Histórico" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="table-responsive">
+                                            <table id="tbContratoHistorico" class="table nowrap" style="width: 100%">
+                                                <thead>
+                                                    <tr>
+                                                        <td class="text-center"><b>Id</b></td>
+                                                        <td class="text-center"><b>Data Histórico</b></td>
+                                                        <td class="text-center"><b>Descrição</b></td>
+                                                        <td class="text-center"><b>Ação</b></td>
+                                                    </tr>
+                                                </thead>
+                                                <tbody></tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="tab-pane" id="resumo" role="tabpanel" aria-labelledby="resumo-tab">
+                                    Resumo
+                                </div>
+                                <div class="tab-pane" id="antecipacao" role="tabpanel" aria-labelledby="antecipacao-tab">
+                                    <div class="form-group">
+                                        <div class="row">
+                                            <div class="col-md-2">
+                                                <label for="dataAntecipacao">Data Antecipação:</label>
+                                                <input id="dataAntecipacao" type="text" class="form-control data datepicker" />
+                                            </div>
+                                            <div class="col-md-2">
+                                                <label for="valorAntecipacao">Valor Antecipação:</label>
+                                                <input id="valorAntecipacao" type="text" class="form-control valor" />
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <input id="btnIncluir" type="button" class="btn btn-primary" value="Incluir" />
-                    <input id="btnAlterar" type="button" class="btn btn-warning" value="Alterar" />
-                </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <input id="btnIncluir" type="button" class="btn btn-primary" value="Incluir" />
+                <input id="btnAlterar" type="button" class="btn btn-warning" value="Alterar" />
             </div>
         </div>
     </div>
+</div>

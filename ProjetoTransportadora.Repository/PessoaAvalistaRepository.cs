@@ -43,16 +43,6 @@ namespace ProjetoTransportadora.Repository
             return pessoaAvalista.Id;
         }
 
-        public void Alterar(PessoaAvalistaDto pessoaAvalistaDto)
-        {
-            var pessoaAvalista = projetoTransportadoraEntities.PessoaAvalista.FirstOrDefault(x => x.Id == pessoaAvalistaDto.Id);
-
-            pessoaAvalistaDto.IdAvalista = pessoaAvalistaDto.IdAvalista;
-
-            projetoTransportadoraEntities.Entry(pessoaAvalista).State = EntityState.Modified;
-            projetoTransportadoraEntities.SaveChanges();
-        }
-
         public void Excluir(int idPessoa)
         {
             var pessoaAvalista = projetoTransportadoraEntities.PessoaAvalista.Where(x => x.IdPessoa == idPessoa);

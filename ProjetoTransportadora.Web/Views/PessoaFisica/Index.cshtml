@@ -14,7 +14,7 @@
 {
     <style type="text/css">
         .modal-lg {
-            width: 85%;
+            width: 95%;
         }
 
         .modal-body {
@@ -95,7 +95,7 @@
                 $("#tbPessoaAvalista").DataTable().rows.add([
                     {
                         "Id": o.Id,
-                        "IdAvalista": "<input type='hidden' id='" + idAvalistaHidden + "' value='" + o.IdAvalista + "' /> <input id='" + idAvalistaInput + "' type='text' class='form-control text-center avalista' placeholder='Avalista (Mínimo de 3 caracteres - CPF ou Nome)' value='" + o.AvalistaDto.Nome + "' />",
+                        "IdAvalista": "<input type='hidden' id='" + idAvalistaHidden + "' value='" + o.IdAvalista + "' /> <input id='" + idAvalistaInput + "' type='text' class='form-control text-center avalista' placeholder='Avalista (Mínimo de 3 caracteres - CPF ou Nome)' value='" + o.AvalistaDto.Nome + " (" + formatarCpf(o.AvalistaDto.Cpf) + ")' />",
                         "Acao": "<i class='glyphicon glyphicon-remove' title='Excluir' style='cursor: pointer'></i>"
                     }]).draw();
             });
@@ -366,9 +366,7 @@
                         {
                             "data": function (data, type, row)
                             {
-                                var cpf = data.Cpf.replace(/[^\d]/g, "");
-                                cpf = cpf.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, "$1.$2.$3-$4");
-                                return cpf;
+                                return formatarCpf(data.Cpf);
                             }, "className": "text-center"
                         },
                         { "data": "Rg", "className": "text-center" },
@@ -1048,10 +1046,14 @@
                         $.getJSON("/PessoaFisica/ListarAutoComplete", { Nome: nome, Cpf: cpf, IdTipoPessoa: '@TipoPessoaDto.TipoPessoa.PessoaFísica.GetHashCode()', Ativo: true }, function (data, status, xhr) {
                             // se não houver pessoa cadastrada, retorna mensagem ao usuário
                             if (data == null || data.Data.length <= 0) {
-                                data.Data.push({ Id: 0, Nome: "Pessoa não cadastrada" });
+                                data.Data.push({ Id: 0, Nome: "Pessoa não cadastrada", Cpf: null });
                             }
-                            response($.map(data.Data, function (pessoa) {
-                                return { label: pessoa.Nome, value: pessoa.Id }
+                            response($.map(data.Data, function (pessoa)
+                            {
+                                if (pessoa.Cpf == null)
+                                    return { label: pessoa.Nome, value: pessoa.Id }
+                                else
+                                    return { label: pessoa.Nome + " (" + formatarCpf(pessoa.Cpf) + ")", value: pessoa.Id }
                             }));
                         });
                     },
@@ -1199,34 +1201,35 @@
                         <div class="row">
                             <ul id="myTab" class="nav nav-tabs nav-justified" role="tablist">
                                 <li class="nav-item">
-                                    <a class="nav-link active" id="dadospessoais-tab" data-toggle="tab" href="#dadospessoais" role="tab" aria-controls="dadospessoais" aria-selected="true">Dados Pessoais</a>
+                                    <a class="nav-link active" id="dadospessoais-tab" data-toggle="tab" href="#dadospessoais" role="tab" aria-controls="dadospessoais" aria-selected="true" style="height: 61px">Dados Pessoais</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link" id="avalistas-tab" data-toggle="tab" href="#avalistas" role="tab" aria-controls="avalistas" aria-selected="false">Avalistas</a>
+                                    <a class="nav-link" id="avalistas-tab" data-toggle="tab" href="#avalistas" role="tab" aria-controls="avalistas" aria-selected="false" style="height: 61px">Avalistas</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link" id="contato-tab" data-toggle="tab" href="#contato" role="tab" aria-controls="contato" aria-selected="false">Contato</a>
+                                    <a class="nav-link" id="contato-tab" data-toggle="tab" href="#contato" role="tab" aria-controls="contato" aria-selected="false" style="height: 61px">Contato</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link" id="residencia-tab" data-toggle="tab" href="#residencia" role="tab" aria-controls="residencia" aria-selected="false">Residência</a>
+                                    <a class="nav-link" id="residencia-tab" data-toggle="tab" href="#residencia" role="tab" aria-controls="residencia" aria-selected="false" style="height: 61px">Residência</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link" id="dadosprofissionais-tab" data-toggle="tab" href="#dadosprofissionais" role="tab" aria-controls="dadosprofissionais" aria-selected="false">Dados Profissionais</a>
+                                    <a class="nav-link" id="dadosprofissionais-tab" data-toggle="tab" href="#dadosprofissionais" role="tab" aria-controls="dadosprofissionais" aria-selected="false" style="height: 61px">Dados Profissionais</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link" id="historico-tab" data-toggle="tab" href="#historico" role="tab" aria-controls="historico" aria-selected="false">Histórico</a>
+                                    <a class="nav-link" id="historico-tab" data-toggle="tab" href="#historico" role="tab" aria-controls="historico" aria-selected="false" style="height: 61px">Histórico</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link" id="referencias-tab" data-toggle="tab" href="#referencias" role="tab" aria-controls="referencias" aria-selected="false">Referências</a>
+                                    <a class="nav-link" id="referencias-tab" data-toggle="tab" href="#referencias" role="tab" aria-controls="referencias" aria-selected="false" style="height: 61px">Referências</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link" id="contratos-tab" data-toggle="tab" href="#contratos" role="tab" aria-controls="contratos" aria-selected="false">Contratos</a>
+                                    <a class="nav-link" id="contratos-tab" data-toggle="tab" href="#contratos" role="tab" aria-controls="contratos" aria-selected="false" style="height: 61px">Contratos</a>
                                 </li>
                             </ul>
                             <div class="tab-content">
                                 <br />
                                 <div class="tab-pane active" id="dadospessoais" role="tabpanel" aria-labelledby="dadospessoais-tab">
-                                    <br />
+                                    <h4>Dados Pessoais</h4>
+                                    <hr />
                                     <div class="form-group">
                                         <div class="row">
                                             <div class="col-md-7">
@@ -1330,6 +1333,8 @@
                                     </div>
                                 </div>
                                 <div class="tab-pane" id="contato" role="tabpanel" aria-labelledby="contato-tab">
+                                    <h4>Contatos</h4>
+                                    <hr />
                                     <h4>Telefones</h4>
                                     <hr />
                                     <div class="form-group">
@@ -1383,6 +1388,8 @@
                                     </div>
                                 </div>
                                 <div class="tab-pane" id="residencia" role="tabpanel" aria-labelledby="residencia-tab">
+                                    <h4>Residência</h4>
+                                    <hr />
                                     <div class="form-group">
                                         <div class="row">
                                             <div class="col-md-2">
@@ -1445,7 +1452,8 @@
                                     </div>
                                 </div>
                                 <div class="tab-pane" id="dadosprofissionais" role="tabpanel" aria-labelledby="dadosprofissionais-tab">
-                                    <br />
+                                    <h4>Dados Profissionais</h4>
+                                    <hr />
                                     <div class="form-group">
                                         <div class="row">
                                             <div class="col-md-6">
@@ -1504,6 +1512,8 @@
                                     </div>
                                 </div>
                                 <div class="tab-pane" id="historico" role="tabpanel" aria-labelledby="historico-tab">
+                                    <h4>Histórico</h4>
+                                    <hr />
                                     <div class="form-group">
                                         <div class="row">
                                             <div class="col-md-12 text-right">
@@ -1528,6 +1538,8 @@
                                     </div>
                                 </div>
                                 <div class="tab-pane" id="referencias" role="tabpanel" aria-labelledby="referencias-tab">
+                                    <h4>Referências</h4>
+                                    <hr />
                                     <div class="form-group">
                                         <div class="row">
                                             <div class="col-md-12 text-right">
@@ -1552,7 +1564,10 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="tab-pane" id="contratos" role="tabpanel" aria-labelledby="contratos-tab">Contratos</div>
+                                <div class="tab-pane" id="contratos" role="tabpanel" aria-labelledby="contratos-tab">
+                                    <h4>Contratos</h4>
+                                    <hr />
+                                </div>
                             </div>
                         </div>
                     </div>

@@ -25,8 +25,23 @@ namespace ProjetoTransportadora.Business
             if (contratoParcelaDto == null)
                 throw new BusinessException("contratoParcelaDto é nulo");
 
+            if (contratoParcelaDto.NumeroParcela <= 0)
+                throw new BusinessException("Número Parcela é obrigatório");
+
             if (contratoParcelaDto.IdContrato <= 0)
                 throw new BusinessException("Contrato é obrigatório");
+
+            if (contratoParcelaDto.IdSituacaoParcela <= 0)
+                throw new BusinessException("IdSituacaoParcela é obrigatório");
+
+            if (contratoParcelaDto.DataVencimento == DateTime.MinValue)
+                throw new BusinessException("Data Vencimento é obrigatório");
+
+            if (contratoParcelaDto.ValorParcela <= 0)
+                throw new BusinessException("Valor Parcela é obrigatório");
+
+            if (contratoParcelaDto.ValorOriginal <= 0)
+                throw new BusinessException("Valor Original é obrigatório");
 
             idContratoParcela = contratoParcelaRepository.Incluir(contratoParcelaDto);
 
@@ -93,11 +108,11 @@ namespace ProjetoTransportadora.Business
                 {
                     NumeroParcela = i,
                     DataVencimento = dataVencimento,
+                    DataEmissao = DateTime.UtcNow.ToLocalTime(),
                     DiasContrato = Convert.ToInt32(diasContrato),
                     DiasParcela = Convert.ToInt32(diasParcela),
                     Fator = fator,
-                    FatorInvertido = fatorInvertido,
-                    IdSituacaoParcela = SituacaoParcelaDto.EnumSituacaoParcela.Pendente.GetHashCode()                    
+                    FatorInvertido = fatorInvertido                    
                 });
             }
 
@@ -117,15 +132,19 @@ namespace ProjetoTransportadora.Business
                 valorJuros = i == simulacaoDto.QuantidadeParcela - 1 ? Math.Round(valorParcela - valorSaldoAnterior, 2) : Math.Round(valorSaldoAnterior * (Math.Pow((1 + (simulacaoDto.TaxaMensalJuros / 100)), (Convert.ToDouble(parcelasDto[i].DiasParcela) / 30D)) - 1), 2);
                 valorAmortizacao = i == simulacaoDto.QuantidadeParcela - 1 ? valorSaldoAnterior - valorAmortizacao : valorParcela - valorJuros;
                 valorSaldoAtual = i == 0 ? simulacaoDto.ValorFinanciado - valorAmortizacao : valorSaldoAnterior - valorAmortizacao;
-
+                                
                 parcelasDto[i].ValorParcela = valorParcela;
                 parcelasDto[i].ValorSaldoAnterior = valorSaldoAnterior;
                 parcelasDto[i].ValorJuros = valorJuros;
                 parcelasDto[i].ValorAmortizacao = valorAmortizacao;
                 parcelasDto[i].ValorSaldoAtual = valorSaldoAtual;
+
+                parcelasDto[i].ValorOriginal = valorParcela;
                 parcelasDto[i].ValorMora = 0;
                 parcelasDto[i].ValorDesconto = 0;
                 parcelasDto[i].ValorMulta = 0;
+                parcelasDto[i].IdSituacaoParcela = SituacaoParcelaDto.EnumSituacaoParcela.Pendente.GetHashCode();
+                parcelasDto[i].SituacaoParcelaDto = new SituacaoParcelaDto() { Id = SituacaoParcelaDto.EnumSituacaoParcela.Pendente.GetHashCode(), Nome = SituacaoParcelaDto.EnumSituacaoParcela.Pendente.ToString() };
             }
 
             return parcelasDto;

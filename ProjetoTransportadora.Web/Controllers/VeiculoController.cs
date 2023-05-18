@@ -37,6 +37,14 @@ namespace ProjetoTransportadora.Web.Controllers
         }
 
         [HttpGet]
+        public JsonResult ListarAutoComplete(VeiculoDto veiculoDto)
+        {
+            var lista = veiculoBusiness.ListarAutoComplete(veiculoDto);
+
+            return Json(new { Sucesso = true, Mensagem = "Veículo listado com sucesso", Data = lista }, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpGet]
         public JsonResult Listar(VeiculoDto veiculoDto)
         {
             var lista = veiculoBusiness.Listar(veiculoDto);

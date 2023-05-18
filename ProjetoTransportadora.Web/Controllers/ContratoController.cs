@@ -36,12 +36,13 @@ namespace ProjetoTransportadora.Web.Controllers
             return View();
         }
 
-        [HttpGet]
+        [HttpPost]
         public JsonResult Listar(ContratoDto contratoDto)
         {
             var lista = contratoBusiness.Listar(contratoDto);
+            var resumo = contratoBusiness.ListarResumo(lista);
 
-            return Json(new { Sucesso = true, Mensagem = "Contrato listado com sucesso", Data = lista }, JsonRequestBehavior.AllowGet);
+            return Json(new { Sucesso = true, Mensagem = "Contrato listado com sucesso", Data = lista, Resumo = resumo }, JsonRequestBehavior.AllowGet);
         }
 
         [HttpPost]
@@ -50,8 +51,9 @@ namespace ProjetoTransportadora.Web.Controllers
             contratoBusiness.Incluir(contratoDto);
 
             var lista = contratoBusiness.Listar();
+            var resumo = contratoBusiness.ListarResumo(lista);
 
-            return Json(new { Sucesso = true, Mensagem = "Contrato cadastrado com sucesso", Data = lista }, JsonRequestBehavior.AllowGet);
+            return Json(new { Sucesso = true, Mensagem = "Contrato cadastrado com sucesso", Data = lista, Resumo = resumo }, JsonRequestBehavior.AllowGet);
         }
 
         [HttpGet]

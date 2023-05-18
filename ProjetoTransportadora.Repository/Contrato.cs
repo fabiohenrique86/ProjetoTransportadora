@@ -52,6 +52,7 @@ namespace ProjetoTransportadora.Repository
         public System.DateTime DataCadastro { get; set; }
         public Nullable<int> IdUsuarioInativacao { get; set; }
         public Nullable<System.DateTime> DataInativacao { get; set; }
+        public Nullable<double> ValorTarifa { get; set; }
     
         public virtual Canal Canal { get; set; }
         public virtual Pessoa PessoaCliente { get; set; }

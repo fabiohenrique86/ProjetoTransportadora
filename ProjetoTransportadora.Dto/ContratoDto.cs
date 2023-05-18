@@ -36,6 +36,7 @@ namespace ProjetoTransportadora.Dto
         public double ValorFinanciado { get; set; }
         public Nullable<double> ValorCaixa { get; set; }
         public Nullable<double> ValorDepositado { get; set; }
+        public Nullable<double> ValorTarifa { get; set; }
         public double TaxaJuros { get; set; }
         public bool? Ativo { get; set; }
         public int IdUsuarioCadastro { get; set; }

@@ -19,6 +19,11 @@ namespace ProjetoTransportadora.Business
             contratoParcelaBusiness = new ContratoParcelaBusiness();
         }
 
+        public object ListarResumo(List<ContratoDto> contratoDto)
+        {
+            return contratoRepository.ListarResumo(contratoDto);
+        }
+
         public int ListarTotal(ContratoDto contratoDto = null)
         {
             return contratoRepository.ListarTotal(contratoDto);
@@ -53,6 +58,9 @@ namespace ProjetoTransportadora.Business
 
             if (contratoDto.DataAntecipacao < contratoDto.DataContrato)
                 throw new BusinessException("Data da DataAntecipação deve ser maior ou igual a Data do Contrato");
+
+            if (contratoDto.ContratoParcelaDto == null || contratoDto.ContratoParcelaDto.Count <= 0)
+                throw new BusinessException("Parcela do Contrato é obrigatório");
 
             using (TransactionScope scope = new TransactionScope(TransactionScopeOption.Required))
             {

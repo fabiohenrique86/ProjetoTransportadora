@@ -24,6 +24,13 @@ namespace ProjetoTransportadora.Business
             return veiculoRepository.ListarTotal(veiculoDto);
         }
 
+        public List<VeiculoDto> ListarAutoComplete(VeiculoDto veiculoDto = null)
+        {
+            veiculoDto.Placa = veiculoDto.Placa?.Replace(".", "").Replace(",", "").Replace("-", "").Replace("/", "").Replace(" ", "").Replace("*", "").Replace("_", "").Trim();
+
+            return veiculoRepository.ListarAutoComplete(veiculoDto);
+        }
+
         public List<VeiculoDto> Listar(VeiculoDto veiculoDto = null)
         {
             return veiculoRepository.Listar(veiculoDto);

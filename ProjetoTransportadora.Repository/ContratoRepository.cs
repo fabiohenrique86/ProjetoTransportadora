@@ -54,6 +54,24 @@ namespace ProjetoTransportadora.Repository
             return query.Select(x => new ContratoDto() { Id = x.Id, NumeroContrato = x.NumeroContrato }).FirstOrDefault();
         }
 
+        public object ListarResumo(List<ContratoDto> contratoDto)
+        {
+            var query = (from c in contratoDto
+                         join sc in projetoTransportadoraEntities.SituacaoContrato on c.IdSituacaoContrato equals sc.Id
+                         join p in projetoTransportadoraEntities.Produto on c.IdProduto equals p.Id
+                         group c by new { scNome = sc.Nome, pNome = p.Nome } into g1
+                         select new
+                         {
+                             SituacaoContrato = g1.Key.scNome,
+                             Produto = g1.Key.pNome,
+                             Quantidade = g1.Select(x => x.Id).Count(),
+                             ValorEntrada = g1.Sum(x => x.ValorEntrada),
+                             ValorFinanciado = g1.Sum(x => x.ValorFinanciado),
+                         }).OrderBy(x => x.SituacaoContrato).ThenBy(x => x.Produto);
+
+            return query.ToList();
+        }
+
         public List<ContratoDto> Listar(ContratoDto contratoDto)
         {
             IQueryable<Contrato> query = projetoTransportadoraEntities.Contrato;
@@ -69,9 +87,6 @@ namespace ProjetoTransportadora.Repository
                 if (contratoDto.IdProduto > 0)
                     query = query.Where(x => x.IdProduto == contratoDto.IdProduto);
 
-                if (contratoDto.NumeroContrato > 0)
-                    query = query.Where(x => x.NumeroContrato == contratoDto.NumeroContrato);
-
                 if (!string.IsNullOrEmpty(contratoDto.VeiculoDto?.Placa))
                     query = query.Where(x => x.Veiculo.Placa.Contains(contratoDto.VeiculoDto.Placa));
 
@@ -80,7 +95,7 @@ namespace ProjetoTransportadora.Repository
 
                 if (contratoDto.DataContratoInicial != DateTime.MinValue && contratoDto.DataContratoFinal != DateTime.MinValue)
                     query = query.Where(x => x.DataContrato >= contratoDto.DataContratoInicial && x.DataContrato <= contratoDto.DataContratoFinal);
-                else if (contratoDto.DataContratoFinal != DateTime.MinValue)
+                else if (contratoDto.DataContratoInicial != DateTime.MinValue)
                     query = query.Where(x => x.DataContrato >= contratoDto.DataContratoInicial);
                 else if (contratoDto.DataContratoFinal != DateTime.MinValue)
                     query = query.Where(x => x.DataContrato <= contratoDto.DataContratoFinal);
@@ -118,6 +133,7 @@ namespace ProjetoTransportadora.Repository
                 ValorFinanciado = x.ValorFinanciado,
                 ValorCaixa = x.ValorCaixa,
                 ValorDepositado = x.ValorDepositado,
+                ValorTarifa = x.ValorTarifa,
                 TaxaJuros = x.TaxaJuros,
                 Ativo = x.Ativo,
                 IdUsuarioCadastro = x.IdUsuarioCadastro,
@@ -213,6 +229,7 @@ namespace ProjetoTransportadora.Repository
                 ValorCaixa = contratoDto.ValorCaixa,
                 ValorDepositado = contratoDto.ValorDepositado,
                 TaxaJuros = contratoDto.TaxaJuros,
+                ValorTarifa = contratoDto.ValorTarifa,
                 Ativo = true,
                 IdUsuarioCadastro = contratoDto.IdUsuarioCadastro,
                 DataCadastro = contratoDto.DataCadastro
