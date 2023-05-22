@@ -145,6 +145,9 @@
 
             // aba - contratos
 
+            $("#tbPessoaContrato").DataTable().clear().draw();
+            $("#tbPessoaContrato").DataTable().rows.add(data.PessoaContratoDto).draw();
+
 
             // reaplica máscaras
             $(".cep").mask("00000-000");
@@ -370,6 +373,34 @@
                         { "data": "DataHistorico", "className": "text-center", "width": "5%" },
                         { "data": "Descricao", "className": "text-center", "width": "85%" },
                         { "data": "Acao", "className": "text-center", "width": "5%" }
+                    ]
+            });
+
+            var tbPessoaContrato = $("#tbPessoaContrato").DataTable({
+                "ordering": false,
+                "bFilter": false,
+                "paging": false,
+                "ordering": false,
+                "info": false,
+                "searching": false,
+                "language": {
+                    "lengthMenu": "_MENU_ registros por página",
+                    "zeroRecords": "Sem registros a serem exibidos",
+                    "info": "Página _PAGE_ de _PAGES_",
+                    "infoEmpty": "Sem registros a serem exibidos",
+                    "infoFiltered": "(filtrados de _MAX_ total de registros)",
+                    "sSearch": "Pesquisar",
+                    "oPaginate": { "sNext": "Próximo", "sPrevious": "Anterior", "sFirst": "Primeiro", "sLast": "Último" }
+                },
+                "columns":
+                    [
+                        { "data": "Id", "className": "text-center" },
+                        { "data": "PessoaClienteDto.Nome", "className": "text-center" },
+                        { "data": "VeiculoDto.Placa", "className": "text-center" },
+                        { "data": "VeiculoDto.Modelo", "className": "text-center" },
+                        { "data": function (data, type, row) { return data["DataContrato"] != null ? moment(data["DataContrato"]).format("DD/MM/YYYY") : "" }, "className": "text-center" },
+                        { "data": function (data, type, row) { return data["ValorFinanciado"] != null ? Globalize.format(data.ValorFinanciado, "n2") : "" }, "className": "text-center" },
+                        { "data": "SituacaoContratoDto.Nome", "className": "text-center" }
                     ]
             });
 
@@ -1031,7 +1062,26 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="tab-pane" id="contratos" role="tabpanel" aria-labelledby="contratos-tab">Contratos</div>
+                                <div class="tab-pane" id="contratos" role="tabpanel" aria-labelledby="contratos-tab">
+                                    <h4>Contratos</h4>
+                                    <hr />
+                                    <div class="table-responsive">
+                                        <table id="tbPessoaContrato" class="table nowrap" style="width: 100%">
+                                            <thead>
+                                                <tr>
+                                                    <td class="text-center" style="width: 10%"><b>Número Contrato</b></td>
+                                                    <td class="text-center" style="width: 15%"><b>Cliente</b></td>
+                                                    <td class="text-center" style="width: 15%"><b>Placa</b></td>
+                                                    <td class="text-center" style="width: 15%"><b>Modelo</b></td>
+                                                    <td class="text-center" style="width: 15%"><b>Data Contrato</b></td>
+                                                    <td class="text-center" style="width: 15%"><b>Valor Financiado</b></td>
+                                                    <td class="text-center" style="width: 15%"><b>Situação Contrato</b></td>
+                                                </tr>
+                                            </thead>
+                                            <tbody></tbody>
+                                        </table>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>

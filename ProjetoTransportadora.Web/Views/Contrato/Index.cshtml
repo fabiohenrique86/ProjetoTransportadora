@@ -31,6 +31,34 @@
 {
     <script type="text/javascript">
 
+        function carregarModalNovo() {
+            $("#lblAcao").html("Novo");
+            $("#lblTitulo").html("");
+            $("#btnIncluir").show();
+            $("#btnAlterar").hide();
+
+            limparFormulario();
+            habilitarModal(true);
+
+            $("#valorParcela").prop("disabled", "disabled");
+            $("#valorFinanciado").prop("disabled", "disabled");
+
+            $("#modalContrato").modal('show');
+            $('#dados-tab').click();
+        }
+
+        function carregarModalBaixar(data, o) {
+            $("#lblTituloBaixar").text(data.Id);
+            $("#contratoIdBaixar").val(data.Id);
+            $("#modalContratoBaixar").modal('show');
+        }
+
+        function carregarModalAntecipar(data, o) {
+            $("#lblTituloAntecipar").text(data.Id);
+            $("#contratoIdAntecipar").val(data.Id);
+            $("#modalContratoAntecipar").modal('show');
+        }
+
         function habilitarModal(opcao) {
             if (opcao) {
                 $("#modalContrato input, #modalContrato select, #modalContrato textarea").removeProp("disabled");
@@ -120,21 +148,6 @@
                 $("#proprietarioAnterior").val(data.PessoaProprietarioAnteriorDto.Nome);
             }
 
-            // aba - parcelas
-
-            //$("#tbContratoParcela").DataTable().clear().draw();
-            //$(data.ContratoParcelaDto).each(function (i, o) {
-
-            //    $("#tbContratoParcela").DataTable().rows.add([
-            //        {
-            //            "Id": o.Id,
-            //            "NumeroParcela": o.NumeroParcela,
-            //            "IdContrato": o.IdContrato,
-            //            "Descricao": "<textarea class='form-control descricaoHistorico' rows='3'>" + o.Descricao + "</textarea>",
-            //            "Acao": "<i class='glyphicon glyphicon-remove' title='Excluir' style='cursor: pointer'></i>"
-            //        }]).draw();
-            //});
-
             // aba - histórico
 
             $("#tbContratoHistorico").DataTable().clear().draw();
@@ -148,10 +161,6 @@
                     "Acao": "<i class='glyphicon glyphicon-remove' title='Excluir' style='cursor: pointer'></i>"
                 }]).draw();
             });
-
-            // aba - resumo
-
-
 
             // reaplica máscaras
             $(".valorMulta").mask("000.000.000,00", { reverse: true });
@@ -237,11 +246,24 @@
                         { "data": "VeiculoDto.Modelo", "className": "text-center" },
                         { "data": function (data, type, row) { return data["DataContrato"] != null ? moment(data["DataContrato"]).format("DD/MM/YYYY") : "" }, "className": "text-center" },
                         { "data": function (data, type, row) { return data["ValorFinanciado"] != null ? Globalize.format(data.ValorFinanciado, "n2") : "" }, "className": "text-center" },
-                        { "data": "SituacaoContratoDto.Nome", "className": "text-center" }
+                        { "data": "SituacaoContratoDto.Nome", "className": "text-center" },
+                        {
+                            "data": function (data, type, row) {
+
+                                var antecipar = "<input type='button' class='btn btn-primary' value='Antecipar' onclick='carregarModalAntecipar(" + JSON.stringify(data) + ", this)' />";
+                                var baixar = "<input type='button' class='btn btn-primary' value='Baixar' onclick='carregarModalBaixar(" + JSON.stringify(data) + ", this)' />";
+
+                                if (data.IdSituacaoContrato == '@SituacaoContratoDto.EnumSituacaoContrato.Ativo.GetHashCode()')
+                                    return antecipar + " " + baixar;
+                                else
+                                    return "";
+
+                            }, "className": "text-center"
+                        }
                     ]
             });
 
-            var tbContratoResumo = $("#tbContratoResumo").DataTable({
+            var tbSituacaoContratoResumo = $("#tbSituacaoContratoResumo").DataTable({
                 "ordering": false,
                 "bFilter": false,
                 "paging": false,
@@ -262,9 +284,35 @@
                     [
                         { "data": "SituacaoContrato", "className": "text-center", "width": "20%" },
                         { "data": "Produto", "className": "text-center", "width": "20%" },
-                        { "data": "Quantidade", "className": "text-center", "width": "15%" },
-                        { "data": function (data, type, row) { return data["ValorEntrada"] != null ? Globalize.format(data.ValorEntrada, "n2") : "" }, "className": "text-center", "width": "15%" },
-                        { "data": function (data, type, row) { return data["ValorFinanciado"] != null ? Globalize.format(data.ValorFinanciado, "n2") : "" }, "className": "text-center", "width": "15%" },
+                        { "data": "Quantidade", "className": "text-center", "width": "20%" },
+                        { "data": function (data, type, row) { return data["ValorEntrada"] != null ? Globalize.format(data.ValorEntrada, "n2") : "" }, "className": "text-center", "width": "20%" },
+                        { "data": function (data, type, row) { return data["ValorFinanciado"] != null ? Globalize.format(data.ValorFinanciado, "n2") : "" }, "className": "text-center", "width": "20%" }
+                    ]
+            });
+
+            var tbSituacaoParcelaResumo = $("#tbSituacaoParcelaResumo").DataTable({
+                "ordering": false,
+                "bFilter": false,
+                "paging": false,
+                "ordering": false,
+                "info": false,
+                "searching": false,
+                "autoWidth": false,
+                "language": {
+                    "lengthMenu": "_MENU_ registros por página",
+                    "zeroRecords": "Sem registros a serem exibidos",
+                    "info": "Página _PAGE_ de _PAGES_",
+                    "infoEmpty": "Sem registros a serem exibidos",
+                    "infoFiltered": "(filtrados de _MAX_ total de registros)",
+                    "sSearch": "Pesquisar",
+                    "oPaginate": { "sNext": "Próximo", "sPrevious": "Anterior", "sFirst": "Primeiro", "sLast": "Último" }
+                },
+                "columns":
+                    [
+                        { "data": "SituacaoParcela", "className": "text-center", "width": "25%" },
+                        { "data": "Quantidade", "className": "text-center", "width": "25%" },
+                        { "data": function (data, type, row) { return data["ValorJuros"] != null ? Globalize.format(data.ValorJuros, "n2") : "" }, "className": "text-center", "width": "25%" },
+                        { "data": function (data, type, row) { return data["ValorParcela"] != null ? Globalize.format(data.ValorParcela, "n2") : "" }, "className": "text-center", "width": "25%" }
                     ]
             });
 
@@ -657,8 +705,8 @@
                     contratoDto.VeiculoDto = { Placa: $("#placaPesquisar").val() };
 
                 contratoDto.IdSituacaoContrato = $("#situacaoContratoPesquisar").val();
-                contratoDto.DataContratoInicial = $("#peridoInicioPesquisar").val();
-                contratoDto.DataContratoFinal = $("#peridoFimPesquisar").val();
+                contratoDto.DataContratoInicial = $("#dataContratoInicioPesquisar").val();
+                contratoDto.DataContratoFinal = $("#dataContratoFimPesquisar").val();
 
                 $.ajax({
                     dataType: "json",
@@ -676,30 +724,18 @@
                         tbContrato.clear();
                         tbContrato.rows.add(data.Data).draw();
 
-                        tbContratoResumo.clear();
-                        tbContratoResumo.rows.add(data.Resumo).draw();
+                        tbSituacaoContratoResumo.clear();
+                        tbSituacaoContratoResumo.rows.add(data.SituacaoContratoResumo).draw();
+
+                        tbSituacaoParcelaResumo.clear();
+                        tbSituacaoParcelaResumo.rows.add(data.SituacaoParcelaResumo).draw();
                     }
                 });
 
             });
 
             $("#btnNovo").click(function () {
-
-                $("#lblAcao").html("Novo");
-                $("#lblTitulo").html("");
-                $("#btnIncluir").show();
-                $("#btnAlterar").hide();
-
-                limparFormulario();
-                habilitarModal(true);
-
-                $("#valorParcela").prop("disabled", "disabled");
-                $("#valorFinanciado").prop("disabled", "disabled");
-                @*$("#situacaoContrato").prop("disabled", "disabled");
-                $("#situacaoContrato").val('@SituacaoContratoDto.EnumSituacaoContrato.Ativo.GetHashCode()');*@
-
-                $("#modalContrato").modal('show');
-                $('#dados-tab').click();
+                carregarModalNovo();
             });
 
             $("#btnIncluir,#btnAlterar").click(function () {
@@ -719,7 +755,6 @@
                 contratoDto.IdPromotor = $("#idPromotor").val();
                 contratoDto.IdCanal = $("#canal").val();
                 contratoDto.DataPrimeiraParcela = $("#dataPrimeiraParcela").val();
-                contratoDto.DataBaixa = $("#dataBaixa").val();
 
                 // aba - valores
 
@@ -736,7 +771,7 @@
                 contratoDto.ValorTarifa = $("#valorTarifa").val();
 
                 contratoDto.ValorFinanciado = $("#valorFinanciado").val();
-                contratoDto.TaxaJuros = $("#taxaMensalJuros").val();
+                contratoDto.TaxaJuros = $("#taxaJuros").val();
 
                 // aba - parcelas
 
@@ -813,8 +848,11 @@
                             tbContrato.clear();
                             tbContrato.rows.add(data.Data).draw();
 
-                            tbContratoResumo.clear();
-                            tbContratoResumo.rows.add(data.Resumo).draw();
+                            tbSituacaoContratoResumo.clear();
+                            tbSituacaoContratoResumo.rows.add(data.SituacaoContratoResumo).draw();
+
+                            tbSituacaoParcelaResumo.clear();
+                            tbSituacaoParcelaResumo.rows.add(data.SituacaoParcelaResumo).draw();
                         }
                         else
                         {
@@ -884,14 +922,7 @@
                 simulacaoDto.DataPrimeiraParcela = $("#dataPrimeiraParcela").val();
                 simulacaoDto.ValorFinanciado = $("#valorFinanciado").val();
                 simulacaoDto.QuantidadeParcela = $("#quantidadeParcela").val();
-                simulacaoDto.TaxaMensalJuros = $("#taxaMensalJuros").val();
-
-                //simulacaoDto.ValorPrincipal = $("#valorPrincipal").val();
-                //simulacaoDto.ValorDocumentacao = $("#valorDocumentacao").val();
-                //simulacaoDto.ValorTarifa = $("#valorTarifa").val();
-                //simulacaoDto.ValorDesconto = $("#valorDesconto").val();
-                //simulacaoDto.ValorBens = $("#valorBens").val();
-                //simulacaoDto.ValorDinheiro = $("#valorDinheiro").val();
+                simulacaoDto.TaxaMensalJuros = $("#taxaJuros").val();
 
                 $.ajax({
                     dataType: "json",
@@ -910,13 +941,79 @@
                         tbContratoParcela.rows.add(data.Data).draw();
 
                         $('#valorParcela').val(Globalize.format(data.Data[0].ValorParcela, "n2"));
-
-                        //habilitar(false);
-                        //$('#btnGerarParcela').hide();
-                        //$('#btnGerarContrato').show();
-                        //$('#btnNovaSimulacao').show();
-
                         $('#parcelas-tab').click();
+                    }
+                });
+
+            });
+
+            $("#btnAntecipar").click(function () {
+
+                var contratoDto = {};
+
+                contratoDto.DataAntecipacao = $("#dataAntecipacao").val();
+                contratoDto.ValorAntecipacao = $("#valorAntecipacao").val();
+                contratoDto.IdSituacaoContrato = '@SituacaoContratoDto.EnumSituacaoContrato.Antecipado.GetHashCode()';
+                contratoDto.IdUsuarioAntecipacao = '@usuarioDto.Id';
+
+                $.ajax({
+                    dataType: "json",
+                    type: "POST",
+                    url: "/Contrato/Antecipar",
+                    data: JSON.stringify(contratoDto),
+                    contentType: "application/json",
+                    success: function (data) {
+
+                        if (!data.Sucesso) {
+                            alert(data.Erro ? "danger" : "warning", data.Mensagem);
+                            return;
+                        }
+
+                        $("#tbContrato").DataTable().rows().every(function (rowIdx, tableLoop, rowLoop) {
+                            if (this.data().Id == contratoDto.Id) {
+                                idx = rowIdx;
+                                return;
+                            }
+                        });
+
+                        $("#tbContrato").DataTable().row(idx).invalidate().data(data.Data).draw();
+                        $("#modalContratoAntecipar").modal('hide');
+                    }
+                });
+
+            });
+
+            $("#btnBaixar").click(function () {
+
+                var contratoDto = {};
+
+                contratoDto.Id = $("#contratoIdBaixar").val();
+                contratoDto.DataBaixa = $("#dataBaixa").val();
+                contratoDto.IdSituacaoContrato = '@SituacaoContratoDto.EnumSituacaoContrato.Baixado.GetHashCode()';
+                contratoDto.IdUsuarioBaixa = '@usuarioDto.Id';
+
+                $.ajax({
+                    dataType: "json",
+                    type: "POST",
+                    url: "/Contrato/Baixar",
+                    data: JSON.stringify(contratoDto),
+                    contentType: "application/json",
+                    success: function (data) {
+
+                        if (!data.Sucesso) {
+                            alert(data.Erro ? "danger" : "warning", data.Mensagem);
+                            return;
+                        }
+
+                        $("#tbContrato").DataTable().rows().every(function (rowIdx, tableLoop, rowLoop) {
+                            if (this.data().Id == contratoDto.Id) {
+                                idx = rowIdx;
+                                return;
+                            }
+                        });
+
+                        $("#tbContrato").DataTable().row(idx).invalidate().data(data.Data).draw();
+                        $("#modalContratoBaixar").modal('hide');
                     }
                 });
 
@@ -955,6 +1052,41 @@
             }
 
             $('#consultaPesquisa-tab').click();
+
+            var simulacaoDto = @Html.Raw(Json.Encode(TempData["SimulacaoDto"]));
+
+            if (simulacaoDto != null)
+            {
+                carregarModalNovo();
+
+                $("#dataContrato").val(moment(simulacaoDto.DataInicio).format("DD/MM/YYYY"));
+                $("#valorVeiculo").val(Globalize.format(simulacaoDto.ValorPrincipal, "n2"));
+                $("#dataPrimeiraParcela").val(moment(simulacaoDto.DataPrimeiraParcela).format("DD/MM/YYYY"));
+                $("#quantidadeParcela").val(simulacaoDto.QuantidadeParcela);
+                $("#taxaJuros").val(Globalize.format(simulacaoDto.TaxaMensalJuros, "n2"));
+                $("#valorFinanciado").val(Globalize.format(simulacaoDto.ValorFinanciado, "n2"));
+
+                if (simulacaoDto.ValorDocumentacao != null)
+                    $("#valorDocumentacao").val(Globalize.format(simulacaoDto.ValorDocumentacao, "n2"));
+
+                if (simulacaoDto.ValorTarifa != null)
+                    $("#valorTarifa").val(Globalize.format(simulacaoDto.ValorTarifa, "n2"));
+
+                if (simulacaoDto.ValorDesconto != null)
+                    $("#valorDesconto").val(Globalize.format(simulacaoDto.ValorDesconto, "n2"));
+
+                if (simulacaoDto.ValorBens != null)
+                    $("#valorVeiculoEntrada").val(Globalize.format(simulacaoDto.ValorBens, "n2"));
+
+                if (simulacaoDto.ValorDinheiro != null)
+                    $("#valorEntrada").val(Globalize.format(simulacaoDto.ValorDinheiro, "n2"));
+
+                if (simulacaoDto.ContratoParcelaDto != null && simulacaoDto.ContratoParcelaDto.length > 0)
+                    $("#valorParcela").val(Globalize.format(simulacaoDto.ContratoParcelaDto[0].ValorParcela, "n2"));
+
+                tbContratoParcela.clear();
+                tbContratoParcela.rows.add(simulacaoDto.ContratoParcelaDto).draw();
+            }
         });
 
     </script>
@@ -996,11 +1128,11 @@
         <div class="row">
             <div class="col-md-2">
                 <label>Período Início:</label>
-                <input id="peridoInicioPesquisar" type="text" class="form-control data datepicker" />
+                <input id="dataContratoInicioPesquisar" type="text" class="form-control data datepicker" />
             </div>
             <div class="col-md-2">
                 <label>Período Fim:</label>
-                <input id="peridoFimPesquisar" type="text" class="form-control data datepicker" />
+                <input id="dataContratoFimPesquisar" type="text" class="form-control data datepicker" />
             </div>
         </div>
     </div>
@@ -1029,7 +1161,10 @@
                 <a class="nav-link active" id="consultaPesquisa-tab" data-toggle="tab" href="#consultaPesquisa" role="tab" aria-controls="consultaPesquisa" aria-selected="true">Consulta</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" id="resumoPesquisa-tab" data-toggle="tab" href="#resumoPesquisa" role="tab" aria-controls="resumoPesquisa" aria-selected="false">Resumo</a>
+                <a class="nav-link" id="situacaoContratoResumo-tab" data-toggle="tab" href="#situacaoContratoResumo" role="tab" aria-controls="situacaoContratoResumo" aria-selected="false">Resumo (Situação Contrato)</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" id="situacaoParcelaResumo-tab" data-toggle="tab" href="#situacaoParcelaResumo" role="tab" aria-controls="situacaoParcelaResumo" aria-selected="false">Resumo (Situação Parcela)</a>
             </li>
         </ul>
         <div class="tab-content">
@@ -1045,15 +1180,16 @@
                                 <td class="text-center" style="width: 15%"><b>Data Contrato</b></td>
                                 <td class="text-center" style="width: 15%"><b>Valor Financiado</b></td>
                                 <td class="text-center" style="width: 15%"><b>Situação Contrato</b></td>
+                                <td class="text-center" style="width: 5%"><b>Ação</b></td>
                             </tr>
                         </thead>
                         <tbody></tbody>
                     </table>
                 </div>
             </div>
-            <div class="tab-pane" id="resumoPesquisa" role="tabpanel" aria-labelledby="resumoPesquisa-tab">
+            <div class="tab-pane" id="situacaoContratoResumo" role="tabpanel" aria-labelledby="situacaoContratoResumo-tab">
                 <div class="table-responsive">
-                    <table id="tbContratoResumo" class="table nowrap">
+                    <table id="tbSituacaoContratoResumo" class="table nowrap">
                         <thead>
                             <tr>
                                 <td class="text-center" style="width: 15%"><b>Situação Contrato</b></td>
@@ -1066,6 +1202,75 @@
                         <tbody></tbody>
                     </table>
                 </div>
+            </div>
+            <div class="tab-pane" id="situacaoParcelaResumo" role="tabpanel" aria-labelledby="situacaoParcelaResumo-tab">
+                <div class="table-responsive">
+                    <table id="tbSituacaoParcelaResumo" class="table nowrap">
+                        <thead>
+                            <tr>
+                                <td class="text-center" style="width: 15%"><b>Situação Parcela</b></td>
+                                <td class="text-center" style="width: 15%"><b>Quantidade</b></td>
+                                <td class="text-center" style="width: 15%"><b>Valor Juros</b></td>
+                                <td class="text-center" style="width: 15%"><b>Valor Parcela</b></td>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modalContratoBaixar" tabindex="-1" role="dialog" aria-labelledby="ModalContratoBaixar" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Fechar</span></button>
+                <h4 class="modal-title" id="myModalLabel">Baixar Contrato <label id="lblTituloBaixar"></label></h4>
+            </div>
+            <div class="modal-body">
+                <input id="contratoIdBaixar" type="hidden" />
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <label for="dataBaixa">Data Baixa:</label>
+                            <input id="dataBaixa" type="text" class="form-control data datepicker" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <input id="btnBaixar" type="button" class="btn btn-primary" value="Baixar" />
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modalContratoAntecipar" tabindex="-1" role="dialog" aria-labelledby="ModalContratoAntecipar" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Fechar</span></button>
+                <h4 class="modal-title" id="myModalLabel">Antecipar Contrato <label id="lblTituloAntecipar"></label></h4>
+            </div>
+            <div class="modal-body">
+                <input id="contratoIdAntecipar" type="hidden" />
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <label for="dataAntecipacao">Data Antecipação:</label>
+                            <input id="dataAntecipacao" type="text" class="form-control data datepicker" />
+                        </div>
+                        <div class="col-md-4">
+                            <label for="valorAntecipacao">Valor Antecipação:</label>
+                            <input id="valorAntecipacao" type="text" class="form-control valor" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <input id="btnAntecipar" type="button" class="btn btn-primary" value="Antecipar" />
             </div>
         </div>
     </div>
@@ -1095,12 +1300,6 @@
                                 </li>
                                 <li class="nav-item">
                                     <a class="nav-link" id="historico-tab" data-toggle="tab" href="#historico" role="tab" aria-controls="historico" aria-selected="false">Histórico</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" id="resumo-tab" data-toggle="tab" href="#resumo" role="tab" aria-controls="resumo" aria-selected="false">Resumo</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" id="antecipacao-tab" data-toggle="tab" href="#antecipacao" role="tab" aria-controls="antecipacao" aria-selected="false">Antecipação</a>
                                 </li>
                             </ul>
                             <div class="tab-content">
@@ -1165,10 +1364,6 @@
                                                 <label for="valorParcela">Valor Parcela:</label>
                                                 <input id="valorParcela" type="text" class="form-control valor" />
                                             </div>
-                                            <div class="col-md-2">
-                                                <label for="dataBaixa">Data Baixa:</label>
-                                                <input id="dataBaixa" type="text" class="form-control data datepicker" />
-                                            </div>
                                         </div>
                                     </div>
                                     @*<div class="form-group">
@@ -1200,13 +1395,10 @@
                                                 <input id="valorDesconto" type="text" class="form-control valor" onchange="calcularValorFinanciado()" />
                                             </div>
                                             <div class="col-md-2">
-                                                <label for="valorFinanciadoVeiculo">Valor Financiado Veículo:</label>
-                                                <input id="valorFinanciadoVeiculo" type="text" class="form-control valor" />
+                                                <label for="valorCaixa">Valor Caixa:</label>
+                                                <input id="valorCaixa" type="text" class="form-control valor" onchange="calcularValorFinanciado()" />
                                             </div>
-                                            <div class="col-md-2">
-                                                <label for="valorFinanciadoDocumentacao">Valor Financiado Documentação:</label>
-                                                <input id="valorFinanciadoDocumentacao" type="text" class="form-control valor" />
-                                            </div>
+                                            
                                         </div>
                                     </div>
                                     <div class="form-group">
@@ -1225,10 +1417,6 @@
                                                 <input id="valorDepositado" type="text" class="form-control valor" onchange="calcularValorFinanciado()" />
                                             </div>
                                             <div class="col-md-2">
-                                                <label for="valorCaixa">Valor Caixa:</label>
-                                                <input id="valorCaixa" type="text" class="form-control valor" onchange="calcularValorFinanciado()" />
-                                            </div>
-                                            <div class="col-md-2">
                                                 <label for="valorTarifa">Valor Tarifa:</label>
                                                 <input id="valorTarifa" type="text" class="form-control valor" onchange="calcularValorFinanciado()" />
                                             </div>
@@ -1241,12 +1429,24 @@
                                                 <input id="valorFinanciado" type="text" class="form-control valor" disabled="disabled" />
                                             </div>
                                             <div class="col-md-2">
-                                                <label for="taxaMensalJuros">Taxa Juros:</label>
-                                                <input id="taxaMensalJuros" type="text" class="form-control taxa" />
+                                                <label for="taxaJuros">Taxa Juros:</label>
+                                                <input id="taxaJuros" type="text" class="form-control taxa" />
                                             </div>
                                             <div class="col-md-2">
                                                 <label for="quantidadeParcela">Quantidade Parcelas:</label>
                                                 <input id="quantidadeParcela" type="text" class="form-control parcela" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="row">
+                                            <div class="col-md-2">
+                                                <label for="valorFinanciadoDocumentacao">Valor Financiado Documentação:</label>
+                                                <input id="valorFinanciadoDocumentacao" type="text" class="form-control valor" />
+                                            </div>
+                                            <div class="col-md-2">
+                                                <label for="valorFinanciadoVeiculo">Valor Financiado Veículo:</label>
+                                                <input id="valorFinanciadoVeiculo" type="text" class="form-control valor" />
                                             </div>
                                         </div>
                                     </div>
@@ -1289,8 +1489,8 @@
                                     <div class="form-group">
                                         <div class="row">
                                             <div class="col-md-2">
-                                                <label for="dataAquisicao">Data da Aquisição:</label>
-                                                <input id="dataAquisicao" name="dataAquisicao" type="text" class="form-control data datepicker" placeholder="Data da Aquisição" />
+                                                <label for="dataAquisicao">Data Aquisição:</label>
+                                                <input id="dataAquisicao" name="dataAquisicao" type="text" class="form-control data datepicker" placeholder="Data Aquisição" />
                                             </div>
                                             <div class="col-md-2">
                                                 <label for="valorAquisicao">Valor Aquisição:</label>
@@ -1301,8 +1501,8 @@
                                     <div class="form-group">
                                         <div class="row">
                                             <div class="col-md-2">
-                                                <label for="dataVenda">Data da Venda:</label>
-                                                <input id="dataVenda" name="dataVenda" type="text" class="form-control data datepicker" placeholder="Data da Venda" />
+                                                <label for="dataVenda">Data Venda:</label>
+                                                <input id="dataVenda" name="dataVenda" type="text" class="form-control data datepicker" placeholder="Data Venda" />
                                             </div>
                                             <div class="col-md-2">
                                                 <label for="valorVenda">Valor Venda:</label>
@@ -1313,8 +1513,8 @@
                                     <div class="form-group">
                                         <div class="row">
                                             <div class="col-md-2">
-                                                <label for="dataRecuperacao">Data da Recuperação:</label>
-                                                <input id="dataRecuperacao" name="dataRecuperacao" type="text" class="form-control data datepicker" placeholder="Data da Recuperação" />
+                                                <label for="dataRecuperacao">Data Recuperação:</label>
+                                                <input id="dataRecuperacao" name="dataRecuperacao" type="text" class="form-control data datepicker" placeholder="Data Recuperação" />
                                             </div>
                                             <div class="col-md-2">
                                                 <label for="valorTransportadora">Valor Transportadora:</label>
@@ -1325,8 +1525,8 @@
                                     <div class="form-group">
                                         <div class="row">
                                             <div class="col-md-2">
-                                                <label for="dataValorFIPE">Data do Valor FIPE:</label>
-                                                <input id="dataValorFIPE" name="dataValorFIPE" type="text" class="form-control data datepicker" placeholder="Data do Valor FIPE" />
+                                                <label for="dataValorFIPE">Data Valor FIPE:</label>
+                                                <input id="dataValorFIPE" name="dataValorFIPE" type="text" class="form-control data datepicker" placeholder="Data Valor FIPE" />
                                             </div>
                                             <div class="col-md-2">
                                                 <label for="valorFIPE">Valor FIPE:</label>
@@ -1356,23 +1556,6 @@
                                                 </thead>
                                                 <tbody></tbody>
                                             </table>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="tab-pane" id="resumo" role="tabpanel" aria-labelledby="resumo-tab">
-                                    Resumo
-                                </div>
-                                <div class="tab-pane" id="antecipacao" role="tabpanel" aria-labelledby="antecipacao-tab">
-                                    <div class="form-group">
-                                        <div class="row">
-                                            <div class="col-md-2">
-                                                <label for="dataAntecipacao">Data Antecipação:</label>
-                                                <input id="dataAntecipacao" type="text" class="form-control data datepicker" />
-                                            </div>
-                                            <div class="col-md-2">
-                                                <label for="valorAntecipacao">Valor Antecipação:</label>
-                                                <input id="valorAntecipacao" type="text" class="form-control valor" />
-                                            </div>
                                         </div>
                                     </div>
                                 </div>

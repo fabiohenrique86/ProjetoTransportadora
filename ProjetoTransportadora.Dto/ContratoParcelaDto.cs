@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace ProjetoTransportadora.Dto
 {
@@ -20,6 +21,7 @@ namespace ProjetoTransportadora.Dto
         public double? ValorMora { get; set; }
         public double? ValorDesconto { get; set; }
         public double ValorParcela { get; set; }
+        public virtual SituacaoParcelaDto SituacaoParcelaDto { get; set; }
 
         // campos referentes à simulação
         public double Fator { get; set; }
@@ -27,6 +29,7 @@ namespace ProjetoTransportadora.Dto
         public double ValorSaldoAnterior { get; set; }
         public double ValorSaldoAtual { get; set; }
 
-        public virtual SituacaoParcelaDto SituacaoParcelaDto { get; set; }
+        // campos referentes a filtros
+        public List<int> ListaIdSituacaoParcela { get; set; }
     }
 }

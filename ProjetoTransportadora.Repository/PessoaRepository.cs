@@ -208,6 +208,18 @@ namespace ProjetoTransportadora.Repository
                     IdTipoReferencia = w.IdTipoReferencia,
                     DataReferencia = w.DataReferencia,
                     Descricao = w.Descricao
+                }).ToList(),
+                PessoaContratoDto = x.Contrato.Select(w => new ContratoDto()
+                {
+                    Id = w.Id,
+                    NumeroContrato = w.NumeroContrato,
+                    DataContrato = w.DataContrato,
+                    ValorFinanciado = w.ValorFinanciado,
+                    IdCliente = w.IdCliente,
+                    IdVeiculo = w.IdVeiculo,
+                    VeiculoDto = w.Veiculo == null ? null : new VeiculoDto { Id = w.Veiculo.Id, Placa = w.Veiculo.Placa, Modelo = w.Veiculo.Modelo, Chassi = w.Veiculo.Chassi, Renavam = w.Veiculo.Renavam, Ativo = w.Veiculo.Ativo },
+                    IdSituacaoContrato = w.IdSituacaoContrato,
+                    SituacaoContratoDto = w.SituacaoContrato == null ? null : new SituacaoContratoDto() { Id = w.SituacaoContrato.Id, Ativo = w.SituacaoContrato.Ativo, DataCadastro = w.SituacaoContrato.DataCadastro, DataInativacao = w.SituacaoContrato.DataInativacao, IdUsuarioCadastro = w.SituacaoContrato.IdUsuarioCadastro, IdUsuarioInativacao = w.SituacaoContrato.IdUsuarioInativacao, Nome = w.SituacaoContrato.Nome },
                 }).ToList()
             }).ToList();
 
@@ -251,6 +263,14 @@ namespace ProjetoTransportadora.Repository
 
                     if (pessoaAvalista != null)
                         item.AvalistaDto = new PessoaDto() { Id = pessoaAvalista.Id, Nome = pessoaAvalista.Nome, IdTipoPessoa = pessoaAvalista.IdTipoPessoa, Cpf = pessoaAvalista.Cpf };
+                }
+
+                foreach (var item in p.PessoaContratoDto)
+                {
+                    var pessoaCliente = projetoTransportadoraEntities.Pessoa.FirstOrDefault(x => x.Id == item.IdCliente);
+
+                    if (pessoaCliente != null)
+                        item.PessoaClienteDto = new PessoaDto() { Id = pessoaCliente.Id, Nome = pessoaCliente.Nome, IdTipoPessoa = pessoaCliente.IdTipoPessoa, Cpf = pessoaCliente.Cpf, Cnpj = pessoaCliente.Cnpj };
                 }
             }
 

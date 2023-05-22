@@ -43,7 +43,6 @@ namespace ProjetoTransportadora.Repository
 
             if (canalDto != null)
             {
-
                 if (canalDto.Id > 0)
                     query = query.Where(x => x.Id == canalDto.Id);
 
@@ -68,7 +67,7 @@ namespace ProjetoTransportadora.Repository
 
         public int Incluir(CanalDto canalDto)
         {
-            var Canal = new Canal()
+            var canal = new Canal()
             {
                 Nome = canalDto.Nome,
                 Ativo = true,
@@ -76,27 +75,27 @@ namespace ProjetoTransportadora.Repository
                 DataCadastro = canalDto.DataCadastro
             };
 
-            projetoTransportadoraEntities.Canal.Add(Canal);
+            projetoTransportadoraEntities.Canal.Add(canal);
             projetoTransportadoraEntities.SaveChanges();
 
-            return Canal.Id;
+            return canal.Id;
         }
 
         public void Alterar(CanalDto canalDto)
         {
-            var Canal = projetoTransportadoraEntities.Canal.FirstOrDefault(x => x.Id == canalDto.Id);
+            var canal = projetoTransportadoraEntities.Canal.FirstOrDefault(x => x.Id == canalDto.Id);
 
             if (!string.IsNullOrEmpty(canalDto.Nome))
-                Canal.Nome = canalDto.Nome;
+                canal.Nome = canalDto.Nome;
 
             if (canalDto.Ativo.HasValue)
             {
-                Canal.Ativo = canalDto.Ativo.Value;
-                Canal.IdUsuarioInativacao = canalDto.IdUsuarioInativacao;
-                Canal.DataInativacao = canalDto.DataInativacao;
+                canal.Ativo = canalDto.Ativo.Value;
+                canal.IdUsuarioInativacao = canalDto.IdUsuarioInativacao;
+                canal.DataInativacao = canalDto.DataInativacao;
             }
 
-            projetoTransportadoraEntities.Entry(Canal).State = EntityState.Modified;
+            projetoTransportadoraEntities.Entry(canal).State = EntityState.Modified;
             projetoTransportadoraEntities.SaveChanges();
         }
     }

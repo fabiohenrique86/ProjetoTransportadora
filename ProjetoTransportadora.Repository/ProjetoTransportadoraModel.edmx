@@ -53,6 +53,8 @@
           <Property Name="IdUsuarioInativacao" Type="int" />
           <Property Name="DataInativacao" Type="datetime" />
           <Property Name="ValorTarifa" Type="float" />
+          <Property Name="IdUsuarioBaixa" Type="int" />
+          <Property Name="IdUsuarioAntecipacao" Type="int" />
         </EntityType>
         <EntityType Name="ContratoHistorico">
           <Key>
@@ -2121,6 +2123,8 @@
           <NavigationProperty Name="ContratoParcela" Relationship="ProjetoTransportadoraModel.FK_ContratoParcela_Contrato" FromRole="Contrato" ToRole="ContratoParcela" />
           <NavigationProperty Name="SituacaoContrato" Relationship="ProjetoTransportadoraModel.FK_Contrato_SituacaoContrato" FromRole="Contrato" ToRole="SituacaoContrato" />
           <Property Name="ValorTarifa" Type="Double" />
+          <Property Name="IdUsuarioBaixa" Type="Int32" />
+          <Property Name="IdUsuarioAntecipacao" Type="Int32" />
         </EntityType>
         <EntityType Name="ContratoHistorico">
           <Key>
@@ -2740,6 +2744,8 @@
           <EntitySetMapping Name="Contrato">
             <EntityTypeMapping TypeName="ProjetoTransportadoraModel.Contrato">
               <MappingFragment StoreEntitySet="Contrato">
+                <ScalarProperty Name="IdUsuarioAntecipacao" ColumnName="IdUsuarioAntecipacao" />
+                <ScalarProperty Name="IdUsuarioBaixa" ColumnName="IdUsuarioBaixa" />
                 <ScalarProperty Name="ValorTarifa" ColumnName="ValorTarifa" />
                 <ScalarProperty Name="DataInativacao" ColumnName="DataInativacao" />
                 <ScalarProperty Name="IdUsuarioInativacao" ColumnName="IdUsuarioInativacao" />

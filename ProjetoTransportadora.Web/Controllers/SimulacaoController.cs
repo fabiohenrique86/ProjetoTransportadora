@@ -22,9 +22,12 @@ namespace ProjetoTransportadora.Web.Controllers
         [HttpPost]
         public JsonResult GerarParcelas(SimulacaoDto simulacaoDto)
         {
-            var lista = parcelaBusiness.Gerar(simulacaoDto);
+            simulacaoDto.ContratoParcelaDto = parcelaBusiness.Gerar(simulacaoDto);
 
-            return Json(new { Sucesso = true, Mensagem = "Simulação gerada com sucesso", Data = lista }, JsonRequestBehavior.AllowGet);
+            TempData["SimulacaoDto"] = simulacaoDto;
+            TempData.Keep("SimulacaoDto");
+
+            return Json(new { Sucesso = true, Mensagem = "Simulação gerada com sucesso", Data = simulacaoDto.ContratoParcelaDto }, JsonRequestBehavior.AllowGet);
         }
     }
 }

@@ -39,10 +39,11 @@ namespace ProjetoTransportadora.Web.Controllers
         [HttpPost]
         public JsonResult Listar(ContratoDto contratoDto)
         {
-            var lista = contratoBusiness.Listar(contratoDto);
-            var resumo = contratoBusiness.ListarResumo(lista);
+            var listaContrato = contratoBusiness.Listar(contratoDto);
+            var listaSituacaoContratoResumo = contratoBusiness.ListarSituacaoContratoResumo(listaContrato);
+            var listaSituacaoParcelaResumo = contratoBusiness.ListarSituacaoParcelaResumo(listaContrato);
 
-            return Json(new { Sucesso = true, Mensagem = "Contrato listado com sucesso", Data = lista, Resumo = resumo }, JsonRequestBehavior.AllowGet);
+            return Json(new { Sucesso = true, Mensagem = "Contrato listado com sucesso", Data = listaContrato, SituacaoContratoResumo = listaSituacaoContratoResumo, SituacaoParcelaResumo = listaSituacaoParcelaResumo }, JsonRequestBehavior.AllowGet);
         }
 
         [HttpPost]
@@ -50,16 +51,37 @@ namespace ProjetoTransportadora.Web.Controllers
         {
             contratoBusiness.Incluir(contratoDto);
 
-            var lista = contratoBusiness.Listar();
-            var resumo = contratoBusiness.ListarResumo(lista);
+            var listaContrato = contratoBusiness.Listar();
+            var listaSituacaoContratoResumo = contratoBusiness.ListarSituacaoContratoResumo(listaContrato);
+            var listaSituacaoParcelaResumo = contratoBusiness.ListarSituacaoParcelaResumo(listaContrato);
 
-            return Json(new { Sucesso = true, Mensagem = "Contrato cadastrado com sucesso", Data = lista, Resumo = resumo }, JsonRequestBehavior.AllowGet);
+            return Json(new { Sucesso = true, Mensagem = "Contrato listado com sucesso", Data = listaContrato, SituacaoContratoResumo = listaSituacaoContratoResumo, SituacaoParcelaResumo = listaSituacaoParcelaResumo }, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpPost]
+        public JsonResult Antecipar(ContratoDto contratoDto)
+        {
+            contratoBusiness.Antecipar(contratoDto);
+
+            var lista = contratoBusiness.Listar(new ContratoDto() { Id = contratoDto.Id }).FirstOrDefault();
+
+            return Json(new { Sucesso = true, Mensagem = "Contrato antecipado com sucesso", Data = lista }, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpPost]
+        public JsonResult Baixar(ContratoDto contratoDto)
+        {
+            contratoBusiness.Baixar(contratoDto);
+
+            var lista = contratoBusiness.Listar(new ContratoDto() { Id = contratoDto.Id }).FirstOrDefault();
+
+            return Json(new { Sucesso = true, Mensagem = "Contrato baixado com sucesso", Data = lista }, JsonRequestBehavior.AllowGet);
         }
 
         [HttpGet]
-        public FileContentResult Exportar(ContratoDto ContratoDto)
+        public FileContentResult Exportar(ContratoDto contratoDto)
         {
-            var lista = contratoBusiness.Listar(ContratoDto);
+            var lista = contratoBusiness.Listar(contratoDto);
 
             string csv = "Montadora; Modelo; Ano Fabricação; Ano Modelo; Cor; Placa; Proprietário Atual; Proprietário Anterior; Renavam; Chassi; Data Aquisição; Valor Aquisição; Data Venda; Valor Venda; Data Recuperação; Data Valor FIPE; Valor FIPE; Valor Transportadora; Implemento; Comprimento; Altura; Largura; Rastreador; Situação" + Environment.NewLine;
 

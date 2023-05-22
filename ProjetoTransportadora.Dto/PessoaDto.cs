@@ -7,11 +7,12 @@ namespace ProjetoTransportadora.Dto
     {
         public PessoaDto()
         {
-            this.PessoaEmailDto = new List<PessoaEmailDto>();
-            this.PessoaTelefoneDto = new List<PessoaTelefoneDto>();
-            this.PessoaHistoricoDto = new List<PessoaHistoricoDto>();
-            this.PessoaReferenciaDto = new List<PessoaReferenciaDto>();
-            this.PessoaAvalistaDto = new List<PessoaAvalistaDto>();
+            PessoaEmailDto = new List<PessoaEmailDto>();
+            PessoaTelefoneDto = new List<PessoaTelefoneDto>();
+            PessoaHistoricoDto = new List<PessoaHistoricoDto>();
+            PessoaReferenciaDto = new List<PessoaReferenciaDto>();
+            PessoaAvalistaDto = new List<PessoaAvalistaDto>();
+            PessoaContratoDto = new List<ContratoDto>();
         }
 
         public int Id { get; set; }
@@ -68,5 +69,6 @@ namespace ProjetoTransportadora.Dto
         public virtual List<PessoaHistoricoDto> PessoaHistoricoDto { get; set; }
         public virtual List<PessoaReferenciaDto> PessoaReferenciaDto { get; set; }
         public virtual List<PessoaAvalistaDto> PessoaAvalistaDto { get; set; }
+        public virtual List<ContratoDto> PessoaContratoDto { get; set; }
     }
 }

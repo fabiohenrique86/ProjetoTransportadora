@@ -51,10 +51,10 @@ namespace ProjetoTransportadora.Repository
             if (contratoDto.NumeroContrato > 0)
                 query = query.Where(x => x.NumeroContrato == contratoDto.NumeroContrato);
 
-            return query.Select(x => new ContratoDto() { Id = x.Id, NumeroContrato = x.NumeroContrato }).FirstOrDefault();
+            return query.Select(x => new ContratoDto() { Id = x.Id, NumeroContrato = x.NumeroContrato, DataContrato = x.DataContrato, TaxaJuros = x.TaxaJuros }).FirstOrDefault();
         }
 
-        public object ListarResumo(List<ContratoDto> contratoDto)
+        public object ListarSituacaoContratoResumo(List<ContratoDto> contratoDto)
         {
             var query = (from c in contratoDto
                          join sc in projetoTransportadoraEntities.SituacaoContrato on c.IdSituacaoContrato equals sc.Id
@@ -68,6 +68,23 @@ namespace ProjetoTransportadora.Repository
                              ValorEntrada = g1.Sum(x => x.ValorEntrada),
                              ValorFinanciado = g1.Sum(x => x.ValorFinanciado),
                          }).OrderBy(x => x.SituacaoContrato).ThenBy(x => x.Produto);
+
+            return query.ToList();
+        }
+
+        public object ListarSituacaoParcelaResumo(List<ContratoDto> contratoDto)
+        {
+            var query = (from c in contratoDto
+                         join cp in projetoTransportadoraEntities.ContratoParcela on c.Id equals cp.IdContrato
+                         join sp in projetoTransportadoraEntities.SituacaoParcela on cp.IdSituacaoParcela equals sp.Id
+                         group cp by new { spNome = sp.Nome } into g1
+                         select new
+                         {
+                             SituacaoParcela = g1.Key.spNome,
+                             Quantidade = g1.Select(x => x.Id).Count(),
+                             ValorJuros = g1.Sum(x => x.ValorJuros),
+                             ValorParcela = g1.Sum(x => x.ValorParcela),
+                         }).OrderBy(x => x.SituacaoParcela);
 
             return query.ToList();
         }
@@ -140,6 +157,8 @@ namespace ProjetoTransportadora.Repository
                 DataCadastro = x.DataCadastro,
                 IdUsuarioInativacao = x.IdUsuarioInativacao,
                 DataInativacao = x.DataInativacao,
+                IdUsuarioAntecipacao = x.IdUsuarioAntecipacao,
+                IdUsuarioBaixa = x.IdUsuarioBaixa,
                 ContratoParcelaDto = x.ContratoParcela.Select(w => new ContratoParcelaDto()
                 {
                     Id = w.Id,
@@ -239,6 +258,31 @@ namespace ProjetoTransportadora.Repository
             projetoTransportadoraEntities.SaveChanges();
 
             return contrato.Id;
+        }
+
+        public void Antecipar(ContratoDto contratoDto)
+        {
+            var contrato = projetoTransportadoraEntities.Contrato.FirstOrDefault(x => x.Id == contratoDto.Id);
+
+            contrato.DataAntecipacao = contratoDto.DataAntecipacao;
+            contrato.ValorAntecipacao = contrato.ValorAntecipacao;
+            contrato.IdSituacaoContrato = contratoDto.IdSituacaoContrato;
+            contrato.IdUsuarioAntecipacao = contratoDto.IdUsuarioAntecipacao;
+
+            projetoTransportadoraEntities.Entry(contrato).State = EntityState.Modified;
+            projetoTransportadoraEntities.SaveChanges();
+        }
+
+        public void Baixar(ContratoDto contratoDto)
+        {
+            var contrato = projetoTransportadoraEntities.Contrato.FirstOrDefault(x => x.Id == contratoDto.Id);
+
+            contrato.DataBaixa = contratoDto.DataBaixa;
+            contrato.IdSituacaoContrato = contratoDto.IdSituacaoContrato;
+            contrato.IdUsuarioBaixa = contratoDto.IdUsuarioBaixa;
+
+            projetoTransportadoraEntities.Entry(contrato).State = EntityState.Modified;
+            projetoTransportadoraEntities.SaveChanges();
         }
 
         //public void Alterar(ContratoDto contratoDto)

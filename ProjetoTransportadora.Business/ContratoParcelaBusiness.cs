@@ -18,6 +18,43 @@ namespace ProjetoTransportadora.Business
             contratoParcelaRepository = new ContratoParcelaRepository();
         }
 
+        public List<ContratoParcelaDto> Listar(ContratoParcelaDto contratoParcelaDto)
+        {
+            return contratoParcelaRepository.Listar(contratoParcelaDto);
+        }
+
+        public void Antecipar(ContratoParcelaDto contratoParcelaDto)
+        {
+            if (contratoParcelaDto == null)
+                throw new BusinessException("contratoParcelaDto é nulo");
+
+            if (contratoParcelaDto.Id <= 0)
+                throw new BusinessException("Id é obrigatório");
+
+            var existeContratoParcela = contratoParcelaRepository.Existe(new ContratoParcelaDto() { Id = contratoParcelaDto.Id });
+
+            if (!existeContratoParcela)
+                throw new BusinessException($"ContratoParcelaDto Id ({contratoParcelaDto.Id}) não está cadastrado");
+
+            contratoParcelaRepository.Antecipar(contratoParcelaDto);
+        }
+
+        public void Baixar(ContratoParcelaDto contratoParcelaDto)
+        {
+            if (contratoParcelaDto == null)
+                throw new BusinessException("contratoParcelaDto é nulo");
+
+            if (contratoParcelaDto.Id <= 0)
+                throw new BusinessException("Id é obrigatório");
+
+            var existeContratoParcela = contratoParcelaRepository.Existe(new ContratoParcelaDto() { Id = contratoParcelaDto.Id });
+
+            if (!existeContratoParcela)
+                throw new BusinessException($"ContratoParcelaDto Id ({contratoParcelaDto.Id}) não está cadastrado");
+
+            contratoParcelaRepository.Baixar(contratoParcelaDto);
+        }
+
         public int Incluir(ContratoParcelaDto contratoParcelaDto)
         {
             var idContratoParcela = 0;
@@ -96,7 +133,7 @@ namespace ProjetoTransportadora.Business
                 fatorInvertido = 0;
                 var parcelaAnterior = i == 1 ? null : parcelasDto[i - 2];
 
-                dataVencimento = CalcularDataVencimento(i == 1 ? simulacaoDto.DataPrimeiraParcela : simulacaoDto.DataPrimeiraParcela.AddMonths(i - 1));
+                dataVencimento = this.CalcularDataVencimento(i == 1 ? simulacaoDto.DataPrimeiraParcela : simulacaoDto.DataPrimeiraParcela.AddMonths(i - 1));
                 diasContrato = Convert.ToDouble(dataVencimento.Subtract(simulacaoDto.DataInicio).Days);
                 diasParcela = parcelaAnterior == null ? diasContrato : Convert.ToDouble(dataVencimento.Subtract(parcelaAnterior.DataVencimento).Days);
 
@@ -112,7 +149,7 @@ namespace ProjetoTransportadora.Business
                     DiasContrato = Convert.ToInt32(diasContrato),
                     DiasParcela = Convert.ToInt32(diasParcela),
                     Fator = fator,
-                    FatorInvertido = fatorInvertido                    
+                    FatorInvertido = fatorInvertido
                 });
             }
 
@@ -132,7 +169,7 @@ namespace ProjetoTransportadora.Business
                 valorJuros = i == simulacaoDto.QuantidadeParcela - 1 ? Math.Round(valorParcela - valorSaldoAnterior, 2) : Math.Round(valorSaldoAnterior * (Math.Pow((1 + (simulacaoDto.TaxaMensalJuros / 100)), (Convert.ToDouble(parcelasDto[i].DiasParcela) / 30D)) - 1), 2);
                 valorAmortizacao = i == simulacaoDto.QuantidadeParcela - 1 ? valorSaldoAnterior - valorAmortizacao : valorParcela - valorJuros;
                 valorSaldoAtual = i == 0 ? simulacaoDto.ValorFinanciado - valorAmortizacao : valorSaldoAnterior - valorAmortizacao;
-                                
+
                 parcelasDto[i].ValorParcela = valorParcela;
                 parcelasDto[i].ValorSaldoAnterior = valorSaldoAnterior;
                 parcelasDto[i].ValorJuros = valorJuros;

@@ -3,6 +3,7 @@ using ProjetoTransportadora.Dto;
 using ProjetoTransportadora.Repository;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Transactions;
 
 namespace ProjetoTransportadora.Business
@@ -12,16 +13,22 @@ namespace ProjetoTransportadora.Business
         ContratoRepository contratoRepository;
         ContratoHistoricoBusiness contratoHistoricoBusiness;
         ContratoParcelaBusiness contratoParcelaBusiness;
+        FeriadoBusiness feriadoBusiness;
         public ContratoBusiness()
         {
             contratoRepository = new ContratoRepository();
             contratoHistoricoBusiness = new ContratoHistoricoBusiness();
             contratoParcelaBusiness = new ContratoParcelaBusiness();
+            feriadoBusiness = new FeriadoBusiness();
         }
 
-        public object ListarResumo(List<ContratoDto> contratoDto)
+        public object ListarSituacaoContratoResumo(List<ContratoDto> contratoDto)
         {
-            return contratoRepository.ListarResumo(contratoDto);
+            return contratoRepository.ListarSituacaoContratoResumo(contratoDto);
+        }
+        public object ListarSituacaoParcelaResumo(List<ContratoDto> contratoDto)
+        {
+            return contratoRepository.ListarSituacaoParcelaResumo(contratoDto);
         }
 
         public int ListarTotal(ContratoDto contratoDto = null)
@@ -84,79 +91,119 @@ namespace ProjetoTransportadora.Business
             return idContrato;
         }
 
-        //public void Alterar(ContratoDto ContratoDto)
-        //{
-        //    if (ContratoDto == null)
-        //        throw new BusinessException("ContratoDto é nulo");
+        public void Antecipar(ContratoDto contratoDto)
+        {
+            if (contratoDto == null)
+                throw new BusinessException("ContratoDto é nulo");
 
-        //    if (ContratoDto.Id <= 0)
-        //        throw new BusinessException("IdContrato é nulo");
+            if (contratoDto.Id <= 0)
+                throw new BusinessException("Id é obrigatório");
 
-        //    var ContratoExistePorId = contratoRepository.Obter(new ContratoDto() { Id = ContratoDto.Id });
+            if (contratoDto.IdSituacaoContrato <= 0)
+                throw new BusinessException("Situação do Contrato é obrigatório");
 
-        //    if (ContratoExistePorId == null)
-        //        throw new BusinessException($"Contrato com Id {ContratoDto.Id} não está cadastrado");
+            if (contratoDto.DataAntecipacao.GetValueOrDefault() == DateTime.MinValue)
+                throw new BusinessException("Data Antecipação é obrigatório");
 
-        //    ContratoDto.Placa = ContratoDto.Placa?.Replace(".", "").Replace(",", "").Replace("-", "").Replace("/", "").Replace(" ", "").Replace("*", "").Replace("_", "").Trim();
+            if (contratoDto.IdUsuarioAntecipacao <= 0)
+                throw new BusinessException("IdUsuarioAntecipação é obrigatório");
 
-        //    if (ContratoDto.Placa != ContratoExistePorId.Placa)
-        //    {
-        //        if (string.IsNullOrEmpty(ContratoDto.Placa))
-        //            throw new BusinessException("Placa é obrigatório");
+            var contrato = contratoRepository.Obter(new ContratoDto() { Id = contratoDto.Id });
 
-        //        var ContratoExistePorPlaca = contratoRepository.Existe(new ContratoDto() { Placa = ContratoDto.Placa });
+            if (contrato == null)
+                throw new BusinessException($"Contrato Id ({contratoDto.Id}) não está cadastrado");
 
-        //        if (ContratoExistePorPlaca)
-        //            throw new BusinessException($"Contrato com Placa {ContratoDto.Placa} já está cadastrado");
-        //    }
+            if (contratoDto.DataAntecipacao < contrato.DataContrato)
+                throw new BusinessException("Data Antecipação deve ser maior ou igual à Data do Contrato");
 
-        //    using (TransactionScope scope = new TransactionScope(TransactionScopeOption.Required))
-        //    {
-        //        contratoRepository.Alterar(ContratoDto);
+            if (contratoDto.DataAntecipacao.GetValueOrDefault().DayOfWeek == DayOfWeek.Saturday || contratoDto.DataAntecipacao.GetValueOrDefault().DayOfWeek == DayOfWeek.Sunday)
+                throw new BusinessException("Data Antecipação deve ser dia útil");
 
-        //        // Contrato historico
-        //        contratoHistoricoBusiness.Excluir(ContratoDto.Id);
-        //        foreach (var ContratoHistoricoDto in ContratoDto.ContratoHistoricoDto)
-        //            contratoHistoricoBusiness.Incluir(ContratoHistoricoDto);
+            var existeFeriado = feriadoBusiness.Existe(new FeriadoDto() { DataFeriado = contratoDto.DataAntecipacao.GetValueOrDefault() });
 
-        //        // Contrato multa
-        //        ContratoMultaBusiness.Excluir(ContratoDto.Id);
-        //        foreach (var ContratoMultaDto in ContratoDto.ContratoMultaDto)
-        //            ContratoMultaBusiness.Incluir(ContratoMultaDto);
+            if (existeFeriado)
+                throw new BusinessException("Data Antecipação deve ser dia útil");
 
-        //        scope.Complete();
-        //    }
-        //}
+            var listaContratoParcelaDto = contratoParcelaBusiness.Listar(new ContratoParcelaDto() { IdContrato = contratoDto.Id, ListaIdSituacaoParcela = new List<int>() { SituacaoParcelaDto.EnumSituacaoParcela.Pendente.GetHashCode(), SituacaoParcelaDto.EnumSituacaoParcela.BoletoEmitido.GetHashCode() } });
 
-        //public void AlterarStatus(ContratoDto ContratoDto)
-        //{
-        //    if (ContratoDto == null)
-        //        throw new BusinessException("ContratoDto é nulo");
+            if (listaContratoParcelaDto == null || listaContratoParcelaDto.Count() <= 0)
+                throw new BusinessException($"Não existem parcelas a serem antecipadas para o Contrato {contratoDto.Id}");
 
-        //    if (ContratoDto.Id <= 0)
-        //        throw new BusinessException("Id é obrigatório");
+            using (var transactionScope = new TransactionScope(TransactionScopeOption.Required))
+            {
+                foreach (var contratoParcelaDto in listaContratoParcelaDto)
+                {
+                    contratoParcelaDto.ValorMulta = 0;
+                    contratoParcelaDto.ValorMora = 0;
 
-        //    if (!ContratoDto.Ativo.HasValue)
-        //        throw new BusinessException("Ativo é obrigatório");
+                    if (contratoParcelaDto.DataVencimento >= contratoDto.DataAntecipacao)
+                    {
+                        contratoParcelaDto.ValorDesconto = contratoParcelaDto.ValorJuros;
+                        contratoParcelaDto.ValorParcela = contratoParcelaDto.ValorAmortizacao.GetValueOrDefault();
+                    }
+                    else
+                    {
+                        double diasCorridos = contratoDto.DataAntecipacao.GetValueOrDefault().Subtract(contratoParcelaDto.DataVencimento).Days;
 
-        //    var existeProduto = contratoRepository.Existe(new ContratoDto() { Id = ContratoDto.Id });
+                        var fatorCalculado = Math.Round(Math.Pow((1 + (contrato.TaxaJuros / 100)), (diasCorridos / 30D)), 6);
+                        
+                        contratoParcelaDto.ValorJuros = (fatorCalculado - 1) * 1; // ??
 
-        //    if (!existeProduto)
-        //        throw new BusinessException($"Contrato Id ({ContratoDto.Id}) não está cadastrado");
+                        contratoParcelaDto.ValorDesconto = contratoParcelaDto.ValorJuros - 0; // ??
+                        contratoParcelaDto.ValorParcela = contratoParcelaDto.ValorAmortizacao.GetValueOrDefault() + contratoParcelaDto.ValorJuros.GetValueOrDefault() - contratoParcelaDto.ValorDesconto.GetValueOrDefault();                        
+                    }
 
-        //    if (ContratoDto.Ativo.HasValue)
-        //    {
-        //        if (!ContratoDto.Ativo.Value)
-        //        {
-        //            if (ContratoDto.IdUsuarioInativacao <= 0)
-        //                throw new BusinessException("IdUsuarioInativação é obrigatório");
+                    contratoParcelaBusiness.Antecipar(contratoParcelaDto);
+                }
 
-        //            if (ContratoDto.DataInativacao.GetValueOrDefault() == DateTime.MinValue)
-        //                throw new BusinessException("Data Inativação é obrigatório");
-        //        }
-        //    }
+                contratoRepository.Antecipar(contratoDto);
 
-        //    contratoRepository.AlterarStatus(ContratoDto);
-        //}
+                transactionScope.Complete();
+            }
+        }
+
+        public void Baixar(ContratoDto contratoDto)
+        {
+            if (contratoDto == null)
+                throw new BusinessException("ContratoDto é nulo");
+
+            if (contratoDto.Id <= 0)
+                throw new BusinessException("Id é obrigatório");
+
+            if (contratoDto.IdSituacaoContrato <= 0)
+                throw new BusinessException("Situação do Contrato é obrigatório");
+
+            if (contratoDto.DataBaixa.GetValueOrDefault() == DateTime.MinValue)
+                throw new BusinessException("Data Baixa é obrigatório");
+
+            if (contratoDto.IdUsuarioBaixa <= 0)
+                throw new BusinessException("IdUsuarioBaixa é obrigatório");
+
+            var contrato = contratoRepository.Obter(new ContratoDto() { Id = contratoDto.Id });
+
+            if (contrato == null)
+                throw new BusinessException($"Contrato Id ({contratoDto.Id}) não está cadastrado");
+
+            if (contratoDto.DataBaixa < contrato.DataContrato)
+                throw new BusinessException("Data Baixa deve ser maior ou igual à Data do Contrato");
+
+            var listaContratoParcelaDto = contratoParcelaBusiness.Listar(new ContratoParcelaDto() { IdContrato = contratoDto.Id, ListaIdSituacaoParcela = new List<int>() { SituacaoParcelaDto.EnumSituacaoParcela.Pendente.GetHashCode(), SituacaoParcelaDto.EnumSituacaoParcela.BoletoEmitido.GetHashCode(), SituacaoParcelaDto.EnumSituacaoParcela.Atraso.GetHashCode() } });
+
+            if (listaContratoParcelaDto == null || listaContratoParcelaDto.Count() <= 0)
+                throw new BusinessException($"Não existem parcelas a serem baixadas para o Contrato {contratoDto.Id}");
+
+            using (var transactionScope = new TransactionScope(TransactionScopeOption.Required))
+            {
+                foreach (var contratoParcelaDto in listaContratoParcelaDto)
+                {
+                    contratoParcelaDto.IdSituacaoParcela = SituacaoParcelaDto.EnumSituacaoParcela.Baixado.GetHashCode();
+                    contratoParcelaBusiness.Baixar(contratoParcelaDto);
+                }
+
+                contratoRepository.Baixar(contratoDto);
+
+                transactionScope.Complete();
+            }
+        }
     }
 }
