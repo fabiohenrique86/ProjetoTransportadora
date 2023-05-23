@@ -7,9 +7,11 @@ namespace ProjetoTransportadora.Business
     public class PessoaAvalistaBusiness
     {
         PessoaAvalistaRepository pessoaAvalistaRepository;
+        PessoaBusiness pessoaBusiness;
         public PessoaAvalistaBusiness()
         {
             pessoaAvalistaRepository = new PessoaAvalistaRepository();
+            pessoaBusiness = new PessoaBusiness();
         }
 
         public int Incluir(PessoaAvalistaDto pessoaAvalistaDto)
@@ -28,9 +30,14 @@ namespace ProjetoTransportadora.Business
             if (pessoaAvalistaDto.IdPessoa == pessoaAvalistaDto.IdAvalista)
                 throw new BusinessException("Avalista não pode ser a própria Pessoa");
 
-            var pessoaAvalistaExistePorAvalista = pessoaAvalistaRepository.Existe(new PessoaAvalistaDto() { IdPessoa = pessoaAvalistaDto.IdPessoa, IdAvalista = pessoaAvalistaDto.IdAvalista });
+            var existePessoaAvalistaPorId = pessoaBusiness.Existe(new PessoaDto() { Id = pessoaAvalistaDto.Id });
 
-            if (pessoaAvalistaExistePorAvalista)
+            if (!existePessoaAvalistaPorId)
+                throw new BusinessException($"Avalista com Id {pessoaAvalistaDto.Id} não está cadastrado");
+
+            var existePessoaAvalistaPraPessoa = pessoaAvalistaRepository.Existe(new PessoaAvalistaDto() { IdPessoa = pessoaAvalistaDto.IdPessoa, IdAvalista = pessoaAvalistaDto.IdAvalista });
+
+            if (existePessoaAvalistaPraPessoa)
                 throw new BusinessException("Avalista duplicado");
 
             idPessoaAvalista = pessoaAvalistaRepository.Incluir(pessoaAvalistaDto);

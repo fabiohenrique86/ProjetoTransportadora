@@ -41,6 +41,11 @@ namespace ProjetoTransportadora.Business
             return pessoaRepository.ListarAutoComplete(pessoaDto);
         }
 
+        public bool Existe(PessoaDto pessoaDto)
+        {
+            return pessoaRepository.Existe(pessoaDto);
+        }
+
         public List<PessoaDto> Listar(PessoaDto pessoaDto = null)
         {
             if (!string.IsNullOrEmpty(pessoaDto?.Cpf))
@@ -83,7 +88,7 @@ namespace ProjetoTransportadora.Business
                 if (pessoaExistePorCpf)
                     throw new BusinessException($"Pessoa com CPF ({pessoaDto.Cpf}) já está cadastrada");
 
-                using (TransactionScope scope = new TransactionScope(TransactionScopeOption.Required))
+                using (var transactionScope = new TransactionScope(TransactionScopeOption.Required))
                 {
                     idPessoa = pessoaRepository.Incluir(pessoaDto);
 
@@ -117,7 +122,7 @@ namespace ProjetoTransportadora.Business
                         pessoaReferenciaBusiness.Incluir(pessoaReferenciaDto);
                     }
 
-                    scope.Complete();
+                    transactionScope.Complete();
                 }
             }
             else if (pessoaDto.IdTipoPessoa == (int)TipoPessoaDto.TipoPessoa.PessoaJurídica)
@@ -141,7 +146,7 @@ namespace ProjetoTransportadora.Business
                 if (pessoaExistePorCnpj)
                     throw new BusinessException($"Pessoa com CNPJ ({pessoaDto.Cnpj}) já está cadastrada");
 
-                using (TransactionScope scope = new TransactionScope(TransactionScopeOption.Required))
+                using (var transactionScope = new TransactionScope(TransactionScopeOption.Required))
                 {
                     idPessoa = pessoaRepository.Incluir(pessoaDto);
 
@@ -163,7 +168,7 @@ namespace ProjetoTransportadora.Business
                         pessoaHistoricoBusiness.Incluir(pessoaHistoricoDto);
                     }
 
-                    scope.Complete();
+                    transactionScope.Complete();
                 }
             }
 
@@ -229,7 +234,7 @@ namespace ProjetoTransportadora.Business
                 throw new BusinessException("IdTipoPessoa é obrigatório");
             }
 
-            using (TransactionScope scope = new TransactionScope(TransactionScopeOption.Required))
+            using (var transactionScope = new TransactionScope(TransactionScopeOption.Required))
             {
                 pessoaRepository.Alterar(pessoaDto);
 
@@ -253,7 +258,7 @@ namespace ProjetoTransportadora.Business
                 foreach (var pessoaReferenciaDto in pessoaDto.PessoaReferenciaDto)
                     pessoaReferenciaBusiness.Incluir(pessoaReferenciaDto);
 
-                scope.Complete();
+                transactionScope.Complete();
             }
         }
 
@@ -268,9 +273,9 @@ namespace ProjetoTransportadora.Business
             if (!pessoaDto.Ativo.HasValue)
                 throw new BusinessException("Ativo é obrigatório");
 
-            var existeProduto = pessoaRepository.Existe(new PessoaDto() { Id = pessoaDto.Id });
+            var existePessoa = pessoaRepository.Existe(new PessoaDto() { Id = pessoaDto.Id });
 
-            if (!existeProduto)
+            if (!existePessoa)
                 throw new BusinessException($"Pessoa Id ({pessoaDto.Id}) não está cadastrada");
 
             if (pessoaDto.Ativo.HasValue)
