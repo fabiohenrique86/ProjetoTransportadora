@@ -55,6 +55,7 @@
           <Property Name="ValorTarifa" Type="float" />
           <Property Name="IdUsuarioBaixa" Type="int" />
           <Property Name="IdUsuarioAntecipacao" Type="int" />
+          <Property Name="ValorVeiculoEntrada" Type="float" />
         </EntityType>
         <EntityType Name="ContratoHistorico">
           <Key>
@@ -2125,6 +2126,7 @@
           <Property Name="ValorTarifa" Type="Double" />
           <Property Name="IdUsuarioBaixa" Type="Int32" />
           <Property Name="IdUsuarioAntecipacao" Type="Int32" />
+          <Property Name="ValorVeiculoEntrada" Type="Double" />
         </EntityType>
         <EntityType Name="ContratoHistorico">
           <Key>
@@ -2744,6 +2746,7 @@
           <EntitySetMapping Name="Contrato">
             <EntityTypeMapping TypeName="ProjetoTransportadoraModel.Contrato">
               <MappingFragment StoreEntitySet="Contrato">
+                <ScalarProperty Name="ValorVeiculoEntrada" ColumnName="ValorVeiculoEntrada" />
                 <ScalarProperty Name="IdUsuarioAntecipacao" ColumnName="IdUsuarioAntecipacao" />
                 <ScalarProperty Name="IdUsuarioBaixa" ColumnName="IdUsuarioBaixa" />
                 <ScalarProperty Name="ValorTarifa" ColumnName="ValorTarifa" />

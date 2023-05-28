@@ -51,30 +51,123 @@ namespace ProjetoTransportadora.Repository
             if (contratoDto.NumeroContrato > 0)
                 query = query.Where(x => x.NumeroContrato == contratoDto.NumeroContrato);
 
-            return query.Select(x => new ContratoDto() { Id = x.Id, NumeroContrato = x.NumeroContrato, DataContrato = x.DataContrato, TaxaJuros = x.TaxaJuros }).FirstOrDefault();
+            return query.Select(x => new ContratoDto() { Id = x.Id, NumeroContrato = x.NumeroContrato, DataContrato = x.DataContrato, TaxaJuros = x.TaxaJuros, ValorFinanciado = x.ValorFinanciado }).FirstOrDefault();
         }
 
-        public object ListarSituacaoContratoResumo(List<ContratoDto> contratoDto)
+        public dynamic ListarGrid(ContratoDto contratoDto = null)
         {
-            var query = (from c in contratoDto
-                         join sc in projetoTransportadoraEntities.SituacaoContrato on c.IdSituacaoContrato equals sc.Id
-                         join p in projetoTransportadoraEntities.Produto on c.IdProduto equals p.Id
-                         group c by new { scNome = sc.Nome, pNome = p.Nome } into g1
-                         select new
-                         {
-                             SituacaoContrato = g1.Key.scNome,
-                             Produto = g1.Key.pNome,
-                             Quantidade = g1.Select(x => x.Id).Count(),
-                             ValorEntrada = g1.Sum(x => x.ValorEntrada),
-                             ValorFinanciado = g1.Sum(x => x.ValorFinanciado),
-                         }).OrderBy(x => x.SituacaoContrato).ThenBy(x => x.Produto);
+            IQueryable<Contrato> query = projetoTransportadoraEntities.Contrato;
 
-            return query.ToList();
+            if (contratoDto != null)
+            {
+                if (contratoDto.Id > 0)
+                    query = query.Where(x => x.Id == contratoDto.Id);
+
+                if (contratoDto.IdCliente > 0)
+                    query = query.Where(x => x.IdCliente == contratoDto.IdCliente);
+
+                if (contratoDto.IdProduto > 0)
+                    query = query.Where(x => x.IdProduto == contratoDto.IdProduto);
+
+                if (!string.IsNullOrEmpty(contratoDto.VeiculoDto?.Placa))
+                    query = query.Where(x => x.Veiculo.Placa.Contains(contratoDto.VeiculoDto.Placa));
+
+                if (contratoDto.IdSituacaoContrato > 0)
+                    query = query.Where(x => x.IdSituacaoContrato == contratoDto.IdSituacaoContrato);
+
+                if (contratoDto.DataContratoInicial != DateTime.MinValue && contratoDto.DataContratoFinal != DateTime.MinValue)
+                    query = query.Where(x => x.DataContrato >= contratoDto.DataContratoInicial && x.DataContrato <= contratoDto.DataContratoFinal);
+                else if (contratoDto.DataContratoInicial != DateTime.MinValue)
+                    query = query.Where(x => x.DataContrato >= contratoDto.DataContratoInicial);
+                else if (contratoDto.DataContratoFinal != DateTime.MinValue)
+                    query = query.Where(x => x.DataContrato <= contratoDto.DataContratoFinal);
+            }
+
+            return query.Select(x => new
+            {
+                Id = x.Id,
+                NomeCliente = x.PessoaCliente.Nome,
+                PlacaVeiculo = x.Veiculo.Placa,
+                ModeloVeiculo = x.Veiculo.Modelo,
+                DataContrato = x.DataContrato,
+                ValorFinanciado = x.ValorFinanciado,
+                IdSituacaoContrato = x.SituacaoContrato.Id,
+                NomeSituacaoContrato = x.SituacaoContrato.Nome
+            }).ToList();
+        }
+        public dynamic ListarSituacaoContratoResumo(ContratoDto contratoDto = null)
+        {
+            IQueryable<Contrato> query = projetoTransportadoraEntities.Contrato;
+
+            if (contratoDto != null)
+            {
+                if (contratoDto.Id > 0)
+                    query = query.Where(x => x.Id == contratoDto.Id);
+
+                if (contratoDto.IdCliente > 0)
+                    query = query.Where(x => x.IdCliente == contratoDto.IdCliente);
+
+                if (contratoDto.IdProduto > 0)
+                    query = query.Where(x => x.IdProduto == contratoDto.IdProduto);
+
+                if (!string.IsNullOrEmpty(contratoDto.VeiculoDto?.Placa))
+                    query = query.Where(x => x.Veiculo.Placa.Contains(contratoDto.VeiculoDto.Placa));
+
+                if (contratoDto.IdSituacaoContrato > 0)
+                    query = query.Where(x => x.IdSituacaoContrato == contratoDto.IdSituacaoContrato);
+
+                if (contratoDto.DataContratoInicial != DateTime.MinValue && contratoDto.DataContratoFinal != DateTime.MinValue)
+                    query = query.Where(x => x.DataContrato >= contratoDto.DataContratoInicial && x.DataContrato <= contratoDto.DataContratoFinal);
+                else if (contratoDto.DataContratoInicial != DateTime.MinValue)
+                    query = query.Where(x => x.DataContrato >= contratoDto.DataContratoInicial);
+                else if (contratoDto.DataContratoFinal != DateTime.MinValue)
+                    query = query.Where(x => x.DataContrato <= contratoDto.DataContratoFinal);
+            }
+
+            return (from c in query
+                    join sc in projetoTransportadoraEntities.SituacaoContrato on c.IdSituacaoContrato equals sc.Id
+                    join p in projetoTransportadoraEntities.Produto on c.IdProduto equals p.Id
+                    group c by new { scNome = sc.Nome, pNome = p.Nome } into g1
+                    select new
+                    {
+                        SituacaoContrato = g1.Key.scNome,
+                        Produto = g1.Key.pNome,
+                        Quantidade = g1.Select(x => x.Id).Count(),
+                        ValorEntrada = g1.Sum(x => x.ValorEntrada),
+                        ValorFinanciado = g1.Sum(x => x.ValorFinanciado),
+                    }).OrderBy(x => x.SituacaoContrato).ThenBy(x => x.Produto).ToList();
         }
 
-        public object ListarSituacaoParcelaResumo(List<ContratoDto> contratoDto)
+        public dynamic ListarSituacaoParcelaResumo(ContratoDto contratoDto = null)
         {
-            var query = (from c in contratoDto
+            IQueryable<Contrato> query = projetoTransportadoraEntities.Contrato;
+
+            if (contratoDto != null)
+            {
+                if (contratoDto.Id > 0)
+                    query = query.Where(x => x.Id == contratoDto.Id);
+
+                if (contratoDto.IdCliente > 0)
+                    query = query.Where(x => x.IdCliente == contratoDto.IdCliente);
+
+                if (contratoDto.IdProduto > 0)
+                    query = query.Where(x => x.IdProduto == contratoDto.IdProduto);
+
+                if (!string.IsNullOrEmpty(contratoDto.VeiculoDto?.Placa))
+                    query = query.Where(x => x.Veiculo.Placa.Contains(contratoDto.VeiculoDto.Placa));
+
+                if (contratoDto.IdSituacaoContrato > 0)
+                    query = query.Where(x => x.IdSituacaoContrato == contratoDto.IdSituacaoContrato);
+
+                if (contratoDto.DataContratoInicial != DateTime.MinValue && contratoDto.DataContratoFinal != DateTime.MinValue)
+                    query = query.Where(x => x.DataContrato >= contratoDto.DataContratoInicial && x.DataContrato <= contratoDto.DataContratoFinal);
+                else if (contratoDto.DataContratoInicial != DateTime.MinValue)
+                    query = query.Where(x => x.DataContrato >= contratoDto.DataContratoInicial);
+                else if (contratoDto.DataContratoFinal != DateTime.MinValue)
+                    query = query.Where(x => x.DataContrato <= contratoDto.DataContratoFinal);
+            }
+
+            return (from c in query
                          join cp in projetoTransportadoraEntities.ContratoParcela on c.Id equals cp.IdContrato
                          join sp in projetoTransportadoraEntities.SituacaoParcela on cp.IdSituacaoParcela equals sp.Id
                          group cp by new { spNome = sp.Nome } into g1
@@ -84,9 +177,7 @@ namespace ProjetoTransportadora.Repository
                              Quantidade = g1.Select(x => x.Id).Count(),
                              ValorJuros = g1.Sum(x => x.ValorJuros),
                              ValorParcela = g1.Sum(x => x.ValorParcela),
-                         }).OrderBy(x => x.SituacaoParcela);
-
-            return query.ToList();
+                         }).OrderBy(x => x.SituacaoParcela).ToList();
         }
 
         public List<ContratoDto> Listar(ContratoDto contratoDto)
@@ -125,7 +216,7 @@ namespace ProjetoTransportadora.Repository
                 IdCliente = x.IdCliente,
                 PessoaClienteDto = x.PessoaCliente == null ? null : new PessoaDto { Id = x.PessoaCliente.Id, Nome = x.PessoaCliente.Nome, Cpf = x.PessoaCliente.Cpf, Cnpj = x.PessoaCliente.Cnpj, Ativo = x.PessoaCliente.Ativo },
                 IdVeiculo = x.IdVeiculo,
-                VeiculoDto = x.Veiculo == null ? null : new VeiculoDto { Id = x.Veiculo.Id, Placa = x.Veiculo.Placa, Modelo = x.Veiculo.Modelo, Chassi = x.Veiculo.Chassi, Renavam = x.Veiculo.Renavam, Ativo = x.Veiculo.Ativo },
+                VeiculoDto = x.Veiculo == null ? null : new VeiculoDto { Id = x.Veiculo.Id, Placa = x.Veiculo.Placa, Modelo = x.Veiculo.Modelo, Chassi = x.Veiculo.Chassi, Renavam = x.Veiculo.Renavam, Ativo = x.Veiculo.Ativo, MontadoraDto = new MontadoraDto() { Id = x.Veiculo.Montadora.Id, Nome = x.Veiculo.Montadora.Nome } },
                 IdProduto = x.IdProduto,
                 ProdutoDto = x.Produto == null ? null : new ProdutoDto { Id = x.Produto.Id, Nome = x.Produto.Nome, Ativo = x.Produto.Ativo },
                 IdSituacaoContrato = x.IdSituacaoContrato,
@@ -145,8 +236,10 @@ namespace ProjetoTransportadora.Repository
                 ValorDocumentacao = x.ValorDocumentacao,
                 ValorDesconto = x.ValorDesconto,
                 ValorFinanciadoDocumentacao = x.ValorFinanciadoDocumentacao,
+                ValorFinanciadoVeiculo = x.ValorFinanciadoVeiculo,
                 IdVeiculoEntrada = x.IdVeiculoEntrada,
-                VeiculoEntradaDto = x.VeiculoEntrada == null ? null : new VeiculoDto { Id = x.VeiculoEntrada.Id, Placa = x.VeiculoEntrada.Placa, Modelo = x.VeiculoEntrada.Modelo, Chassi = x.VeiculoEntrada.Chassi, Renavam = x.VeiculoEntrada.Renavam, Ativo = x.VeiculoEntrada.Ativo },
+                VeiculoEntradaDto = x.VeiculoEntrada == null ? null : new VeiculoDto { Id = x.VeiculoEntrada.Id, Placa = x.VeiculoEntrada.Placa, Modelo = x.VeiculoEntrada.Modelo, Chassi = x.VeiculoEntrada.Chassi, Renavam = x.VeiculoEntrada.Renavam, Ativo = x.VeiculoEntrada.Ativo, MontadoraDto = new MontadoraDto() { Id = x.VeiculoEntrada.Montadora.Id, Nome = x.VeiculoEntrada.Montadora.Nome } },
+                ValorVeiculoEntrada = x.ValorVeiculoEntrada,
                 ValorFinanciado = x.ValorFinanciado,
                 ValorCaixa = x.ValorCaixa,
                 ValorDepositado = x.ValorDepositado,
@@ -170,6 +263,7 @@ namespace ProjetoTransportadora.Repository
                     DiasParcela = w.DiasParcela,
                     DiasContrato = w.DiasContrato,
                     DataPagamento = w.DataPagamento,
+                    DataEmissao = w.DataEmissao,
                     ValorOriginal = w.ValorOriginal,
                     ValorAmortizacao = w.ValorAmortizacao,
                     ValorJuros = w.ValorJuros,
@@ -244,6 +338,7 @@ namespace ProjetoTransportadora.Repository
                 ValorFinanciadoVeiculo = contratoDto.ValorFinanciadoVeiculo,
                 ValorFinanciadoDocumentacao = contratoDto.ValorFinanciadoDocumentacao,
                 IdVeiculoEntrada = contratoDto.IdVeiculoEntrada,
+                ValorVeiculoEntrada = contratoDto.ValorVeiculoEntrada,
                 ValorFinanciado = contratoDto.ValorFinanciado,
                 ValorCaixa = contratoDto.ValorCaixa,
                 ValorDepositado = contratoDto.ValorDepositado,
@@ -265,7 +360,7 @@ namespace ProjetoTransportadora.Repository
             var contrato = projetoTransportadoraEntities.Contrato.FirstOrDefault(x => x.Id == contratoDto.Id);
 
             contrato.DataAntecipacao = contratoDto.DataAntecipacao;
-            contrato.ValorAntecipacao = contrato.ValorAntecipacao;
+            contrato.ValorAntecipacao = contratoDto.ValorAntecipacao;
             contrato.IdSituacaoContrato = contratoDto.IdSituacaoContrato;
             contrato.IdUsuarioAntecipacao = contratoDto.IdUsuarioAntecipacao;
 

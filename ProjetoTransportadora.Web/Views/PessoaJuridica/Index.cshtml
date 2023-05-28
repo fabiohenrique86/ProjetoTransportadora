@@ -54,6 +54,7 @@
             $("#tbPessoaTelefone").DataTable().clear().draw();
             $("#tbPessoaEmail").DataTable().clear().draw();
             $("#tbPessoaHistorico").DataTable().clear().draw();
+            $("#tbPessoaContrato").DataTable().clear().draw();
         }
 
         function carregarDadosModal(data) {
@@ -185,30 +186,70 @@
             });
         }
 
-        function consultar(data) {
-            limparFormulario();
-            carregarDadosModal(data);
-            habilitarModal(false);
-            $("#lblAcao").text("Consultar");
-            $("#lblTitulo").text(data.Nome);
-            $("#idPessoa").val("");
-            $("#btnIncluir").hide();
-            $("#btnAlterar").hide();
-            $("#modalPessoaJuridica").modal('show');
-            $('#empresa-tab').click();
+        function consultar(id) {
+
+            var pessoaDto = { Id: id };
+
+            $.ajax({
+                dataType: "json",
+                type: "GET",
+                url: "/PessoaJuridica/Listar",
+                data: pessoaDto,
+                contentType: "application/json",
+                success: function (data) {
+
+                    if (!data.Sucesso) {
+                        alert(data.Erro ? "danger" : "warning", data.Mensagem);
+                        return;
+                    }
+
+                    limparFormulario();
+                    carregarDadosModal(data.Data[0]);
+                    habilitarModal(false);
+                    $("#lblAcao").text("Consultar");
+                    $("#lblTitulo").text(data.Data[0].Nome);
+                    $("#idPessoa").val("");
+                    $("#btnIncluir").hide();
+                    $("#btnAlterar").hide();
+                    $("#modalPessoaJuridica").modal('show');
+                    $('#empresa-tab').click();
+                }
+            });
+
+            
         }
 
-        function alterar(data, o) {
-            limparFormulario();
-            carregarDadosModal(data);
-            habilitarModal(true);
-            $("#idPessoa").val(data.Id);
-            $("#lblAcao").text("Alterar");
-            $("#lblTitulo").text(data.Nome);
-            $("#btnIncluir").hide();
-            $("#btnAlterar").show();
-            $("#modalPessoaJuridica").modal('show');
-            $('#empresa-tab').click();
+        function alterar(id) {
+
+            var pessoaDto = { Id: id };
+
+            $.ajax({
+                dataType: "json",
+                type: "GET",
+                url: "/PessoaJuridica/Listar",
+                data: pessoaDto,
+                contentType: "application/json",
+                success: function (data) {
+
+                    if (!data.Sucesso) {
+                        alert(data.Erro ? "danger" : "warning", data.Mensagem);
+                        return;
+                    }
+
+                    limparFormulario();
+                    carregarDadosModal(data.Data[0]);
+                    habilitarModal(true);
+                    $("#idPessoa").val(id);
+                    $("#lblAcao").text("Alterar");
+                    $("#lblTitulo").text(data.Data[0].Nome);
+                    $("#btnIncluir").hide();
+                    $("#btnAlterar").show();
+                    $("#modalPessoaJuridica").modal('show');
+                    $('#empresa-tab').click();
+                }
+            });
+
+            
         }
 
         function alterarStatus(data, obj) {
@@ -272,23 +313,12 @@
                                 return cnpj;
                             }, "className": "text-center"
                         },
-                        {
-                            "data": function (data, type, row)
-                            {
-                                var nome = "";
-
-                                if (data.PessoaProprietarioDto != null)
-                                    nome = data.PessoaProprietarioDto.Nome;
-
-                                return nome;
-
-                            }, "className": "text-center"
-                        },
+                        { "data": "NomeProprietario", "className": "text-center" },
                         { "data": function (data, type, row) { return "<a href='#' onclick='alterarStatus(" + JSON.stringify(data) + ", this)'>" + (data.Ativo ? "Sim" : "Não") + "</a>"; }, "className": "text-center" },
                         {
                             "data": function (data, type, row) {
-                                var consultar = "<i class='glyphicon glyphicon-search' title='Consultar' style='cursor: pointer' onclick='consultar(" + JSON.stringify(data) + ", this)'></i>";
-                                var alterar = "<i class='glyphicon glyphicon-edit' title='Editar' style='cursor: pointer' onclick='alterar(" + JSON.stringify(data) + ", this)'></i>";
+                                var consultar = "<i class='glyphicon glyphicon-search' title='Consultar' style='cursor: pointer' onclick='consultar(" + data.Id + ")'></i>";
+                                var alterar = "<i class='glyphicon glyphicon-edit' title='Editar' style='cursor: pointer' onclick='alterar(" + data.Id + ")'></i>";
 
                                 return consultar + " " + alterar;
 
@@ -533,7 +563,7 @@
                 $.ajax({
                     dataType: "json",
                     type: "GET",
-                    url: "/PessoaJuridica/Listar",
+                    url: "/PessoaJuridica/ListarGrid",
                     data: pessoaDto,
                     contentType: "application/json",
                     success: function (data) {
@@ -656,11 +686,7 @@
                     success: function (data) {
 
                         if (!data.Sucesso) {
-                            if (data.Erro)
-                                alert("danger", data.Mensagem);
-                            else
-                                alert("warning", data.Mensagem);
-
+                            alert(data.Erro ? "danger" : "warning", data.Mensagem);
                             return;
                         }
 
@@ -674,14 +700,14 @@
                         }
                         else
                         {
-                            $("#tbPessoa").DataTable().rows().every(function (rowIdx, tableLoop, rowLoop) {
+                            tbPessoa.rows().every(function (rowIdx, tableLoop, rowLoop) {
                                 if (this.data().Id == pessoaDto.Id) {
                                     idx = rowIdx;
                                     return;
                                 }
                             });
 
-                            $("#tbPessoa").DataTable().row(idx).invalidate().data(data.Data).draw();
+                            tbPessoa.row(idx).invalidate().data(data.Data[0]).draw();
                         }
 
 

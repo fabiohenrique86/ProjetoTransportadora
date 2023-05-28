@@ -93,6 +93,50 @@ namespace ProjetoTransportadora.Repository
             }).OrderBy(x => x.Nome).ToList();
         }
 
+        public dynamic ListarGrid(PessoaDto pessoaDto)
+        {
+            IQueryable<Pessoa> query = projetoTransportadoraEntities.Pessoa;
+
+            if (pessoaDto != null)
+            {
+                if (pessoaDto.Id > 0)
+                    query = query.Where(x => x.Id == pessoaDto.Id);
+
+                if (!string.IsNullOrEmpty(pessoaDto.Nome))
+                    query = query.Where(x => x.Nome.Contains(pessoaDto.Nome));
+
+                if (!string.IsNullOrEmpty(pessoaDto.Cpf))
+                    query = query.Where(x => x.Cpf.Contains(pessoaDto.Cpf.Replace(".", "").Replace("-", "").Trim()));
+
+                if (!string.IsNullOrEmpty(pessoaDto.Rg))
+                    query = query.Where(x => x.Rg.Contains(pessoaDto.Rg));
+
+                if (!string.IsNullOrEmpty(pessoaDto.Cnpj))
+                    query = query.Where(x => x.Cnpj.Contains(pessoaDto.Cnpj.Replace(".", "").Replace("-", "").Replace("/", "")));
+
+                if (pessoaDto.Ativo.HasValue)
+                    query = query.Where(x => x.Ativo == pessoaDto.Ativo.Value);
+
+                if (pessoaDto.IdTipoPessoa > 0)
+                    query = query.Where(x => x.IdTipoPessoa == pessoaDto.IdTipoPessoa);
+
+                if (pessoaDto.IdProprietario > 0)
+                    query = query.Where(x => x.IdProprietario == pessoaDto.IdProprietario);
+            }
+
+            return query.Select(x => new
+            {
+                Id = x.Id,
+                Nome = x.Nome,
+                Cpf = x.Cpf,
+                Cnpj = x.Cnpj,
+                Rg = x.Rg,
+                DataNascimento = x.DataNascimento,
+                NomeProprietario = x.PessoaProprietario == null ? string.Empty : x.PessoaProprietario.Nome,
+                Ativo = x.Ativo
+            }).ToList();
+        }
+
         public List<PessoaDto> Listar(PessoaDto pessoaDto)
         {
             IQueryable<Pessoa> query = projetoTransportadoraEntities.Pessoa;
@@ -106,13 +150,13 @@ namespace ProjetoTransportadora.Repository
                     query = query.Where(x => x.Nome.Contains(pessoaDto.Nome));
 
                 if (!string.IsNullOrEmpty(pessoaDto.Cpf))
-                    query = query.Where(x => x.Cpf.Contains(pessoaDto.Cpf));
+                    query = query.Where(x => x.Cpf.Contains(pessoaDto.Cpf.Replace(".", "").Replace("-", "").Trim()));
 
                 if (!string.IsNullOrEmpty(pessoaDto.Rg))
                     query = query.Where(x => x.Rg.Contains(pessoaDto.Rg));
 
                 if (!string.IsNullOrEmpty(pessoaDto.Cnpj))
-                    query = query.Where(x => x.Cnpj.Contains(pessoaDto.Cnpj));
+                    query = query.Where(x => x.Cnpj.Contains(pessoaDto.Cnpj.Replace(".", "").Replace("-", "").Replace("/", "")));
 
                 if (pessoaDto.Ativo.HasValue)
                     query = query.Where(x => x.Ativo == pessoaDto.Ativo.Value);

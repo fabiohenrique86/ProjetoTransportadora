@@ -127,7 +127,7 @@ namespace ProjetoTransportadora.Web.Controllers
             HttpPostedFileBase file = Request.Files[0];
 
             if (file == null)
-                return Json("Arquivo é obrigatório", JsonRequestBehavior.AllowGet);
+                return Json(new { Sucesso = false, Mensagem = "Arquivo é obrigatório" }, JsonRequestBehavior.AllowGet);
 
             var tamanhoArquivo = file.ContentLength;
             var tipoArquivo = file.ContentType;
@@ -137,10 +137,10 @@ namespace ProjetoTransportadora.Web.Controllers
             var placa = string.Empty;
 
             if (tamanhoArquivo <= 0)
-                return Json("Arquivo está vazio", JsonRequestBehavior.AllowGet);
+                return Json(new { Sucesso = false, Mensagem = "Arquivo está vazio" }, JsonRequestBehavior.AllowGet);
 
             if (!tipoArquivo.Contains("csv"))
-                return Json("Arquivo deve ser do tipo csv", JsonRequestBehavior.AllowGet);
+                return Json(new { Sucesso = false, Mensagem = "Arquivo deve ser do tipo csv" }, JsonRequestBehavior.AllowGet);
 
             using (var sr = new StreamReader(streamArquivo, Encoding.GetEncoding(new System.Globalization.CultureInfo("pt-BR").TextInfo.ANSICodePage)))
                 conteudoArquivo = sr.ReadToEnd();

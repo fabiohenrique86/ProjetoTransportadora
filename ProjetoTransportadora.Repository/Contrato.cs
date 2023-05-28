@@ -55,6 +55,7 @@ namespace ProjetoTransportadora.Repository
         public Nullable<double> ValorTarifa { get; set; }
         public Nullable<int> IdUsuarioBaixa { get; set; }
         public Nullable<int> IdUsuarioAntecipacao { get; set; }
+        public Nullable<double> ValorVeiculoEntrada { get; set; }
     
         public virtual Canal Canal { get; set; }
         public virtual Pessoa PessoaCliente { get; set; }

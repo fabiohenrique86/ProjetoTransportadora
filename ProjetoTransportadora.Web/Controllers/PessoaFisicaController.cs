@@ -44,6 +44,14 @@ namespace ProjetoTransportadora.Web.Controllers
         }
 
         [HttpGet]
+        public JsonResult ListarGrid(PessoaDto pessoaDto)
+        {
+            var listaPessoaDto = pessoaBusiness.ListarGrid(pessoaDto);
+
+            return Json(new { Sucesso = true, Mensagem = "Pessoa listada com sucesso", Data = listaPessoaDto }, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpGet]
         public JsonResult ListarAutoComplete(PessoaDto pessoaDto)
         {
             var lista = pessoaBusiness.ListarAutoComplete(pessoaDto);
@@ -64,7 +72,7 @@ namespace ProjetoTransportadora.Web.Controllers
         {
             pessoaBusiness.Incluir(pessoaDto);
 
-            var lista = pessoaBusiness.Listar(new PessoaDto() { IdTipoPessoa = (int)TipoPessoaDto.TipoPessoa.PessoaFísica });
+            var lista = pessoaBusiness.ListarGrid(new PessoaDto() { IdTipoPessoa = (int)TipoPessoaDto.TipoPessoa.PessoaFísica });
 
             return Json(new { Sucesso = true, Mensagem = "Pessoa cadastrada com sucesso", Data = lista }, JsonRequestBehavior.AllowGet);
         }
@@ -74,7 +82,7 @@ namespace ProjetoTransportadora.Web.Controllers
         {
             pessoaBusiness.Alterar(pessoaDto);
 
-            var lista = pessoaBusiness.Listar(new PessoaDto() { Id = pessoaDto.Id }).FirstOrDefault();
+            var lista = pessoaBusiness.ListarGrid(new PessoaDto() { Id = pessoaDto.Id });
 
             return Json(new { Sucesso = true, Mensagem = "Pessoa alterada com sucesso", Data = lista }, JsonRequestBehavior.AllowGet);
         }
@@ -84,7 +92,7 @@ namespace ProjetoTransportadora.Web.Controllers
         {
             pessoaBusiness.AlterarStatus(pessoaDto);
 
-            var lista = pessoaBusiness.Listar(new PessoaDto() { Id = pessoaDto.Id }).FirstOrDefault();
+            var lista = pessoaBusiness.ListarGrid(new PessoaDto() { Id = pessoaDto.Id });
 
             return Json(new { Sucesso = true, Mensagem = "Status alterado com sucesso", Data = lista }, JsonRequestBehavior.AllowGet);
         }
@@ -153,7 +161,7 @@ namespace ProjetoTransportadora.Web.Controllers
             HttpPostedFileBase file = Request.Files[0];
 
             if (file == null)
-                return Json("Arquivo é obrigatório", JsonRequestBehavior.AllowGet);
+                return Json(new { Sucesso = false, Mensagem = "Arquivo é obrigatório" }, JsonRequestBehavior.AllowGet);
 
             var tamanhoArquivo = file.ContentLength;
             var tipoArquivo = file.ContentType;
@@ -163,10 +171,10 @@ namespace ProjetoTransportadora.Web.Controllers
             var nome = string.Empty;
 
             if (tamanhoArquivo <= 0)
-                return Json("Arquivo está vazio", JsonRequestBehavior.AllowGet);
+                return Json(new { Sucesso = false, Mensagem = "Arquivo está vazio" }, JsonRequestBehavior.AllowGet);
 
             if (!tipoArquivo.Contains("csv"))
-                return Json("Arquivo deve ser do tipo csv", JsonRequestBehavior.AllowGet);
+                return Json(new { Sucesso = false, Mensagem = "Arquivo deve ser do tipo csv" }, JsonRequestBehavior.AllowGet);
 
             using (var sr = new StreamReader(streamArquivo, Encoding.GetEncoding(new System.Globalization.CultureInfo("pt-BR").TextInfo.ANSICodePage)))
                 conteudoArquivo = sr.ReadToEnd();

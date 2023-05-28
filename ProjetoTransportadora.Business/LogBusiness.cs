@@ -1,7 +1,7 @@
 ﻿using ProjetoTransportadora.Business.Exceptions;
 using ProjetoTransportadora.Dto;
 using ProjetoTransportadora.Repository;
-using System.Collections.Generic;
+using System;
 
 namespace ProjetoTransportadora.Business
 {
@@ -22,6 +22,9 @@ namespace ProjetoTransportadora.Business
 
             if (string.IsNullOrEmpty(logDto.Exception))
                 throw new BusinessException("Exception é obrigatório");
+
+            if (logDto.DataCadastro == DateTime.MinValue)
+                throw new BusinessException("Data Cadastro é obrigatório");
 
             idLog = LogRepository.Incluir(logDto);
 

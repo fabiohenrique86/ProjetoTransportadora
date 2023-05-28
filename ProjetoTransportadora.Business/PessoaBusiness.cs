@@ -25,6 +25,20 @@ namespace ProjetoTransportadora.Business
             pessoaAvalistaBusiness = new PessoaAvalistaBusiness();
         }
 
+        public dynamic ListarGrid(PessoaDto pessoaDto = null)
+        {
+            //if (pessoaDto != null)
+            //{
+            //    if (!string.IsNullOrEmpty(pessoaDto.Cpf))
+            //        pessoaDto.Cpf = pessoaDto.Cpf.Replace(".", "").Replace("-", "").Trim();
+
+            //    if (!string.IsNullOrEmpty(pessoaDto.Cnpj))
+            //        pessoaDto.Cnpj = pessoaDto.Cnpj.Replace(".", "").Replace("-", "").Replace("/", "");
+            //}
+
+            return pessoaRepository.ListarGrid(pessoaDto);
+        }
+
         public int ListarTotal(PessoaDto pessoaDto = null)
         {
             return pessoaRepository.ListarTotal(pessoaDto);
@@ -32,11 +46,14 @@ namespace ProjetoTransportadora.Business
 
         public List<PessoaDto> ListarAutoComplete(PessoaDto pessoaDto = null)
         {
-            if (!string.IsNullOrEmpty(pessoaDto?.Cpf))
-                pessoaDto.Cpf = pessoaDto.Cpf.Replace(".", "").Replace("-", "").Trim();
+            //if (pessoaDto != null)
+            //{
+            //    if (!string.IsNullOrEmpty(pessoaDto.Cpf))
+            //        pessoaDto.Cpf = pessoaDto.Cpf.Replace(".", "").Replace("-", "").Trim();
 
-            if (!string.IsNullOrEmpty(pessoaDto?.Cnpj))
-                pessoaDto.Cnpj = pessoaDto.Cnpj.Replace(".", "").Replace("-", "").Replace("/", "");
+            //    if (!string.IsNullOrEmpty(pessoaDto.Cnpj))
+            //        pessoaDto.Cnpj = pessoaDto.Cnpj.Replace(".", "").Replace("-", "").Replace("/", "");
+            //}
 
             return pessoaRepository.ListarAutoComplete(pessoaDto);
         }
@@ -48,11 +65,14 @@ namespace ProjetoTransportadora.Business
 
         public List<PessoaDto> Listar(PessoaDto pessoaDto = null)
         {
-            if (!string.IsNullOrEmpty(pessoaDto?.Cpf))
-                pessoaDto.Cpf = pessoaDto.Cpf.Replace(".", "").Replace("-", "").Trim();
+            //if (pessoaDto != null)
+            //{
+            //    if (!string.IsNullOrEmpty(pessoaDto.Cpf))
+            //        pessoaDto.Cpf = pessoaDto.Cpf.Replace(".", "").Replace("-", "").Trim();
 
-            if (!string.IsNullOrEmpty(pessoaDto?.Cnpj))
-                pessoaDto.Cnpj = pessoaDto.Cnpj.Replace(".", "").Replace("-", "").Replace("/", "");
+            //    if (!string.IsNullOrEmpty(pessoaDto.Cnpj))
+            //        pessoaDto.Cnpj = pessoaDto.Cnpj.Replace(".", "").Replace("-", "").Replace("/", "");
+            //}
 
             return pessoaRepository.Listar(pessoaDto);
         }

@@ -1,5 +1,4 @@
 ﻿using ProjetoTransportadora.Dto;
-using System;
 
 namespace ProjetoTransportadora.Repository
 {
@@ -16,9 +15,8 @@ namespace ProjetoTransportadora.Repository
         {
             var log = new Log()
             {
-                Id = logDto.Id,
                 Exception = logDto.Exception,
-                DataCadastro = DateTime.UtcNow
+                DataCadastro = logDto.DataCadastro
             };
 
             projetoTransportadoraEntities.Log.Add(log);

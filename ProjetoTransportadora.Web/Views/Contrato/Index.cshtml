@@ -53,10 +53,47 @@
             $("#modalContratoBaixar").modal('show');
         }
 
-        function carregarModalAntecipar(data, o) {
-            $("#lblTituloAntecipar").text(data.Id);
-            $("#contratoIdAntecipar").val(data.Id);
-            $("#modalContratoAntecipar").modal('show');
+        function limparModalAntecipar() {
+            $("#dataAntecipacao").val("");
+            $("#valorSaldoAntecipacao").val("");
+            $("#valorAntecipacao").val("");
+        }
+
+        function carregarModalAntecipar(idContrato) {
+
+            limparModalAntecipar();
+
+            var contratoParcelaDto = {};
+
+            contratoParcelaDto.IdContrato = idContrato;
+
+            $.ajax({
+                dataType: "json",
+                type: "GET",
+                url: "/ContratoParcela/Listar",
+                data: contratoParcelaDto,
+                contentType: "application/json",
+                success: function (data) {
+
+                    if (!data.Sucesso) {
+                        alert(data.Erro ? "danger" : "warning", data.Mensagem);
+                        return;
+                    }
+
+                    var valorSaldoAntecipacao = 0;
+                    for (var i = 0; i < data.Data.length; i++) {
+                        valorSaldoAntecipacao += data.Data[i].ValorParcela;
+                    }
+
+                    $("#lblTituloAntecipar").text(idContrato);
+                    $("#contratoIdAntecipar").val(idContrato);
+                    $("#valorSaldoAntecipacao").val(Globalize.format(valorSaldoAntecipacao, "n2"));
+                    $("#valorAntecipacao").val(Globalize.format(valorSaldoAntecipacao, "n2"));
+
+                    $("#modalContratoAntecipar").modal('show');
+                }
+            });
+            
         }
 
         function habilitarModal(opcao) {
@@ -123,32 +160,83 @@
 
         function carregarDadosModal(data) {
 
-            // aba - dados do contrato
+            // aba - dados
 
-            $("#placa").val(data.Placa);
-            $("#renavam").val(data.Renavam);
-            $("#montadora").val(data.IdMontadora);
-            $("#modelo").val(data.Modelo);
-            $("#anoFabricacao").val(data.AnoFabricacao);
-            $("#anoModelo").val(data.AnoModelo);
-            $("#cor").val(data.Cor);
-            $("#chassi").val(data.Chassi);
-            $("#situacaoContrato").val(data.IdSituacaoContrato);
-            $("#rastreador").val(data.Rastreador);
+            $("#dataContrato").val(moment(data.DataContrato).format("DD/MM/YYYY"));
 
-            // aba - valores do contrato
+            $("#cliente").val(data.PessoaClienteDto.Nome);
+            $("#idCliente").val(data.PessoaClienteDto.Id);
 
-            if (data.PessoaProprietarioAtualDto != null) {
-                $("#idProprietarioAtual").val(data.PessoaProprietarioAtualDto.Id);
-                $("#proprietarioAtual").val(data.PessoaProprietarioAtualDto.Nome);
+            $("#produto").val(data.IdProduto);
+
+            if (data.VeiculoDto != null)
+            {
+                $("#veiculo").val(data.VeiculoDto.MontadoraDto.Nome + " - " + data.VeiculoDto.Modelo + " - " + data.VeiculoDto.Placa);
+                $("#idVeiculo").val(data.VeiculoDto.Id);
             }
 
-            if (data.PessoaProprietarioAnteriorDto != null) {
-                $("#idProprietarioAnterior").val(data.PessoaProprietarioAnteriorDto.Id);
-                $("#proprietarioAnterior").val(data.PessoaProprietarioAnteriorDto.Nome);
+            if (data.PessoaFiadorDto != null)
+            {
+                $("#fiador").val(data.PessoaFiadorDto.Nome);
+                $("#idFiador").val(data.PessoaFiadorDto.Id);
             }
+
+            if (data.PessoaIndicacaoDto != null)
+            {
+                $("#indicacao").val(data.PessoaIndicacaoDto.Nome);
+                $("#idIndicacao").val(data.PessoaIndicacaoDto.Id);
+            }
+
+            if (data.PessoaPromotorDto != null)
+            {
+                $("#promotor").val(data.PessoaPromotorDto.Nome);
+                $("#idPromotor").val(data.PessoaPromotorDto.Id);
+            }            
+
+            $("#canal").val(data.IdCanal);
+
+            $("#dataPrimeiraParcela").val(moment(data.DataPrimeiraParcela).format("DD/MM/YYYY"));
+            $("#valorParcela").val(Globalize.format(data.ContratoParcelaDto[0].ValorParcela, "n2"));
+
+            if (data.DataAntecipacao != null)
+                $("#dataAntecipacaoDados").val(moment(data.DataAntecipacao).format("DD/MM/YYYY"));
+
+            $("#valorAntecipacaoDados").val(Globalize.format(data.ValorAntecipacao, "n2"));
+
+            if (data.DataBaixa != null)
+                $("#dataBaixaDados").val(moment(data.DataBaixa).format("DD/MM/YYYY"));
+
+            // aba - valores
+
+            $("#valorVeiculo").val(Globalize.format(data.ValorVeiculo, "n2"));
+            $("#valorEntrada").val(Globalize.format(data.ValorEntrada, "n2"));
+            $("#valorDocumentacao").val(Globalize.format(data.ValorDocumentacao, "n2"));
+            $("#valorDesconto").val(Globalize.format(data.ValorDesconto, "n2"));
+            $("#valorCaixa").val(Globalize.format(data.ValorCaixa, "n2"));
+
+            if (data.VeiculoEntradaDto != null)
+            {
+                $("#veiculoEntrada").val(data.VeiculoEntradaDto.MontadoraDto.Nome + " - " + data.VeiculoEntradaDto.Modelo + " - " + data.VeiculoEntradaDto.Placa);
+                $("#idVeiculoEntrada").val(data.VeiculoEntradaDto.Id);
+            }
+
+            $("#valorVeiculoEntrada").val(Globalize.format(data.ValorVeiculoEntrada, "n2"));
+
+            $("#valorDepositado").val(Globalize.format(data.ValorDepositado, "n2"));
+            $("#valorTarifa").val(Globalize.format(data.ValorTarifa, "n2"));
+            $("#valorFinanciado").val(Globalize.format(data.ValorFinanciado, "n2"));
+            $("#taxaJuros").val(Globalize.format(data.TaxaJuros, "n2"));
+            $("#quantidadeParcela").val(data.ContratoParcelaDto.length);
+            $("#valorFinanciadoDocumentacao").val(Globalize.format(data.ValorFinanciadoDocumentacao, "n2"));
+            $("#valorFinanciadoVeiculo").val(Globalize.format(data.ValorFinanciadoVeiculo, "n2"));
+
+            // aba - parcelas
+            $("#tbContratoParcela").DataTable().clear();
+            $("#tbContratoParcela").DataTable().rows.add(data.ContratoParcelaDto).draw();
 
             // aba - histórico
+            //$("#tbContratoHistorico").DataTable().clear();
+            //$("#tbContratoHistorico").DataTable().rows.add(data.ContratoHistoricoDto).draw();
 
             $("#tbContratoHistorico").DataTable().clear().draw();
             $(data.ContratoHistoricoDto).each(function (i, o) {
@@ -194,30 +282,81 @@
             });
         }
 
-        function consultar(data) {
-            limparFormulario();
-            carregarDadosModal(data);
-            habilitarModal(false);
-            $("#lblAcao").text("Consultar");
-            $("#lblTitulo").text(data.NumeroContrato);
-            $("#idContrato").val("");
-            $("#btnIncluir").hide();
-            $("#btnAlterar").hide();
-            $("#modalContrato").modal('show');
-            $('#dados-tab').click();
+        function consultar(id)
+        {
+            var contratoDto = { Id: id };
+
+            $.ajax({
+                dataType: "json",
+                type: "POST",
+                url: "/Contrato/Listar",
+                data: JSON.stringify(contratoDto),
+                contentType: "application/json",
+                success: function (data) {
+
+                    if (!data.Sucesso) {
+                        alert(data.Erro ? "danger" : "warning", data.Mensagem);
+                        return;
+                    }
+
+                    limparFormulario();
+                    carregarDadosModal(data.Data[0]);
+                    habilitarModal(false);
+
+                    $("#lblAcao").text("Consultar");
+                    $("#lblTitulo").text(id);
+
+                    $("#idContrato").val("");
+                    $("#btnIncluir").hide();
+                    $("#btnAlterar").hide();
+                    $("#divDataAntecipacaoDados").show();
+                    $("#divValorAntecipacaoDados").show();
+                    $("#divDataBaixaDados").show();
+
+                    $("#modalContrato").modal('show');
+                    $('#dados-tab').click();
+                }
+            });
+
         }
 
-        function alterar(data, o) {
-            limparFormulario();
-            carregarDadosModal(data);
-            habilitarModal(true);
-            $("#idContrato").val(data.Id);
-            $("#lblAcao").text("Alterar");
-            $("#lblTitulo").text(data.NumeroContrato);
-            $("#btnIncluir").hide();
-            $("#btnAlterar").show();
-            $("#modalContrato").modal('show');
-            $('#dados-tab').click();
+        function alterar(id)
+        {
+            var contratoDto = { Id: id };
+
+            $.ajax({
+                dataType: "json",
+                type: "POST",
+                url: "/Contrato/Listar",
+                data: JSON.stringify(contratoDto),
+                contentType: "application/json",
+                success: function (data) {
+
+                    if (!data.Sucesso) {
+                        alert(data.Erro ? "danger" : "warning", data.Mensagem);
+                        return;
+                    }
+
+                    limparFormulario();
+                    carregarDadosModal(data.Data[0]);
+                    habilitarModal(true);
+
+                    $("#idContrato").val(id);
+                    $("#lblAcao").text("Alterar");
+
+                    $("#lblTitulo").text(id);
+                    $("#btnIncluir").hide();
+                    $("#btnAlterar").show();
+                    $("#divDataAntecipacaoDados").hide();
+                    $("#divValorAntecipacaoDados").hide();
+                    $("#divDataBaixaDados").hide();
+
+                    $("#modalContrato").modal('show');
+                    $('#dados-tab').click();
+                }
+            });
+
+            
         }
 
         $(document).ready(function () {
@@ -241,22 +380,24 @@
                 "columns":
                     [
                         { "data": "Id", "className": "text-center" },
-                        { "data": "PessoaClienteDto.Nome", "className": "text-center" },
-                        { "data": "VeiculoDto.Placa", "className": "text-center" },
-                        { "data": "VeiculoDto.Modelo", "className": "text-center" },
+                        { "data": "NomeCliente", "className": "text-center" },
+                        { "data": "PlacaVeiculo", "className": "text-center" },
+                        { "data": "ModeloVeiculo", "className": "text-center" },
                         { "data": function (data, type, row) { return data["DataContrato"] != null ? moment(data["DataContrato"]).format("DD/MM/YYYY") : "" }, "className": "text-center" },
                         { "data": function (data, type, row) { return data["ValorFinanciado"] != null ? Globalize.format(data.ValorFinanciado, "n2") : "" }, "className": "text-center" },
-                        { "data": "SituacaoContratoDto.Nome", "className": "text-center" },
+                        { "data": "NomeSituacaoContrato", "className": "text-center" },
                         {
                             "data": function (data, type, row) {
 
-                                var antecipar = "<input type='button' class='btn btn-primary' value='Antecipar' onclick='carregarModalAntecipar(" + JSON.stringify(data) + ", this)' />";
-                                var baixar = "<input type='button' class='btn btn-primary' value='Baixar' onclick='carregarModalBaixar(" + JSON.stringify(data) + ", this)' />";
+                                var consultar = "<i class='glyphicon glyphicon-search' title='Consultar' style='cursor: pointer' onclick='consultar(" + data.Id + ")'></i>";
+                                var alterar = "<i class='glyphicon glyphicon-edit' title='Editar' style='cursor: pointer' onclick='alterar(" + data.Id + ")'></i>";
+                                var antecipar = "<i class='glyphicon glyphicon-play' title='Antecipar' style='cursor: pointer' onclick='carregarModalAntecipar(" + data.Id + ")'></i>";
+                                var baixar = "<i class='glyphicon glyphicon-ok' title='Baixar' style='cursor: pointer' onclick='carregarModalBaixar(" + JSON.stringify(data) + ", this)'></i>";
 
                                 if (data.IdSituacaoContrato == '@SituacaoContratoDto.EnumSituacaoContrato.Ativo.GetHashCode()')
-                                    return antecipar + " " + baixar;
+                                    return consultar + " " + alterar + " " + antecipar + " " + baixar;
                                 else
-                                    return "";
+                                    return consultar + " " + alterar;
 
                             }, "className": "text-center"
                         }
@@ -711,7 +852,7 @@
                 $.ajax({
                     dataType: "json",
                     type: "POST",
-                    url: "/Contrato/Listar",
+                    url: "/Contrato/ListarGrid",
                     data: JSON.stringify(contratoDto),
                     contentType: "application/json",
                     success: function (data) {
@@ -951,6 +1092,7 @@
 
                 var contratoDto = {};
 
+                contratoDto.Id = $("#contratoIdAntecipar").val();
                 contratoDto.DataAntecipacao = $("#dataAntecipacao").val();
                 contratoDto.ValorAntecipacao = $("#valorAntecipacao").val();
                 contratoDto.IdSituacaoContrato = '@SituacaoContratoDto.EnumSituacaoContrato.Antecipado.GetHashCode()';
@@ -976,7 +1118,14 @@
                             }
                         });
 
-                        $("#tbContrato").DataTable().row(idx).invalidate().data(data.Data).draw();
+                        tbContrato.row(idx).invalidate().data(data.Data[0]).draw();
+
+                        tbSituacaoContratoResumo.clear();
+                        tbSituacaoContratoResumo.rows.add(data.SituacaoContratoResumo).draw();
+
+                        tbSituacaoParcelaResumo.clear();
+                        tbSituacaoParcelaResumo.rows.add(data.SituacaoParcelaResumo).draw();
+
                         $("#modalContratoAntecipar").modal('hide');
                     }
                 });
@@ -1012,7 +1161,14 @@
                             }
                         });
 
-                        $("#tbContrato").DataTable().row(idx).invalidate().data(data.Data).draw();
+                        tbContrato.row(idx).invalidate().data(data.Data[0]).draw();
+
+                        tbSituacaoContratoResumo.clear();
+                        tbSituacaoContratoResumo.rows.add(data.SituacaoContratoResumo).draw();
+
+                        tbSituacaoParcelaResumo.clear();
+                        tbSituacaoParcelaResumo.rows.add(data.SituacaoParcelaResumo).draw();
+
                         $("#modalContratoBaixar").modal('hide');
                     }
                 });
@@ -1041,7 +1197,8 @@
                 xhr.send(formdata);
 
                 xhr.onreadystatechange = function () {
-                    if (xhr.readyState == 4 && xhr.status == 200) {
+                    if (xhr.readyState == 4 && xhr.status == 200)
+                    {
                         var response = JSON.parse(xhr.responseText);
                         $.unblockUI();
                         alert("info", response.Mensagem);
@@ -1053,7 +1210,7 @@
 
             $('#consultaPesquisa-tab').click();
 
-            var simulacaoDto = @Html.Raw(Json.Encode(TempData["SimulacaoDto"]));
+            var simulacaoDto = @Html.Raw(Json.Encode(ViewBag.SimulacaoDto));
 
             if (simulacaoDto != null)
             {
@@ -1066,19 +1223,19 @@
                 $("#taxaJuros").val(Globalize.format(simulacaoDto.TaxaMensalJuros, "n2"));
                 $("#valorFinanciado").val(Globalize.format(simulacaoDto.ValorFinanciado, "n2"));
 
-                if (simulacaoDto.ValorDocumentacao != null)
+                if (simulacaoDto.ValorDocumentacao != 0)
                     $("#valorDocumentacao").val(Globalize.format(simulacaoDto.ValorDocumentacao, "n2"));
 
-                if (simulacaoDto.ValorTarifa != null)
+                if (simulacaoDto.ValorTarifa != 0)
                     $("#valorTarifa").val(Globalize.format(simulacaoDto.ValorTarifa, "n2"));
 
-                if (simulacaoDto.ValorDesconto != null)
+                if (simulacaoDto.ValorDesconto != 0)
                     $("#valorDesconto").val(Globalize.format(simulacaoDto.ValorDesconto, "n2"));
 
-                if (simulacaoDto.ValorBens != null)
+                if (simulacaoDto.ValorBens != 0)
                     $("#valorVeiculoEntrada").val(Globalize.format(simulacaoDto.ValorBens, "n2"));
 
-                if (simulacaoDto.ValorDinheiro != null)
+                if (simulacaoDto.ValorDinheiro != 0)
                     $("#valorEntrada").val(Globalize.format(simulacaoDto.ValorDinheiro, "n2"));
 
                 if (simulacaoDto.ContratoParcelaDto != null && simulacaoDto.ContratoParcelaDto.length > 0)
@@ -1106,21 +1263,17 @@
                 <input id="clientePesquisar" type="text" class="form-control" placeholder="Cliente (Mínimo de 3 caracteres - CPF ou CNPJ ou Nome)" />
                 <input id="idClientePesquisar" type="hidden" />
             </div>
-        </div>
-    </div>
-    <div class="form-group">
-        <div class="row">
             <div class="col-md-2">
-                <label for="produtoPesquisar">Produto:</label>
-                @Html.DropDownList("produtoPesquisar", new SelectList(ViewBag.Produto, "Id", "Nome"), "Selecione", new { @class = "form-control" })
+                <label for="situacaoContratoPesquisar">Situação Contrato:</label>
+                @Html.DropDownList("situacaoContratoPesquisar", new SelectList(ViewBag.SituacaoContrato, "Id", "Nome"), "Selecione", new { @class = "form-control" })
             </div>
             <div class="col-md-2">
                 <label for="placaPesquisar">Placa:</label>
                 <input id="placaPesquisar" type="text" class="form-control" />
             </div>
             <div class="col-md-2">
-                <label for="situacaoContratoPesquisar">Situação Contrato:</label>
-                @Html.DropDownList("situacaoContratoPesquisar", new SelectList(ViewBag.SituacaoContrato, "Id", "Nome"), "Selecione", new { @class = "form-control" })
+                <label for="produtoPesquisar">Produto:</label>
+                @Html.DropDownList("produtoPesquisar", new SelectList(ViewBag.Produto, "Id", "Nome"), "Selecione", new { @class = "form-control" })
             </div>
         </div>
     </div>
@@ -1195,8 +1348,8 @@
                                 <td class="text-center" style="width: 15%"><b>Situação Contrato</b></td>
                                 <td class="text-center" style="width: 15%"><b>Produto</b></td>
                                 <td class="text-center" style="width: 15%"><b>Quantidade</b></td>
-                                <td class="text-center" style="width: 15%"><b>Valor Entrada</b></td>
-                                <td class="text-center" style="width: 15%"><b>Valor Financiado</b></td>
+                                <td class="text-center" style="width: 15%"><b>Total Valor Entrada</b></td>
+                                <td class="text-center" style="width: 15%"><b>Total Valor Financiado</b></td>
                             </tr>
                         </thead>
                         <tbody></tbody>
@@ -1210,8 +1363,8 @@
                             <tr>
                                 <td class="text-center" style="width: 15%"><b>Situação Parcela</b></td>
                                 <td class="text-center" style="width: 15%"><b>Quantidade</b></td>
-                                <td class="text-center" style="width: 15%"><b>Valor Juros</b></td>
-                                <td class="text-center" style="width: 15%"><b>Valor Parcela</b></td>
+                                <td class="text-center" style="width: 15%"><b>Total Valor Juros</b></td>
+                                <td class="text-center" style="width: 15%"><b>Total Valor Parcela</b></td>
                             </tr>
                         </thead>
                         <tbody></tbody>
@@ -1248,7 +1401,7 @@
 </div>
 
 <div class="modal fade" id="modalContratoAntecipar" tabindex="-1" role="dialog" aria-labelledby="ModalContratoAntecipar" aria-hidden="true">
-    <div class="modal-dialog">
+    <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Fechar</span></button>
@@ -1261,6 +1414,10 @@
                         <div class="col-md-4">
                             <label for="dataAntecipacao">Data Antecipação:</label>
                             <input id="dataAntecipacao" type="text" class="form-control data datepicker" />
+                        </div>
+                        <div class="col-md-4">
+                            <label for="valorSaldoAntecipacao">Valor Saldo Antecipação:</label>
+                            <input id="valorSaldoAntecipacao" type="text" class="form-control valor" disabled="disabled" />
                         </div>
                         <div class="col-md-4">
                             <label for="valorAntecipacao">Valor Antecipação:</label>
@@ -1308,9 +1465,9 @@
                                     <div class="form-group">
                                         <div class="row">
                                             @*<div class="col-md-2">
-                                                    <label for="numeroContrato">Número Contrato:</label>
-                                                    <input id="numeroContrato" type="text" class="form-control" />
-                                                </div>*@
+                    <label for="numeroContrato">Número Contrato:</label>
+                    <input id="numeroContrato" type="text" class="form-control" />
+                </div>*@
                                             <div class="col-md-2">
                                                 <label for="dataContrato">Data Contrato:</label>
                                                 <input id="dataContrato" type="text" class="form-control data datepicker" />
@@ -1366,14 +1523,26 @@
                                             </div>
                                         </div>
                                     </div>
-                                    @*<div class="form-group">
-                                            <div class="row">
-                                                <div class="col-md-2">
-                                                    <label for="situacaoContrato">Situação Contrato:</label>
-                                                    @Html.DropDownList("situacaoContrato", new SelectList(ViewBag.SituacaoContrato, "Id", "Nome"), "Selecione", new { @class = "form-control" })
-                                                </div>
+                                    <div class="form-group">
+                                        <div class="row">
+                                            <div class="col-md-2" id="divDataAntecipacaoDados">
+                                                <label for="dataAntecipacaoDados">Data Antecipação:</label>
+                                                <input id="dataAntecipacaoDados" type="text" class="form-control" disabled="disabled" />
                                             </div>
-                                        </div>*@
+                                            <div class="col-md-2" id="divValorAntecipacaoDados">
+                                                <label for="valorAntecipacaoDados">Valor Antecipação:</label>
+                                                <input id="valorAntecipacaoDados" type="text" class="form-control" disabled="disabled" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="row">
+                                            <div class="col-md-2" id="divDataBaixaDados">
+                                                <label for="dataBaixaDados">Data Baixa:</label>
+                                                <input id="dataBaixaDados" type="text" class="form-control" disabled="disabled" />
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                                 <div class="tab-pane" id="valores" role="tabpanel" aria-labelledby="valores-tab">
                                     <div class="form-group">
@@ -1398,7 +1567,7 @@
                                                 <label for="valorCaixa">Valor Caixa:</label>
                                                 <input id="valorCaixa" type="text" class="form-control valor" onchange="calcularValorFinanciado()" />
                                             </div>
-                                            
+
                                         </div>
                                     </div>
                                     <div class="form-group">

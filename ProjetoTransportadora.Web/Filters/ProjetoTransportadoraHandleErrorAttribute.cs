@@ -39,7 +39,7 @@ namespace ProjetoTransportadora.Web.Filters
 
                 try
                 {
-                    logBusiness.Incluir(new LogDto() { Exception = exception.ToString() });
+                    logBusiness.Incluir(new LogDto() { Exception = exception.ToString(), DataCadastro = DateTime.UtcNow });
                 }
                 catch (Exception ex)
                 {

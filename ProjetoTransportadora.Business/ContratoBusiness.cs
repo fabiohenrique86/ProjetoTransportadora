@@ -22,11 +22,16 @@ namespace ProjetoTransportadora.Business
             feriadoBusiness = new FeriadoBusiness();
         }
 
-        public object ListarSituacaoContratoResumo(List<ContratoDto> contratoDto)
+        public dynamic ListarGrid(ContratoDto contratoDto = null)
+        {
+            return contratoRepository.ListarGrid(contratoDto);
+        }
+
+        public dynamic ListarSituacaoContratoResumo(ContratoDto contratoDto = null)
         {
             return contratoRepository.ListarSituacaoContratoResumo(contratoDto);
         }
-        public object ListarSituacaoParcelaResumo(List<ContratoDto> contratoDto)
+        public dynamic ListarSituacaoParcelaResumo(ContratoDto contratoDto = null)
         {
             return contratoRepository.ListarSituacaoParcelaResumo(contratoDto);
         }
@@ -60,14 +65,20 @@ namespace ProjetoTransportadora.Business
             if (contratoDto.IdVeiculo <= 0)
                 throw new BusinessException("Veículo é obrigatório");
 
-            if (contratoDto.DataBaixa < contratoDto.DataContrato)
-                throw new BusinessException("Data da Baixa deve ser maior ou igual a Data do Contrato");
+            if (contratoDto.DataBaixa.GetValueOrDefault() != DateTime.MinValue)
+            {
+                if (contratoDto.DataBaixa < contratoDto.DataContrato)
+                    throw new BusinessException("Data da Baixa deve ser maior ou igual a Data do Contrato");
+            }
 
-            if (contratoDto.DataAntecipacao < contratoDto.DataContrato)
-                throw new BusinessException("Data da DataAntecipação deve ser maior ou igual a Data do Contrato");
+            if (contratoDto.DataAntecipacao.GetValueOrDefault() != DateTime.MinValue)
+            {
+                if (contratoDto.DataAntecipacao < contratoDto.DataContrato)
+                    throw new BusinessException("Data da Antecipação deve ser maior ou igual a Data do Contrato");
+            }
 
             if (contratoDto.ContratoParcelaDto == null || contratoDto.ContratoParcelaDto.Count <= 0)
-                throw new BusinessException("Parcela do Contrato é obrigatório");
+                throw new BusinessException("Quantidade de parcelas do Contrato é obrigatório");
 
             using (TransactionScope scope = new TransactionScope(TransactionScopeOption.Required))
             {
@@ -103,7 +114,10 @@ namespace ProjetoTransportadora.Business
                 throw new BusinessException("Situação do Contrato é obrigatório");
 
             if (contratoDto.DataAntecipacao.GetValueOrDefault() == DateTime.MinValue)
-                throw new BusinessException("Data Antecipação é obrigatório");
+                throw new BusinessException("Data da Antecipação é obrigatório");
+
+            if (contratoDto.ValorAntecipacao <= 0)
+                throw new BusinessException("Valor da Antecipação é obrigatório");
 
             if (contratoDto.IdUsuarioAntecipacao <= 0)
                 throw new BusinessException("IdUsuarioAntecipação é obrigatório");
@@ -114,15 +128,15 @@ namespace ProjetoTransportadora.Business
                 throw new BusinessException($"Contrato Id ({contratoDto.Id}) não está cadastrado");
 
             if (contratoDto.DataAntecipacao < contrato.DataContrato)
-                throw new BusinessException("Data Antecipação deve ser maior ou igual à Data do Contrato");
+                throw new BusinessException("Data da Antecipação deve ser maior ou igual à Data do Contrato");
 
             if (contratoDto.DataAntecipacao.GetValueOrDefault().DayOfWeek == DayOfWeek.Saturday || contratoDto.DataAntecipacao.GetValueOrDefault().DayOfWeek == DayOfWeek.Sunday)
-                throw new BusinessException("Data Antecipação deve ser dia útil");
+                throw new BusinessException("Data da Antecipação deve ser dia útil");
 
             var existeFeriado = feriadoBusiness.Existe(new FeriadoDto() { DataFeriado = contratoDto.DataAntecipacao.GetValueOrDefault() });
 
             if (existeFeriado)
-                throw new BusinessException("Data Antecipação deve ser dia útil");
+                throw new BusinessException("Data da Antecipação deve ser dia útil");
 
             var listaContratoParcelaDto = contratoParcelaBusiness.Listar(new ContratoParcelaDto() { IdContrato = contratoDto.Id, ListaIdSituacaoParcela = new List<int>() { SituacaoParcelaDto.EnumSituacaoParcela.Pendente.GetHashCode(), SituacaoParcelaDto.EnumSituacaoParcela.BoletoEmitido.GetHashCode() } });
 
@@ -131,29 +145,30 @@ namespace ProjetoTransportadora.Business
 
             using (var transactionScope = new TransactionScope(TransactionScopeOption.Required))
             {
-                foreach (var contratoParcelaDto in listaContratoParcelaDto)
+                for (int i = 0; i < listaContratoParcelaDto.Count; i++)
                 {
-                    contratoParcelaDto.ValorMulta = 0;
-                    contratoParcelaDto.ValorMora = 0;
+                    listaContratoParcelaDto[i].IdSituacaoParcela = SituacaoParcelaDto.EnumSituacaoParcela.Antecipado.GetHashCode();
+                    listaContratoParcelaDto[i].ValorMulta = 0;
+                    listaContratoParcelaDto[i].ValorMora = 0;
 
-                    if (contratoParcelaDto.DataVencimento >= contratoDto.DataAntecipacao)
+                    if (listaContratoParcelaDto[i].DataVencimento >= contratoDto.DataAntecipacao)
                     {
-                        contratoParcelaDto.ValorDesconto = contratoParcelaDto.ValorJuros;
-                        contratoParcelaDto.ValorParcela = contratoParcelaDto.ValorAmortizacao.GetValueOrDefault();
+                        listaContratoParcelaDto[i].ValorDesconto = listaContratoParcelaDto[i].ValorJuros;
+                        listaContratoParcelaDto[i].ValorParcela = listaContratoParcelaDto[i].ValorAmortizacao.GetValueOrDefault();
                     }
                     else
                     {
-                        double diasCorridos = contratoDto.DataAntecipacao.GetValueOrDefault().Subtract(contratoParcelaDto.DataVencimento).Days;
+                        var contratoParcelaDtoAnterior = i == 0 ? null : listaContratoParcelaDto[i - 1];
 
+                        double diasCorridos = contratoDto.DataAntecipacao.GetValueOrDefault().Subtract(listaContratoParcelaDto[i].DataVencimento).Days;
                         var fatorCalculado = Math.Round(Math.Pow((1 + (contrato.TaxaJuros / 100)), (diasCorridos / 30D)), 6);
-                        
-                        contratoParcelaDto.ValorJuros = (fatorCalculado - 1) * 1; // ??
+                        double valorJurosAntecipacao = (fatorCalculado - 1) * (i == 0 ? contrato.ValorFinanciado : contratoParcelaDtoAnterior.ValorSaldoAnterior);
 
-                        contratoParcelaDto.ValorDesconto = contratoParcelaDto.ValorJuros - 0; // ??
-                        contratoParcelaDto.ValorParcela = contratoParcelaDto.ValorAmortizacao.GetValueOrDefault() + contratoParcelaDto.ValorJuros.GetValueOrDefault() - contratoParcelaDto.ValorDesconto.GetValueOrDefault();                        
+                        listaContratoParcelaDto[i].ValorDesconto = Math.Abs(listaContratoParcelaDto[i].ValorJuros.GetValueOrDefault() - valorJurosAntecipacao);
+                        listaContratoParcelaDto[i].ValorParcela = listaContratoParcelaDto[i].ValorAmortizacao.GetValueOrDefault() + listaContratoParcelaDto[i].ValorJuros.GetValueOrDefault() - listaContratoParcelaDto[i].ValorDesconto.GetValueOrDefault();
                     }
 
-                    contratoParcelaBusiness.Antecipar(contratoParcelaDto);
+                    contratoParcelaBusiness.Antecipar(listaContratoParcelaDto[i]);
                 }
 
                 contratoRepository.Antecipar(contratoDto);
@@ -174,7 +189,7 @@ namespace ProjetoTransportadora.Business
                 throw new BusinessException("Situação do Contrato é obrigatório");
 
             if (contratoDto.DataBaixa.GetValueOrDefault() == DateTime.MinValue)
-                throw new BusinessException("Data Baixa é obrigatório");
+                throw new BusinessException("Data da Baixa é obrigatório");
 
             if (contratoDto.IdUsuarioBaixa <= 0)
                 throw new BusinessException("IdUsuarioBaixa é obrigatório");
@@ -185,7 +200,7 @@ namespace ProjetoTransportadora.Business
                 throw new BusinessException($"Contrato Id ({contratoDto.Id}) não está cadastrado");
 
             if (contratoDto.DataBaixa < contrato.DataContrato)
-                throw new BusinessException("Data Baixa deve ser maior ou igual à Data do Contrato");
+                throw new BusinessException("Data da Baixa deve ser maior ou igual à Data do Contrato");
 
             var listaContratoParcelaDto = contratoParcelaBusiness.Listar(new ContratoParcelaDto() { IdContrato = contratoDto.Id, ListaIdSituacaoParcela = new List<int>() { SituacaoParcelaDto.EnumSituacaoParcela.Pendente.GetHashCode(), SituacaoParcelaDto.EnumSituacaoParcela.BoletoEmitido.GetHashCode(), SituacaoParcelaDto.EnumSituacaoParcela.Atraso.GetHashCode() } });
 

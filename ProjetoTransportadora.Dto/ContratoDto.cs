@@ -35,6 +35,7 @@ namespace ProjetoTransportadora.Dto
         public double? ValorFinanciadoVeiculo { get; set; }
         public double? ValorFinanciadoDocumentacao { get; set; }
         public int? IdVeiculoEntrada { get; set; }
+        public double? ValorVeiculoEntrada { get; set; }
         public double ValorFinanciado { get; set; }
         public double? ValorCaixa { get; set; }
         public double? ValorDepositado { get; set; }

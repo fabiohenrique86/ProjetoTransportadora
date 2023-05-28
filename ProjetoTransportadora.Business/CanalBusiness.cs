@@ -15,6 +15,11 @@ namespace ProjetoTransportadora.Business
             canalRepository = new CanalRepository();
         }
 
+        public CanalDto Obter(CanalDto canalDto = null)
+        {
+            return canalRepository.Obter(canalDto);
+        }
+
         public List<CanalDto> Listar(CanalDto canalDto = null)
         {
             return canalRepository.Listar(canalDto);

@@ -17,6 +17,9 @@ namespace ProjetoTransportadora.Web.Controllers
         private SituacaoMultaBusiness situacaoMultaBusiness;
         private ProdutoBusiness produtoBusiness;
         private CanalBusiness canalBusiness;
+        private PessoaBusiness pessoaBusiness;
+        private VeiculoBusiness veiculoBusiness;
+        private ContratoParcelaBusiness contratoParcelaBusiness;
 
         public ContratoController()
         {
@@ -25,6 +28,9 @@ namespace ProjetoTransportadora.Web.Controllers
             situacaoMultaBusiness = new SituacaoMultaBusiness();
             produtoBusiness = new ProdutoBusiness();
             canalBusiness = new CanalBusiness();
+            pessoaBusiness = new PessoaBusiness();
+            veiculoBusiness = new VeiculoBusiness();
+            contratoParcelaBusiness = new ContratoParcelaBusiness();
         }
 
         public ActionResult Index()
@@ -33,17 +39,32 @@ namespace ProjetoTransportadora.Web.Controllers
             ViewBag.Produto = produtoBusiness.Listar(new ProdutoDto() { Ativo = true });
             ViewBag.Canal = canalBusiness.Listar(new CanalDto() { Ativo = true });
 
+            // Se existe uma simulação, inclui a simulação na view
+            if (TempData["SimulacaoDto"] != null)
+            {
+                ViewBag.SimulacaoDto = TempData["SimulacaoDto"];
+                TempData.Remove("SimulacaoDto");
+            }
+
             return View();
+        }
+
+        [HttpPost]
+        public JsonResult ListarGrid(ContratoDto contratoDto)
+        {
+            var listaContrato = contratoBusiness.ListarGrid(contratoDto);
+            var listaSituacaoContratoResumo = contratoBusiness.ListarSituacaoContratoResumo(contratoDto);
+            var listaSituacaoParcelaResumo = contratoBusiness.ListarSituacaoParcelaResumo(contratoDto);
+
+            return Json(new { Sucesso = true, Mensagem = "Contrato listado com sucesso", Data = listaContrato, SituacaoContratoResumo = listaSituacaoContratoResumo, SituacaoParcelaResumo = listaSituacaoParcelaResumo }, JsonRequestBehavior.AllowGet);
         }
 
         [HttpPost]
         public JsonResult Listar(ContratoDto contratoDto)
         {
             var listaContrato = contratoBusiness.Listar(contratoDto);
-            var listaSituacaoContratoResumo = contratoBusiness.ListarSituacaoContratoResumo(listaContrato);
-            var listaSituacaoParcelaResumo = contratoBusiness.ListarSituacaoParcelaResumo(listaContrato);
 
-            return Json(new { Sucesso = true, Mensagem = "Contrato listado com sucesso", Data = listaContrato, SituacaoContratoResumo = listaSituacaoContratoResumo, SituacaoParcelaResumo = listaSituacaoParcelaResumo }, JsonRequestBehavior.AllowGet);
+            return Json(new { Sucesso = true, Mensagem = "Contrato listado com sucesso", Data = listaContrato }, JsonRequestBehavior.AllowGet);
         }
 
         [HttpPost]
@@ -51,9 +72,9 @@ namespace ProjetoTransportadora.Web.Controllers
         {
             contratoBusiness.Incluir(contratoDto);
 
-            var listaContrato = contratoBusiness.Listar();
-            var listaSituacaoContratoResumo = contratoBusiness.ListarSituacaoContratoResumo(listaContrato);
-            var listaSituacaoParcelaResumo = contratoBusiness.ListarSituacaoParcelaResumo(listaContrato);
+            var listaContrato = contratoBusiness.ListarGrid();
+            var listaSituacaoContratoResumo = contratoBusiness.ListarSituacaoContratoResumo();
+            var listaSituacaoParcelaResumo = contratoBusiness.ListarSituacaoParcelaResumo();
 
             return Json(new { Sucesso = true, Mensagem = "Contrato listado com sucesso", Data = listaContrato, SituacaoContratoResumo = listaSituacaoContratoResumo, SituacaoParcelaResumo = listaSituacaoParcelaResumo }, JsonRequestBehavior.AllowGet);
         }
@@ -63,9 +84,11 @@ namespace ProjetoTransportadora.Web.Controllers
         {
             contratoBusiness.Antecipar(contratoDto);
 
-            var lista = contratoBusiness.Listar(new ContratoDto() { Id = contratoDto.Id }).FirstOrDefault();
+            var listaContrato = contratoBusiness.ListarGrid(new ContratoDto() { Id = contratoDto.Id });
+            var listaSituacaoContratoResumo = contratoBusiness.ListarSituacaoContratoResumo();
+            var listaSituacaoParcelaResumo = contratoBusiness.ListarSituacaoParcelaResumo();
 
-            return Json(new { Sucesso = true, Mensagem = "Contrato antecipado com sucesso", Data = lista }, JsonRequestBehavior.AllowGet);
+            return Json(new { Sucesso = true, Mensagem = "Contrato listado com sucesso", Data = listaContrato, SituacaoContratoResumo = listaSituacaoContratoResumo, SituacaoParcelaResumo = listaSituacaoParcelaResumo }, JsonRequestBehavior.AllowGet);
         }
 
         [HttpPost]
@@ -73,9 +96,11 @@ namespace ProjetoTransportadora.Web.Controllers
         {
             contratoBusiness.Baixar(contratoDto);
 
-            var lista = contratoBusiness.Listar(new ContratoDto() { Id = contratoDto.Id }).FirstOrDefault();
+            var listaContrato = contratoBusiness.ListarGrid(new ContratoDto() { Id = contratoDto.Id });
+            var listaSituacaoContratoResumo = contratoBusiness.ListarSituacaoContratoResumo();
+            var listaSituacaoParcelaResumo = contratoBusiness.ListarSituacaoParcelaResumo();
 
-            return Json(new { Sucesso = true, Mensagem = "Contrato baixado com sucesso", Data = lista }, JsonRequestBehavior.AllowGet);
+            return Json(new { Sucesso = true, Mensagem = "Contrato listado com sucesso", Data = listaContrato, SituacaoContratoResumo = listaSituacaoContratoResumo, SituacaoParcelaResumo = listaSituacaoParcelaResumo }, JsonRequestBehavior.AllowGet);
         }
 
         [HttpGet]
@@ -83,37 +108,40 @@ namespace ProjetoTransportadora.Web.Controllers
         {
             var lista = contratoBusiness.Listar(contratoDto);
 
-            string csv = "Montadora; Modelo; Ano Fabricação; Ano Modelo; Cor; Placa; Proprietário Atual; Proprietário Anterior; Renavam; Chassi; Data Aquisição; Valor Aquisição; Data Venda; Valor Venda; Data Recuperação; Data Valor FIPE; Valor FIPE; Valor Transportadora; Implemento; Comprimento; Altura; Largura; Rastreador; Situação" + Environment.NewLine;
+            string csv = "Id; Data Contrato; Canal; Cliente; Produto; Promotor; Indicação; Fiador; Veículo; Valor Venda; Valor Entrada; Veículo Entrada; Valor Veículo Entrada; Valor Dinheiro Entrada; Data Início Juros; Primeiro Vencimento; Quantidade Parcelas; Taxa Juros Mensal; Valor Financiado Total; Valor Financiado Veículo; Valor Financiado Documentação; Valor Caixa; Valor Depositado; Valor Desconto; Data Baixa; Data Antecipação; Valor Antecipação" + Environment.NewLine;
 
-            //foreach (var item in lista)
-            //{
-            //    csv += (item.MontadoraDto.Nome == null ? "" : item.MontadoraDto.Nome) + ";";
-            //    csv += item.Modelo + ";";
-            //    csv += item.AnoFabricacao + ";";
-            //    csv += item.AnoModelo + ";";
-            //    csv += item.Cor + ";";
-            //    csv += item.Placa + ";";
-            //    csv += (item.PessoaProprietarioAtualDto == null ? "" : item.PessoaProprietarioAtualDto.Nome) + ";";
-            //    csv += (item.PessoaProprietarioAnteriorDto == null ? "" : item.PessoaProprietarioAnteriorDto.Nome) + ";";
-            //    csv += item.Renavam + ";";
-            //    csv += item.Chassi + ";";
-            //    csv += (item.DataAquisicao == null ? "" : item.DataAquisicao.GetValueOrDefault().ToString("dd/MM/yyyy")) + ";";
-            //    csv += (item.ValorAquisicao == null ? "" : item.ValorAquisicao.GetValueOrDefault().ToString("C")) + ";";
-            //    csv += (item.DataVenda == null ? "" : item.DataVenda.GetValueOrDefault().ToString("dd/MM/yyyy")) + ";";
-            //    csv += (item.ValorVenda == null ? "" : item.ValorVenda.GetValueOrDefault().ToString("C")) + ";";
-            //    csv += (item.DataRecuperacao == null ? "" : item.DataRecuperacao.GetValueOrDefault().ToString("dd/MM/yyyy")) + ";";
-            //    csv += (item.DataValorFIPE == null ? "" : item.DataValorFIPE.GetValueOrDefault().ToString("dd/MM/yyyy")) + ";";
-            //    csv += (item.ValorFIPE == null ? "" : item.ValorFIPE.GetValueOrDefault().ToString("C")) + ";";
-            //    csv += (item.ValorTransportadora == null ? "" : item.ValorTransportadora.GetValueOrDefault().ToString("C")) + ";";
-            //    csv += item.Implemento + ";";
-            //    csv += item.Comprimento + ";";
-            //    csv += item.Altura + ";";
-            //    csv += item.Largura + ";";
-            //    csv += item.Rastreador + ";";
-            //    csv += (item.SituacaoContratoDto == null ? "" : item.SituacaoContratoDto.Nome) + ";";
+            foreach (var item in lista)
+            {
+                csv += item.Id + ";";
+                csv += item.DataContrato.ToString("dd/MM/yyyy") + ";";
+                csv += (item.CanalDto == null ? string.Empty : item.CanalDto.Nome) + ";";
+                csv += (item.PessoaClienteDto == null ? string.Empty : item.PessoaClienteDto.Nome) + ";";
+                csv += (item.ProdutoDto == null ? string.Empty : item.ProdutoDto.Nome) + ";";
+                csv += (item.PessoaPromotorDto == null ? string.Empty : item.PessoaPromotorDto.Nome) + ";";
+                csv += (item.PessoaIndicacaoDto == null ? string.Empty : item.PessoaIndicacaoDto.Nome) + ";";
+                csv += (item.PessoaFiadorDto == null ? "" : item.PessoaFiadorDto.Nome) + ";";
+                csv += (item.VeiculoDto == null ? "" : item.VeiculoDto.Placa) + ";";
+                csv += (item.VeiculoDto == null ? "" : item.VeiculoDto.ValorVenda.GetValueOrDefault().ToString("C")) + ";";
+                csv += (item.ValorEntrada == null ? string.Empty : item.ValorEntrada.GetValueOrDefault().ToString("C")) + ";";
+                csv += (item.VeiculoEntradaDto == null ? "" : item.VeiculoEntradaDto.Placa) + ";";
+                csv += (item.ValorVeiculoEntrada == null ? string.Empty : item.ValorVeiculoEntrada.GetValueOrDefault().ToString("C")) + ";";
+                //csv += (item.ValorDepositado == null ? string.Empty : item.ValorDesconto.GetValueOrDefault().ToString("C")) + ";"; 
+                //csv += item.DataPrimeiraParcela.ToString("dd/MM/yyyy") + ";";
+                csv += item.DataPrimeiraParcela.ToString("dd/MM/yyyy") + ";";
+                csv += item.ContratoParcelaDto?.Count() + ";";
+                csv += item.TaxaJuros.ToString("C") + ";";
+                csv += item.ValorFinanciado.ToString("C") + ";";
+                csv += (item.ValorFinanciadoVeiculo == null ? string.Empty : item.ValorFinanciadoVeiculo.GetValueOrDefault().ToString("C")) + ";";
+                csv += (item.ValorFinanciadoDocumentacao == null ? string.Empty : item.ValorFinanciadoDocumentacao.GetValueOrDefault().ToString("C")) + ";";
+                csv += (item.ValorCaixa == null ? string.Empty : item.ValorCaixa.GetValueOrDefault().ToString("C")) + ";";
+                csv += (item.ValorDepositado == null ? string.Empty : item.ValorDepositado.GetValueOrDefault().ToString("C")) + ";";
+                csv += (item.ValorDesconto == null ? string.Empty : item.ValorDesconto.GetValueOrDefault().ToString("C")) + ";";
+                csv += (item.DataBaixa == null ? string.Empty : item.DataBaixa.GetValueOrDefault().ToString("dd/MM/yyyy")) + ";";
+                csv += (item.DataAntecipacao == null ? string.Empty : item.DataAntecipacao.GetValueOrDefault().ToString("dd/MM/yyyy")) + ";";
+                csv += (item.ValorAntecipacao == null ? string.Empty : item.ValorAntecipacao.GetValueOrDefault().ToString("C")) + ";";
 
-            //    csv += Environment.NewLine;
-            //}
+                csv += Environment.NewLine;
+            }
 
             return File(Encoding.UTF8.GetPreamble().Concat(Encoding.UTF8.GetBytes(csv)).ToArray(), "text/csv", "contrato-exportar-" + DateTime.Now.ToString("ddMMyyyy_HHmmss") + ".csv");
         }
@@ -123,20 +151,19 @@ namespace ProjetoTransportadora.Web.Controllers
             HttpPostedFileBase file = Request.Files[0];
 
             if (file == null)
-                return Json("Arquivo é obrigatório", JsonRequestBehavior.AllowGet);
+                return Json(new { Sucesso = false, Mensagem = "Arquivo é obrigatório" }, JsonRequestBehavior.AllowGet);
 
             var tamanhoArquivo = file.ContentLength;
             var tipoArquivo = file.ContentType;
             var streamArquivo = file.InputStream;
             var conteudoArquivo = string.Empty;
             var mensagem = string.Empty;
-            var placa = string.Empty;
 
             if (tamanhoArquivo <= 0)
-                return Json("Arquivo está vazio", JsonRequestBehavior.AllowGet);
+                return Json(new { Sucesso = false, Mensagem = "Arquivo está vazio" }, JsonRequestBehavior.AllowGet);
 
             if (!tipoArquivo.Contains("csv"))
-                return Json("Arquivo deve ser do tipo csv", JsonRequestBehavior.AllowGet);
+                return Json(new { Sucesso = false, Mensagem = "Arquivo deve ser do tipo csv" }, JsonRequestBehavior.AllowGet);
 
             using (var sr = new StreamReader(streamArquivo, Encoding.GetEncoding(new System.Globalization.CultureInfo("pt-BR").TextInfo.ANSICodePage)))
                 conteudoArquivo = sr.ReadToEnd();
@@ -150,143 +177,193 @@ namespace ProjetoTransportadora.Web.Controllers
                 {
                     var linhaArquivo = item.Split(";".ToCharArray(), StringSplitOptions.None);
 
-                    var montadora = linhaArquivo[0]?.Trim();
-                    var modelo = linhaArquivo[1]?.Trim();
-                    var anoFabricacao = linhaArquivo[2]?.Trim();
-                    var anoModelo = linhaArquivo[3]?.Trim();
-                    var cor = linhaArquivo[4]?.Trim();
-                    placa = linhaArquivo[5]?.Trim();
-                    var proprietarioAtual = linhaArquivo[6]?.Trim();
-                    var proprietarioAnterior = linhaArquivo[7]?.Trim();
-                    var renavam = linhaArquivo[8]?.Trim();
-                    var chassi = linhaArquivo[9]?.Trim();
-                    var dataAquisicao = linhaArquivo[10]?.Trim();
-                    var valorAquisicao = linhaArquivo[11]?.Trim();
-                    var dataVenda = linhaArquivo[12]?.Trim();
-                    var valorVenda = linhaArquivo[13]?.Trim();
-                    var dataRecuperacao = linhaArquivo[14]?.Trim();
-                    var dataValorFIPE = linhaArquivo[15]?.Trim();
-                    var valorFIPE = linhaArquivo[16]?.Trim();
-                    var valorTranpostadora = linhaArquivo[17]?.Trim();
-                    var implemento = linhaArquivo[18]?.Trim();
-                    var comprimento = linhaArquivo[19]?.Trim();
-                    var altura = linhaArquivo[20]?.Trim();
-                    var largura = linhaArquivo[21]?.Trim();
-                    var rastreador = linhaArquivo[22]?.Trim();
-                    var situacaoContrato = linhaArquivo[23]?.Trim();
+                    var dataContrato = linhaArquivo[0]?.Trim();
+                    var canal = linhaArquivo[1]?.Trim();
+                    var cliente = linhaArquivo[2]?.Trim();
+                    var produto = linhaArquivo[3]?.Trim();
+                    var promotor = linhaArquivo[4]?.Trim();
+                    var indicacao = linhaArquivo[5]?.Trim();
+                    var fiador = linhaArquivo[6]?.Trim();
+                    var veiculo = linhaArquivo[7]?.Trim();
+                    var valorVenda = linhaArquivo[8]?.Trim();
+                    var valorEntrada = linhaArquivo[9]?.Trim();
+                    var veiculoEntrada = linhaArquivo[10]?.Trim();
+                    var valorVeiculoEntrada = linhaArquivo[11]?.Trim();
+                    var valorDinheiroEntrada = linhaArquivo[12]?.Trim();
+                    var dataInicioJuros = linhaArquivo[13]?.Trim();
+                    var dataPrimeiraParcela = linhaArquivo[14]?.Trim();
+                    var quantidadeParcelas = linhaArquivo[15]?.Trim();
+                    var taxaJurosMensal = linhaArquivo[16]?.Trim();
+                    var valorFinanciado = linhaArquivo[17]?.Trim();
+                    var valorFinanciadoVeiculo = linhaArquivo[18]?.Trim();
+                    var valorFinanciadoDocumentacao = linhaArquivo[19]?.Trim();
+                    var valorCaixa = linhaArquivo[20]?.Trim();
+                    var valorDepositado = linhaArquivo[21]?.Trim();
+                    var valorDesconto = linhaArquivo[22]?.Trim();
+                    var dataBaixa = linhaArquivo[23]?.Trim();
+                    var dataAntecipacao = linhaArquivo[24]?.Trim();
+                    var valorAntecipacao = linhaArquivo[25]?.Trim();
 
-                    DateTime dtAquisicao;
-                    DateTime.TryParse(dataAquisicao, out dtAquisicao);
+                    DateTime dtContrato;
+                    DateTime.TryParse(dataContrato, out dtContrato);
 
-                    DateTime dtVenda;
-                    DateTime.TryParse(dataVenda, out dtVenda);
+                    DateTime dtInicioJuros;
+                    DateTime.TryParse(dataInicioJuros, out dtInicioJuros);
 
-                    DateTime dtRecuperacao;
-                    DateTime.TryParse(dataRecuperacao, out dtRecuperacao);
+                    DateTime dtPrimeiraParcela;
+                    DateTime.TryParse(dataPrimeiraParcela, out dtPrimeiraParcela);
 
-                    DateTime dtValorFIPE;
-                    DateTime.TryParse(dataValorFIPE, out dtValorFIPE);
+                    DateTime dtBaixa;
+                    DateTime.TryParse(dataBaixa, out dtBaixa);
 
-                    int aFabricacao;
-                    int.TryParse(anoFabricacao, out aFabricacao);
+                    DateTime dtAntecipacao;
+                    DateTime.TryParse(dataAntecipacao, out dtAntecipacao);
 
-                    int aModelo;
-                    int.TryParse(anoModelo, out aModelo);
-
-                    double vlAquisicao;
-                    double.TryParse(valorAquisicao, out vlAquisicao);
+                    int qtdParcelas;
+                    int.TryParse(quantidadeParcelas, out qtdParcelas);
 
                     double vlVenda;
                     double.TryParse(valorVenda, out vlVenda);
 
-                    double vlFIPE;
-                    double.TryParse(valorFIPE, out vlFIPE);
+                    double vlVeiculoEntrada;
+                    double.TryParse(valorVeiculoEntrada, out vlVeiculoEntrada);
 
-                    double vlTransportadora;
-                    double.TryParse(valorTranpostadora, out vlTransportadora);
+                    double txJurosMensal;
+                    double.TryParse(taxaJurosMensal, out txJurosMensal);
 
-                    double dComprimento;
-                    double.TryParse(comprimento, out dComprimento);
+                    double vlFinanciado;
+                    double.TryParse(valorFinanciado, out vlFinanciado);
 
-                    double dAltura;
-                    double.TryParse(altura, out dAltura);
+                    double vlFinanciadoVeiculo;
+                    double.TryParse(valorFinanciadoVeiculo, out vlFinanciadoVeiculo);
 
-                    double dLargura;
-                    double.TryParse(largura, out dLargura);
+                    double vlFinanciadoDocumentacao;
+                    double.TryParse(valorFinanciadoDocumentacao, out vlFinanciadoDocumentacao);
 
-                    var idMontadora = 0;                    
-                    //var montadoraDto = montadoraBusiness.Obter(new MontadoraDto() { Nome = montadora });
-                    
-                    //if (montadoraDto != null)
-                    //    idMontadora = montadoraDto.Id;
+                    double vlCaixa;
+                    double.TryParse(valorCaixa, out vlCaixa);
 
-                    int? idProprietarioAtual = null;
-                    //if (!string.IsNullOrEmpty(proprietarioAtual))
-                    //{
-                    //    var pessoaProprietarioAtualDto = pessoaBusiness.Listar(new PessoaDto() { Nome = proprietarioAtual }).FirstOrDefault();
+                    double vlDepositado;
+                    double.TryParse(valorDepositado, out vlDepositado);
 
-                    //    if (pessoaProprietarioAtualDto != null)
-                    //        idProprietarioAtual = pessoaProprietarioAtualDto.Id;
-                    //}
+                    double vlDesconto;
+                    double.TryParse(valorDesconto, out vlDesconto);
 
-                    int? idProprietarioAnterior = null;
-                    //if (!string.IsNullOrEmpty(proprietarioAnterior))
-                    //{
-                    //    var pessoaProprietarioAnteriorDto = pessoaBusiness.Listar(new PessoaDto() { Nome = proprietarioAnterior }).FirstOrDefault();
+                    double vlAntecipacao;
+                    double.TryParse(valorAntecipacao, out vlAntecipacao);
 
-                    //    if (pessoaProprietarioAnteriorDto != null)
-                    //        idProprietarioAnterior = pessoaProprietarioAnteriorDto.Id;
-                    //}
-
-                    int? idSituacaoContrato = null;
-                    if (!string.IsNullOrEmpty(situacaoContrato))
+                    int? idCanal = null;
+                    if (!string.IsNullOrEmpty(canal))
                     {
-                        var situacaoContratoDto = situacaoContratoBusiness.Obter(new SituacaoContratoDto() { Nome = situacaoContrato });
+                        var canalDto = canalBusiness.Obter(new CanalDto() { Nome = canal });
 
-                        if (situacaoContratoDto != null)
-                            idSituacaoContrato = situacaoContratoDto.Id;
+                        if (canalDto != null)
+                            idCanal = canalDto.Id;
                     }
 
-                    //var ContratoDto = new ContratoDto()
-                    //{
-                    //    IdMontadora = idMontadora,
-                    //    Modelo = modelo,
-                    //    AnoFabricacao = aFabricacao,
-                    //    AnoModelo = aModelo,
-                    //    Cor = cor,
-                    //    Placa = placa,
-                    //    IdProprietarioAtual = idProprietarioAtual,
-                    //    IdProprietarioAnterior = idProprietarioAnterior,
-                    //    Renavam = renavam,
-                    //    Chassi = chassi,
-                    //    DataAquisicao = dtAquisicao == DateTime.MinValue ? (DateTime?)null : dtAquisicao,
-                    //    ValorAquisicao = vlAquisicao,
-                    //    DataVenda = dtVenda == DateTime.MinValue ? (DateTime?)null : dtVenda,
-                    //    DataRecuperacao = dtRecuperacao == DateTime.MinValue ? (DateTime?)null : dtRecuperacao,
-                    //    DataValorFIPE = dtValorFIPE == DateTime.MinValue ? (DateTime?)null : dtValorFIPE,
-                    //    ValorFIPE = vlFIPE,
-                    //    ValorTransportadora = vlTransportadora,
-                    //    Implemento = implemento,
-                    //    Comprimento = dComprimento,
-                    //    Altura = dAltura,
-                    //    Largura = dLargura,
-                    //    Rastreador = rastreador,
-                    //    IdSituacaoContrato = idSituacaoContrato,
-                    //    IdUsuarioCadastro = idUsuario,
-                    //    DataCadastro = dataCadastro
-                    //};
+                    int? idCliente = null;
+                    if (!string.IsNullOrEmpty(cliente))
+                    {
+                        var pessoaClienteDto = pessoaBusiness.Listar(new PessoaDto() { Nome = cliente }).FirstOrDefault();
 
-                    //contratoBusiness.Incluir(ContratoDto);
+                        if (pessoaClienteDto != null)
+                            idCliente = pessoaClienteDto.Id;
+                    }
 
-                    mensagem += $"Contrato ({placa}) incluído com sucesso" + Environment.NewLine;
+                    int? idProduto = null;
+                    if (!string.IsNullOrEmpty(produto))
+                    {
+                        var produtoDto = produtoBusiness.Listar(new ProdutoDto() { Nome = produto }).FirstOrDefault();
+
+                        if (produtoDto != null)
+                            idProduto = produtoDto.Id;
+                    }
+
+                    int? idPromotor = null;
+                    if (!string.IsNullOrEmpty(promotor))
+                    {
+                        var pessoaPromotorDto = pessoaBusiness.Listar(new PessoaDto() { Nome = promotor }).FirstOrDefault();
+
+                        if (pessoaPromotorDto != null)
+                            idPromotor = pessoaPromotorDto.Id;
+                    }
+
+                    int? idIndicacao = null;
+                    if (!string.IsNullOrEmpty(cliente))
+                    {
+                        var pessoaIndicacaoDto = pessoaBusiness.Listar(new PessoaDto() { Nome = indicacao }).FirstOrDefault();
+
+                        if (pessoaIndicacaoDto != null)
+                            idIndicacao = pessoaIndicacaoDto.Id;
+                    }
+
+                    int? idFiador = null;
+                    if (!string.IsNullOrEmpty(fiador))
+                    {
+                        var pessoaFiadorDto = pessoaBusiness.Listar(new PessoaDto() { Nome = fiador }).FirstOrDefault();
+
+                        if (pessoaFiadorDto != null)
+                            idFiador = pessoaFiadorDto.Id;
+                    }
+
+                    int? idVeiculo = null;
+                    if (!string.IsNullOrEmpty(fiador))
+                    {
+                        var veiculoDto = veiculoBusiness.Listar(new VeiculoDto() { Placa = veiculo }).FirstOrDefault();
+
+                        if (veiculoDto != null)
+                            idVeiculo = veiculoDto.Id;
+                    }
+
+                    int? idVeiculoEntrada = null;
+                    if (!string.IsNullOrEmpty(fiador))
+                    {
+                        var veiculoEntradaDto = veiculoBusiness.Listar(new VeiculoDto() { Placa = veiculoEntrada }).FirstOrDefault();
+
+                        if (veiculoEntradaDto != null)
+                            idVeiculoEntrada = veiculoEntradaDto.Id;
+                    }
+
+                    var listaContratoParcelaDto = contratoParcelaBusiness.Gerar(new SimulacaoDto()
+                    {
+                        DataInicio = dtContrato,
+                        DataPrimeiraParcela = dtPrimeiraParcela,
+                        QuantidadeParcela = qtdParcelas,
+                        TaxaMensalJuros = txJurosMensal,
+                        ValorFinanciado = vlFinanciado
+                    });
+
+                    var contratoDto = new ContratoDto()
+                    {
+                        DataContrato = dtContrato,
+                        IdCanal = idCanal,
+                        IdCliente = idCliente.GetValueOrDefault(),
+                        IdProduto = idProduto.GetValueOrDefault(),
+                        IdPromotor = idPromotor,
+                        IdIndicacao = idIndicacao,
+                        IdFiador = idFiador,
+                        IdVeiculo = idVeiculo.GetValueOrDefault(),
+                        IdVeiculoEntrada = idVeiculoEntrada,
+                        ValorVeiculoEntrada = vlVeiculoEntrada,
+                        //DataRecuperacao = dtRecuperacao == DateTime.MinValue ? (DateTime?)null : dtRecuperacao,
+                        DataPrimeiraParcela = dtPrimeiraParcela,
+                        IdSituacaoContrato = SituacaoContratoDto.EnumSituacaoContrato.Ativo.GetHashCode(),
+                        IdUsuarioCadastro = idUsuario,
+                        DataCadastro = dataCadastro,
+                        ContratoParcelaDto = listaContratoParcelaDto
+                    };
+
+                    var idContrato = contratoBusiness.Incluir(contratoDto);
+
+                    mensagem += $"Contrato ({idContrato}) incluído com sucesso" + Environment.NewLine;
                 }
                 catch (BusinessException ex)
                 {
-                    mensagem += $"Erro ao incluir Contrato ({placa}): " + ex.Message + Environment.NewLine;
+                    mensagem += $"Erro ao incluir Contrato: " + ex.Message + Environment.NewLine;
                 }
                 catch (Exception ex)
                 {
-                    mensagem += $"Erro ao incluir Contrato ({placa}): " + ex.Message + Environment.NewLine;
+                    mensagem += $"Erro ao incluir Contrato: " + ex.Message + Environment.NewLine;
                 }
             }
 
