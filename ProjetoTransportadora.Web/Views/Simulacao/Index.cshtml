@@ -101,6 +101,7 @@
                 "columns":
                     [
                         { "data": "NumeroParcela", "className": "text-center" },
+                        { "data": function (data, type, row) { return data["DataInicio"] != null ? moment(data["DataInicio"]).format("DD/MM/YYYY") : "" }, "className": "text-center" },
                         { "data": function (data, type, row) { return data["DataVencimento"] != null ? moment(data["DataVencimento"]).format("DD/MM/YYYY") : "" }, "className": "text-center" },
                         { "data": "DiasContrato", "className": "text-center" },
                         { "data": "DiasParcela", "className": "text-center" },
@@ -260,6 +261,7 @@
                                 <thead>
                                     <tr>
                                         <td class="text-center"><b>Parcela</b></td>
+                                        <td class="text-center"><b>Data Início</b></td>
                                         <td class="text-center"><b>Data Vencimento</b></td>
                                         <td class="text-center"><b>Dias Contrato</b></td>
                                         <td class="text-center"><b>Dias Parcela</b></td>

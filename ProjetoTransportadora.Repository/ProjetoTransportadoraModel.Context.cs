@@ -51,11 +51,11 @@ namespace ProjetoTransportadora.Repository
         public virtual DbSet<VeiculoHistorico> VeiculoHistorico { get; set; }
         public virtual DbSet<Veiculo> Veiculo { get; set; }
         public virtual DbSet<VeiculoMulta> VeiculoMulta { get; set; }
-        public virtual DbSet<Contrato> Contrato { get; set; }
         public virtual DbSet<ContratoHistorico> ContratoHistorico { get; set; }
         public virtual DbSet<ContratoParcela> ContratoParcela { get; set; }
         public virtual DbSet<SituacaoContrato> SituacaoContrato { get; set; }
         public virtual DbSet<SituacaoParcela> SituacaoParcela { get; set; }
         public virtual DbSet<PessoaAvalista> PessoaAvalista { get; set; }
+        public virtual DbSet<Contrato> Contrato { get; set; }
     }
 }

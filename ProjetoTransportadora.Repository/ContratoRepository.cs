@@ -51,7 +51,15 @@ namespace ProjetoTransportadora.Repository
             if (contratoDto.NumeroContrato > 0)
                 query = query.Where(x => x.NumeroContrato == contratoDto.NumeroContrato);
 
-            return query.Select(x => new ContratoDto() { Id = x.Id, NumeroContrato = x.NumeroContrato, DataContrato = x.DataContrato, TaxaJuros = x.TaxaJuros, ValorFinanciado = x.ValorFinanciado }).FirstOrDefault();
+            return query.Select(x => new ContratoDto()
+            {
+                Id = x.Id,
+                DataContrato = x.DataContrato,
+                TaxaJuros = x.TaxaJuros,
+                ValorFinanciado = x.ValorFinanciado,
+                TaxaMora = x.TaxaMora,
+                TaxaMulta = x.TaxaMulta
+            }).FirstOrDefault();
         }
 
         public dynamic ListarGrid(ContratoDto contratoDto = null)
@@ -168,16 +176,16 @@ namespace ProjetoTransportadora.Repository
             }
 
             return (from c in query
-                         join cp in projetoTransportadoraEntities.ContratoParcela on c.Id equals cp.IdContrato
-                         join sp in projetoTransportadoraEntities.SituacaoParcela on cp.IdSituacaoParcela equals sp.Id
-                         group cp by new { spNome = sp.Nome } into g1
-                         select new
-                         {
-                             SituacaoParcela = g1.Key.spNome,
-                             Quantidade = g1.Select(x => x.Id).Count(),
-                             ValorJuros = g1.Sum(x => x.ValorJuros),
-                             ValorParcela = g1.Sum(x => x.ValorParcela),
-                         }).OrderBy(x => x.SituacaoParcela).ToList();
+                    join cp in projetoTransportadoraEntities.ContratoParcela on c.Id equals cp.IdContrato
+                    join sp in projetoTransportadoraEntities.SituacaoParcela on cp.IdSituacaoParcela equals sp.Id
+                    group cp by new { spNome = sp.Nome } into g1
+                    select new
+                    {
+                        SituacaoParcela = g1.Key.spNome,
+                        Quantidade = g1.Select(x => x.Id).Count(),
+                        ValorJuros = g1.Sum(x => x.ValorJuros),
+                        ValorParcela = g1.Sum(x => x.ValorParcela),
+                    }).OrderBy(x => x.SituacaoParcela).ToList();
         }
 
         public List<ContratoDto> Listar(ContratoDto contratoDto)
@@ -241,10 +249,12 @@ namespace ProjetoTransportadora.Repository
                 VeiculoEntradaDto = x.VeiculoEntrada == null ? null : new VeiculoDto { Id = x.VeiculoEntrada.Id, Placa = x.VeiculoEntrada.Placa, Modelo = x.VeiculoEntrada.Modelo, Chassi = x.VeiculoEntrada.Chassi, Renavam = x.VeiculoEntrada.Renavam, Ativo = x.VeiculoEntrada.Ativo, MontadoraDto = new MontadoraDto() { Id = x.VeiculoEntrada.Montadora.Id, Nome = x.VeiculoEntrada.Montadora.Nome } },
                 ValorVeiculoEntrada = x.ValorVeiculoEntrada,
                 ValorFinanciado = x.ValorFinanciado,
-                ValorCaixa = x.ValorCaixa,
+                ValorDinheiro = x.ValorDinheiro,
                 ValorDepositado = x.ValorDepositado,
                 ValorTarifa = x.ValorTarifa,
                 TaxaJuros = x.TaxaJuros,
+                TaxaMora = x.TaxaMora,
+                TaxaMulta = x.TaxaMulta,
                 Ativo = x.Ativo,
                 IdUsuarioCadastro = x.IdUsuarioCadastro,
                 DataCadastro = x.DataCadastro,
@@ -340,10 +350,12 @@ namespace ProjetoTransportadora.Repository
                 IdVeiculoEntrada = contratoDto.IdVeiculoEntrada,
                 ValorVeiculoEntrada = contratoDto.ValorVeiculoEntrada,
                 ValorFinanciado = contratoDto.ValorFinanciado,
-                ValorCaixa = contratoDto.ValorCaixa,
+                ValorDinheiro = contratoDto.ValorDinheiro,
                 ValorDepositado = contratoDto.ValorDepositado,
                 TaxaJuros = contratoDto.TaxaJuros,
                 ValorTarifa = contratoDto.ValorTarifa,
+                TaxaMora = contratoDto.TaxaMora,
+                TaxaMulta = contratoDto.TaxaMulta,
                 Ativo = true,
                 IdUsuarioCadastro = contratoDto.IdUsuarioCadastro,
                 DataCadastro = contratoDto.DataCadastro

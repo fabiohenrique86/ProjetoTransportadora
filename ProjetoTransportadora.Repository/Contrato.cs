@@ -44,7 +44,7 @@ namespace ProjetoTransportadora.Repository
         public Nullable<double> ValorFinanciadoDocumentacao { get; set; }
         public Nullable<int> IdVeiculoEntrada { get; set; }
         public double ValorFinanciado { get; set; }
-        public Nullable<double> ValorCaixa { get; set; }
+        public Nullable<double> ValorDinheiro { get; set; }
         public Nullable<double> ValorDepositado { get; set; }
         public double TaxaJuros { get; set; }
         public bool Ativo { get; set; }
@@ -56,19 +56,21 @@ namespace ProjetoTransportadora.Repository
         public Nullable<int> IdUsuarioBaixa { get; set; }
         public Nullable<int> IdUsuarioAntecipacao { get; set; }
         public Nullable<double> ValorVeiculoEntrada { get; set; }
+        public Nullable<double> TaxaMulta { get; set; }
+        public Nullable<double> TaxaMora { get; set; }
     
         public virtual Canal Canal { get; set; }
         public virtual Pessoa PessoaCliente { get; set; }
-        public virtual Pessoa PessoaFiador { get; set; }
-        public virtual Pessoa PessoaIndicacao { get; set; }
-        public virtual Pessoa PessoaPromotor { get; set; }
+        public virtual Pessoa Pessoa1 { get; set; }
+        public virtual Pessoa Pessoa2 { get; set; }
+        public virtual Pessoa Pessoa3 { get; set; }
         public virtual Produto Produto { get; set; }
+        public virtual SituacaoContrato SituacaoContrato { get; set; }
         public virtual Veiculo Veiculo { get; set; }
         public virtual Veiculo VeiculoEntrada { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<ContratoHistorico> ContratoHistorico { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<ContratoParcela> ContratoParcela { get; set; }
-        public virtual SituacaoContrato SituacaoContrato { get; set; }
     }
 }

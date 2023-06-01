@@ -9,6 +9,7 @@ namespace ProjetoTransportadora.Dto
         public int NumeroParcela { get; set; }
         public int IdContrato { get; set; }
         public int IdSituacaoParcela { get; set; }
+        public DateTime DataInicio { get; set; }
         public DateTime DataVencimento { get; set; }
         public int DiasParcela { get; set; }
         public int DiasContrato { get; set; }

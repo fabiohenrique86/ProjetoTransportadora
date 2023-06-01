@@ -43,6 +43,9 @@
             $("#valorParcela").prop("disabled", "disabled");
             $("#valorFinanciado").prop("disabled", "disabled");
 
+            //$("#taxaMulta").val();
+            //$("#taxaMora").val();
+
             $("#modalContrato").modal('show');
             $('#dados-tab').click();
         }
@@ -149,11 +152,11 @@
             if (isNaN(valorDepositado))
                 valorDepositado = 0;
 
-            var valorCaixa = Globalize.parseFloat($("#valorCaixa").val());
-            if (isNaN(valorCaixa))
-                valorCaixa = 0;
+            var valorDinheiro = Globalize.parseFloat($("#valorDinheiro").val());
+            if (isNaN(valorDinheiro))
+                valorDinheiro = 0;
 
-            var valorFinanciado = valorVeiculo - valorEntrada + valorDocumentacao - valorDesconto + valorTarifa - valorVeiculoEntrada - valorCaixa - valorDepositado;
+            var valorFinanciado = valorVeiculo - valorEntrada + valorDocumentacao - valorDesconto + valorTarifa - valorVeiculoEntrada - valorDinheiro - valorDepositado;
 
             $("#valorFinanciado").val(Globalize.format(valorFinanciado, "n2"));
         }
@@ -197,6 +200,8 @@
 
             $("#dataPrimeiraParcela").val(moment(data.DataPrimeiraParcela).format("DD/MM/YYYY"));
             $("#valorParcela").val(Globalize.format(data.ContratoParcelaDto[0].ValorParcela, "n2"));
+            $("#taxaMulta").val(Globalize.format(data.TaxaMulta, "n2"));
+            $("#taxaMora").val(Globalize.format(data.TaxaMora, "n2"));
 
             if (data.DataAntecipacao != null)
                 $("#dataAntecipacaoDados").val(moment(data.DataAntecipacao).format("DD/MM/YYYY"));
@@ -212,7 +217,7 @@
             $("#valorEntrada").val(Globalize.format(data.ValorEntrada, "n2"));
             $("#valorDocumentacao").val(Globalize.format(data.ValorDocumentacao, "n2"));
             $("#valorDesconto").val(Globalize.format(data.ValorDesconto, "n2"));
-            $("#valorCaixa").val(Globalize.format(data.ValorCaixa, "n2"));
+            $("#valorDinheiro").val(Globalize.format(data.ValorDinheiro, "n2"));
 
             if (data.VeiculoEntradaDto != null)
             {
@@ -476,6 +481,7 @@
                 "columns":
                     [
                         { "data": "NumeroParcela", "className": "text-center" },
+                        { "data": function (data, type, row) { return data["DataInicio"] != null ? moment(data["DataInicio"]).format("DD/MM/YYYY") : "" }, "className": "text-center" },
                         { "data": function (data, type, row) { return data["DataVencimento"] != null ? moment(data["DataVencimento"]).format("DD/MM/YYYY") : "" }, "className": "text-center" },
                         { "data": "DiasContrato", "className": "text-center" },
                         { "data": "DiasParcela", "className": "text-center" },
@@ -896,6 +902,8 @@
                 contratoDto.IdPromotor = $("#idPromotor").val();
                 contratoDto.IdCanal = $("#canal").val();
                 contratoDto.DataPrimeiraParcela = $("#dataPrimeiraParcela").val();
+                contratoDto.TaxaMulta = $("#taxaMulta").val();
+                contratoDto.TaxaMora = $("#taxaMora").val();
 
                 // aba - valores
 
@@ -908,7 +916,7 @@
                 contratoDto.IdVeiculoEntrada = $("#idVeiculoEntrada").val();
                 contratoDto.ValorVeiculoEntrada = $("#valorVeiculoEntrada").val();
                 contratoDto.ValorDepositado = $("#valorDepositado").val();
-                contratoDto.ValorCaixa = $("#valorCaixa").val();
+                contratoDto.ValorDinheiro = $("#valorDinheiro").val();
                 contratoDto.ValorTarifa = $("#valorTarifa").val();
 
                 contratoDto.ValorFinanciado = $("#valorFinanciado").val();
@@ -924,6 +932,7 @@
                     contratoDto.ContratoParcelaDto.push
                         ({
                             "NumeroParcela": data.NumeroParcela,
+                            "DataInicio": moment(data.DataInicio).format("YYYY/MM/DD"),
                             "DataVencimento": moment(data.DataVencimento).format("YYYY/MM/DD"),
                             "DiasContrato": data.DiasContrato,
                             "DiasParcela": data.DiasParcela,
@@ -1236,7 +1245,7 @@
                     $("#valorVeiculoEntrada").val(Globalize.format(simulacaoDto.ValorBens, "n2"));
 
                 if (simulacaoDto.ValorDinheiro != 0)
-                    $("#valorEntrada").val(Globalize.format(simulacaoDto.ValorDinheiro, "n2"));
+                    $("#valorDinheiro").val(Globalize.format(simulacaoDto.ValorDinheiro, "n2"));
 
                 if (simulacaoDto.ContratoParcelaDto != null && simulacaoDto.ContratoParcelaDto.length > 0)
                     $("#valorParcela").val(Globalize.format(simulacaoDto.ContratoParcelaDto[0].ValorParcela, "n2"));
@@ -1280,11 +1289,11 @@
     <div class="form-group">
         <div class="row">
             <div class="col-md-2">
-                <label>Período Início:</label>
+                <label>Data Contrato Início:</label>
                 <input id="dataContratoInicioPesquisar" type="text" class="form-control data datepicker" />
             </div>
             <div class="col-md-2">
-                <label>Período Fim:</label>
+                <label>Data Contrato Fim:</label>
                 <input id="dataContratoFimPesquisar" type="text" class="form-control data datepicker" />
             </div>
         </div>
@@ -1464,10 +1473,6 @@
                                 <div class="tab-pane active" id="dados" role="tabpanel" aria-labelledby="dados-tab">
                                     <div class="form-group">
                                         <div class="row">
-                                            @*<div class="col-md-2">
-                    <label for="numeroContrato">Número Contrato:</label>
-                    <input id="numeroContrato" type="text" class="form-control" />
-                </div>*@
                                             <div class="col-md-2">
                                                 <label for="dataContrato">Data Contrato:</label>
                                                 <input id="dataContrato" type="text" class="form-control data datepicker" />
@@ -1521,6 +1526,14 @@
                                                 <label for="valorParcela">Valor Parcela:</label>
                                                 <input id="valorParcela" type="text" class="form-control valor" />
                                             </div>
+                                            <div class="col-md-2">
+                                                <label for="taxaMulta">Taxa Multa:</label>
+                                                <input id="taxaMulta" type="text" class="form-control" disabled="disabled" />
+                                            </div>
+                                            <div class="col-md-2">
+                                                <label for="taxaMora">Taxa Mora:</label>
+                                                <input id="taxaMora" type="text" class="form-control" disabled="disabled" />
+                                            </div>
                                         </div>
                                     </div>
                                     <div class="form-group">
@@ -1564,8 +1577,8 @@
                                                 <input id="valorDesconto" type="text" class="form-control valor" onchange="calcularValorFinanciado()" />
                                             </div>
                                             <div class="col-md-2">
-                                                <label for="valorCaixa">Valor Caixa:</label>
-                                                <input id="valorCaixa" type="text" class="form-control valor" onchange="calcularValorFinanciado()" />
+                                                <label for="valorDinheiro">Valor Dinheiro:</label>
+                                                <input id="valorDinheiro" type="text" class="form-control valor" onchange="calcularValorFinanciado()" />
                                             </div>
 
                                         </div>
@@ -1634,6 +1647,7 @@
                                                 <thead>
                                                     <tr>
                                                         <td class="text-center"><b>Parcela</b></td>
+                                                        <td class="text-center"><b>Data Início</b></td>
                                                         <td class="text-center"><b>Data Vencimento</b></td>
                                                         <td class="text-center"><b>Dias Contrato</b></td>
                                                         <td class="text-center"><b>Dias Parcela</b></td>

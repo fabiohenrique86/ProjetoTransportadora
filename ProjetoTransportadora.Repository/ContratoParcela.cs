@@ -30,8 +30,9 @@ namespace ProjetoTransportadora.Repository
         public Nullable<double> ValorMora { get; set; }
         public Nullable<double> ValorDesconto { get; set; }
         public double ValorParcela { get; set; }
+        public System.DateTime DataInicio { get; set; }
     
-        public virtual Contrato Contrato { get; set; }
         public virtual SituacaoParcela SituacaoParcela { get; set; }
+        public virtual Contrato Contrato { get; set; }
     }
 }

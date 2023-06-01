@@ -44,7 +44,7 @@
           <Property Name="ValorFinanciadoDocumentacao" Type="float" />
           <Property Name="IdVeiculoEntrada" Type="int" />
           <Property Name="ValorFinanciado" Type="float" Nullable="false" />
-          <Property Name="ValorCaixa" Type="float" />
+          <Property Name="ValorDinheiro" Type="float" />
           <Property Name="ValorDepositado" Type="float" />
           <Property Name="TaxaJuros" Type="float" Nullable="false" />
           <Property Name="Ativo" Type="bit" Nullable="false" />
@@ -56,6 +56,8 @@
           <Property Name="IdUsuarioBaixa" Type="int" />
           <Property Name="IdUsuarioAntecipacao" Type="int" />
           <Property Name="ValorVeiculoEntrada" Type="float" />
+          <Property Name="TaxaMulta" Type="float" />
+          <Property Name="TaxaMora" Type="float" />
         </EntityType>
         <EntityType Name="ContratoHistorico">
           <Key>
@@ -88,6 +90,7 @@
           <Property Name="ValorMora" Type="float" />
           <Property Name="ValorDesconto" Type="float" />
           <Property Name="ValorParcela" Type="float" Nullable="false" />
+          <Property Name="DataInicio" Type="datetime" Nullable="false" />
         </EntityType>
         <EntityType Name="EstadoCivil">
           <Key>
@@ -1345,9 +1348,24 @@
             <End Role="Veiculo" EntitySet="Veiculo" />
             <End Role="VeiculoMulta" EntitySet="VeiculoMulta" />
           </AssociationSet>
-          <EntitySet Name="Contrato" EntityType="ProjetoTransportadoraModel.Contrato" />
           <EntitySet Name="ContratoHistorico" EntityType="ProjetoTransportadoraModel.ContratoHistorico" />
           <EntitySet Name="ContratoParcela" EntityType="ProjetoTransportadoraModel.ContratoParcela" />
+          <EntitySet Name="SituacaoContrato" EntityType="ProjetoTransportadoraModel.SituacaoContrato" />
+          <EntitySet Name="SituacaoParcela" EntityType="ProjetoTransportadoraModel.SituacaoParcela" />
+          <AssociationSet Name="FK_ContratoParcela_SituacaoParcela" Association="ProjetoTransportadoraModel.FK_ContratoParcela_SituacaoParcela">
+            <End Role="SituacaoParcela" EntitySet="SituacaoParcela" />
+            <End Role="ContratoParcela" EntitySet="ContratoParcela" />
+          </AssociationSet>
+          <EntitySet Name="PessoaAvalista" EntityType="ProjetoTransportadoraModel.PessoaAvalista" />
+          <AssociationSet Name="FK_PessoaAvalista_Avalista" Association="ProjetoTransportadoraModel.FK_PessoaAvalista_Avalista">
+            <End Role="Pessoa" EntitySet="Pessoa" />
+            <End Role="PessoaAvalista" EntitySet="PessoaAvalista" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PessoaAvalista_Pessoa" Association="ProjetoTransportadoraModel.FK_PessoaAvalista_Pessoa">
+            <End Role="Pessoa" EntitySet="Pessoa" />
+            <End Role="PessoaAvalista" EntitySet="PessoaAvalista" />
+          </AssociationSet>
+          <EntitySet Name="Contrato" EntityType="ProjetoTransportadoraModel.Contrato" />
           <AssociationSet Name="FK_Contrato_Canal" Association="ProjetoTransportadoraModel.FK_Contrato_Canal">
             <End Role="Canal" EntitySet="Canal" />
             <End Role="Contrato" EntitySet="Contrato" />
@@ -1372,6 +1390,10 @@
             <End Role="Produto" EntitySet="Produto" />
             <End Role="Contrato" EntitySet="Contrato" />
           </AssociationSet>
+          <AssociationSet Name="FK_Contrato_SituacaoContrato" Association="ProjetoTransportadoraModel.FK_Contrato_SituacaoContrato">
+            <End Role="SituacaoContrato" EntitySet="SituacaoContrato" />
+            <End Role="Contrato" EntitySet="Contrato" />
+          </AssociationSet>
           <AssociationSet Name="FK_Contrato_Veiculo" Association="ProjetoTransportadoraModel.FK_Contrato_Veiculo">
             <End Role="Veiculo" EntitySet="Veiculo" />
             <End Role="Contrato" EntitySet="Contrato" />
@@ -1387,25 +1409,6 @@
           <AssociationSet Name="FK_ContratoParcela_Contrato" Association="ProjetoTransportadoraModel.FK_ContratoParcela_Contrato">
             <End Role="Contrato" EntitySet="Contrato" />
             <End Role="ContratoParcela" EntitySet="ContratoParcela" />
-          </AssociationSet>
-          <EntitySet Name="SituacaoContrato" EntityType="ProjetoTransportadoraModel.SituacaoContrato" />
-          <EntitySet Name="SituacaoParcela" EntityType="ProjetoTransportadoraModel.SituacaoParcela" />
-          <AssociationSet Name="FK_Contrato_SituacaoContrato" Association="ProjetoTransportadoraModel.FK_Contrato_SituacaoContrato">
-            <End Role="SituacaoContrato" EntitySet="SituacaoContrato" />
-            <End Role="Contrato" EntitySet="Contrato" />
-          </AssociationSet>
-          <AssociationSet Name="FK_ContratoParcela_SituacaoParcela" Association="ProjetoTransportadoraModel.FK_ContratoParcela_SituacaoParcela">
-            <End Role="SituacaoParcela" EntitySet="SituacaoParcela" />
-            <End Role="ContratoParcela" EntitySet="ContratoParcela" />
-          </AssociationSet>
-          <EntitySet Name="PessoaAvalista" EntityType="ProjetoTransportadoraModel.PessoaAvalista" />
-          <AssociationSet Name="FK_PessoaAvalista_Avalista" Association="ProjetoTransportadoraModel.FK_PessoaAvalista_Avalista">
-            <End Role="Pessoa" EntitySet="Pessoa" />
-            <End Role="PessoaAvalista" EntitySet="PessoaAvalista" />
-          </AssociationSet>
-          <AssociationSet Name="FK_PessoaAvalista_Pessoa" Association="ProjetoTransportadoraModel.FK_PessoaAvalista_Pessoa">
-            <End Role="Pessoa" EntitySet="Pessoa" />
-            <End Role="PessoaAvalista" EntitySet="PessoaAvalista" />
           </AssociationSet>
           </EntityContainer>
         <EntityType Name="Log">
@@ -1737,12 +1740,12 @@
           <NavigationProperty Name="Veiculo" Relationship="ProjetoTransportadoraModel.FK_Veiculo_Pessoa_ProprietarioAnterior" FromRole="Pessoa" ToRole="Veiculo" />
           <NavigationProperty Name="Veiculo1" Relationship="ProjetoTransportadoraModel.FK_Veiculo_Pessoa_ProprietarioAtual" FromRole="Pessoa" ToRole="Veiculo" />
           <NavigationProperty Name="VeiculoMulta" Relationship="ProjetoTransportadoraModel.FK_VeiculoMulta_Pessoa" FromRole="Pessoa" ToRole="VeiculoMulta" />
+          <NavigationProperty Name="PessoaAvalista1" Relationship="ProjetoTransportadoraModel.FK_PessoaAvalista_Avalista" FromRole="Pessoa" ToRole="PessoaAvalista" />
+          <NavigationProperty Name="PessoaAvalista" Relationship="ProjetoTransportadoraModel.FK_PessoaAvalista_Pessoa" FromRole="Pessoa" ToRole="PessoaAvalista" />
           <NavigationProperty Name="Contrato" Relationship="ProjetoTransportadoraModel.FK_Contrato_Pessoa_Cliente" FromRole="Pessoa" ToRole="Contrato" />
           <NavigationProperty Name="Contrato1" Relationship="ProjetoTransportadoraModel.FK_Contrato_Pessoa_Fiador" FromRole="Pessoa" ToRole="Contrato" />
           <NavigationProperty Name="Contrato2" Relationship="ProjetoTransportadoraModel.FK_Contrato_Pessoa_Indicacao" FromRole="Pessoa" ToRole="Contrato" />
           <NavigationProperty Name="Contrato3" Relationship="ProjetoTransportadoraModel.FK_Contrato_Pessoa_Promotor" FromRole="Pessoa" ToRole="Contrato" />
-          <NavigationProperty Name="PessoaAvalista1" Relationship="ProjetoTransportadoraModel.FK_PessoaAvalista_Avalista" FromRole="Pessoa" ToRole="PessoaAvalista" />
-          <NavigationProperty Name="PessoaAvalista" Relationship="ProjetoTransportadoraModel.FK_PessoaAvalista_Pessoa" FromRole="Pessoa" ToRole="PessoaAvalista" />
           </EntityType>
         <Association Name="FK_Pessoa_EstadoCivil">
           <End Type="ProjetoTransportadoraModel.EstadoCivil" Role="EstadoCivil" Multiplicity="0..1" />
@@ -2077,57 +2080,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <EntityType Name="Contrato">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="NumeroContrato" Type="Int32" Nullable="false" />
-          <Property Name="IdCliente" Type="Int32" Nullable="false" />
-          <Property Name="IdVeiculo" Type="Int32" Nullable="false" />
-          <Property Name="IdProduto" Type="Int32" Nullable="false" />
-          <Property Name="IdSituacaoContrato" Type="Int32" Nullable="false" />
-          <Property Name="IdCanal" Type="Int32" />
-          <Property Name="DataContrato" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="IdFiador" Type="Int32" />
-          <Property Name="IdIndicacao" Type="Int32" />
-          <Property Name="IdPromotor" Type="Int32" />
-          <Property Name="DataPrimeiraParcela" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="DataBaixa" Type="DateTime" Precision="3" />
-          <Property Name="DataAntecipacao" Type="DateTime" Precision="3" />
-          <Property Name="ValorAntecipacao" Type="Double" />
-          <Property Name="ValorVeiculo" Type="Double" />
-          <Property Name="ValorEntrada" Type="Double" />
-          <Property Name="ValorDocumentacao" Type="Double" />
-          <Property Name="ValorDesconto" Type="Double" />
-          <Property Name="ValorFinanciadoVeiculo" Type="Double" />
-          <Property Name="ValorFinanciadoDocumentacao" Type="Double" />
-          <Property Name="IdVeiculoEntrada" Type="Int32" />
-          <Property Name="ValorFinanciado" Type="Double" Nullable="false" />
-          <Property Name="ValorCaixa" Type="Double" />
-          <Property Name="ValorDepositado" Type="Double" />
-          <Property Name="TaxaJuros" Type="Double" Nullable="false" />
-          <Property Name="Ativo" Type="Boolean" Nullable="false" />
-          <Property Name="IdUsuarioCadastro" Type="Int32" Nullable="false" />
-          <Property Name="DataCadastro" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="IdUsuarioInativacao" Type="Int32" />
-          <Property Name="DataInativacao" Type="DateTime" Precision="3" />
-          <NavigationProperty Name="Canal" Relationship="ProjetoTransportadoraModel.FK_Contrato_Canal" FromRole="Contrato" ToRole="Canal" />
-          <NavigationProperty Name="PessoaCliente" Relationship="ProjetoTransportadoraModel.FK_Contrato_Pessoa_Cliente" FromRole="Contrato" ToRole="Pessoa" />
-          <NavigationProperty Name="PessoaFiador" Relationship="ProjetoTransportadoraModel.FK_Contrato_Pessoa_Fiador" FromRole="Contrato" ToRole="Pessoa" />
-          <NavigationProperty Name="PessoaIndicacao" Relationship="ProjetoTransportadoraModel.FK_Contrato_Pessoa_Indicacao" FromRole="Contrato" ToRole="Pessoa" />
-          <NavigationProperty Name="PessoaPromotor" Relationship="ProjetoTransportadoraModel.FK_Contrato_Pessoa_Promotor" FromRole="Contrato" ToRole="Pessoa" />
-          <NavigationProperty Name="Produto" Relationship="ProjetoTransportadoraModel.FK_Contrato_Produto" FromRole="Contrato" ToRole="Produto" />
-          <NavigationProperty Name="Veiculo" Relationship="ProjetoTransportadoraModel.FK_Contrato_Veiculo" FromRole="Contrato" ToRole="Veiculo" />
-          <NavigationProperty Name="VeiculoEntrada" Relationship="ProjetoTransportadoraModel.FK_Contrato_VeiculoEntrada" FromRole="Contrato" ToRole="Veiculo" />
-          <NavigationProperty Name="ContratoHistorico" Relationship="ProjetoTransportadoraModel.FK_ContratoHistorico_Contrato" FromRole="Contrato" ToRole="ContratoHistorico" />
-          <NavigationProperty Name="ContratoParcela" Relationship="ProjetoTransportadoraModel.FK_ContratoParcela_Contrato" FromRole="Contrato" ToRole="ContratoParcela" />
-          <NavigationProperty Name="SituacaoContrato" Relationship="ProjetoTransportadoraModel.FK_Contrato_SituacaoContrato" FromRole="Contrato" ToRole="SituacaoContrato" />
-          <Property Name="ValorTarifa" Type="Double" />
-          <Property Name="IdUsuarioBaixa" Type="Int32" />
-          <Property Name="IdUsuarioAntecipacao" Type="Int32" />
-          <Property Name="ValorVeiculoEntrada" Type="Double" />
-        </EntityType>
         <EntityType Name="ContratoHistorico">
           <Key>
             <PropertyRef Name="Id" />
@@ -2160,8 +2112,134 @@
           <Property Name="ValorMora" Type="Double" />
           <Property Name="ValorDesconto" Type="Double" />
           <Property Name="ValorParcela" Type="Double" Nullable="false" />
-          <NavigationProperty Name="Contrato" Relationship="ProjetoTransportadoraModel.FK_ContratoParcela_Contrato" FromRole="ContratoParcela" ToRole="Contrato" />
           <NavigationProperty Name="SituacaoParcela" Relationship="ProjetoTransportadoraModel.FK_ContratoParcela_SituacaoParcela" FromRole="ContratoParcela" ToRole="SituacaoParcela" />
+          <NavigationProperty Name="Contrato" Relationship="ProjetoTransportadoraModel.FK_ContratoParcela_Contrato" FromRole="ContratoParcela" ToRole="Contrato" />
+          <Property Name="DataInicio" Type="DateTime" Nullable="false" Precision="3" />
+        </EntityType>
+        <EntityType Name="SituacaoContrato">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" />
+          <Property Name="Nome" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="Ativo" Type="Boolean" Nullable="false" />
+          <Property Name="IdUsuarioCadastro" Type="Int32" Nullable="false" />
+          <Property Name="DataCadastro" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="IdUsuarioInativacao" Type="Int32" />
+          <Property Name="DataInativacao" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="Contrato" Relationship="ProjetoTransportadoraModel.FK_Contrato_SituacaoContrato" FromRole="SituacaoContrato" ToRole="Contrato" />
+        </EntityType>
+        <EntityType Name="SituacaoParcela">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" />
+          <Property Name="Nome" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="Ativo" Type="Boolean" Nullable="false" />
+          <Property Name="IdUsuarioCadastro" Type="Int32" Nullable="false" />
+          <Property Name="DataCadastro" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="IdUsuarioInativacao" Type="Int32" />
+          <Property Name="DataInativacao" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="ContratoParcela" Relationship="ProjetoTransportadoraModel.FK_ContratoParcela_SituacaoParcela" FromRole="SituacaoParcela" ToRole="ContratoParcela" />
+        </EntityType>
+        <Association Name="FK_ContratoParcela_SituacaoParcela">
+          <End Type="ProjetoTransportadoraModel.SituacaoParcela" Role="SituacaoParcela" Multiplicity="1" />
+          <End Type="ProjetoTransportadoraModel.ContratoParcela" Role="ContratoParcela" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SituacaoParcela">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ContratoParcela">
+              <PropertyRef Name="IdSituacaoParcela" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="PessoaAvalista">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="IdPessoa" Type="Int32" Nullable="false" />
+          <Property Name="IdAvalista" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Avalista" Relationship="ProjetoTransportadoraModel.FK_PessoaAvalista_Avalista" FromRole="PessoaAvalista" ToRole="Pessoa" />
+          <NavigationProperty Name="Pessoa" Relationship="ProjetoTransportadoraModel.FK_PessoaAvalista_Pessoa" FromRole="PessoaAvalista" ToRole="Pessoa" />
+        </EntityType>
+        <Association Name="FK_PessoaAvalista_Avalista">
+          <End Type="ProjetoTransportadoraModel.Pessoa" Role="Pessoa" Multiplicity="1" />
+          <End Type="ProjetoTransportadoraModel.PessoaAvalista" Role="PessoaAvalista" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Pessoa">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="PessoaAvalista">
+              <PropertyRef Name="IdAvalista" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PessoaAvalista_Pessoa">
+          <End Type="ProjetoTransportadoraModel.Pessoa" Role="Pessoa" Multiplicity="1" />
+          <End Type="ProjetoTransportadoraModel.PessoaAvalista" Role="PessoaAvalista" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Pessoa">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="PessoaAvalista">
+              <PropertyRef Name="IdPessoa" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="Contrato">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="NumeroContrato" Type="Int32" Nullable="false" />
+          <Property Name="IdCliente" Type="Int32" Nullable="false" />
+          <Property Name="IdVeiculo" Type="Int32" Nullable="false" />
+          <Property Name="IdProduto" Type="Int32" Nullable="false" />
+          <Property Name="IdSituacaoContrato" Type="Int32" Nullable="false" />
+          <Property Name="IdCanal" Type="Int32" />
+          <Property Name="DataContrato" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="IdFiador" Type="Int32" />
+          <Property Name="IdIndicacao" Type="Int32" />
+          <Property Name="IdPromotor" Type="Int32" />
+          <Property Name="DataPrimeiraParcela" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="DataBaixa" Type="DateTime" Precision="3" />
+          <Property Name="DataAntecipacao" Type="DateTime" Precision="3" />
+          <Property Name="ValorAntecipacao" Type="Double" />
+          <Property Name="ValorVeiculo" Type="Double" />
+          <Property Name="ValorEntrada" Type="Double" />
+          <Property Name="ValorDocumentacao" Type="Double" />
+          <Property Name="ValorDesconto" Type="Double" />
+          <Property Name="ValorFinanciadoVeiculo" Type="Double" />
+          <Property Name="ValorFinanciadoDocumentacao" Type="Double" />
+          <Property Name="IdVeiculoEntrada" Type="Int32" />
+          <Property Name="ValorFinanciado" Type="Double" Nullable="false" />
+          <Property Name="ValorDinheiro" Type="Double" />
+          <Property Name="ValorDepositado" Type="Double" />
+          <Property Name="TaxaJuros" Type="Double" Nullable="false" />
+          <Property Name="Ativo" Type="Boolean" Nullable="false" />
+          <Property Name="IdUsuarioCadastro" Type="Int32" Nullable="false" />
+          <Property Name="DataCadastro" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="IdUsuarioInativacao" Type="Int32" />
+          <Property Name="DataInativacao" Type="DateTime" Precision="3" />
+          <Property Name="ValorTarifa" Type="Double" />
+          <Property Name="IdUsuarioBaixa" Type="Int32" />
+          <Property Name="IdUsuarioAntecipacao" Type="Int32" />
+          <Property Name="ValorVeiculoEntrada" Type="Double" />
+          <Property Name="TaxaMulta" Type="Double" />
+          <Property Name="TaxaMora" Type="Double" />
+          <NavigationProperty Name="Canal" Relationship="ProjetoTransportadoraModel.FK_Contrato_Canal" FromRole="Contrato" ToRole="Canal" />
+          <NavigationProperty Name="PessoaCliente" Relationship="ProjetoTransportadoraModel.FK_Contrato_Pessoa_Cliente" FromRole="Contrato" ToRole="Pessoa" />
+          <NavigationProperty Name="Pessoa1" Relationship="ProjetoTransportadoraModel.FK_Contrato_Pessoa_Fiador" FromRole="Contrato" ToRole="Pessoa" />
+          <NavigationProperty Name="Pessoa2" Relationship="ProjetoTransportadoraModel.FK_Contrato_Pessoa_Indicacao" FromRole="Contrato" ToRole="Pessoa" />
+          <NavigationProperty Name="Pessoa3" Relationship="ProjetoTransportadoraModel.FK_Contrato_Pessoa_Promotor" FromRole="Contrato" ToRole="Pessoa" />
+          <NavigationProperty Name="Produto" Relationship="ProjetoTransportadoraModel.FK_Contrato_Produto" FromRole="Contrato" ToRole="Produto" />
+          <NavigationProperty Name="SituacaoContrato" Relationship="ProjetoTransportadoraModel.FK_Contrato_SituacaoContrato" FromRole="Contrato" ToRole="SituacaoContrato" />
+          <NavigationProperty Name="Veiculo" Relationship="ProjetoTransportadoraModel.FK_Contrato_Veiculo" FromRole="Contrato" ToRole="Veiculo" />
+          <NavigationProperty Name="VeiculoEntrada" Relationship="ProjetoTransportadoraModel.FK_Contrato_VeiculoEntrada" FromRole="Contrato" ToRole="Veiculo" />
+          <NavigationProperty Name="ContratoHistorico" Relationship="ProjetoTransportadoraModel.FK_ContratoHistorico_Contrato" FromRole="Contrato" ToRole="ContratoHistorico" />
+          <NavigationProperty Name="ContratoParcela" Relationship="ProjetoTransportadoraModel.FK_ContratoParcela_Contrato" FromRole="Contrato" ToRole="ContratoParcela" />
         </EntityType>
         <Association Name="FK_Contrato_Canal">
           <End Type="ProjetoTransportadoraModel.Canal" Role="Canal" Multiplicity="0..1" />
@@ -2235,6 +2313,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_Contrato_SituacaoContrato">
+          <End Type="ProjetoTransportadoraModel.SituacaoContrato" Role="SituacaoContrato" Multiplicity="1" />
+          <End Type="ProjetoTransportadoraModel.Contrato" Role="Contrato" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SituacaoContrato">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Contrato">
+              <PropertyRef Name="IdSituacaoContrato" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_Contrato_Veiculo">
           <End Type="ProjetoTransportadoraModel.Veiculo" Role="Veiculo" Multiplicity="1" />
           <End Type="ProjetoTransportadoraModel.Contrato" Role="Contrato" Multiplicity="*" />
@@ -2280,90 +2370,6 @@
             </Principal>
             <Dependent Role="ContratoParcela">
               <PropertyRef Name="IdContrato" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <EntityType Name="SituacaoContrato">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" />
-          <Property Name="Nome" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
-          <Property Name="Ativo" Type="Boolean" Nullable="false" />
-          <Property Name="IdUsuarioCadastro" Type="Int32" Nullable="false" />
-          <Property Name="DataCadastro" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="IdUsuarioInativacao" Type="Int32" />
-          <Property Name="DataInativacao" Type="DateTime" Precision="3" />
-          <NavigationProperty Name="Contrato" Relationship="ProjetoTransportadoraModel.FK_Contrato_SituacaoContrato" FromRole="SituacaoContrato" ToRole="Contrato" />
-        </EntityType>
-        <EntityType Name="SituacaoParcela">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" />
-          <Property Name="Nome" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
-          <Property Name="Ativo" Type="Boolean" Nullable="false" />
-          <Property Name="IdUsuarioCadastro" Type="Int32" Nullable="false" />
-          <Property Name="DataCadastro" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="IdUsuarioInativacao" Type="Int32" />
-          <Property Name="DataInativacao" Type="DateTime" Precision="3" />
-          <NavigationProperty Name="ContratoParcela" Relationship="ProjetoTransportadoraModel.FK_ContratoParcela_SituacaoParcela" FromRole="SituacaoParcela" ToRole="ContratoParcela" />
-        </EntityType>
-        <Association Name="FK_Contrato_SituacaoContrato">
-          <End Type="ProjetoTransportadoraModel.SituacaoContrato" Role="SituacaoContrato" Multiplicity="1" />
-          <End Type="ProjetoTransportadoraModel.Contrato" Role="Contrato" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="SituacaoContrato">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="Contrato">
-              <PropertyRef Name="IdSituacaoContrato" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_ContratoParcela_SituacaoParcela">
-          <End Type="ProjetoTransportadoraModel.SituacaoParcela" Role="SituacaoParcela" Multiplicity="1" />
-          <End Type="ProjetoTransportadoraModel.ContratoParcela" Role="ContratoParcela" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="SituacaoParcela">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="ContratoParcela">
-              <PropertyRef Name="IdSituacaoParcela" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <EntityType Name="PessoaAvalista">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="IdPessoa" Type="Int32" Nullable="false" />
-          <Property Name="IdAvalista" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="Avalista" Relationship="ProjetoTransportadoraModel.FK_PessoaAvalista_Avalista" FromRole="PessoaAvalista" ToRole="Pessoa" />
-          <NavigationProperty Name="Pessoa" Relationship="ProjetoTransportadoraModel.FK_PessoaAvalista_Pessoa" FromRole="PessoaAvalista" ToRole="Pessoa" />
-        </EntityType>
-        <Association Name="FK_PessoaAvalista_Avalista">
-          <End Type="ProjetoTransportadoraModel.Pessoa" Role="Pessoa" Multiplicity="1" />
-          <End Type="ProjetoTransportadoraModel.PessoaAvalista" Role="PessoaAvalista" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Pessoa">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="PessoaAvalista">
-              <PropertyRef Name="IdAvalista" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_PessoaAvalista_Pessoa">
-          <End Type="ProjetoTransportadoraModel.Pessoa" Role="Pessoa" Multiplicity="1" />
-          <End Type="ProjetoTransportadoraModel.PessoaAvalista" Role="PessoaAvalista" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Pessoa">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="PessoaAvalista">
-              <PropertyRef Name="IdPessoa" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -2743,47 +2749,6 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="Contrato">
-            <EntityTypeMapping TypeName="ProjetoTransportadoraModel.Contrato">
-              <MappingFragment StoreEntitySet="Contrato">
-                <ScalarProperty Name="ValorVeiculoEntrada" ColumnName="ValorVeiculoEntrada" />
-                <ScalarProperty Name="IdUsuarioAntecipacao" ColumnName="IdUsuarioAntecipacao" />
-                <ScalarProperty Name="IdUsuarioBaixa" ColumnName="IdUsuarioBaixa" />
-                <ScalarProperty Name="ValorTarifa" ColumnName="ValorTarifa" />
-                <ScalarProperty Name="DataInativacao" ColumnName="DataInativacao" />
-                <ScalarProperty Name="IdUsuarioInativacao" ColumnName="IdUsuarioInativacao" />
-                <ScalarProperty Name="DataCadastro" ColumnName="DataCadastro" />
-                <ScalarProperty Name="IdUsuarioCadastro" ColumnName="IdUsuarioCadastro" />
-                <ScalarProperty Name="Ativo" ColumnName="Ativo" />
-                <ScalarProperty Name="TaxaJuros" ColumnName="TaxaJuros" />
-                <ScalarProperty Name="ValorDepositado" ColumnName="ValorDepositado" />
-                <ScalarProperty Name="ValorCaixa" ColumnName="ValorCaixa" />
-                <ScalarProperty Name="ValorFinanciado" ColumnName="ValorFinanciado" />
-                <ScalarProperty Name="IdVeiculoEntrada" ColumnName="IdVeiculoEntrada" />
-                <ScalarProperty Name="ValorFinanciadoDocumentacao" ColumnName="ValorFinanciadoDocumentacao" />
-                <ScalarProperty Name="ValorFinanciadoVeiculo" ColumnName="ValorFinanciadoVeiculo" />
-                <ScalarProperty Name="ValorDesconto" ColumnName="ValorDesconto" />
-                <ScalarProperty Name="ValorDocumentacao" ColumnName="ValorDocumentacao" />
-                <ScalarProperty Name="ValorEntrada" ColumnName="ValorEntrada" />
-                <ScalarProperty Name="ValorVeiculo" ColumnName="ValorVeiculo" />
-                <ScalarProperty Name="ValorAntecipacao" ColumnName="ValorAntecipacao" />
-                <ScalarProperty Name="DataAntecipacao" ColumnName="DataAntecipacao" />
-                <ScalarProperty Name="DataBaixa" ColumnName="DataBaixa" />
-                <ScalarProperty Name="DataPrimeiraParcela" ColumnName="DataPrimeiraParcela" />
-                <ScalarProperty Name="IdPromotor" ColumnName="IdPromotor" />
-                <ScalarProperty Name="IdIndicacao" ColumnName="IdIndicacao" />
-                <ScalarProperty Name="IdFiador" ColumnName="IdFiador" />
-                <ScalarProperty Name="DataContrato" ColumnName="DataContrato" />
-                <ScalarProperty Name="IdCanal" ColumnName="IdCanal" />
-                <ScalarProperty Name="IdSituacaoContrato" ColumnName="IdSituacaoContrato" />
-                <ScalarProperty Name="IdProduto" ColumnName="IdProduto" />
-                <ScalarProperty Name="IdVeiculo" ColumnName="IdVeiculo" />
-                <ScalarProperty Name="IdCliente" ColumnName="IdCliente" />
-                <ScalarProperty Name="NumeroContrato" ColumnName="NumeroContrato" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="ContratoHistorico">
             <EntityTypeMapping TypeName="ProjetoTransportadoraModel.ContratoHistorico">
               <MappingFragment StoreEntitySet="ContratoHistorico">
@@ -2799,6 +2764,7 @@
           <EntitySetMapping Name="ContratoParcela">
             <EntityTypeMapping TypeName="ProjetoTransportadoraModel.ContratoParcela">
               <MappingFragment StoreEntitySet="ContratoParcela">
+                <ScalarProperty Name="DataInicio" ColumnName="DataInicio" />
                 <ScalarProperty Name="ValorParcela" ColumnName="ValorParcela" />
                 <ScalarProperty Name="ValorDesconto" ColumnName="ValorDesconto" />
                 <ScalarProperty Name="ValorMora" ColumnName="ValorMora" />
@@ -2849,6 +2815,49 @@
               <MappingFragment StoreEntitySet="PessoaAvalista">
                 <ScalarProperty Name="IdAvalista" ColumnName="IdAvalista" />
                 <ScalarProperty Name="IdPessoa" ColumnName="IdPessoa" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Contrato">
+            <EntityTypeMapping TypeName="ProjetoTransportadoraModel.Contrato">
+              <MappingFragment StoreEntitySet="Contrato">
+                <ScalarProperty Name="TaxaMora" ColumnName="TaxaMora" />
+                <ScalarProperty Name="TaxaMulta" ColumnName="TaxaMulta" />
+                <ScalarProperty Name="ValorVeiculoEntrada" ColumnName="ValorVeiculoEntrada" />
+                <ScalarProperty Name="IdUsuarioAntecipacao" ColumnName="IdUsuarioAntecipacao" />
+                <ScalarProperty Name="IdUsuarioBaixa" ColumnName="IdUsuarioBaixa" />
+                <ScalarProperty Name="ValorTarifa" ColumnName="ValorTarifa" />
+                <ScalarProperty Name="DataInativacao" ColumnName="DataInativacao" />
+                <ScalarProperty Name="IdUsuarioInativacao" ColumnName="IdUsuarioInativacao" />
+                <ScalarProperty Name="DataCadastro" ColumnName="DataCadastro" />
+                <ScalarProperty Name="IdUsuarioCadastro" ColumnName="IdUsuarioCadastro" />
+                <ScalarProperty Name="Ativo" ColumnName="Ativo" />
+                <ScalarProperty Name="TaxaJuros" ColumnName="TaxaJuros" />
+                <ScalarProperty Name="ValorDepositado" ColumnName="ValorDepositado" />
+                <ScalarProperty Name="ValorDinheiro" ColumnName="ValorDinheiro" />
+                <ScalarProperty Name="ValorFinanciado" ColumnName="ValorFinanciado" />
+                <ScalarProperty Name="IdVeiculoEntrada" ColumnName="IdVeiculoEntrada" />
+                <ScalarProperty Name="ValorFinanciadoDocumentacao" ColumnName="ValorFinanciadoDocumentacao" />
+                <ScalarProperty Name="ValorFinanciadoVeiculo" ColumnName="ValorFinanciadoVeiculo" />
+                <ScalarProperty Name="ValorDesconto" ColumnName="ValorDesconto" />
+                <ScalarProperty Name="ValorDocumentacao" ColumnName="ValorDocumentacao" />
+                <ScalarProperty Name="ValorEntrada" ColumnName="ValorEntrada" />
+                <ScalarProperty Name="ValorVeiculo" ColumnName="ValorVeiculo" />
+                <ScalarProperty Name="ValorAntecipacao" ColumnName="ValorAntecipacao" />
+                <ScalarProperty Name="DataAntecipacao" ColumnName="DataAntecipacao" />
+                <ScalarProperty Name="DataBaixa" ColumnName="DataBaixa" />
+                <ScalarProperty Name="DataPrimeiraParcela" ColumnName="DataPrimeiraParcela" />
+                <ScalarProperty Name="IdPromotor" ColumnName="IdPromotor" />
+                <ScalarProperty Name="IdIndicacao" ColumnName="IdIndicacao" />
+                <ScalarProperty Name="IdFiador" ColumnName="IdFiador" />
+                <ScalarProperty Name="DataContrato" ColumnName="DataContrato" />
+                <ScalarProperty Name="IdCanal" ColumnName="IdCanal" />
+                <ScalarProperty Name="IdSituacaoContrato" ColumnName="IdSituacaoContrato" />
+                <ScalarProperty Name="IdProduto" ColumnName="IdProduto" />
+                <ScalarProperty Name="IdVeiculo" ColumnName="IdVeiculo" />
+                <ScalarProperty Name="IdCliente" ColumnName="IdCliente" />
+                <ScalarProperty Name="NumeroContrato" ColumnName="NumeroContrato" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>

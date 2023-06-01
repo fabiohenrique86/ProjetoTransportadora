@@ -37,10 +37,12 @@ namespace ProjetoTransportadora.Dto
         public int? IdVeiculoEntrada { get; set; }
         public double? ValorVeiculoEntrada { get; set; }
         public double ValorFinanciado { get; set; }
-        public double? ValorCaixa { get; set; }
+        public double? ValorDinheiro { get; set; }
         public double? ValorDepositado { get; set; }
         public double? ValorTarifa { get; set; }
         public double TaxaJuros { get; set; }
+        public double? TaxaMulta { get; set; }
+        public double? TaxaMora { get; set; }
         public bool? Ativo { get; set; }
         public int IdUsuarioCadastro { get; set; }
         public DateTime DataCadastro { get; set; }

@@ -133,7 +133,7 @@ namespace ProjetoTransportadora.Web.Controllers
                 csv += item.ValorFinanciado.ToString("C") + ";";
                 csv += (item.ValorFinanciadoVeiculo == null ? string.Empty : item.ValorFinanciadoVeiculo.GetValueOrDefault().ToString("C")) + ";";
                 csv += (item.ValorFinanciadoDocumentacao == null ? string.Empty : item.ValorFinanciadoDocumentacao.GetValueOrDefault().ToString("C")) + ";";
-                csv += (item.ValorCaixa == null ? string.Empty : item.ValorCaixa.GetValueOrDefault().ToString("C")) + ";";
+                csv += (item.ValorDinheiro == null ? string.Empty : item.ValorDinheiro.GetValueOrDefault().ToString("C")) + ";";
                 csv += (item.ValorDepositado == null ? string.Empty : item.ValorDepositado.GetValueOrDefault().ToString("C")) + ";";
                 csv += (item.ValorDesconto == null ? string.Empty : item.ValorDesconto.GetValueOrDefault().ToString("C")) + ";";
                 csv += (item.DataBaixa == null ? string.Empty : item.DataBaixa.GetValueOrDefault().ToString("dd/MM/yyyy")) + ";";

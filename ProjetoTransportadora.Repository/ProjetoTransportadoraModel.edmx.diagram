@@ -58,26 +58,26 @@
         <AssociationConnector Association="ProjetoTransportadoraModel.FK_VeiculoMulta_Pessoa" />
         <AssociationConnector Association="ProjetoTransportadoraModel.FK_VeiculoMulta_SituacaoMulta" />
         <AssociationConnector Association="ProjetoTransportadoraModel.FK_VeiculoMulta_Veiculo" />
-        <EntityTypeShape EntityType="ProjetoTransportadoraModel.Contrato" Width="1.5" PointX="23.5" PointY="5.75" />
         <EntityTypeShape EntityType="ProjetoTransportadoraModel.ContratoHistorico" Width="1.5" PointX="25.75" PointY="14.375" />
         <EntityTypeShape EntityType="ProjetoTransportadoraModel.ContratoParcela" Width="1.5" PointX="25.75" PointY="8" />
+        <EntityTypeShape EntityType="ProjetoTransportadoraModel.SituacaoContrato" Width="1.5" PointX="21.25" PointY="4" />
+        <EntityTypeShape EntityType="ProjetoTransportadoraModel.SituacaoParcela" Width="1.5" PointX="4.375" PointY="13" />
+        <AssociationConnector Association="ProjetoTransportadoraModel.FK_ContratoParcela_SituacaoParcela" />
+        <EntityTypeShape EntityType="ProjetoTransportadoraModel.PessoaAvalista" Width="1.5" PointX="12.25" PointY="5.625" />
+        <AssociationConnector Association="ProjetoTransportadoraModel.FK_PessoaAvalista_Avalista" />
+        <AssociationConnector Association="ProjetoTransportadoraModel.FK_PessoaAvalista_Pessoa" />
+        <EntityTypeShape EntityType="ProjetoTransportadoraModel.Contrato" Width="1.5" PointX="23.5" PointY="5.125" />
         <AssociationConnector Association="ProjetoTransportadoraModel.FK_Contrato_Canal" />
         <AssociationConnector Association="ProjetoTransportadoraModel.FK_Contrato_Pessoa_Cliente" />
         <AssociationConnector Association="ProjetoTransportadoraModel.FK_Contrato_Pessoa_Fiador" />
         <AssociationConnector Association="ProjetoTransportadoraModel.FK_Contrato_Pessoa_Indicacao" />
         <AssociationConnector Association="ProjetoTransportadoraModel.FK_Contrato_Pessoa_Promotor" />
         <AssociationConnector Association="ProjetoTransportadoraModel.FK_Contrato_Produto" />
+        <AssociationConnector Association="ProjetoTransportadoraModel.FK_Contrato_SituacaoContrato" />
         <AssociationConnector Association="ProjetoTransportadoraModel.FK_Contrato_Veiculo" />
         <AssociationConnector Association="ProjetoTransportadoraModel.FK_Contrato_VeiculoEntrada" />
         <AssociationConnector Association="ProjetoTransportadoraModel.FK_ContratoHistorico_Contrato" />
         <AssociationConnector Association="ProjetoTransportadoraModel.FK_ContratoParcela_Contrato" />
-        <EntityTypeShape EntityType="ProjetoTransportadoraModel.SituacaoContrato" Width="1.5" PointX="21.25" PointY="4" />
-        <EntityTypeShape EntityType="ProjetoTransportadoraModel.SituacaoParcela" Width="1.5" PointX="4.375" PointY="13" />
-        <AssociationConnector Association="ProjetoTransportadoraModel.FK_Contrato_SituacaoContrato" />
-        <AssociationConnector Association="ProjetoTransportadoraModel.FK_ContratoParcela_SituacaoParcela" />
-        <EntityTypeShape EntityType="ProjetoTransportadoraModel.PessoaAvalista" Width="1.5" PointX="12.25" PointY="5.625" />
-        <AssociationConnector Association="ProjetoTransportadoraModel.FK_PessoaAvalista_Avalista" />
-        <AssociationConnector Association="ProjetoTransportadoraModel.FK_PessoaAvalista_Pessoa" />
         </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

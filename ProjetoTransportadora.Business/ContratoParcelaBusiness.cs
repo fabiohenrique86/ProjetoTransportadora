@@ -71,6 +71,9 @@ namespace ProjetoTransportadora.Business
             if (contratoParcelaDto.IdSituacaoParcela <= 0)
                 throw new BusinessException("IdSituacaoParcela é obrigatório");
 
+            if (contratoParcelaDto.DataInicio == DateTime.MinValue)
+                throw new BusinessException("Data Início é obrigatório");
+
             if (contratoParcelaDto.DataVencimento == DateTime.MinValue)
                 throw new BusinessException("Data Vencimento é obrigatório");
 
@@ -137,14 +140,15 @@ namespace ProjetoTransportadora.Business
                 diasContrato = Convert.ToDouble(dataVencimento.Subtract(simulacaoDto.DataInicio).Days);
                 diasParcela = parcelaAnterior == null ? diasContrato : Convert.ToDouble(dataVencimento.Subtract(parcelaAnterior.DataVencimento).Days);
 
-                fator = Math.Round(Math.Pow((1 + (simulacaoDto.TaxaMensalJuros / 100)), (diasContrato / 30D)), 6);
-                fatorInvertido = Math.Round(1 / fator, 6);
+                fator = Math.Pow((1 + (simulacaoDto.TaxaMensalJuros / 100)), (diasContrato / 30D));
+                fatorInvertido = 1 / fator;
                 somaFatorInvertido += fatorInvertido;
 
                 parcelasDto.Add(new ContratoParcelaDto()
                 {
                     NumeroParcela = i,
-                    DataVencimento = dataVencimento,
+                    DataInicio = (i == 1 ? simulacaoDto.DataInicio : parcelaAnterior.DataVencimento),
+                    DataVencimento = dataVencimento,                    
                     DataEmissao = DateTime.UtcNow.ToLocalTime(),
                     DiasContrato = Convert.ToInt32(diasContrato),
                     DiasParcela = Convert.ToInt32(diasParcela),
@@ -153,7 +157,7 @@ namespace ProjetoTransportadora.Business
                 });
             }
 
-            somaFatorInvertido = Math.Round(somaFatorInvertido, 6);
+            //somaFatorInvertido = Math.Round(somaFatorInvertido, 6);
 
             for (int i = 0; i < parcelasDto.Count(); i++)
             {
