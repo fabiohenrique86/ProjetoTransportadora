@@ -215,6 +215,8 @@ namespace ProjetoTransportadora.Repository
                 IdProprietario = x.IdProprietario,
                 EmpresaPessoal = x.EmpresaPessoal,
                 EmpresaTrabalho = x.EmpresaTrabalho,
+                TelefoneEmpresa = x.TelefoneEmpresa,
+                EmailEmpresa = x.EmailEmpresa,
                 PessoaAvalistaDto = x.PessoaAvalista.Select(w => new PessoaAvalistaDto()
                 {
                     Id = w.Id,
@@ -361,7 +363,9 @@ namespace ProjetoTransportadora.Repository
                 IdConjuge = pessoaDto.IdConjuge,
                 IdProprietario = pessoaDto.IdProprietario,
                 EmpresaPessoal = pessoaDto.EmpresaPessoal,
-                EmpresaTrabalho = pessoaDto.EmpresaTrabalho
+                EmpresaTrabalho = pessoaDto.EmpresaTrabalho,
+                TelefoneEmpresa = pessoaDto.TelefoneEmpresa,
+                EmailEmpresa = pessoaDto.EmailEmpresa
             };
 
             projetoTransportadoraEntities.Pessoa.Add(pessoa);
@@ -422,6 +426,8 @@ namespace ProjetoTransportadora.Repository
             pessoa.IdProprietario = pessoaDto.IdProprietario;
             pessoa.EmpresaPessoal = pessoaDto.EmpresaPessoal;
             pessoa.EmpresaTrabalho = pessoaDto.EmpresaTrabalho;
+            pessoa.TelefoneEmpresa = pessoaDto.TelefoneEmpresa;
+            pessoa.EmailEmpresa = pessoaDto.EmailEmpresa;
 
             if (pessoaDto.Ativo.HasValue)
             {

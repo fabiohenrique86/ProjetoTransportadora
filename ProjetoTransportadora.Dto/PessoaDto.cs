@@ -55,6 +55,9 @@ namespace ProjetoTransportadora.Dto
         public Nullable<int> IdMae { get; set; }
         public Nullable<int> IdConjuge { get; set; }
         public Nullable<int> IdProprietario { get; set; }
+        public bool SemVinculo { get; set; }
+        public string TelefoneEmpresa { get; set; }
+        public string EmailEmpresa { get; set; }
         public virtual EstadoCivilDto EstadoCivilDto { get; set; }
         public virtual PessoaDto PessoaPaiDto { get; set; }
         public virtual PessoaDto PessoaMaeDto { get; set; }

@@ -1034,18 +1034,24 @@
                                     <div class="form-group">
                                         <div class="row">
                                             <div class="col-md-4">
-                                                <label for="proprietarioAtual">Proprietário Atual:</label>
-                                                <input id="proprietarioAtual" name="proprietarioAtual" type="text" class="form-control" placeholder="Proprietário Atual (Mínimo de 3 caracteres - CPF ou CNPJ ou Nome)" />
-                                                <input type="hidden" name="idProprietarioAtual" id="idProprietarioAtual" />
+                                                <label class="control-label" for="proprietarioAtual">Proprietário Atual:</label>
+                                                <div class="input-group">
+                                                    <input id="proprietarioAtual" name="proprietarioAtual" type="text" class="form-control" placeholder="Proprietário Atual (Mínimo de 3 caracteres - CPF ou CNPJ ou Nome)" />
+                                                    <input type="hidden" name="idProprietarioAtual" id="idProprietarioAtual" />
+                                                    <div class="input-group-addon" style="cursor: pointer" data-id="idProprietarioAtual" data-nome="proprietarioAtual" data-titulo="Proprietário Atual" data-sem-vinculo="false" data-documento="Cpf/Cnpj" onclick="abrirModalPessoaCadastroAuxiliar(this)">+</div>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="form-group">
                                         <div class="row">
                                             <div class="col-md-4">
-                                                <label for="proprietarioAnterior">Proprietário Anterior:</label>
-                                                <input id="proprietarioAnterior" name="proprietarioAnterior" type="text" class="form-control" placeholder="Proprietário Anterior (Mínimo de 3 caracteres - CPF ou CNPJ ou Nome)" />
-                                                <input type="hidden" name="idProprietarioAnterior" id="idProprietarioAnterior" />
+                                                <label class="control-label" for="proprietarioAnterior">Proprietário Anterior:</label>
+                                                <div class="input-group">
+                                                    <input id="proprietarioAnterior" name="proprietarioAnterior" type="text" class="form-control" placeholder="Proprietário Anterior (Mínimo de 3 caracteres - CPF ou CNPJ ou Nome)" />
+                                                    <input type="hidden" name="idProprietarioAnterior" id="idProprietarioAnterior" />
+                                                    <div class="input-group-addon" style="cursor: pointer" data-id="idProprietarioAnterior" data-nome="proprietarioAnterior" data-titulo="Proprietário Anterior" data-sem-vinculo="false" data-documento="Cpf/Cnpj" onclick="abrirModalPessoaCadastroAuxiliar(this)">+</div>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -1198,3 +1204,5 @@
         </div>
     </div>
 </div>
+
+@Html.Partial("_PessoaCadastroAuxiliar")

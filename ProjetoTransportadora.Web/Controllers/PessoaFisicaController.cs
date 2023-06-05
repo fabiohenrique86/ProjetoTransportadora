@@ -68,6 +68,14 @@ namespace ProjetoTransportadora.Web.Controllers
         }
 
         [HttpPost]
+        public JsonResult IncluirAuxiliar(PessoaDto pessoaDto)
+        {
+            var id = pessoaBusiness.Incluir(pessoaDto);
+
+            return Json(new { Sucesso = true, Mensagem = "Pessoa cadastrada com sucesso", Id = id }, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpPost]
         public JsonResult Incluir(PessoaDto pessoaDto)
         {
             pessoaBusiness.Incluir(pessoaDto);

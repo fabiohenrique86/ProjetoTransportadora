@@ -76,6 +76,8 @@ namespace ProjetoTransportadora.Repository
         public Nullable<int> IdProprietario { get; set; }
         public string EmpresaPessoal { get; set; }
         public string EmpresaTrabalho { get; set; }
+        public string TelefoneEmpresa { get; set; }
+        public string EmailEmpresa { get; set; }
     
         public virtual EstadoCivil EstadoCivil { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

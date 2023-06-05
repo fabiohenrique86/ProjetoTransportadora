@@ -149,10 +149,8 @@ namespace ProjetoTransportadora.Business
                 {
                     listaContratoParcelaDto[i].IdSituacaoParcela = SituacaoParcelaDto.EnumSituacaoParcela.Antecipado.GetHashCode();
 
-                    if (listaContratoParcelaDto[i].DataInicio >= contratoDto.DataAntecipacao)
+                    if (listaContratoParcelaDto[i].DataInicio >= contratoDto.DataAntecipacao) // parcela a vencer
                     {
-                        // parcela a vencer
-
                         listaContratoParcelaDto[i].ValorDesconto = listaContratoParcelaDto[i].ValorJuros;
                         listaContratoParcelaDto[i].ValorParcela = listaContratoParcelaDto[i].ValorAmortizacao.GetValueOrDefault();
                         listaContratoParcelaDto[i].ValorMulta = 0;
@@ -160,29 +158,21 @@ namespace ProjetoTransportadora.Business
                     }
                     else
                     {
-                        if (listaContratoParcelaDto[i].DataVencimento < contratoDto.DataAntecipacao)
+                        if (listaContratoParcelaDto[i].DataVencimento < contratoDto.DataAntecipacao) // parcela vencida
                         {
-                            // parcela vencida
-
-                            var contratoParcelaDtoAnterior = i == 0 ? null : listaContratoParcelaDto[i - 1];
-
-                            //listaContratoParcelaDto[i].ValorSaldoAnterior = (i == 0 ? contrato.ValorFinanciado : contratoParcelaDtoAnterior.ValorSaldoAnterior - contratoParcelaDtoAnterior.ValorAmortizacao.GetValueOrDefault());
-
                             double diasCorridos = contratoDto.DataAntecipacao.GetValueOrDefault().Subtract(listaContratoParcelaDto[i].DataVencimento).Days;
 
                             listaContratoParcelaDto[i].ValorMora = Math.Round(listaContratoParcelaDto[i].ValorOriginal * (contrato.TaxaMora.GetValueOrDefault() / 100) * (diasCorridos / 30D), 2);
                             listaContratoParcelaDto[i].ValorMulta = Math.Round(listaContratoParcelaDto[i].ValorOriginal * (contrato.TaxaMulta.GetValueOrDefault() / 100), 2);
                             listaContratoParcelaDto[i].ValorDesconto = 0;
-                            listaContratoParcelaDto[i].ValorParcela = Math.Round(listaContratoParcelaDto[i].ValorAmortizacao.GetValueOrDefault() + 
-                                                                                listaContratoParcelaDto[i].ValorJuros.GetValueOrDefault() + 
-                                                                                listaContratoParcelaDto[i].ValorMora.GetValueOrDefault() + 
-                                                                                listaContratoParcelaDto[i].ValorMulta.GetValueOrDefault() - 
+                            listaContratoParcelaDto[i].ValorParcela = Math.Round(listaContratoParcelaDto[i].ValorAmortizacao.GetValueOrDefault() +
+                                                                                listaContratoParcelaDto[i].ValorJuros.GetValueOrDefault() +
+                                                                                listaContratoParcelaDto[i].ValorMora.GetValueOrDefault() +
+                                                                                listaContratoParcelaDto[i].ValorMulta.GetValueOrDefault() -
                                                                                 listaContratoParcelaDto[i].ValorDesconto.GetValueOrDefault(), 2);
                         }
-                        else
+                        else // parcela atual
                         {
-                            // parcela atual
-                            
                             double diasCorridos = contratoDto.DataAntecipacao.GetValueOrDefault().Subtract(listaContratoParcelaDto[i].DataInicio).Days;
 
                             listaContratoParcelaDto[i].ValorMora = 0;

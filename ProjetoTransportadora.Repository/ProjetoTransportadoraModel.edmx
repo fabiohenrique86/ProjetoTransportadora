@@ -214,6 +214,8 @@
           <Property Name="IdProprietario" Type="int" />
           <Property Name="EmpresaPessoal" Type="varchar" MaxLength="1000" />
           <Property Name="EmpresaTrabalho" Type="varchar" MaxLength="1000" />
+          <Property Name="TelefoneEmpresa" Type="varchar" MaxLength="100" />
+          <Property Name="EmailEmpresa" Type="varchar" MaxLength="100" />
         </EntityType>
         <EntityType Name="PessoaAvalista">
           <Key>
@@ -1746,6 +1748,8 @@
           <NavigationProperty Name="Contrato1" Relationship="ProjetoTransportadoraModel.FK_Contrato_Pessoa_Fiador" FromRole="Pessoa" ToRole="Contrato" />
           <NavigationProperty Name="Contrato2" Relationship="ProjetoTransportadoraModel.FK_Contrato_Pessoa_Indicacao" FromRole="Pessoa" ToRole="Contrato" />
           <NavigationProperty Name="Contrato3" Relationship="ProjetoTransportadoraModel.FK_Contrato_Pessoa_Promotor" FromRole="Pessoa" ToRole="Contrato" />
+          <Property Name="TelefoneEmpresa" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="EmailEmpresa" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
           </EntityType>
         <Association Name="FK_Pessoa_EstadoCivil">
           <End Type="ProjetoTransportadoraModel.EstadoCivil" Role="EstadoCivil" Multiplicity="0..1" />
@@ -2634,6 +2638,8 @@
           <EntitySetMapping Name="Pessoa">
             <EntityTypeMapping TypeName="ProjetoTransportadoraModel.Pessoa">
               <MappingFragment StoreEntitySet="Pessoa">
+                <ScalarProperty Name="EmailEmpresa" ColumnName="EmailEmpresa" />
+                <ScalarProperty Name="TelefoneEmpresa" ColumnName="TelefoneEmpresa" />
                 <ScalarProperty Name="EmpresaTrabalho" ColumnName="EmpresaTrabalho" />
                 <ScalarProperty Name="EmpresaPessoal" ColumnName="EmpresaPessoal" />
                 <ScalarProperty Name="IdProprietario" ColumnName="IdProprietario" />

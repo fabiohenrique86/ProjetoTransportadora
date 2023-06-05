@@ -96,7 +96,7 @@
                     $("#modalContratoAntecipar").modal('show');
                 }
             });
-            
+
         }
 
         function habilitarModal(opcao) {
@@ -194,7 +194,7 @@
             {
                 $("#promotor").val(data.PessoaPromotorDto.Nome);
                 $("#idPromotor").val(data.PessoaPromotorDto.Id);
-            }            
+            }
 
             $("#canal").val(data.IdCanal);
 
@@ -361,7 +361,7 @@
                 }
             });
 
-            
+
         }
 
         $(document).ready(function () {
@@ -1478,9 +1478,12 @@
                                                 <input id="dataContrato" type="text" class="form-control data datepicker" />
                                             </div>
                                             <div class="col-md-3">
-                                                <label for="cliente">Cliente:</label>
-                                                <input id="cliente" type="text" class="form-control" placeholder="Cliente (Mínimo de 3 caracteres - CPF ou CNPJ ou Nome)" />
-                                                <input id="idCliente" type="hidden" />
+                                                <label class="control-label" for="cliente">Cliente:</label>
+                                                <div class="input-group">
+                                                    <input id="cliente" type="text" class="form-control" placeholder="Cliente (Mínimo de 3 caracteres - CPF ou CNPJ ou Nome)" />
+                                                    <input id="idCliente" type="hidden" />
+                                                    <div class="input-group-addon" style="cursor: pointer" data-id="idCliente" data-nome="cliente" data-titulo="Cliente" data-sem-vinculo="false" data-documento="Cpf/Cnpj" onclick="abrirModalPessoaCadastroAuxiliar(this)">+</div>
+                                                </div>
                                             </div>
                                             <div class="col-md-2">
                                                 <label for="produto">Produto:</label>
@@ -1496,19 +1499,28 @@
                                     <div class="form-group">
                                         <div class="row">
                                             <div class="col-md-3">
-                                                <label for="fiador">Fiador:</label>
-                                                <input id="fiador" type="text" class="form-control" placeholder="Fiador (Mínimo de 3 caracteres - CPF ou CNPJ ou Nome)" />
-                                                <input id="idFiador" type="hidden" />
+                                                <label class="control-label" for="fiador">Fiador:</label>
+                                                <div class="input-group">
+                                                    <input id="fiador" type="text" class="form-control" placeholder="Fiador (Mínimo de 3 caracteres - CPF ou CNPJ ou Nome)" />
+                                                    <input id="idFiador" type="hidden" />
+                                                    <div class="input-group-addon" style="cursor: pointer" data-id="idFiador" data-nome="fiador" data-titulo="Fiador" data-sem-vinculo="false" data-documento="Cpf/Cnpj" onclick="abrirModalPessoaCadastroAuxiliar(this)">+</div>
+                                                </div>
                                             </div>
                                             <div class="col-md-3">
-                                                <label for="indicacao">Indicação:</label>
-                                                <input id="indicacao" type="text" class="form-control" placeholder="Indicação (Mínimo de 3 caracteres - CPF ou CNPJ ou Nome)" />
-                                                <input id="idIndicacao" type="hidden" />
+                                                <label class="control-label" for="indicacao">Indicação:</label>
+                                                <div class="input-group">
+                                                    <input id="indicacao" type="text" class="form-control" placeholder="Indicação (Mínimo de 3 caracteres - CPF ou CNPJ ou Nome)" />
+                                                    <input id="idIndicacao" type="hidden" />
+                                                    <div class="input-group-addon" style="cursor: pointer" data-id="idIndicacao" data-nome="indicacao" data-titulo="Indicação" data-sem-vinculo="false" data-documento="Cpf/Cnpj" onclick="abrirModalPessoaCadastroAuxiliar(this)">+</div>
+                                                </div>
                                             </div>
                                             <div class="col-md-3">
-                                                <label for="promotor">Promotor:</label>
-                                                <input id="promotor" type="text" class="form-control" placeholder="Promotor (Mínimo de 3 caracteres - CPF ou CNPJ ou Nome)" />
-                                                <input id="idPromotor" type="hidden" />
+                                                <label class="control-label" for="promotor">Promotor:</label>
+                                                <div class="input-group">
+                                                    <input id="promotor" type="text" class="form-control" placeholder="Promotor (Mínimo de 3 caracteres - CPF ou CNPJ ou Nome)" />
+                                                    <input id="idPromotor" type="hidden" />
+                                                    <div class="input-group-addon" style="cursor: pointer" data-id="idPromotor" data-nome="promotor" data-titulo="Promotor" data-sem-vinculo="false" data-documento="Cpf/Cnpj" onclick="abrirModalPessoaCadastroAuxiliar(this)">+</div>
+                                                </div>
                                             </div>
                                             <div class="col-md-3">
                                                 <label for="canal">Canal:</label>
@@ -1754,3 +1766,5 @@
         </div>
     </div>
 </div>
+
+@Html.Partial("_PessoaCadastroAuxiliar")

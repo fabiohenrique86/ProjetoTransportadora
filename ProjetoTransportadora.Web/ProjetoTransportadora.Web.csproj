@@ -221,6 +221,7 @@
     <Content Include="Views\Veiculo\Index.cshtml" />
     <Content Include="Views\Simulacao\Index.cshtml" />
     <Content Include="Views\Contrato\Index.cshtml" />
+    <Content Include="Views\Shared\_PessoaCadastroAuxiliar.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -261,9 +262,9 @@
         <WebProjectProperties>
           <UseIIS>True</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
-          <DevelopmentServerPort>55670</DevelopmentServerPort>
+          <DevelopmentServerPort>63366</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>http://localhost:55670/</IISUrl>
+          <IISUrl>http://localhost:63366/</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>

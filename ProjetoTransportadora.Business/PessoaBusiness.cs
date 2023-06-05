@@ -27,15 +27,6 @@ namespace ProjetoTransportadora.Business
 
         public dynamic ListarGrid(PessoaDto pessoaDto = null)
         {
-            //if (pessoaDto != null)
-            //{
-            //    if (!string.IsNullOrEmpty(pessoaDto.Cpf))
-            //        pessoaDto.Cpf = pessoaDto.Cpf.Replace(".", "").Replace("-", "").Trim();
-
-            //    if (!string.IsNullOrEmpty(pessoaDto.Cnpj))
-            //        pessoaDto.Cnpj = pessoaDto.Cnpj.Replace(".", "").Replace("-", "").Replace("/", "");
-            //}
-
             return pessoaRepository.ListarGrid(pessoaDto);
         }
 
@@ -46,15 +37,6 @@ namespace ProjetoTransportadora.Business
 
         public List<PessoaDto> ListarAutoComplete(PessoaDto pessoaDto = null)
         {
-            //if (pessoaDto != null)
-            //{
-            //    if (!string.IsNullOrEmpty(pessoaDto.Cpf))
-            //        pessoaDto.Cpf = pessoaDto.Cpf.Replace(".", "").Replace("-", "").Trim();
-
-            //    if (!string.IsNullOrEmpty(pessoaDto.Cnpj))
-            //        pessoaDto.Cnpj = pessoaDto.Cnpj.Replace(".", "").Replace("-", "").Replace("/", "");
-            //}
-
             return pessoaRepository.ListarAutoComplete(pessoaDto);
         }
 
@@ -65,15 +47,6 @@ namespace ProjetoTransportadora.Business
 
         public List<PessoaDto> Listar(PessoaDto pessoaDto = null)
         {
-            //if (pessoaDto != null)
-            //{
-            //    if (!string.IsNullOrEmpty(pessoaDto.Cpf))
-            //        pessoaDto.Cpf = pessoaDto.Cpf.Replace(".", "").Replace("-", "").Trim();
-
-            //    if (!string.IsNullOrEmpty(pessoaDto.Cnpj))
-            //        pessoaDto.Cnpj = pessoaDto.Cnpj.Replace(".", "").Replace("-", "").Replace("/", "");
-            //}
-
             return pessoaRepository.Listar(pessoaDto);
         }
 
@@ -92,21 +65,24 @@ namespace ProjetoTransportadora.Business
                 if (string.IsNullOrEmpty(pessoaDto.Nome))
                     throw new BusinessException("Nome é obrigatório");
 
-                pessoaDto.Cpf = pessoaDto.Cpf?.Replace(".", "").Replace("-", "").Trim();
+                if (!pessoaDto.SemVinculo)
+                {
+                    pessoaDto.Cpf = pessoaDto.Cpf?.Replace(".", "").Replace("-", "").Trim();
 
-                if (string.IsNullOrEmpty(pessoaDto.Cpf))
-                    throw new BusinessException("Cpf é obrigatório");
+                    if (string.IsNullOrEmpty(pessoaDto.Cpf))
+                        throw new BusinessException("Cpf é obrigatório");
 
-                if (pessoaDto.Cpf.Length != 11)
-                    throw new BusinessException("Cpf deve ter 11 dígitos");
+                    if (pessoaDto.Cpf.Length != 11)
+                        throw new BusinessException("Cpf deve ter 11 dígitos");
 
-                if (!CpfValido(pessoaDto.Cpf))
-                    throw new BusinessException("Cpf inválido");
+                    if (!CpfValido(pessoaDto.Cpf))
+                        throw new BusinessException("Cpf inválido");
 
-                var pessoaExistePorCpf = pessoaRepository.Existe(new PessoaDto() { Cpf = pessoaDto.Cpf });
+                    var pessoaExistePorCpf = pessoaRepository.Existe(new PessoaDto() { Cpf = pessoaDto.Cpf });
 
-                if (pessoaExistePorCpf)
-                    throw new BusinessException($"Pessoa com CPF ({pessoaDto.Cpf}) já está cadastrada");
+                    if (pessoaExistePorCpf)
+                        throw new BusinessException($"Pessoa com CPF ({pessoaDto.Cpf}) já está cadastrada");
+                }
 
                 using (var transactionScope = new TransactionScope(TransactionScopeOption.Required))
                 {
@@ -149,22 +125,25 @@ namespace ProjetoTransportadora.Business
             {
                 pessoaDto.Cnpj = pessoaDto.Cnpj?.Replace(".", "").Replace("-", "").Replace("/", "");
 
-                if (string.IsNullOrEmpty(pessoaDto.Cnpj))
-                    throw new BusinessException("Cnpj é obrigatório");
+                if (!pessoaDto.SemVinculo)
+                {
+                    if (string.IsNullOrEmpty(pessoaDto.Cnpj))
+                        throw new BusinessException("Cnpj é obrigatório");
 
-                if (pessoaDto.Cnpj.Length != 14)
-                    throw new BusinessException("Cnpj deve ter 14 dígitos");
+                    if (pessoaDto.Cnpj.Length != 14)
+                        throw new BusinessException("Cnpj deve ter 14 dígitos");
 
-                if (!CnpjValido(pessoaDto.Cnpj))
-                    throw new BusinessException("Cnpj inválido");
+                    if (!CnpjValido(pessoaDto.Cnpj))
+                        throw new BusinessException("Cnpj inválido");
+
+                    var pessoaExistePorCnpj = pessoaRepository.Existe(new PessoaDto() { Cnpj = pessoaDto.Cnpj });
+
+                    if (pessoaExistePorCnpj)
+                        throw new BusinessException($"Pessoa com CNPJ ({pessoaDto.Cnpj}) já está cadastrada");
+                }
 
                 if (string.IsNullOrEmpty(pessoaDto.Nome))
                     throw new BusinessException("Nome Empresa é obrigatório");
-
-                var pessoaExistePorCnpj = pessoaRepository.Existe(new PessoaDto() { Cnpj = pessoaDto.Cnpj });
-
-                if (pessoaExistePorCnpj)
-                    throw new BusinessException($"Pessoa com CNPJ ({pessoaDto.Cnpj}) já está cadastrada");
 
                 using (var transactionScope = new TransactionScope(TransactionScopeOption.Required))
                 {

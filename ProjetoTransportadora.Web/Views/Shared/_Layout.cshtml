@@ -235,7 +235,7 @@
 
 
 
-    <script type="text/javascript">
+<script type="text/javascript">
 
         $(document).ready(function () {
 
@@ -244,45 +244,6 @@
 
             // popover
             $('#popover-usuario').popover({ html: true, placement: "bottom", content: function () { return $("#popover-content-usuario").html(); } });
-
-            @*@{
-                int? idUsuario = 0;
-
-                if (Session[System.Configuration.ConfigurationManager.AppSettings["ProjetoTransportadoraCookieLogin"]] != null)
-                {
-                    idUsuario = ((UsuarioDto)Session[System.Configuration.ConfigurationManager.AppSettings["ProjetoTransportadoraCookieLogin"]])?.Id;
-                }
-            }
-
-            $('#popover-usuario').popover({
-                html: true,
-                placement: 'bottom',
-                content: function () {
-
-                    $.ajax({
-                        dataType: "json",
-                        type: "GET",
-                        url: "/Usuario/Listar",
-                        data: { Id: '@idUsuario' },
-                        success: function (data) {
-
-                            if (!data.Sucesso) {
-                                alert("warning", data.Mensagem);
-                                return;
-                            }
-
-                            $("#poLogin").html(data.Data[0].Login);
-
-                            $("#poGrupoUsuario").html("");
-                            for (var i = 0; i < data.Data[0].UsuarioGrupoDto.length; i++) {
-                                $("#poGrupoUsuario").append("<li>" + data.Data[0].UsuarioGrupoDto[i].GrupoDto.Nome + "</li>");
-                            }
-                        }
-                    });
-
-                    return $("#popover-content-usuario").html();
-                }
-            });*@
 
             // validação js número
             $.validator.methods.number = function (value, element) {
@@ -335,6 +296,29 @@
                     element.mask("(99) 9999-99999");
                 }
             });
+
+            $(".celularDDD").mask("(##) 9999-99999").focusout(function (event) {
+                var target, phone, element;
+                target = (event.currentTarget) ? event.currentTarget : event.srcElement;
+                phone = target.value.replace(/\D/g, '');
+                element = $(target);
+                element.unmask();
+                if (phone.length > 10) {
+                    element.mask("(99) 99999-9999");
+                }
+                else {
+                    element.mask("(99) 9999-99999");
+                }
+            });
+
+            var options = {
+                onKeyPress: function (valor, ev, el, op) {
+                    $("#documentoPessoaCadastroAuxiliar").mask((valor.replace(/\D/g, '').length <= 11) ? '000.000.000-000####' : '00.000.000/0000-00', op);
+                }
+            };
+
+            if ($('#documentoPessoaCadastroAuxiliar').val() != undefined)
+                $('#documentoPessoaCadastroAuxiliar').val().length > 11 ? $('#documentoPessoaCadastroAuxiliar').mask('00.000.000/0000-00', options) : $('#documentoPessoaCadastroAuxiliar').mask('000.000.000-00####', options);
 
             $(".cep").change(function () {
                 var cep = $(this).val().replace("-", "");
@@ -461,28 +445,92 @@
             $("#modalAlerta").modal('show');
         }
 
-        // dd/MM/yyyy -> yyyy-mm-dd
-        function converterData(dataOriginal)
-        {
-            var dataConvertida = dataOriginal.substring(6, 10) + "-" + dataOriginal.substring(5, 3) + "-" + dataOriginal.substring(0, 2);
-            return dataConvertida;
-        }
-
         // 11122233344 -> 111.222.333-44
         function formatarCpf(cpf) {
-            if (cpf == null || cpf == "")
-                return "";
+            return (cpf == null || cpf == "") ? "" : cpf.replace(/[^\d]/g, "").replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, "$1.$2.$3-$4");
+        }
 
-            var cpfFormatado = cpf.replace(/[^\d]/g, "");
-            cpfFormatado = cpfFormatado.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, "$1.$2.$3-$4");
-            return cpfFormatado;
+        function abrirModalPessoaCadastroAuxiliar(o) {
+            limparFormularioPessoaCadastroAuxiliar();
+
+            $("#lblTituloPessoaCadastroAuxiliar").html($(o).data("titulo"));
+            $("#lblDocumentoPessoaCadastroAuxiliar").html($(o).data("documento"));
+
+            $("#btnIncluirPessoaCadastroAuxiliar").data("id", $(o).data("id"));
+            $("#btnIncluirPessoaCadastroAuxiliar").data("nome", $(o).data("nome"));
+            $("#btnIncluirPessoaCadastroAuxiliar").data("sem-vinculo", $(o).data("sem-vinculo"));
+
+            if ($(o).data("sem-vinculo") == true)
+                $("#divDocumentoPessoaCadastroAuxiliar").hide();
+            else
+                $("#divDocumentoPessoaCadastroAuxiliar").show();
+
+            $("#modalPessoaCadastroAuxiliar").modal('show');
+        }
+
+        function limparFormularioPessoaCadastroAuxiliar() {
+            $("#btnIncluirPessoaCadastroAuxiliar").data("id", "");
+            $("#btnIncluirPessoaCadastroAuxiliar").data("nome", "");
+            $("#btnIncluirPessoaCadastroAuxiliar").data("titulo", "");
+            $("#btnIncluirPessoaCadastroAuxiliar").data("sem-vinculo", false);
+            $("#nomePessoaCadastroAuxiliar").val("");
+            $("#documentoPessoaCadastroAuxiliar").val("");
+        }
+
+        function preencherCampoExternoPessoaCadastroAuxiliar(id, nome, data) {
+            $("#" + id).val(data.Id);
+            $("#" + nome).val(data.Nome);
+        }
+
+        function incluirPessoaCadastroAuxiliar (o) {
+
+            var pessoaDto = {};
+
+            pessoaDto.Nome = $("#nomePessoaCadastroAuxiliar").val();
+
+            var labelDocumento = $("#lblDocumentoPessoaCadastroAuxiliar").text();
+            var qtdCaracteresDocumento = $("#documentoPessoaCadastroAuxiliar").val().replace(/\D/g, '').length;
+            var url = "";
+
+            if (qtdCaracteresDocumento <= 11 || labelDocumento == "Cpf") {
+                pessoaDto.Cpf = $("#documentoPessoaCadastroAuxiliar").val();
+                pessoaDto.IdTipoPessoa = '@TipoPessoaDto.TipoPessoa.PessoaFísica.GetHashCode()';
+                url = "/PessoaFisica/IncluirAuxiliar";
+            }
+            else {
+                pessoaDto.Cnpj = $("#documentoPessoaCadastroAuxiliar").val();
+                pessoaDto.IdTipoPessoa = '@TipoPessoaDto.TipoPessoa.PessoaJurídica.GetHashCode()';
+                url = "/PessoaJuridica/IncluirAuxiliar";
+            }
+
+            pessoaDto.IdUsuarioCadastro = $(o).data("id-usuario-logado");
+            pessoaDto.DataCadastro = '@DateTime.UtcNow';
+            pessoaDto.SemVinculo = $(o).data("sem-vinculo");
+
+            $.ajax({
+                dataType: "json",
+                type: "POST",
+                url: url,
+                data: JSON.stringify(pessoaDto),
+                contentType: "application/json",
+                success: function (data) {
+
+                    if (!data.Sucesso) {
+                        alert(data.Erro ? "danger" : "warning", data.Mensagem);
+                        return;
+                    }
+
+                    preencherCampoExternoPessoaCadastroAuxiliar($(o).data("id"), $(o).data("nome"), { Id: data.Id, Nome: pessoaDto.Nome });
+                    $("#modalPessoaCadastroAuxiliar").modal('hide');
+                }
+            });
         }
 
         $.ajaxSetup({
             beforeSend: function () { $.blockUI({ message: '<h5>Carregando...</h4>' }); },
             complete: function () { $.unblockUI(); }
         });
-    </script>
+</script>
     @RenderSection("scripts", required: false)
 </body>
 </html>

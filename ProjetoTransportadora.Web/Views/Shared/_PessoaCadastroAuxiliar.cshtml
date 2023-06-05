@@ -1,0 +1,54 @@
+﻿@using ProjetoTransportadora.Dto;
+
+@{
+    UsuarioDto usuarioDto = null;
+
+    if (Session[System.Configuration.ConfigurationManager.AppSettings["ProjetoTransportadoraCookieLogin"]] != null)
+    {
+        usuarioDto = (UsuarioDto)Session[System.Configuration.ConfigurationManager.AppSettings["ProjetoTransportadoraCookieLogin"]];
+    }
+}
+
+@*<script type="text/javascript">
+
+    var options = {
+        onKeyPress: function (valor, ev, el, op) {
+            $("#documentoPessoaCadastroAuxiliar").mask((valor.replace(/\D/g, '').length <= 11) ? '000.000.000-000####' : '00.000.000/0000-00', op);
+        }
+    };
+
+    $('#documentoPessoaCadastroAuxiliar').val().length > 11 ? $('#documentoPessoaCadastroAuxiliar').mask('00.000.000/0000-00', options) : $('#documentoPessoaCadastroAuxiliar').mask('000.000.000-00####', options);
+
+</script>*@
+
+<div class="modal fade" id="modalPessoaCadastroAuxiliar" tabindex="-1" role="dialog" aria-labelledby="ModalPessoaCadastroAuxiliar" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Fechar</span></button>
+                <h4 class="modal-title" id="myModalLabel">Incluir <label id="lblTituloPessoaCadastroAuxiliar"></label></h4>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-lg-10">
+                            <label for="nomePessoaCadastroAuxiliar">Nome:</label>
+                            <input id="nomePessoaCadastroAuxiliar" type="text" class="form-control" />
+                        </div>
+                    </div>
+                </div>
+                <div id="divDocumentoPessoaCadastroAuxiliar" class="form-group">
+                    <div class="row">
+                        <div class="col-lg-10">
+                            <label id="lblDocumentoPessoaCadastroAuxiliar" for="documentoPessoaCadastroAuxiliar"></label>
+                            <input id="documentoPessoaCadastroAuxiliar" type="text" class="form-control" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <input id="btnIncluirPessoaCadastroAuxiliar" type="button" class="btn btn-primary" value="Incluir" data-id="" data-nome="" data-id-usuario-logado="@usuarioDto.Id" onclick="incluirPessoaCadastroAuxiliar(this)" />
+            </div>
+        </div>
+    </div>
+</div>

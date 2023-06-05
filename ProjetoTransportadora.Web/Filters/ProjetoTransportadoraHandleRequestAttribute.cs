@@ -83,7 +83,7 @@ namespace ProjetoTransportadora.Web.Filters
 
             if (action == "Listar" || action == "ListarGrid" || action == "Index")
                 temPermissao = usuarioDto.UsuarioGrupoDto.Any(x => x.GrupoDto.Ativo.GetValueOrDefault() == true && x.GrupoDto.GrupoFuncionalidadeDto.Any(w => w.FuncionalidadeDto.Nome == controller && w.Ler.GetValueOrDefault() == true));
-            else if (action == "Incluir")
+            else if (action == "Incluir" || action == "IncluirAuxiliar")
                 temPermissao = usuarioDto.UsuarioGrupoDto.Any(x => x.GrupoDto.Ativo.GetValueOrDefault() == true && x.GrupoDto.GrupoFuncionalidadeDto.Any(w => w.FuncionalidadeDto.Nome == controller && w.Inserir.GetValueOrDefault() == true));
             else if (action == "Alterar")
                 temPermissao = usuarioDto.UsuarioGrupoDto.Any(x => x.GrupoDto.Ativo.GetValueOrDefault() == true && x.GrupoDto.GrupoFuncionalidadeDto.Any(w => w.FuncionalidadeDto.Nome == controller && w.Atualizar.GetValueOrDefault() == true));
