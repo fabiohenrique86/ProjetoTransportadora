@@ -4,9 +4,9 @@
     ViewBag.Title = "Pessoas Jurídicas";
 
     UsuarioDto usuarioDto = null;
-    if (Session[System.Configuration.ConfigurationManager.AppSettings["ProjetoTransportadoraCookieLogin"]] != null)
+    if (Session[System.Configuration.ConfigurationManager.AppSettings["ProjetoTransportadora.Usuario"]] != null)
     {
-        usuarioDto = (UsuarioDto)Session[System.Configuration.ConfigurationManager.AppSettings["ProjetoTransportadoraCookieLogin"]];
+        usuarioDto = (UsuarioDto)Session[System.Configuration.ConfigurationManager.AppSettings["ProjetoTransportadora.Usuario"]];
     }
 }
 
@@ -289,7 +289,8 @@
             var tbPessoa = $("#tbPessoa").DataTable({
                 "ordering": false,
                 "bFilter": false,
-                "paging": false,
+                "paging": true,
+                "pageLength": 25,
                 "ordering": false,
                 "info": false,
                 "searching": false,

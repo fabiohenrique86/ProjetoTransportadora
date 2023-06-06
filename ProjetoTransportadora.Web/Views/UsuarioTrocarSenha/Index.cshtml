@@ -2,12 +2,6 @@
 
 @{
     ViewBag.Title = "Usuário Trocar Senha";
-
-    UsuarioDto usuarioDto = null;
-    if (Session[System.Configuration.ConfigurationManager.AppSettings["ProjetoTransportadoraSessionUsuarioTrocarSenha"]] != null)
-    {
-        usuarioDto = (UsuarioDto)Session[System.Configuration.ConfigurationManager.AppSettings["ProjetoTransportadoraSessionUsuarioTrocarSenha"]];
-    }
 }
 
 @section scripts
@@ -33,7 +27,7 @@
                     url: "/Usuario/AlterarSenha",
                     data:
                     {
-                        Id: '@usuarioDto.Id',
+                        Id: '@ViewBag.IdUsuario',
                         Senha: $("#senha").val(),
                         TrocarSenha: false
                     },

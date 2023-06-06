@@ -3,23 +3,11 @@
 @{
     UsuarioDto usuarioDto = null;
 
-    if (Session[System.Configuration.ConfigurationManager.AppSettings["ProjetoTransportadoraCookieLogin"]] != null)
+    if (Session[System.Configuration.ConfigurationManager.AppSettings["ProjetoTransportadora.Usuario"]] != null)
     {
-        usuarioDto = (UsuarioDto)Session[System.Configuration.ConfigurationManager.AppSettings["ProjetoTransportadoraCookieLogin"]];
+        usuarioDto = (UsuarioDto)Session[System.Configuration.ConfigurationManager.AppSettings["ProjetoTransportadora.Usuario"]];
     }
 }
-
-@*<script type="text/javascript">
-
-    var options = {
-        onKeyPress: function (valor, ev, el, op) {
-            $("#documentoPessoaCadastroAuxiliar").mask((valor.replace(/\D/g, '').length <= 11) ? '000.000.000-000####' : '00.000.000/0000-00', op);
-        }
-    };
-
-    $('#documentoPessoaCadastroAuxiliar').val().length > 11 ? $('#documentoPessoaCadastroAuxiliar').mask('00.000.000/0000-00', options) : $('#documentoPessoaCadastroAuxiliar').mask('000.000.000-00####', options);
-
-</script>*@
 
 <div class="modal fade" id="modalPessoaCadastroAuxiliar" tabindex="-1" role="dialog" aria-labelledby="ModalPessoaCadastroAuxiliar" aria-hidden="true">
     <div class="modal-dialog">
@@ -37,7 +25,7 @@
                         </div>
                     </div>
                 </div>
-                <div id="divDocumentoPessoaCadastroAuxiliar" class="form-group">
+                <div class="form-group">
                     <div class="row">
                         <div class="col-lg-10">
                             <label id="lblDocumentoPessoaCadastroAuxiliar" for="documentoPessoaCadastroAuxiliar"></label>

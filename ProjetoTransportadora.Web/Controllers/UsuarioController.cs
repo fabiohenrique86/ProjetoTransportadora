@@ -32,8 +32,8 @@ namespace ProjetoTransportadora.Web.Controllers
             if (usuario.TrocarSenha.GetValueOrDefault())
             {
                 usuario.Senha = null;
-                Session[ConfigurationManager.AppSettings["ProjetoTransportadoraSessionUsuarioTrocarSenha"]] = usuario;
-
+                TempData[ConfigurationManager.AppSettings["ProjetoTransportadora.UsuarioTrocarSenha"]] = usuario;
+                
                 return Json(new { Sucesso = true, Mensagem = "Usuário necessita trocar a senha", Data = "", TrocarSenha = true }, JsonRequestBehavior.AllowGet);
             }
 
@@ -54,7 +54,8 @@ namespace ProjetoTransportadora.Web.Controllers
         {
             usuarioBusiness.Alterar(usuarioDto);
 
-            LogIn((UsuarioDto)Session[ConfigurationManager.AppSettings["ProjetoTransportadoraSessionUsuarioTrocarSenha"]]);
+            LogIn((UsuarioDto)TempData[ConfigurationManager.AppSettings["ProjetoTransportadora.UsuarioTrocarSenha"]]);
+            TempData.Remove(ConfigurationManager.AppSettings["ProjetoTransportadora.UsuarioTrocarSenha"]);
 
             return Json(new { Sucesso = true, Mensagem = "Usuário logado com sucesso", Data = "" }, JsonRequestBehavior.AllowGet);
         }

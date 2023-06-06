@@ -116,9 +116,9 @@
     @{
         UsuarioDto usuarioDto = null;
 
-        if (Session[System.Configuration.ConfigurationManager.AppSettings["ProjetoTransportadoraCookieLogin"]] != null)
+        if (Session[System.Configuration.ConfigurationManager.AppSettings["ProjetoTransportadora.Usuario"]] != null)
         {
-            usuarioDto = (UsuarioDto)Session[System.Configuration.ConfigurationManager.AppSettings["ProjetoTransportadoraCookieLogin"]];
+            usuarioDto = (UsuarioDto)Session[System.Configuration.ConfigurationManager.AppSettings["ProjetoTransportadora.Usuario"]];
         }
     }
     <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation" style="font-size: 14px">
@@ -460,10 +460,10 @@
             $("#btnIncluirPessoaCadastroAuxiliar").data("nome", $(o).data("nome"));
             $("#btnIncluirPessoaCadastroAuxiliar").data("sem-vinculo", $(o).data("sem-vinculo"));
 
-            if ($(o).data("sem-vinculo") == true)
-                $("#divDocumentoPessoaCadastroAuxiliar").hide();
-            else
-                $("#divDocumentoPessoaCadastroAuxiliar").show();
+            //if ($(o).data("sem-vinculo") == true)
+            //    $("#divDocumentoPessoaCadastroAuxiliar").hide();
+            //else
+            //    $("#divDocumentoPessoaCadastroAuxiliar").show();
 
             $("#modalPessoaCadastroAuxiliar").modal('show');
         }

@@ -4,9 +4,9 @@
     ViewBag.Title = "Estados Civis";
 
     UsuarioDto usuarioDto = null;
-    if (Session[System.Configuration.ConfigurationManager.AppSettings["ProjetoTransportadoraCookieLogin"]] != null)
+    if (Session[System.Configuration.ConfigurationManager.AppSettings["ProjetoTransportadora.Usuario"]] != null)
     {
-        usuarioDto = (UsuarioDto)Session[System.Configuration.ConfigurationManager.AppSettings["ProjetoTransportadoraCookieLogin"]];
+        usuarioDto = (UsuarioDto)Session[System.Configuration.ConfigurationManager.AppSettings["ProjetoTransportadora.Usuario"]];
     }
 }
 
@@ -257,7 +257,7 @@
     </div>
     <div class="form-group">
         <div class="table-responsive">
-            <table id="tbEstadoCivil" class="table nowrap">
+            <table id="tbEstadoCivil" class="table table-hover nowrap">
                 <thead>
                     <tr>
                         <td class="text-center" style="width: 5%"><b>Id</b></td>

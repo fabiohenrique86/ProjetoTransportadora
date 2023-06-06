@@ -4,9 +4,9 @@
     ViewBag.Title = "Simulação";
 
     UsuarioDto usuarioDto = null;
-    if (Session[System.Configuration.ConfigurationManager.AppSettings["ProjetoTransportadoraCookieLogin"]] != null)
+    if (Session[System.Configuration.ConfigurationManager.AppSettings["ProjetoTransportadora.Usuario"]] != null)
     {
-        usuarioDto = (UsuarioDto)Session[System.Configuration.ConfigurationManager.AppSettings["ProjetoTransportadoraCookieLogin"]];
+        usuarioDto = (UsuarioDto)Session[System.Configuration.ConfigurationManager.AppSettings["ProjetoTransportadora.Usuario"]];
     }
 }
 
@@ -257,7 +257,7 @@
                 <div class="tab-pane" id="parcelas" role="tabpanel" aria-labelledby="parcelas-tab">
                     <div class="form-group">
                         <div class="table-responsive">
-                            <table id="tbParcela" class="table nowrap" style="width: 100%">
+                            <table id="tbParcela" class="table table-hover nowrap" style="width: 100%">
                                 <thead>
                                     <tr>
                                         <td class="text-center"><b>Parcela</b></td>

@@ -1,4 +1,5 @@
-﻿using System.Configuration;
+﻿using ProjetoTransportadora.Dto;
+using System.Configuration;
 using System.Web.Mvc;
 
 namespace ProjetoTransportadora.Web.Controllers
@@ -7,8 +8,11 @@ namespace ProjetoTransportadora.Web.Controllers
     {
         public ActionResult Index()
         {
-            if (Session[ConfigurationManager.AppSettings["ProjetoTransportadoraSessionUsuarioTrocarSenha"]] == null)
+            if (TempData[ConfigurationManager.AppSettings["ProjetoTransportadora.UsuarioTrocarSenha"]] == null)
                 return RedirectToAction("Index", "Home");
+
+            TempData.Keep(ConfigurationManager.AppSettings["ProjetoTransportadora.UsuarioTrocarSenha"]);
+            ViewBag.IdUsuario = ((UsuarioDto)TempData[ConfigurationManager.AppSettings["ProjetoTransportadora.UsuarioTrocarSenha"]]).Id;
 
             return View();
         }

@@ -4,9 +4,9 @@
     ViewBag.Title = "Pessoas Físicas";
 
     UsuarioDto usuarioDto = null;
-    if (Session[System.Configuration.ConfigurationManager.AppSettings["ProjetoTransportadoraCookieLogin"]] != null)
+    if (Session[System.Configuration.ConfigurationManager.AppSettings["ProjetoTransportadora.Usuario"]] != null)
     {
-        usuarioDto = (UsuarioDto)Session[System.Configuration.ConfigurationManager.AppSettings["ProjetoTransportadoraCookieLogin"]];
+        usuarioDto = (UsuarioDto)Session[System.Configuration.ConfigurationManager.AppSettings["ProjetoTransportadora.Usuario"]];
     }
 }
 
@@ -408,7 +408,8 @@
             var tbPessoa = $("#tbPessoa").DataTable({
                 "ordering": false,
                 "bFilter": false,
-                "paging": false,
+                "paging": true,
+                "pageLength": 25,
                 "ordering": false,
                 "info": false,
                 "searching": false,
@@ -1319,86 +1320,88 @@
                             <div class="tab-content">
                                 <br />
                                 <div class="tab-pane active" id="dadospessoais" role="tabpanel" aria-labelledby="dadospessoais-tab">
-                                    <div class="form-group">
-                                        <div class="row">
-                                            <div class="col-md-7">
-                                                <label for="nome">Nome:</label>
-                                                <input id="nome" type="text" class="form-control" />
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <div class="row">
-                                            <div class="col-md-3">
-                                                <label for="cpf">Cpf:</label>
-                                                <input id="cpf" type="text" class="form-control cpf" />
-                                            </div>
-                                            <div class="col-md-2">
-                                                <label for="rg">Rg:</label>
-                                                <input id="rg" type="text" class="form-control" />
-                                            </div>
-                                            <div class="col-md-2">
-                                                <label for="dataNascimento">Data Nascimento:</label>
-                                                <input id="dataNascimento" type="text" class="form-control data datepicker" />
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <div class="row">
-                                            <div class="col-md-4">
-                                                <label for="cidadeNascimento">Naturalidade:</label>
-                                                <input id="cidadeNascimento" type="text" class="form-control" />
-                                            </div>
-                                            <div class="col-md-3">
-                                                <label for="ufNascimento">Uf:</label>
-                                                @Html.DropDownList("ufNascimento", new SelectList(ViewBag.Estado, "Uf", "Nome"), "Uf", new { @class = "form-control" })
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <div class="row">
-                                            <div class="col-md-3">
-                                                <label for="estadoCivil">Estado Civil:</label>
-                                                @Html.DropDownList("estadoCivil", new SelectList(ViewBag.EstadoCivil, "Id", "Nome"), "Estado Civil", new { @class = "form-control" })
-                                            </div>
-                                            <div class="col-md-4">
-                                                <label for="regimeCasamento">Regime de Casamento:</label>
-                                                @Html.DropDownList("regimeCasamento", new SelectList(ViewBag.RegimeCasamento, "Id", "Nome"), "Regime de Casamento", new { @class = "form-control" })
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <div class="row">
-                                            <div class="col-md-7">
-                                                <label class="control-label" for="conjuge">Cônjuge:</label>
-                                                <div class="input-group">
-                                                    <input id="conjuge" name="conjuge" type="text" class="form-control" placeholder="Cônjuge (Mínimo de 3 caracteres - CPF ou Nome)" />
-                                                    <input type="hidden" name="idConjuge" id="idConjuge" />
-                                                    <div class="input-group-addon" style="cursor: pointer" data-id="idConjuge" data-nome="conjuge" data-titulo="Cônjuge" data-sem-vinculo="false" data-documento="Cpf" onclick="abrirModalPessoaCadastroAuxiliar(this)">+</div>
+                                    <div style="overflow-x: hidden; overflow-y: auto; height: calc(60vh - 125px);">
+                                        <div class="form-group">
+                                            <div class="row">
+                                                <div class="col-md-7">
+                                                    <label for="nome">Nome:</label>
+                                                    <input id="nome" type="text" class="form-control" />
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <div class="row">
-                                            <div class="col-md-7">
-                                                <label class="control-label" for="pai">Pai:</label>
-                                                <div class="input-group">
-                                                    <input id="pai" name="pai" type="text" class="form-control" placeholder="Pai (Mínimo de 3 caracteres - CPF ou Nome)" />
-                                                    <input type="hidden" name="idPai" id="idPai" />
-                                                    <div class="input-group-addon" style="cursor: pointer" data-id="idPai" data-nome="pai" data-titulo="Pai" data-sem-vinculo="true" data-documento="Cpf" onclick="abrirModalPessoaCadastroAuxiliar(this)">+</div>
+                                        <div class="form-group">
+                                            <div class="row">
+                                                <div class="col-md-3">
+                                                    <label for="cpf">Cpf:</label>
+                                                    <input id="cpf" type="text" class="form-control cpf" />
+                                                </div>
+                                                <div class="col-md-2">
+                                                    <label for="rg">Rg:</label>
+                                                    <input id="rg" type="text" class="form-control" />
+                                                </div>
+                                                <div class="col-md-2">
+                                                    <label for="dataNascimento">Data Nascimento:</label>
+                                                    <input id="dataNascimento" type="text" class="form-control data datepicker" />
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <div class="row">
-                                            <div class="col-md-7">
-                                                <label class="control-label" for="mae">Mãe:</label>
-                                                <div class="input-group">
-                                                    <input id="mae" name="mae" type="text" class="form-control" placeholder="Mãe (Mínimo de 3 caracteres - CPF ou Nome)" />
-                                                    <input type="hidden" name="idMae" id="idMae" />
-                                                    <div class="input-group-addon" style="cursor: pointer" data-id="idMae" data-nome="mae" data-titulo="Mãe" data-sem-vinculo="true" data-documento="Cpf" onclick="abrirModalPessoaCadastroAuxiliar(this)">+</div>
+                                        <div class="form-group">
+                                            <div class="row">
+                                                <div class="col-md-4">
+                                                    <label for="cidadeNascimento">Naturalidade:</label>
+                                                    <input id="cidadeNascimento" type="text" class="form-control" />
+                                                </div>
+                                                <div class="col-md-3">
+                                                    <label for="ufNascimento">Uf:</label>
+                                                    @Html.DropDownList("ufNascimento", new SelectList(ViewBag.Estado, "Uf", "Nome"), "Uf", new { @class = "form-control" })
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="row">
+                                                <div class="col-md-3">
+                                                    <label for="estadoCivil">Estado Civil:</label>
+                                                    @Html.DropDownList("estadoCivil", new SelectList(ViewBag.EstadoCivil, "Id", "Nome"), "Estado Civil", new { @class = "form-control" })
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <label for="regimeCasamento">Regime de Casamento:</label>
+                                                    @Html.DropDownList("regimeCasamento", new SelectList(ViewBag.RegimeCasamento, "Id", "Nome"), "Regime de Casamento", new { @class = "form-control" })
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="row">
+                                                <div class="col-md-7">
+                                                    <label class="control-label" for="conjuge">Cônjuge:</label>
+                                                    <div class="input-group">
+                                                        <input id="conjuge" name="conjuge" type="text" class="form-control" placeholder="Cônjuge (Mínimo de 3 caracteres - CPF ou Nome)" />
+                                                        <input type="hidden" name="idConjuge" id="idConjuge" />
+                                                        <div class="input-group-addon" style="cursor: pointer" data-id="idConjuge" data-nome="conjuge" data-titulo="Cônjuge" data-sem-vinculo="false" data-documento="Cpf" onclick="abrirModalPessoaCadastroAuxiliar(this)">+</div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="row">
+                                                <div class="col-md-7">
+                                                    <label class="control-label" for="pai">Pai:</label>
+                                                    <div class="input-group">
+                                                        <input id="pai" name="pai" type="text" class="form-control" placeholder="Pai (Mínimo de 3 caracteres - CPF ou Nome)" />
+                                                        <input type="hidden" name="idPai" id="idPai" />
+                                                        <div class="input-group-addon" style="cursor: pointer" data-id="idPai" data-nome="pai" data-titulo="Pai" data-sem-vinculo="true" data-documento="Cpf" onclick="abrirModalPessoaCadastroAuxiliar(this)">+</div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="row">
+                                                <div class="col-md-7">
+                                                    <label class="control-label" for="mae">Mãe:</label>
+                                                    <div class="input-group">
+                                                        <input id="mae" name="mae" type="text" class="form-control" placeholder="Mãe (Mínimo de 3 caracteres - CPF ou Nome)" />
+                                                        <input type="hidden" name="idMae" id="idMae" />
+                                                        <div class="input-group-addon" style="cursor: pointer" data-id="idMae" data-nome="mae" data-titulo="Mãe" data-sem-vinculo="true" data-documento="Cpf" onclick="abrirModalPessoaCadastroAuxiliar(this)">+</div>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>

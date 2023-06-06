@@ -4,9 +4,9 @@
     ViewBag.Title = "Contratos";
 
     UsuarioDto usuarioDto = null;
-    if (Session[System.Configuration.ConfigurationManager.AppSettings["ProjetoTransportadoraCookieLogin"]] != null)
+    if (Session[System.Configuration.ConfigurationManager.AppSettings["ProjetoTransportadora.Usuario"]] != null)
     {
-        usuarioDto = (UsuarioDto)Session[System.Configuration.ConfigurationManager.AppSettings["ProjetoTransportadoraCookieLogin"]];
+        usuarioDto = (UsuarioDto)Session[System.Configuration.ConfigurationManager.AppSettings["ProjetoTransportadora.Usuario"]];
     }
 }
 
@@ -370,7 +370,8 @@
                 "ordering": false,
                 "bFilter": false,
                 "paging": false,
-                "ordering": false,
+                "paging": true,
+                "pageLength": 25,
                 "info": false,
                 "searching": false,
                 "language": {
@@ -1332,7 +1333,7 @@
         <div class="tab-content">
             <div class="tab-pane active" id="consultaPesquisa" role="tabpanel" aria-labelledby="consultaPesquisa-tab">
                 <div class="table-responsive">
-                    <table id="tbContrato" class="table nowrap">
+                    <table id="tbContrato" class="table table-hover nowrap">
                         <thead>
                             <tr>
                                 <td class="text-center" style="width: 10%"><b>Número Contrato</b></td>
@@ -1351,7 +1352,7 @@
             </div>
             <div class="tab-pane" id="situacaoContratoResumo" role="tabpanel" aria-labelledby="situacaoContratoResumo-tab">
                 <div class="table-responsive">
-                    <table id="tbSituacaoContratoResumo" class="table nowrap">
+                    <table id="tbSituacaoContratoResumo" class="table table-hover nowrap">
                         <thead>
                             <tr>
                                 <td class="text-center" style="width: 15%"><b>Situação Contrato</b></td>
@@ -1367,7 +1368,7 @@
             </div>
             <div class="tab-pane" id="situacaoParcelaResumo" role="tabpanel" aria-labelledby="situacaoParcelaResumo-tab">
                 <div class="table-responsive">
-                    <table id="tbSituacaoParcelaResumo" class="table nowrap">
+                    <table id="tbSituacaoParcelaResumo" class="table table-hover nowrap">
                         <thead>
                             <tr>
                                 <td class="text-center" style="width: 15%"><b>Situação Parcela</b></td>
@@ -1655,7 +1656,7 @@
                                 <div class="tab-pane" id="parcelas" role="tabpanel" aria-labelledby="parcelas-tab">
                                     <div class="form-group">
                                         <div class="table-responsive" style="overflow-x: hidden; overflow-y: scroll; height: 350px">
-                                            <table id="tbContratoParcela" class="table nowrap" style="width: 100%">
+                                            <table id="tbContratoParcela" class="table table-hover nowrap" style="width: 100%">
                                                 <thead>
                                                     <tr>
                                                         <td class="text-center"><b>Parcela</b></td>

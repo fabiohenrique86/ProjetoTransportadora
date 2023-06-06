@@ -39,14 +39,14 @@ namespace ProjetoTransportadora.Web.Filters
                 return;
 
             // acesso via link direto
-            if (filterContext.HttpContext.Session[ConfigurationManager.AppSettings["ProjetoTransportadoraCookieLogin"]] == null)
+            if (filterContext.HttpContext.Session[ConfigurationManager.AppSettings["ProjetoTransportadora.Usuario"]] == null)
             {
                 var urlHelper = new UrlHelper(filterContext.HttpContext.Request.RequestContext).Action("Index", "Home");
                 filterContext.Result = new RedirectResult(urlHelper);
                 return;
             }
 
-            var usuarioDto = (UsuarioDto)filterContext.HttpContext.Session[ConfigurationManager.AppSettings["ProjetoTransportadoraCookieLogin"]];
+            var usuarioDto = (UsuarioDto)filterContext.HttpContext.Session[ConfigurationManager.AppSettings["ProjetoTransportadora.Usuario"]];
 
             if (usuarioDto == null)
             {

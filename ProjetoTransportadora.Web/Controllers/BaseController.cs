@@ -11,10 +11,10 @@ namespace ProjetoTransportadora.Web.Controllers
         {
             try
             {
-                if (Session[ConfigurationManager.AppSettings["ProjetoTransportadoraCookieLogin"]] == null)
+                if (Session[ConfigurationManager.AppSettings["ProjetoTransportadora.Usuario"]] == null)
                     return null;
 
-                var usuarioDto = (UsuarioDto)Session[ConfigurationManager.AppSettings["ProjetoTransportadoraCookieLogin"]];
+                var usuarioDto = (UsuarioDto)Session[ConfigurationManager.AppSettings["ProjetoTransportadora.Usuario"]];
 
                 return usuarioDto;
             }
@@ -29,8 +29,7 @@ namespace ProjetoTransportadora.Web.Controllers
             try
             {
                 usuarioDto.Senha = null;
-                Session[ConfigurationManager.AppSettings["ProjetoTransportadoraCookieLogin"]] = usuarioDto;
-                Session[ConfigurationManager.AppSettings["ProjetoTransportadoraSessionUsuarioTrocarSenha"]] = null;
+                Session[ConfigurationManager.AppSettings["ProjetoTransportadora.Usuario"]] = usuarioDto;
             }
             catch (Exception)
             {
@@ -42,8 +41,7 @@ namespace ProjetoTransportadora.Web.Controllers
         {
             try
             {
-                Session[ConfigurationManager.AppSettings["ProjetoTransportadoraCookieLogin"]] = null;
-                Session[ConfigurationManager.AppSettings["ProjetoTransportadoraSessionUsuarioTrocarSenha"]] = null;
+                Session[ConfigurationManager.AppSettings["ProjetoTransportadora.Usuario"]] = null;
             }
             catch (Exception)
             {

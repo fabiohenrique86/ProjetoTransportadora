@@ -65,10 +65,10 @@ namespace ProjetoTransportadora.Business
                 if (string.IsNullOrEmpty(pessoaDto.Nome))
                     throw new BusinessException("Nome é obrigatório");
 
-                if (!pessoaDto.SemVinculo)
-                {
-                    pessoaDto.Cpf = pessoaDto.Cpf?.Replace(".", "").Replace("-", "").Trim();
+                pessoaDto.Cpf = pessoaDto.Cpf?.Replace(".", "").Replace("-", "").Trim();
 
+                if (!pessoaDto.SemVinculo || !string.IsNullOrEmpty(pessoaDto.Cpf))
+                {
                     if (string.IsNullOrEmpty(pessoaDto.Cpf))
                         throw new BusinessException("Cpf é obrigatório");
 
@@ -125,7 +125,7 @@ namespace ProjetoTransportadora.Business
             {
                 pessoaDto.Cnpj = pessoaDto.Cnpj?.Replace(".", "").Replace("-", "").Replace("/", "");
 
-                if (!pessoaDto.SemVinculo)
+                if (!pessoaDto.SemVinculo || !string.IsNullOrEmpty(pessoaDto.Cnpj))
                 {
                     if (string.IsNullOrEmpty(pessoaDto.Cnpj))
                         throw new BusinessException("Cnpj é obrigatório");
