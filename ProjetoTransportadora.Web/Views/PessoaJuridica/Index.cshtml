@@ -107,15 +107,16 @@
                 $("#tbPessoaTelefone").DataTable().rows.add([
                 {
                     "Id": o.Id,
-                    "Pais": "<input type='text' class='form-control pais' value='" + o.Pais + "' />",
-                    "DDD": "<input type='text' class='form-control ddd' value='" + o.DDD + "' />",
+                    "Pais": "<input type='text' class='form-control pais' value='" + (o.Pais == null ? '' : o.Pais) + "' />",
+                    "DDD": "<input type='text' class='form-control ddd' value='" + (o.DDD == null ? '' : o.DDD) + "' />",
                     "Numero": "<input type='text' class='form-control numero celular' value='" + o.Numero + "' />",
-                    "NomeContato": "<input type='text' class='form-control nomeContatoTelefone' value='" + o.NomeContato + "' />",
+                    "NomeContato": "<input type='text' class='form-control nomeContatoTelefone' value='" + (o.NomeContato == null ? '' : o.NomeContato) + "' />",
                     "IdTipoTelefone": selectTipoTelefone,
                     "Acao": "<i class='glyphicon glyphicon-remove' title='Excluir' style='cursor: pointer'></i>"
                 }]).draw();
 
-                $("#" + id).val(o.IdTipoTelefone);
+                if (o.IdTipoTelefone > 0)
+                    $("#" + id).val(o.IdTipoTelefone);
             });
 
             $("#tbPessoaEmail").DataTable().clear().draw();
@@ -125,7 +126,7 @@
                     {
                         "Id": o.Id,
                         "Email": "<input type='text' class='form-control emailContato' value='" + o.Email + "' />",
-                        "NomeContato": "<input type='text' class='form-control nomeContatoEmail' value='" + o.NomeContato + "' />",
+                        "NomeContato": "<input type='text' class='form-control nomeContatoEmail' value='" + (o.NomeContato == null ? '' : o.NomeContato) + "' />",
                         "Acao": "<i class='glyphicon glyphicon-remove' title='Excluir' style='cursor: pointer'></i>"
                     }]).draw();
             });
@@ -924,7 +925,7 @@
                                     <a class="nav-link" id="localizacao-tab" data-toggle="tab" href="#localizacao" role="tab" aria-controls="localizacao" aria-selected="false">Localização</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link" id="contato-tab" data-toggle="tab" href="#contato" role="tab" aria-controls="contato" aria-selected="false">Contato</a>
+                                    <a class="nav-link" id="contato-tab" data-toggle="tab" href="#contato" role="tab" aria-controls="contato" aria-selected="false">Contatos</a>
                                 </li>
                                 <li class="nav-item">
                                     <a class="nav-link" id="historico-tab" data-toggle="tab" href="#historico" role="tab" aria-controls="historico" aria-selected="false">Histórico</a>

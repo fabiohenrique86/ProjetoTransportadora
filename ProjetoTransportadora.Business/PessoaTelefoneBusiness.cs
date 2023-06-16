@@ -22,20 +22,20 @@ namespace ProjetoTransportadora.Business
             if (pessoaTelefoneDto.IdPessoa <= 0)
                 throw new BusinessException("IdPessoa é obrigatório");
 
-            if (string.IsNullOrEmpty(pessoaTelefoneDto.Pais))
-                throw new BusinessException("País é obrigatório");
+            //if (string.IsNullOrEmpty(pessoaTelefoneDto.Pais))
+            //    throw new BusinessException("País é obrigatório");
 
-            if (pessoaTelefoneDto.DDD <= 0)
-                throw new BusinessException("DDD é obrigatório");
+            //if (pessoaTelefoneDto.DDD <= 0)
+            //    throw new BusinessException("DDD é obrigatório");
 
             if (pessoaTelefoneDto.Numero <= 0)
                 throw new BusinessException("Número é obrigatório");
 
-            if (string.IsNullOrEmpty(pessoaTelefoneDto.NomeContato))
-                throw new BusinessException("Nome do Contato é obrigatório");
+            //if (string.IsNullOrEmpty(pessoaTelefoneDto.NomeContato))
+            //    throw new BusinessException("Nome do Contato é obrigatório");
 
-            if (pessoaTelefoneDto.IdTipoTelefone <= 0)
-                throw new BusinessException("IdTipoTelefone é obrigatório");
+            //if (pessoaTelefoneDto.IdTipoTelefone <= 0)
+            //    throw new BusinessException("IdTipoTelefone é obrigatório");
 
             idPessoaTelefone = pessoaTelefoneRepository.Incluir(pessoaTelefoneDto);
 

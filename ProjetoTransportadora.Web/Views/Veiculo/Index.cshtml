@@ -962,71 +962,73 @@
                             <div class="tab-content">
                                 <br />
                                 <div class="tab-pane active" id="dadosveiculo" role="tabpanel" aria-labelledby="dadosveiculo-tab">
-                                    <div class="form-group">
-                                        <div class="row">
-                                            <div class="col-md-2">
-                                                <label for="placa">Placa:</label>
-                                                <input id="placa" type="text" class="form-control" placeholder="Placa" />
-                                            </div>
-                                            <div class="col-md-3">
-                                                <label for="renavam">Renavam:</label>
-                                                <input id="renavam" type="text" class="form-control" placeholder="Renavam" />
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <div class="row">
-                                            <div class="col-md-4">
-                                                <label for="situacaoVeiculo">Montadora:</label>
-                                                @Html.DropDownList("montadora", new SelectList(ViewBag.Montadora, "Id", "Nome"), "Montadora", new { @class = "form-control" })
+                                    <div style="overflow-x: hidden; overflow-y: auto; height: calc(60vh - 125px);">
+                                        <div class="form-group">
+                                            <div class="row">
+                                                <div class="col-md-2">
+                                                    <label for="placa">Placa:</label>
+                                                    <input id="placa" type="text" class="form-control" placeholder="Placa" />
+                                                </div>
+                                                <div class="col-md-2">
+                                                    <label for="renavam">Renavam:</label>
+                                                    <input id="renavam" type="text" class="form-control" placeholder="Renavam" />
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <div class="row">
-                                            <div class="col-md-2">
-                                                <label for="modelo">Modelo:</label>
-                                                <input id="modelo" type="text" class="form-control" placeholder="Modelo" />
-                                            </div>
-                                            <div class="col-md-2">
-                                                <label for="cor">Cor:</label>
-                                                <input id="cor" type="text" class="form-control" placeholder="Cor" />
+                                        <div class="form-group">
+                                            <div class="row">
+                                                <div class="col-md-4">
+                                                    <label for="situacaoVeiculo">Montadora:</label>
+                                                    @Html.DropDownList("montadora", new SelectList(ViewBag.Montadora, "Id", "Nome"), "Montadora", new { @class = "form-control" })
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <div class="row">
-                                            <div class="col-md-2">
-                                                <label for="anoModelo">Ano do Modelo:</label>
-                                                <input id="anoModelo" type="text" class="form-control ano" placeholder="Ano do Modelo" />
-                                            </div>
-                                            <div class="col-md-2">
-                                                <label for="anoFabricacao">Ano de Fabricação:</label>
-                                                <input id="anoFabricacao" type="text" class="form-control ano" placeholder="Ano de Fabricação" />
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <div class="row">
-                                            <div class="col-md-4">
-                                                <label for="chassi">Chassi:</label>
-                                                <input id="chassi" type="text" class="form-control" placeholder="Chassi" />
+                                        <div class="form-group">
+                                            <div class="row">
+                                                <div class="col-md-2">
+                                                    <label for="modelo">Modelo:</label>
+                                                    <input id="modelo" type="text" class="form-control" placeholder="Modelo" />
+                                                </div>
+                                                <div class="col-md-2">
+                                                    <label for="cor">Cor:</label>
+                                                    <input id="cor" type="text" class="form-control" placeholder="Cor" />
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <div class="row">
-                                            <div class="col-md-4">
-                                                <label for="situacaoVeiculo">Situação do Veículo:</label>
-                                                @Html.DropDownList("situacaoVeiculo", new SelectList(ViewBag.SituacaoVeiculo, "Id", "Nome"), "Situação do Veículo", new { @class = "form-control" })
+                                        <div class="form-group">
+                                            <div class="row">
+                                                <div class="col-md-2">
+                                                    <label for="anoModelo">Ano do Modelo:</label>
+                                                    <input id="anoModelo" type="text" class="form-control ano" placeholder="Ano do Modelo" />
+                                                </div>
+                                                <div class="col-md-2">
+                                                    <label for="anoFabricacao">Ano de Fabricação:</label>
+                                                    <input id="anoFabricacao" type="text" class="form-control ano" placeholder="Ano de Fabricação" />
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <div class="row">
-                                            <div class="col-md-4">
-                                                <label for="rastreador">Rastreador:</label>
-                                                <input id="rastreador" type="text" class="form-control" placeholder="Rastreador" />
+                                        <div class="form-group">
+                                            <div class="row">
+                                                <div class="col-md-4">
+                                                    <label for="chassi">Chassi:</label>
+                                                    <input id="chassi" type="text" class="form-control" placeholder="Chassi" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="row">
+                                                <div class="col-md-4">
+                                                    <label for="situacaoVeiculo">Situação do Veículo:</label>
+                                                    @Html.DropDownList("situacaoVeiculo", new SelectList(ViewBag.SituacaoVeiculo, "Id", "Nome"), "Situação do Veículo", new { @class = "form-control" })
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="row">
+                                                <div class="col-md-4">
+                                                    <label for="rastreador">Rastreador:</label>
+                                                    <input id="rastreador" type="text" class="form-control" placeholder="Rastreador" />
+                                                </div>
                                             </div>
                                         </div>
                                     </div>

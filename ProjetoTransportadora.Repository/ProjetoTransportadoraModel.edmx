@@ -232,7 +232,7 @@
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="IdPessoa" Type="int" Nullable="false" />
           <Property Name="Email" Type="varchar" MaxLength="100" Nullable="false" />
-          <Property Name="NomeContato" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="NomeContato" Type="varchar" MaxLength="100" />
         </EntityType>
         <EntityType Name="PessoaHistorico">
           <Key>
@@ -259,11 +259,11 @@
           </Key>
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="IdPessoa" Type="int" Nullable="false" />
-          <Property Name="Pais" Type="varchar" MaxLength="100" Nullable="false" />
-          <Property Name="DDD" Type="int" Nullable="false" />
+          <Property Name="Pais" Type="varchar" MaxLength="100" />
+          <Property Name="DDD" Type="int" />
           <Property Name="Numero" Type="int" Nullable="false" />
-          <Property Name="NomeContato" Type="varchar" MaxLength="100" Nullable="false" />
-          <Property Name="IdTipoTelefone" Type="int" Nullable="false" />
+          <Property Name="NomeContato" Type="varchar" MaxLength="100" />
+          <Property Name="IdTipoTelefone" Type="int" />
         </EntityType>
         <EntityType Name="Produto">
           <Key>
@@ -819,7 +819,7 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_PessoaTelefone_TipoTelefone">
-          <End Role="TipoTelefone" Type="Self.TipoTelefone" Multiplicity="1" />
+          <End Role="TipoTelefone" Type="Self.TipoTelefone" Multiplicity="0..1" />
           <End Role="PessoaTelefone" Type="Self.PessoaTelefone" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="TipoTelefone">
@@ -1236,19 +1236,13 @@
           <EntitySet Name="RegimeCasamento" EntityType="ProjetoTransportadoraModel.RegimeCasamento" />
           <EntitySet Name="SituacaoVeiculo" EntityType="ProjetoTransportadoraModel.SituacaoVeiculo" />
           <EntitySet Name="TipoResidencia" EntityType="ProjetoTransportadoraModel.TipoResidencia" />
-          <EntitySet Name="PessoaEmail" EntityType="ProjetoTransportadoraModel.PessoaEmail" />
           <EntitySet Name="PessoaHistorico" EntityType="ProjetoTransportadoraModel.PessoaHistorico" />
           <EntitySet Name="PessoaReferencia" EntityType="ProjetoTransportadoraModel.PessoaReferencia" />
-          <EntitySet Name="PessoaTelefone" EntityType="ProjetoTransportadoraModel.PessoaTelefone" />
           <EntitySet Name="TipoReferencia" EntityType="ProjetoTransportadoraModel.TipoReferencia" />
           <EntitySet Name="TipoTelefone" EntityType="ProjetoTransportadoraModel.TipoTelefone" />
           <AssociationSet Name="FK_PessoaReferencia_TipoReferencia" Association="ProjetoTransportadoraModel.FK_PessoaReferencia_TipoReferencia">
             <End Role="TipoReferencia" EntitySet="TipoReferencia" />
             <End Role="PessoaReferencia" EntitySet="PessoaReferencia" />
-          </AssociationSet>
-          <AssociationSet Name="FK_PessoaTelefone_TipoTelefone" Association="ProjetoTransportadoraModel.FK_PessoaTelefone_TipoTelefone">
-            <End Role="TipoTelefone" EntitySet="TipoTelefone" />
-            <End Role="PessoaTelefone" EntitySet="PessoaTelefone" />
           </AssociationSet>
           <EntitySet Name="Funcionalidade" EntityType="ProjetoTransportadoraModel.Funcionalidade" />
           <EntitySet Name="GrupoFuncionalidade" EntityType="ProjetoTransportadoraModel.GrupoFuncionalidade" />
@@ -1298,10 +1292,6 @@
             <End Role="TipoResidencia" EntitySet="TipoResidencia" />
             <End Role="Pessoa" EntitySet="Pessoa" />
           </AssociationSet>
-          <AssociationSet Name="FK_PessoaEmail_Pessoa" Association="ProjetoTransportadoraModel.FK_PessoaEmail_Pessoa">
-            <End Role="Pessoa" EntitySet="Pessoa" />
-            <End Role="PessoaEmail" EntitySet="PessoaEmail" />
-          </AssociationSet>
           <AssociationSet Name="FK_PessoaHistorico_Pessoa" Association="ProjetoTransportadoraModel.FK_PessoaHistorico_Pessoa">
             <End Role="Pessoa" EntitySet="Pessoa" />
             <End Role="PessoaHistorico" EntitySet="PessoaHistorico" />
@@ -1309,10 +1299,6 @@
           <AssociationSet Name="FK_PessoaReferencia_Pessoa" Association="ProjetoTransportadoraModel.FK_PessoaReferencia_Pessoa">
             <End Role="Pessoa" EntitySet="Pessoa" />
             <End Role="PessoaReferencia" EntitySet="PessoaReferencia" />
-          </AssociationSet>
-          <AssociationSet Name="FK_PessoaTelefone_Pessoa" Association="ProjetoTransportadoraModel.FK_PessoaTelefone_Pessoa">
-            <End Role="Pessoa" EntitySet="Pessoa" />
-            <End Role="PessoaTelefone" EntitySet="PessoaTelefone" />
           </AssociationSet>
           <EntitySet Name="SituacaoMulta" EntityType="ProjetoTransportadoraModel.SituacaoMulta" />
           <EntitySet Name="VeiculoHistorico" EntityType="ProjetoTransportadoraModel.VeiculoHistorico" />
@@ -1411,6 +1397,20 @@
           <AssociationSet Name="FK_ContratoParcela_Contrato" Association="ProjetoTransportadoraModel.FK_ContratoParcela_Contrato">
             <End Role="Contrato" EntitySet="Contrato" />
             <End Role="ContratoParcela" EntitySet="ContratoParcela" />
+          </AssociationSet>
+          <EntitySet Name="PessoaEmail" EntityType="ProjetoTransportadoraModel.PessoaEmail" />
+          <AssociationSet Name="FK_PessoaEmail_Pessoa" Association="ProjetoTransportadoraModel.FK_PessoaEmail_Pessoa">
+            <End Role="Pessoa" EntitySet="Pessoa" />
+            <End Role="PessoaEmail" EntitySet="PessoaEmail" />
+          </AssociationSet>
+          <EntitySet Name="PessoaTelefone" EntityType="ProjetoTransportadoraModel.PessoaTelefone" />
+          <AssociationSet Name="FK_PessoaTelefone_Pessoa" Association="ProjetoTransportadoraModel.FK_PessoaTelefone_Pessoa">
+            <End Role="Pessoa" EntitySet="Pessoa" />
+            <End Role="PessoaTelefone" EntitySet="PessoaTelefone" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PessoaTelefone_TipoTelefone" Association="ProjetoTransportadoraModel.FK_PessoaTelefone_TipoTelefone">
+            <End Role="TipoTelefone" EntitySet="TipoTelefone" />
+            <End Role="PessoaTelefone" EntitySet="PessoaTelefone" />
           </AssociationSet>
           </EntityContainer>
         <EntityType Name="Log">
@@ -1526,16 +1526,6 @@
           <Property Name="DataInativacao" Type="DateTime" Precision="3" />
           <NavigationProperty Name="Pessoa" Relationship="ProjetoTransportadoraModel.FK_Pessoa_TipoResidencia" FromRole="TipoResidencia" ToRole="Pessoa" />
         </EntityType>
-        <EntityType Name="PessoaEmail">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="IdPessoa" Type="Int32" Nullable="false" />
-          <Property Name="Email" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
-          <Property Name="NomeContato" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
-          <NavigationProperty Name="Pessoa" Relationship="ProjetoTransportadoraModel.FK_PessoaEmail_Pessoa" FromRole="PessoaEmail" ToRole="Pessoa" />
-        </EntityType>
         <EntityType Name="PessoaHistorico">
           <Key>
             <PropertyRef Name="Id" />
@@ -1557,20 +1547,6 @@
           <Property Name="Descricao" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="TipoReferencia" Relationship="ProjetoTransportadoraModel.FK_PessoaReferencia_TipoReferencia" FromRole="PessoaReferencia" ToRole="TipoReferencia" />
           <NavigationProperty Name="Pessoa" Relationship="ProjetoTransportadoraModel.FK_PessoaReferencia_Pessoa" FromRole="PessoaReferencia" ToRole="Pessoa" />
-        </EntityType>
-        <EntityType Name="PessoaTelefone">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="IdPessoa" Type="Int32" Nullable="false" />
-          <Property Name="Pais" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
-          <Property Name="DDD" Type="Int32" Nullable="false" />
-          <Property Name="Numero" Type="Int32" Nullable="false" />
-          <Property Name="NomeContato" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
-          <Property Name="IdTipoTelefone" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="TipoTelefone" Relationship="ProjetoTransportadoraModel.FK_PessoaTelefone_TipoTelefone" FromRole="PessoaTelefone" ToRole="TipoTelefone" />
-          <NavigationProperty Name="Pessoa" Relationship="ProjetoTransportadoraModel.FK_PessoaTelefone_Pessoa" FromRole="PessoaTelefone" ToRole="Pessoa" />
         </EntityType>
         <EntityType Name="TipoReferencia">
           <Key>
@@ -1607,18 +1583,6 @@
             </Principal>
             <Dependent Role="PessoaReferencia">
               <PropertyRef Name="IdTipoReferencia" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_PessoaTelefone_TipoTelefone">
-          <End Type="ProjetoTransportadoraModel.TipoTelefone" Role="TipoTelefone" Multiplicity="1" />
-          <End Type="ProjetoTransportadoraModel.PessoaTelefone" Role="PessoaTelefone" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="TipoTelefone">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="PessoaTelefone">
-              <PropertyRef Name="IdTipoTelefone" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -1735,10 +1699,8 @@
           <NavigationProperty Name="RegimeCasamento" Relationship="ProjetoTransportadoraModel.FK_Pessoa_RegimeCasamento" FromRole="Pessoa" ToRole="RegimeCasamento" />
           <NavigationProperty Name="TipoPessoa" Relationship="ProjetoTransportadoraModel.FK_Pessoa_TipoPessoa" FromRole="Pessoa" ToRole="TipoPessoa" />
           <NavigationProperty Name="TipoResidencia" Relationship="ProjetoTransportadoraModel.FK_Pessoa_TipoResidencia" FromRole="Pessoa" ToRole="TipoResidencia" />
-          <NavigationProperty Name="PessoaEmail" Relationship="ProjetoTransportadoraModel.FK_PessoaEmail_Pessoa" FromRole="Pessoa" ToRole="PessoaEmail" />
           <NavigationProperty Name="PessoaHistorico" Relationship="ProjetoTransportadoraModel.FK_PessoaHistorico_Pessoa" FromRole="Pessoa" ToRole="PessoaHistorico" />
           <NavigationProperty Name="PessoaReferencia" Relationship="ProjetoTransportadoraModel.FK_PessoaReferencia_Pessoa" FromRole="Pessoa" ToRole="PessoaReferencia" />
-          <NavigationProperty Name="PessoaTelefone" Relationship="ProjetoTransportadoraModel.FK_PessoaTelefone_Pessoa" FromRole="Pessoa" ToRole="PessoaTelefone" />
           <NavigationProperty Name="Veiculo" Relationship="ProjetoTransportadoraModel.FK_Veiculo_Pessoa_ProprietarioAnterior" FromRole="Pessoa" ToRole="Veiculo" />
           <NavigationProperty Name="Veiculo1" Relationship="ProjetoTransportadoraModel.FK_Veiculo_Pessoa_ProprietarioAtual" FromRole="Pessoa" ToRole="Veiculo" />
           <NavigationProperty Name="VeiculoMulta" Relationship="ProjetoTransportadoraModel.FK_VeiculoMulta_Pessoa" FromRole="Pessoa" ToRole="VeiculoMulta" />
@@ -1750,6 +1712,8 @@
           <NavigationProperty Name="Contrato3" Relationship="ProjetoTransportadoraModel.FK_Contrato_Pessoa_Promotor" FromRole="Pessoa" ToRole="Contrato" />
           <Property Name="TelefoneEmpresa" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
           <Property Name="EmailEmpresa" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="PessoaEmail" Relationship="ProjetoTransportadoraModel.FK_PessoaEmail_Pessoa" FromRole="Pessoa" ToRole="PessoaEmail" />
+          <NavigationProperty Name="PessoaTelefone" Relationship="ProjetoTransportadoraModel.FK_PessoaTelefone_Pessoa" FromRole="Pessoa" ToRole="PessoaTelefone" />
           </EntityType>
         <Association Name="FK_Pessoa_EstadoCivil">
           <End Type="ProjetoTransportadoraModel.EstadoCivil" Role="EstadoCivil" Multiplicity="0..1" />
@@ -1859,18 +1823,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_PessoaEmail_Pessoa">
-          <End Type="ProjetoTransportadoraModel.Pessoa" Role="Pessoa" Multiplicity="1" />
-          <End Type="ProjetoTransportadoraModel.PessoaEmail" Role="PessoaEmail" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Pessoa">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="PessoaEmail">
-              <PropertyRef Name="IdPessoa" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK_PessoaHistorico_Pessoa">
           <End Type="ProjetoTransportadoraModel.Pessoa" Role="Pessoa" Multiplicity="1" />
           <End Type="ProjetoTransportadoraModel.PessoaHistorico" Role="PessoaHistorico" Multiplicity="*" />
@@ -1891,18 +1843,6 @@
               <PropertyRef Name="Id" />
             </Principal>
             <Dependent Role="PessoaReferencia">
-              <PropertyRef Name="IdPessoa" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_PessoaTelefone_Pessoa">
-          <End Type="ProjetoTransportadoraModel.Pessoa" Role="Pessoa" Multiplicity="1" />
-          <End Type="ProjetoTransportadoraModel.PessoaTelefone" Role="PessoaTelefone" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Pessoa">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="PessoaTelefone">
               <PropertyRef Name="IdPessoa" />
             </Dependent>
           </ReferentialConstraint>
@@ -2377,6 +2317,66 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="PessoaEmail">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="IdPessoa" Type="Int32" Nullable="false" />
+          <Property Name="Email" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="NomeContato" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Pessoa" Relationship="ProjetoTransportadoraModel.FK_PessoaEmail_Pessoa" FromRole="PessoaEmail" ToRole="Pessoa" />
+        </EntityType>
+        <Association Name="FK_PessoaEmail_Pessoa">
+          <End Type="ProjetoTransportadoraModel.Pessoa" Role="Pessoa" Multiplicity="1" />
+          <End Type="ProjetoTransportadoraModel.PessoaEmail" Role="PessoaEmail" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Pessoa">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="PessoaEmail">
+              <PropertyRef Name="IdPessoa" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="PessoaTelefone">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="IdPessoa" Type="Int32" Nullable="false" />
+          <Property Name="Pais" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="DDD" Type="Int32" />
+          <Property Name="Numero" Type="Int32" Nullable="false" />
+          <Property Name="NomeContato" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="IdTipoTelefone" Type="Int32" />
+          <NavigationProperty Name="Pessoa" Relationship="ProjetoTransportadoraModel.FK_PessoaTelefone_Pessoa" FromRole="PessoaTelefone" ToRole="Pessoa" />
+          <NavigationProperty Name="TipoTelefone" Relationship="ProjetoTransportadoraModel.FK_PessoaTelefone_TipoTelefone" FromRole="PessoaTelefone" ToRole="TipoTelefone" />
+        </EntityType>
+        <Association Name="FK_PessoaTelefone_Pessoa">
+          <End Type="ProjetoTransportadoraModel.Pessoa" Role="Pessoa" Multiplicity="1" />
+          <End Type="ProjetoTransportadoraModel.PessoaTelefone" Role="PessoaTelefone" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Pessoa">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="PessoaTelefone">
+              <PropertyRef Name="IdPessoa" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PessoaTelefone_TipoTelefone">
+          <End Type="ProjetoTransportadoraModel.TipoTelefone" Role="TipoTelefone" Multiplicity="0..1" />
+          <End Type="ProjetoTransportadoraModel.PessoaTelefone" Role="PessoaTelefone" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TipoTelefone">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="PessoaTelefone">
+              <PropertyRef Name="IdTipoTelefone" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -2534,16 +2534,6 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="PessoaEmail">
-            <EntityTypeMapping TypeName="ProjetoTransportadoraModel.PessoaEmail">
-              <MappingFragment StoreEntitySet="PessoaEmail">
-                <ScalarProperty Name="NomeContato" ColumnName="NomeContato" />
-                <ScalarProperty Name="Email" ColumnName="Email" />
-                <ScalarProperty Name="IdPessoa" ColumnName="IdPessoa" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="PessoaHistorico">
             <EntityTypeMapping TypeName="ProjetoTransportadoraModel.PessoaHistorico">
               <MappingFragment StoreEntitySet="PessoaHistorico">
@@ -2560,19 +2550,6 @@
                 <ScalarProperty Name="Descricao" ColumnName="Descricao" />
                 <ScalarProperty Name="DataReferencia" ColumnName="DataReferencia" />
                 <ScalarProperty Name="IdTipoReferencia" ColumnName="IdTipoReferencia" />
-                <ScalarProperty Name="IdPessoa" ColumnName="IdPessoa" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="PessoaTelefone">
-            <EntityTypeMapping TypeName="ProjetoTransportadoraModel.PessoaTelefone">
-              <MappingFragment StoreEntitySet="PessoaTelefone">
-                <ScalarProperty Name="IdTipoTelefone" ColumnName="IdTipoTelefone" />
-                <ScalarProperty Name="NomeContato" ColumnName="NomeContato" />
-                <ScalarProperty Name="Numero" ColumnName="Numero" />
-                <ScalarProperty Name="DDD" ColumnName="DDD" />
-                <ScalarProperty Name="Pais" ColumnName="Pais" />
                 <ScalarProperty Name="IdPessoa" ColumnName="IdPessoa" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
@@ -2864,6 +2841,29 @@
                 <ScalarProperty Name="IdVeiculo" ColumnName="IdVeiculo" />
                 <ScalarProperty Name="IdCliente" ColumnName="IdCliente" />
                 <ScalarProperty Name="NumeroContrato" ColumnName="NumeroContrato" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PessoaEmail">
+            <EntityTypeMapping TypeName="ProjetoTransportadoraModel.PessoaEmail">
+              <MappingFragment StoreEntitySet="PessoaEmail">
+                <ScalarProperty Name="NomeContato" ColumnName="NomeContato" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="IdPessoa" ColumnName="IdPessoa" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PessoaTelefone">
+            <EntityTypeMapping TypeName="ProjetoTransportadoraModel.PessoaTelefone">
+              <MappingFragment StoreEntitySet="PessoaTelefone">
+                <ScalarProperty Name="IdTipoTelefone" ColumnName="IdTipoTelefone" />
+                <ScalarProperty Name="NomeContato" ColumnName="NomeContato" />
+                <ScalarProperty Name="Numero" ColumnName="Numero" />
+                <ScalarProperty Name="DDD" ColumnName="DDD" />
+                <ScalarProperty Name="Pais" ColumnName="Pais" />
+                <ScalarProperty Name="IdPessoa" ColumnName="IdPessoa" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>

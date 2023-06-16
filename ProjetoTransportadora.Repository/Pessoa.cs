@@ -21,10 +21,8 @@ namespace ProjetoTransportadora.Repository
             this.Pessoa11 = new HashSet<Pessoa>();
             this.Pessoa12 = new HashSet<Pessoa>();
             this.Pessoa13 = new HashSet<Pessoa>();
-            this.PessoaEmail = new HashSet<PessoaEmail>();
             this.PessoaHistorico = new HashSet<PessoaHistorico>();
             this.PessoaReferencia = new HashSet<PessoaReferencia>();
-            this.PessoaTelefone = new HashSet<PessoaTelefone>();
             this.Veiculo = new HashSet<Veiculo>();
             this.Veiculo1 = new HashSet<Veiculo>();
             this.VeiculoMulta = new HashSet<VeiculoMulta>();
@@ -34,6 +32,8 @@ namespace ProjetoTransportadora.Repository
             this.Contrato1 = new HashSet<Contrato>();
             this.Contrato2 = new HashSet<Contrato>();
             this.Contrato3 = new HashSet<Contrato>();
+            this.PessoaEmail = new HashSet<PessoaEmail>();
+            this.PessoaTelefone = new HashSet<PessoaTelefone>();
         }
     
         public int Id { get; set; }
@@ -97,13 +97,9 @@ namespace ProjetoTransportadora.Repository
         public virtual TipoPessoa TipoPessoa { get; set; }
         public virtual TipoResidencia TipoResidencia { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<PessoaEmail> PessoaEmail { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<PessoaHistorico> PessoaHistorico { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<PessoaReferencia> PessoaReferencia { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<PessoaTelefone> PessoaTelefone { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Veiculo> Veiculo { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
@@ -122,5 +118,9 @@ namespace ProjetoTransportadora.Repository
         public virtual ICollection<Contrato> Contrato2 { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Contrato> Contrato3 { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<PessoaEmail> PessoaEmail { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<PessoaTelefone> PessoaTelefone { get; set; }
     }
 }

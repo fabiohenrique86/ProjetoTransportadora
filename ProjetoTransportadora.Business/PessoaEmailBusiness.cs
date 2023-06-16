@@ -25,8 +25,8 @@ namespace ProjetoTransportadora.Business
             if (string.IsNullOrEmpty(pessoaEmailDto.Email))
                 throw new BusinessException("E-mail é obrigatório");
 
-            if (string.IsNullOrEmpty(pessoaEmailDto.NomeContato))
-                throw new BusinessException("Nome do Contato é obrigatório");
+            //if (string.IsNullOrEmpty(pessoaEmailDto.NomeContato))
+            //    throw new BusinessException("Nome do Contato é obrigatório");
 
             var pessoaEmailExistePorEmail = pessoaEmailRepository.Existe(new PessoaEmailDto() { IdPessoa = pessoaEmailDto.IdPessoa, Email = pessoaEmailDto.Email });
 

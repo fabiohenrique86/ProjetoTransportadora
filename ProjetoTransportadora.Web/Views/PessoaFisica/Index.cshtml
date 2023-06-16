@@ -96,12 +96,12 @@
                 $("#tbPessoaAvalista").DataTable().rows.add([
                     {
                         "Id": o.Id,
-                        "IdAvalista": "<input type='hidden' id='" + idAvalistaHidden + "' value='" + o.IdAvalista + "' /> <input id='" + idAvalistaInput + "' type='text' class='form-control text-center avalista' placeholder='Avalista (Mínimo de 3 caracteres - CPF ou Nome)' value='" + o.AvalistaDto.Nome + " (" + formatarCpf(o.AvalistaDto.Cpf) + ")' />",
+                        "IdAvalista": "<input type='hidden' id='" + idAvalistaHidden + "' value='" + o.IdAvalista + "' class='avalista' /> <input id='" + idAvalistaInput + "' type='text' class='form-control text-center' placeholder='Avalista (Mínimo de 3 caracteres - CPF ou Nome)' value='" + o.AvalistaDto.Nome + " (" + formatarCpf(o.AvalistaDto.Cpf) + ")' />",
                         "Acao": "<i class='glyphicon glyphicon-remove' title='Excluir' style='cursor: pointer'></i>"
                     }]).draw();
             });
 
-            // aba - contato
+            // aba - contatos
 
             $("#tbPessoaTelefone").DataTable().clear().draw();
             $(data.PessoaTelefoneDto).each(function (i, o) {
@@ -118,15 +118,16 @@
                 $("#tbPessoaTelefone").DataTable().rows.add([
                 {
                     "Id": o.Id,
-                    "Pais": "<input type='text' class='form-control pais' value='" + o.Pais + "' />",
-                    "DDD": "<input type='text' class='form-control ddd' value='" + o.DDD + "' />",
+                    "Pais": "<input type='text' class='form-control pais' value='" + (o.Pais == null ? '' : o.Pais) + "' />",
+                    "DDD": "<input type='text' class='form-control ddd' value='" + (o.DDD == null ? '' : o.DDD) + "' />",
                     "Numero": "<input type='text' class='form-control numero celular' value='" + o.Numero + "' />",
-                    "NomeContato": "<input type='text' class='form-control nomeContatoTelefone' value='" + o.NomeContato + "' />",
+                    "NomeContato": "<input type='text' class='form-control nomeContatoTelefone' value='" + (o.NomeContato == null ? '' : o.NomeContato) + "' />",
                     "IdTipoTelefone": selectTipoTelefone,
                     "Acao": "<i class='glyphicon glyphicon-remove' title='Excluir' style='cursor: pointer'></i>"
                 }]).draw();
 
-                $("#" + id).val(o.IdTipoTelefone);
+                if (o.IdTipoTelefone > 0)
+                    $("#" + id).val(o.IdTipoTelefone);
             });
 
             $("#tbPessoaEmail").DataTable().clear().draw();
@@ -136,7 +137,7 @@
                     {
                         "Id": o.Id,
                         "Email": "<input type='text' class='form-control emailContato' value='" + o.Email + "' />",
-                        "NomeContato": "<input type='text' class='form-control nomeContatoEmail' value='" + o.NomeContato + "' />",
+                        "NomeContato": "<input type='text' class='form-control nomeContatoEmail' value='" + (o.NomeContato == null ? '' : o.NomeContato) + "' />",
                         "Acao": "<i class='glyphicon glyphicon-remove' title='Excluir' style='cursor: pointer'></i>"
                     }]).draw();
             });
@@ -846,11 +847,11 @@
                         ({
                             "Id": this.data().Id,
                             "IdPessoa": pessoaDto.Id,
-                            "IdAvalista": $($($(".avalista")[rowIdx]).parents("tr").children().eq(0)).children().val(),
+                            "IdAvalista": $($(".avalista")[rowIdx]).val() // $($($(".avalista")[rowIdx]).parents("tr").children().eq(0)).children().val(),
                         });
                 });
 
-                // aba - contato
+                // aba - contatos
 
                 pessoaDto.PessoaTelefoneDto = [];
 
@@ -1118,7 +1119,7 @@
                 $("#tbPessoaAvalista").DataTable().rows.add([
                     {
                         "Id": 0,
-                        "IdAvalista": "<div class='input-group'><input type='hidden' id='" + idAvalistaHidden + "' /> <input id='" + idAvalistaInput + "' type='text' class='form-control text-center avalista' placeholder='Avalista (Mínimo de 3 caracteres - CPF ou Nome)' /><div class='input-group-addon' style='cursor: pointer' data-id='" + idAvalistaHidden + "' data-nome='" + idAvalistaInput + "' data-titulo='Avalista' data-sem-vinculo='false' data-documento='Cpf' onclick='abrirModalPessoaCadastroAuxiliar(this)'>+</div></div>",
+                        "IdAvalista": "<div class='input-group'><input type='hidden' id='" + idAvalistaHidden + "' class='avalista' /> <input id='" + idAvalistaInput + "' type='text' class='form-control text-center' placeholder='Avalista (Mínimo de 3 caracteres - CPF ou Nome)' /><div class='input-group-addon' style='cursor: pointer' data-id='" + idAvalistaHidden + "' data-nome='" + idAvalistaInput + "' data-titulo='Avalista' data-sem-vinculo='false' data-documento='Cpf' onclick='abrirModalPessoaCadastroAuxiliar(this)'>+</div></div>",
                         "Acao": "<i class='glyphicon glyphicon-remove' title='Excluir' style='cursor: pointer'></i>"
                     }]).draw();
 
@@ -1299,7 +1300,7 @@
                                     <a class="nav-link" id="avalistas-tab" data-toggle="tab" href="#avalistas" role="tab" aria-controls="avalistas" aria-selected="false" style="height: 61px">Avalistas</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link" id="contato-tab" data-toggle="tab" href="#contato" role="tab" aria-controls="contato" aria-selected="false" style="height: 61px">Contato</a>
+                                    <a class="nav-link" id="contato-tab" data-toggle="tab" href="#contato" role="tab" aria-controls="contato" aria-selected="false" style="height: 61px">Contatos</a>
                                 </li>
                                 <li class="nav-item">
                                     <a class="nav-link" id="residencia-tab" data-toggle="tab" href="#residencia" role="tab" aria-controls="residencia" aria-selected="false" style="height: 61px">Residência</a>
