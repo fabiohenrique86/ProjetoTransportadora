@@ -962,16 +962,16 @@
                             <div class="tab-content">
                                 <br />
                                 <div class="tab-pane active" id="dadosveiculo" role="tabpanel" aria-labelledby="dadosveiculo-tab">
-                                    <div style="overflow-x: hidden; overflow-y: auto; height: calc(60vh - 125px);">
+                                    <div class="rolagem-vertical">
                                         <div class="form-group">
                                             <div class="row">
                                                 <div class="col-md-2">
                                                     <label for="placa">Placa:</label>
-                                                    <input id="placa" type="text" class="form-control" placeholder="Placa" />
+                                                    <input id="placa" type="text" class="form-control" />
                                                 </div>
                                                 <div class="col-md-2">
                                                     <label for="renavam">Renavam:</label>
-                                                    <input id="renavam" type="text" class="form-control" placeholder="Renavam" />
+                                                    <input id="renavam" type="text" class="form-control" />
                                                 </div>
                                             </div>
                                         </div>
@@ -987,11 +987,11 @@
                                             <div class="row">
                                                 <div class="col-md-2">
                                                     <label for="modelo">Modelo:</label>
-                                                    <input id="modelo" type="text" class="form-control" placeholder="Modelo" />
+                                                    <input id="modelo" type="text" class="form-control" />
                                                 </div>
                                                 <div class="col-md-2">
                                                     <label for="cor">Cor:</label>
-                                                    <input id="cor" type="text" class="form-control" placeholder="Cor" />
+                                                    <input id="cor" type="text" class="form-control" />
                                                 </div>
                                             </div>
                                         </div>
@@ -999,11 +999,11 @@
                                             <div class="row">
                                                 <div class="col-md-2">
                                                     <label for="anoModelo">Ano do Modelo:</label>
-                                                    <input id="anoModelo" type="text" class="form-control ano" placeholder="Ano do Modelo" />
+                                                    <input id="anoModelo" type="text" class="form-control ano" />
                                                 </div>
                                                 <div class="col-md-2">
                                                     <label for="anoFabricacao">Ano de Fabricação:</label>
-                                                    <input id="anoFabricacao" type="text" class="form-control ano" placeholder="Ano de Fabricação" />
+                                                    <input id="anoFabricacao" type="text" class="form-control ano" />
                                                 </div>
                                             </div>
                                         </div>
@@ -1011,7 +1011,7 @@
                                             <div class="row">
                                                 <div class="col-md-4">
                                                     <label for="chassi">Chassi:</label>
-                                                    <input id="chassi" type="text" class="form-control" placeholder="Chassi" />
+                                                    <input id="chassi" type="text" class="form-control" />
                                                 </div>
                                             </div>
                                         </div>
@@ -1027,7 +1027,7 @@
                                             <div class="row">
                                                 <div class="col-md-4">
                                                     <label for="rastreador">Rastreador:</label>
-                                                    <input id="rastreador" type="text" class="form-control" placeholder="Rastreador" />
+                                                    <input id="rastreador" type="text" class="form-control" />
                                                 </div>
                                             </div>
                                         </div>
@@ -1064,7 +1064,7 @@
                                         <div class="row">
                                             <div class="col-md-2">
                                                 <label for="implementoV">Implemento:</label>
-                                                <input id="implementoV" name="implementoV" type="text" class="form-control" placeholder="Implemento" />
+                                                <input id="implementoV" name="implementoV" type="text" class="form-control" />
                                             </div>
                                         </div>
                                     </div>
@@ -1072,7 +1072,7 @@
                                         <div class="row">
                                             <div class="col-md-2">
                                                 <label for="comprimento">Comprimento:</label>
-                                                <input id="comprimento" name="comprimento" type="text" class="form-control comprimento" placeholder="Comprimento" />
+                                                <input id="comprimento" name="comprimento" type="text" class="form-control comprimento" />
                                             </div>
                                         </div>
                                     </div>
@@ -1080,7 +1080,7 @@
                                         <div class="row">
                                             <div class="col-md-2">
                                                 <label for="altura">Altura:</label>
-                                                <input id="altura" name="altura" type="text" class="form-control altura" placeholder="Altura" />
+                                                <input id="altura" name="altura" type="text" class="form-control altura" />
                                             </div>
                                         </div>
                                     </div>
@@ -1088,7 +1088,7 @@
                                         <div class="row">
                                             <div class="col-md-2">
                                                 <label for="largura">Largura:</label>
-                                                <input id="largura" name="largura" type="text" class="form-control largura" placeholder="Largura" />
+                                                <input id="largura" name="largura" type="text" class="form-control largura" />
                                             </div>
                                         </div>
                                     </div>
@@ -1098,11 +1098,11 @@
                                         <div class="row">
                                             <div class="col-md-2">
                                                 <label for="dataAquisicao">Data da Aquisição:</label>
-                                                <input id="dataAquisicao" name="dataAquisicao" type="text" class="form-control data datepicker" placeholder="Data da Aquisição" />
+                                                <input id="dataAquisicao" name="dataAquisicao" type="text" class="form-control data datepicker" />
                                             </div>
                                             <div class="col-md-2">
                                                 <label for="valorAquisicao">Valor Aquisição:</label>
-                                                <input id="valorAquisicao" name="valorAquisicao" type="text" class="form-control valor" placeholder="Valor Aquisição" />
+                                                <input id="valorAquisicao" name="valorAquisicao" type="text" class="form-control valor" />
                                             </div>
                                         </div>
                                     </div>
@@ -1110,11 +1110,11 @@
                                         <div class="row">
                                             <div class="col-md-2">
                                                 <label for="dataVenda">Data da Venda:</label>
-                                                <input id="dataVenda" name="dataVenda" type="text" class="form-control data datepicker" placeholder="Data da Venda" />
+                                                <input id="dataVenda" name="dataVenda" type="text" class="form-control data datepicker" />
                                             </div>
                                             <div class="col-md-2">
                                                 <label for="valorVenda">Valor Venda:</label>
-                                                <input id="valorVenda" name="valorVenda" type="text" class="form-control valor" placeholder="Valor Venda" />
+                                                <input id="valorVenda" name="valorVenda" type="text" class="form-control valor" />
                                             </div>
                                         </div>
                                     </div>
@@ -1122,11 +1122,11 @@
                                         <div class="row">
                                             <div class="col-md-2">
                                                 <label for="dataRecuperacao">Data da Recuperação:</label>
-                                                <input id="dataRecuperacao" name="dataRecuperacao" type="text" class="form-control data datepicker" placeholder="Data da Recuperação" />
+                                                <input id="dataRecuperacao" name="dataRecuperacao" type="text" class="form-control data datepicker" />
                                             </div>
                                             <div class="col-md-2">
                                                 <label for="valorTransportadora">Valor Transportadora:</label>
-                                                <input id="valorTransportadora" name="valorTransportadora" type="text" class="form-control valor" placeholder="Valor Transportadora" />
+                                                <input id="valorTransportadora" name="valorTransportadora" type="text" class="form-control valor" />
                                             </div>
                                         </div>
                                     </div>
@@ -1134,11 +1134,11 @@
                                         <div class="row">
                                             <div class="col-md-2">
                                                 <label for="dataValorFIPE">Data do Valor FIPE:</label>
-                                                <input id="dataValorFIPE" name="dataValorFIPE" type="text" class="form-control data datepicker" placeholder="Data do Valor FIPE" />
+                                                <input id="dataValorFIPE" name="dataValorFIPE" type="text" class="form-control data datepicker" />
                                             </div>
                                             <div class="col-md-2">
                                                 <label for="valorFIPE">Valor FIPE:</label>
-                                                <input id="valorFIPE" name="valorFIPE" type="text" class="form-control valor" placeholder="Valor FIPE" />
+                                                <input id="valorFIPE" name="valorFIPE" type="text" class="form-control valor" />
                                             </div>
                                         </div>
                                     </div>

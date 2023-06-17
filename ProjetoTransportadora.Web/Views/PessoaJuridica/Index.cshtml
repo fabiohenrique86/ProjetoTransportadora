@@ -279,7 +279,7 @@
                             return;
                         }
 
-                        $("#tbPessoa").DataTable().row($(obj).parents("tr")).invalidate().data(data.Data).draw();
+                        $("#tbPessoa").DataTable().row($(obj).parents("tr")).invalidate().data(data.Data[0]).draw();
                     }
                 });
             }
@@ -937,35 +937,37 @@
                             <div class="tab-content">
                                 <br />
                                 <div class="tab-pane active" id="empresa" role="tabpanel" aria-labelledby="empresa-tab">
-                                    <div class="form-group">
-                                        <div class="row">
-                                            <div class="col-md-3">
-                                                <label for="nomeEmpresa">Nome Empresa:</label>
-                                                <input id="nomeEmpresa" type="text" class="form-control" placeholder="Nome Empresa" />
-                                            </div>
-                                            <div class="col-md-3">
-                                                <label for="cnpj">Cnpj:</label>
-                                                <input id="cnpj" type="text" class="form-control cnpj" placeholder="Cnpj" />
-                                            </div>
-                                            <div class="col-md-3">
-                                                <label class="control-label" for="proprietario">Proprietário:</label>
-                                                <div class="input-group">
-                                                    <input id="proprietario" name="proprietario" type="text" class="form-control" placeholder="Proprietário (Mínimo de 3 caracteres - CPF ou CNPJ ou Nome)" />
-                                                    <input type="hidden" name="idProprietario" id="idProprietario" />
-                                                    <div class="input-group-addon" style="cursor: pointer" data-id="idProprietario" data-nome="proprietario" data-titulo="Proprietário" data-sem-vinculo="false" data-documento="Cpf/Cnpj" onclick="abrirModalPessoaCadastroAuxiliar(this)">+</div>
+                                    <div class="rolagem-vertical">
+                                        <div class="form-group">
+                                            <div class="row">
+                                                <div class="col-md-3">
+                                                    <label for="nomeEmpresa">Nome Empresa:</label>
+                                                    <input id="nomeEmpresa" type="text" class="form-control" />
+                                                </div>
+                                                <div class="col-md-3">
+                                                    <label for="cnpj">Cnpj:</label>
+                                                    <input id="cnpj" type="text" class="form-control cnpj" />
+                                                </div>
+                                                <div class="col-md-3">
+                                                    <label class="control-label" for="proprietario">Proprietário:</label>
+                                                    <div class="input-group">
+                                                        <input id="proprietario" name="proprietario" type="text" class="form-control" placeholder="Proprietário (Mínimo de 3 caracteres - CPF ou CNPJ ou Nome)" />
+                                                        <input type="hidden" name="idProprietario" id="idProprietario" />
+                                                        <div class="input-group-addon" style="cursor: pointer" data-id="idProprietario" data-nome="proprietario" data-titulo="Proprietário" data-sem-vinculo="false" data-documento="Cpf/Cnpj" onclick="abrirModalPessoaCadastroAuxiliar(this)">+</div>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <div class="row">
-                                            <div class="col-md-3">
-                                                <label for="produto">Produto:</label>
-                                                @Html.DropDownList("produto", new SelectList(ViewBag.Produto, "Id", "Nome"), "Produto", new { @class = "form-control" })
-                                            </div>
-                                            <div class="col-md-3">
-                                                <label for="dataAbertura">Data de Abertura:</label>
-                                                <input id="dataAbertura" type="text" class="form-control data datepicker" placeholder="Data de Abertura" />
+                                        <div class="form-group">
+                                            <div class="row">
+                                                <div class="col-md-3">
+                                                    <label for="produto">Produto:</label>
+                                                    @Html.DropDownList("produto", new SelectList(ViewBag.Produto, "Id", "Nome"), "Produto", new { @class = "form-control" })
+                                                </div>
+                                                <div class="col-md-3">
+                                                    <label for="dataAbertura">Data de Abertura:</label>
+                                                    <input id="dataAbertura" type="text" class="form-control data datepicker" />
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -975,7 +977,7 @@
                                         <div class="row">
                                             <div class="col-md-2">
                                                 <label for="cepResidencia">Cep:</label>
-                                                <input id="cepResidencia" type="text" class="form-control cep" placeholder="Cep" />
+                                                <input id="cepResidencia" type="text" class="form-control cep" />
                                             </div>
                                         </div>
                                     </div>
@@ -983,11 +985,11 @@
                                         <div class="row">
                                             <div class="col-md-5">
                                                 <label for="logradouroResidencia">Logradouro:</label>
-                                                <input id="logradouroResidencia" type="text" class="form-control" placeholder="Logradouro" />
+                                                <input id="logradouroResidencia" type="text" class="form-control" />
                                             </div>
                                             <div class="col-md-2">
                                                 <label for="numeroResidencia">Número:</label>
-                                                <input id="numeroResidencia" type="text" class="form-control" placeholder="Número" />
+                                                <input id="numeroResidencia" type="text" class="form-control" />
                                             </div>
                                         </div>
                                     </div>
@@ -995,11 +997,11 @@
                                         <div class="row">
                                             <div class="col-md-4">
                                                 <label for="complementoResidencia">Complemento:</label>
-                                                <input id="complementoResidencia" type="text" class="form-control" placeholder="Complemento" />
+                                                <input id="complementoResidencia" type="text" class="form-control" />
                                             </div>
                                             <div class="col-md-3">
                                                 <label for="bairroResidencia">Bairro:</label>
-                                                <input id="bairroResidencia" type="text" class="form-control" placeholder="Bairro" />
+                                                <input id="bairroResidencia" type="text" class="form-control" />
                                             </div>
                                         </div>
                                     </div>
@@ -1007,7 +1009,7 @@
                                         <div class="row">
                                             <div class="col-md-4">
                                                 <label for="cidadeResidencia">Cidade:</label>
-                                                <input id="cidadeResidencia" type="text" class="form-control" placeholder="Cidade" />
+                                                <input id="cidadeResidencia" type="text" class="form-control" />
                                             </div>
                                             <div class="col-md-3">
                                                 <label for="ufResidencia">Uf:</label>
