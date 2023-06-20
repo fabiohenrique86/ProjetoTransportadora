@@ -489,7 +489,29 @@
             return (cpf == null || cpf == "") ? "" : cpf.replace(/[^\d]/g, "").replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, "$1.$2.$3-$4");
         }
 
-        function abrirModalPessoaCadastroAuxiliar(o) {
+        function formatarCnpj(cnpj) {
+            return (cnpj == null || cnpj == "") ? "" : cnpj.replace(/[^\d]/g, "").replace(/^(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})/, "$1.$2.$3/$4-$5");
+        }
+
+        function formatarTelefone(telefone) {
+            var tel = telefone.toString().replace(/[^\d]/g, "");
+
+            if (tel == null || tel == "")
+                return "";
+
+            if (tel.length == 11)
+                return "(" + tel.substring(0, 2) + ") " + tel.substring(2, 7) + "-" + tel.substring(7);
+            if (tel.length == 10)
+                return "(" + tel.substring(0, 2) + ") " + tel.substring(2, 6) + "-" + tel.substring(6);
+            else if (tel.length == 9)
+                return tel.substring(0, 5) + "-" + tel.substring(5);
+            else if (tel.length == 8)
+                return tel.substring(0, 4) + "-" + tel.substring(4);
+            else
+                return tel;
+        }
+
+        function abrirModalPessoaCadastroAuxiliar(o) {            
             limparFormularioPessoaCadastroAuxiliar();
 
             $("#lblTituloPessoaCadastroAuxiliar").html($(o).data("titulo"));
@@ -498,6 +520,9 @@
             $("#btnIncluirPessoaCadastroAuxiliar").data("id", $(o).data("id"));
             $("#btnIncluirPessoaCadastroAuxiliar").data("nome", $(o).data("nome"));
             $("#btnIncluirPessoaCadastroAuxiliar").data("sem-vinculo", $(o).data("sem-vinculo"));
+
+            $("#btnIncluirPessoaCadastroAuxiliar").data("id-telefone", $(o).data("id-telefone"));
+            $("#btnIncluirPessoaCadastroAuxiliar").data("id-email", $(o).data("id-email"));
 
             $("#modalPessoaCadastroAuxiliar").modal('show');
         }
@@ -523,9 +548,18 @@
             $("#tipoResidenciaPessoaCadastroAuxiliar").val("");
         }
 
-        function preencherCampoExternoPessoaCadastroAuxiliar(id, nome, data) {
+        function preencherCampoExternoPessoaCadastroAuxiliar(id, nome, documento, data, idTelefone, telefone, idEmail, email) {
             $("#" + id).val(data.Id);
-            $("#" + nome).val(data.Nome);
+            if (documento == null || documento == "")
+                $("#" + nome).val(data.Nome);
+            else
+                $("#" + nome).val(data.Nome + " (" + documento + ")");
+
+            if (idTelefone != undefined && idTelefone != null)
+                $("#" + idTelefone).val(formatarTelefone(telefone));
+
+            if (idEmail != undefined && idEmail != null)
+                $("#" + idEmail).val(email);
         }
 
         function incluirPessoaCadastroAuxiliar (o) {
@@ -589,7 +623,7 @@
                         return;
                     }
 
-                    preencherCampoExternoPessoaCadastroAuxiliar($(o).data("id"), $(o).data("nome"), { Id: data.Id, Nome: pessoaDto.Nome });
+                    preencherCampoExternoPessoaCadastroAuxiliar($(o).data("id"), $(o).data("nome"), $("#documentoPessoaCadastroAuxiliar").val(), { Id: data.Id, Nome: pessoaDto.Nome }, $(o).data("id-telefone"), telefone, $(o).data("id-email"), $("#emailPessoaCadastroAuxiliar").val());
                     $("#modalPessoaCadastroAuxiliar").modal('hide');
                 }
             });

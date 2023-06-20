@@ -401,10 +401,15 @@
                     $.getJSON("/PessoaJuridica/ListarAutoComplete", { Nome: nome, Cpf: cpf, Cnpj: cnpj, Ativo: true }, function (data, status, xhr) {
                         // se não houver pessoa cadastrada, retorna mensagem ao usuário
                         if (data == null || data.Data.length <= 0) {
-                            data.Data.push({ Id: 0, Nome: "Pessoa não cadastrada" });
+                            data.Data.push({ Id: 0, Nome: "Pessoa não cadastrada", Cpf: null, Cnpj: null });
                         }
                         response($.map(data.Data, function (pessoa) {
-                            return { label: pessoa.Nome, value: pessoa.Id }
+                            if (pessoa.Cpf == null && pessoa.Cnpj == null)
+                                return { label: pessoa.Nome, value: pessoa.Id }
+                            else if (pessoa.Cpf != null)
+                                return { label: pessoa.Nome + " (" + formatarCpf(pessoa.Cpf) + ")", value: pessoa.Id }
+                            else if (pessoa.Cnpj != null)
+                                return { label: pessoa.Nome + " (" + formatarCnpj(pessoa.Cnpj) + ")", value: pessoa.Id }
                         }));
                     });
                 },
@@ -445,10 +450,15 @@
                     $.getJSON("/PessoaJuridica/ListarAutoComplete", { Nome: nome, Cpf: cpf, Cnpj: cnpj, Ativo: true }, function (data, status, xhr) {
                         // se não houver pessoa cadastrada, retorna mensagem ao usuário
                         if (data == null || data.Data.length <= 0) {
-                            data.Data.push({ Id: 0, Nome: "Pessoa não cadastrada" });
+                            data.Data.push({ Id: 0, Nome: "Pessoa não cadastrada", Cpf: null, Cnpj: null });
                         }
                         response($.map(data.Data, function (pessoa) {
-                            return { label: pessoa.Nome, value: pessoa.Id }
+                            if (pessoa.Cpf == null && pessoa.Cnpj == null)
+                                return { label: pessoa.Nome, value: pessoa.Id }
+                            else if (pessoa.Cpf != null)
+                                return { label: pessoa.Nome + " (" + formatarCpf(pessoa.Cpf) + ")", value: pessoa.Id }
+                            else if (pessoa.Cnpj != null)
+                                return { label: pessoa.Nome + " (" + formatarCnpj(pessoa.Cnpj) + ")", value: pessoa.Id }
                         }));
                     });
                 },
@@ -489,10 +499,15 @@
                     $.getJSON("/PessoaJuridica/ListarAutoComplete", { Nome: nome, Cpf: cpf, Cnpj: cnpj, Ativo: true }, function (data, status, xhr) {
                         // se não houver pessoa cadastrada, retorna mensagem ao usuário
                         if (data == null || data.Data.length <= 0) {
-                            data.Data.push({ Id: 0, Nome: "Pessoa não cadastrada" });
+                            data.Data.push({ Id: 0, Nome: "Pessoa não cadastrada", Cpf: null, Cnpj: null });
                         }
                         response($.map(data.Data, function (pessoa) {
-                            return { label: pessoa.Nome, value: pessoa.Id }
+                            if (pessoa.Cpf == null && pessoa.Cnpj == null)
+                                return { label: pessoa.Nome, value: pessoa.Id }
+                            else if (pessoa.Cpf != null)
+                                return { label: pessoa.Nome + " (" + formatarCpf(pessoa.Cpf) + ")", value: pessoa.Id }
+                            else if (pessoa.Cnpj != null)
+                                return { label: pessoa.Nome + " (" + formatarCnpj(pessoa.Cnpj) + ")", value: pessoa.Id }
                         }));
                     });
                 },
@@ -762,10 +777,13 @@
                         $.getJSON("/PessoaFisica/ListarAutoComplete", { Nome: nome, Cpf: cpf, IdTipoPessoa: '@TipoPessoaDto.TipoPessoa.PessoaFísica.GetHashCode()', Ativo: true }, function (data, status, xhr) {
                             // se não houver pessoa cadastrada, retorna mensagem ao usuário
                             if (data == null || data.Data.length <= 0) {
-                                data.Data.push({ Id: 0, Nome: "Pessoa não cadastrada" });
+                                data.Data.push({ Id: 0, Nome: "Pessoa não cadastrada", Cpf: null });
                             }
                             response($.map(data.Data, function (pessoa) {
-                                return { label: pessoa.Nome, value: pessoa.Id }
+                                if (pessoa.Cpf == null)
+                                    return { label: pessoa.Nome, value: pessoa.Id }
+                                else
+                                    return { label: pessoa.Nome + " (" + formatarCpf(pessoa.Cpf) + ")", value: pessoa.Id }
                             }));
                         });
                     },

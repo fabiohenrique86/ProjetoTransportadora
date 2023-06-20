@@ -89,7 +89,24 @@ namespace ProjetoTransportadora.Repository
                 Id = x.Id,
                 Nome = x.Nome,
                 Cpf = x.Cpf,
-                Cnpj = x.Cnpj
+                Cnpj = x.Cnpj,
+                PessoaTelefoneDto = x.PessoaTelefone.Select(w => new PessoaTelefoneDto()
+                {
+                    Id = w.Id,
+                    DDD = w.DDD,
+                    IdPessoa = w.IdPessoa,
+                    IdTipoTelefone = w.IdTipoTelefone,
+                    NomeContato = w.NomeContato,
+                    Numero = w.Numero,
+                    Pais = w.Pais
+                }).ToList(),
+                PessoaEmailDto = x.PessoaEmail.Select(w => new PessoaEmailDto()
+                {
+                    Id = w.Id,
+                    IdPessoa = w.IdPessoa,
+                    Email = w.Email,
+                    NomeContato = w.NomeContato
+                }).ToList(),
             }).OrderBy(x => x.Nome).ToList();
         }
 

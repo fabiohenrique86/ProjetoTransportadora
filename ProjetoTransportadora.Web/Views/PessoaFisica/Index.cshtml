@@ -578,7 +578,9 @@
                 "columns":
                     [
                         { "data": "Id", "className": "text-center", "visible": false, "width": "5%" },
-                        { "data": "IdAvalista", "className": "text-center", "width": "90%" },
+                        { "data": "IdAvalista", "className": "text-center", "width": "50%" },
+                        { "data": "Telefone", "className": "text-center", "width": "20%" },
+                        { "data": "Email", "className": "text-center", "width": "20%" },
                         { "data": "Acao", "className": "text-center", "width": "5%" }
                     ]
             });
@@ -662,10 +664,13 @@
                     $.getJSON("/PessoaFisica/ListarAutoComplete", { Nome: nome, Cpf: cpf, IdTipoPessoa: '@TipoPessoaDto.TipoPessoa.PessoaFísica.GetHashCode()', Ativo: true }, function (data, status, xhr) {
                         // se não houver pessoa cadastrada, retorna mensagem ao usuário
                         if (data == null || data.Data.length <= 0) {
-                            data.Data.push({ Id: 0, Nome: "Pessoa não cadastrada" });
+                            data.Data.push({ Id: 0, Nome: "Pessoa não cadastrada", Cpf: null });
                         }
                         response($.map(data.Data, function (pessoa) {
-                            return { label: pessoa.Nome, value: pessoa.Id }
+                            if (pessoa.Cpf == null)
+                                return { label: pessoa.Nome, value: pessoa.Id }
+                            else
+                                return { label: pessoa.Nome + " (" + formatarCpf(pessoa.Cpf) + ")", value: pessoa.Id }
                         }));
                     });
                 },
@@ -704,10 +709,13 @@
                     $.getJSON("/PessoaFisica/ListarAutoComplete", { Nome: nome, Cpf: cpf, IdTipoPessoa: '@TipoPessoaDto.TipoPessoa.PessoaFísica.GetHashCode()', Ativo: true }, function (data, status, xhr) {
                         // se não houver pessoa cadastrada, retorna mensagem ao usuário
                         if (data == null || data.Data.length <= 0) {
-                            data.Data.push({ Id: 0, Nome: "Pessoa não cadastrada" });
+                            data.Data.push({ Id: 0, Nome: "Pessoa não cadastrada", Cpf: null });
                         }
                         response($.map(data.Data, function (pessoa) {
-                            return { label: pessoa.Nome, value: pessoa.Id }
+                            if (pessoa.Cpf == null)
+                                return { label: pessoa.Nome, value: pessoa.Id }
+                            else
+                                return { label: pessoa.Nome + " (" + formatarCpf(pessoa.Cpf) + ")", value: pessoa.Id }
                         }));
                     });
                 },
@@ -746,10 +754,13 @@
                     $.getJSON("/PessoaFisica/ListarAutoComplete", { Nome: nome, Cpf: cpf, IdTipoPessoa: '@TipoPessoaDto.TipoPessoa.PessoaFísica.GetHashCode()', Ativo: true }, function (data, status, xhr) {
                         // se não houver pessoa cadastrada, retorna mensagem ao usuário
                         if (data == null || data.Data.length <= 0) {
-                            data.Data.push({ Id: 0, Nome: "Pessoa não cadastrada" });
+                            data.Data.push({ Id: 0, Nome: "Pessoa não cadastrada", Cpf: null });
                         }
                         response($.map(data.Data, function (pessoa) {
-                            return { label: pessoa.Nome, value: pessoa.Id }
+                            if (pessoa.Cpf == null)
+                                return { label: pessoa.Nome, value: pessoa.Id }
+                            else
+                                return { label: pessoa.Nome + " (" + formatarCpf(pessoa.Cpf) + ")", value: pessoa.Id }
                         }));
                     });
                 },
@@ -851,7 +862,7 @@
                         ({
                             "Id": this.data().Id,
                             "IdPessoa": pessoaDto.Id,
-                            "IdAvalista": $($(".avalista")[rowIdx]).val() // $($($(".avalista")[rowIdx]).parents("tr").children().eq(0)).children().val(),
+                            "IdAvalista": $($(".avalista")[rowIdx]).val()
                         });
                 });
 
@@ -1120,10 +1131,15 @@
                 var idAvalistaInput = Math.floor((Math.random() * 100000000) + 1);
                 var idAvalistaHidden = Math.floor((Math.random() * 100000000) + 1);
 
+                var idTelefoneAvalista = Math.floor((Math.random() * 100000000) + 1);
+                var idEmailAvalista = Math.floor((Math.random() * 100000000) + 1);
+
                 $("#tbPessoaAvalista").DataTable().rows.add([
                     {
                         "Id": 0,
-                        "IdAvalista": "<div class='input-group'><input type='hidden' id='" + idAvalistaHidden + "' class='avalista' /> <input id='" + idAvalistaInput + "' type='text' class='form-control text-center' placeholder='Avalista (Mínimo de 3 caracteres - CPF ou Nome)' /><div class='input-group-addon' style='cursor: pointer' data-id='" + idAvalistaHidden + "' data-nome='" + idAvalistaInput + "' data-titulo='Avalista' data-sem-vinculo='false' data-documento='Cpf' onclick='abrirModalPessoaCadastroAuxiliar(this)'>+</div></div>",
+                        "IdAvalista": "<div class='input-group'><input type='hidden' id='" + idAvalistaHidden + "' class='avalista' /> <input id='" + idAvalistaInput + "' type='text' class='form-control text-center' placeholder='Avalista (Mínimo de 3 caracteres - CPF ou Nome)' /><div class='input-group-addon' style='cursor: pointer' data-id='" + idAvalistaHidden + "' data-nome='" + idAvalistaInput + "' data-titulo='Avalista' data-sem-vinculo='false' data-documento='Cpf' data-id-telefone='" + idTelefoneAvalista + "' data-id-email='" + idEmailAvalista + "' onclick='abrirModalPessoaCadastroAuxiliar(this)'>+</div></div>",
+                        "Telefone": "<input id='" + idTelefoneAvalista + "' type='text' disabled='disabled' class='form-control telefoneAvalista'>",
+                        "Email": "<input id='" + idEmailAvalista + "' type='text' disabled='disabled' class='form-control  emailAvalista'>",
                         "Acao": "<i class='glyphicon glyphicon-remove' title='Excluir' style='cursor: pointer'></i>"
                     }]).draw();
 
@@ -1150,7 +1166,12 @@
                                 if (pessoa.Cpf == null)
                                     return { label: pessoa.Nome, value: pessoa.Id }
                                 else
-                                    return { label: pessoa.Nome + " (" + formatarCpf(pessoa.Cpf) + ")", value: pessoa.Id }
+                                    return {
+                                        label: pessoa.Nome + " (" + formatarCpf(pessoa.Cpf) + ")",
+                                        value: pessoa.Id,
+                                        telefone: pessoa.PessoaTelefoneDto == null || pessoa.PessoaTelefoneDto.length <= 0 ? "" : formatarTelefone(pessoa.PessoaTelefoneDto[0].DDD?.toString() + pessoa.PessoaTelefoneDto[0].Numero?.toString()),
+                                        email: pessoa.PessoaEmailDto == null || pessoa.PessoaEmailDto.length <= 0 ? "" : pessoa.PessoaEmailDto[0].Email
+                                    }
                             }));
                         });
                     },
@@ -1159,16 +1180,22 @@
                         if (ui.item.label == "Pessoa não cadastrada") {
                             ui.item.label = "";
                             ui.item.value = "";
+                            $("#" + idTelefoneAvalista).val("");
+                            $("#" + idEmailAvalista).val("");
                             return;
                         }
                         $("#" + idAvalistaHidden).val(ui.item.value);
                         ui.item.label = ui.item.label;
                         ui.item.value = ui.item.label;
+                        $("#" + idTelefoneAvalista).val(ui.item.telefone);
+                        $("#" + idEmailAvalista).val(ui.item.email);
                     },
                     change: function (event, ui) {
                         if (ui == null || ui.item == undefined || ui.item == null) {
                             $("#" + idAvalistaInput).val("");
                             $("#" + idAvalistaHidden).val("");
+                            $("#" + idTelefoneAvalista).val("");
+                            $("#" + idEmailAvalista).val("");
                         }
                     }
                 });
@@ -1426,7 +1453,9 @@
                                                 <thead>
                                                     <tr>
                                                         <td class="text-center" style="width: 5%"><b>Id</b></td>
-                                                        <td class="text-center" style="width: 90%"><b>Avalista</b></td>
+                                                        <td class="text-center" style="width: 50%"><b>Avalista</b></td>
+                                                        <td class="text-center" style="width: 20%"><b>Telefone</b></td>
+                                                        <td class="text-center" style="width: 20%"><b>E-mail</b></td>
                                                         <td class="text-center" style="width: 5%"><b>Ação</b></td>
                                                     </tr>
                                                 </thead>
@@ -1555,7 +1584,7 @@
                                         <div class="row">
                                             <div class="col-md-6">
                                                 <label for="profissao">Profissão:</label>
-                                                <input id="profissao" type="text" class="form-control"  />
+                                                <input id="profissao" type="text" class="form-control" />
                                             </div>
                                         </div>
                                     </div>
@@ -1575,7 +1604,7 @@
                                             </div>
                                             <div class="col-md-2">
                                                 <label for="dataAdmissao">Data Admissão:</label>
-                                                <input id="dataAdmissao" type="text" class="form-control data datepicker"  />
+                                                <input id="dataAdmissao" type="text" class="form-control data datepicker" />
                                             </div>
                                         </div>
                                     </div>
