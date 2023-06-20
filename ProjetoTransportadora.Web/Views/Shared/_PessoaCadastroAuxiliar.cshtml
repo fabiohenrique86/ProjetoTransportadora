@@ -10,32 +10,121 @@
 }
 
 <div class="modal fade" id="modalPessoaCadastroAuxiliar" tabindex="-1" role="dialog" aria-labelledby="ModalPessoaCadastroAuxiliar" aria-hidden="true">
-    <div class="modal-dialog">
+    <div class="modal-dialog modal-md">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Fechar</span></button>
                 <h4 class="modal-title" id="myModalLabel">Incluir <label id="lblTituloPessoaCadastroAuxiliar"></label></h4>
             </div>
             <div class="modal-body">
-                <div class="form-group">
-                    <div class="row">
-                        <div class="col-lg-10">
-                            <label for="nomePessoaCadastroAuxiliar">Nome:</label>
-                            <input id="nomePessoaCadastroAuxiliar" type="text" class="form-control" />
+                <div class="rolagem-vertical">
+                    <div class="form-group">
+                        <div class="row">
+                            <div class="col-lg-8">
+                                <label for="nomePessoaCadastroAuxiliar">Nome:</label>
+                                <input id="nomePessoaCadastroAuxiliar" type="text" class="form-control" />
+                            </div>
+                            <div class="col-lg-4">
+                                <label id="lblDocumentoPessoaCadastroAuxiliar" for="documentoPessoaCadastroAuxiliar"></label>
+                                <input id="documentoPessoaCadastroAuxiliar" type="text" class="form-control" />
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class="form-group">
-                    <div class="row">
-                        <div class="col-lg-10">
-                            <label id="lblDocumentoPessoaCadastroAuxiliar" for="documentoPessoaCadastroAuxiliar"></label>
-                            <input id="documentoPessoaCadastroAuxiliar" type="text" class="form-control" />
+                    <div class="form-group">
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <label for="lblemailPessoaCadastroAuxiliar">E-mail:</label>
+                                <input id="emailPessoaCadastroAuxiliar" type="text" class="form-control" />
+                            </div>
                         </div>
                     </div>
+                    <div class="form-group">
+                        <div class="row">
+                            <div class="col-lg-3">
+                                <label for="lbldataNascimentoPessoaCadastroAuxiliar">Data Nascimento:</label>
+                                <input id="dataNascimentoPessoaCadastroAuxiliar" type="text" class="form-control data datepicker" />
+                            </div>
+                            @{
+                                if (ViewBag.TipoTelefone != null)
+                                {
+                                    <div class="col-lg-3">
+                                        <label for="lbltipoTelefonePessoaCadastroAuxiliar">Tipo Telefone:</label>
+                                        @Html.DropDownList("tipoTelefonePessoaCadastroAuxiliar", new SelectList(ViewBag.TipoTelefone, "Id", "Nome"), "Tipo Telefone", new { @class = "form-control" })
+                                    </div>
+                                }
+                            }
+                            <div class="col-lg-6">
+                                <label for="telefonePessoaCadastroAuxiliar">Telefone:</label>
+                                <input id="telefonePessoaCadastroAuxiliar" type="text" class="form-control celularDDD" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="row">
+                            <div class="col-lg-4">
+                                <label for="cepResidenciaPessoaCadastroAuxiliar">Cep:</label>
+                                <input id="cepResidenciaPessoaCadastroAuxiliar" type="text" class="form-control cepAuxiliar" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="row">
+                            <div class="col-lg-10">
+                                <label for="logradouroResidenciaPessoaCadastroAuxiliar">Logradouro:</label>
+                                <input id="logradouroResidenciaPessoaCadastroAuxiliar" type="text" class="form-control" />
+                            </div>
+                            <div class="col-lg-2">
+                                <label for="numeroResidenciaPessoaCadastroAuxiliar">Número:</label>
+                                <input id="numeroResidenciaPessoaCadastroAuxiliar" type="text" class="form-control" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="row">
+                            <div class="col-lg-8">
+                                <label for="complementoResidenciaPessoaCadastroAuxiliar">Complemento:</label>
+                                <input id="complementoResidenciaPessoaCadastroAuxiliar" type="text" class="form-control" />
+                            </div>
+                            <div class="col-lg-4">
+                                <label for="bairroResidenciaPessoaCadastroAuxiliar">Bairro:</label>
+                                <input id="bairroResidenciaPessoaCadastroAuxiliar" type="text" class="form-control" />
+                            </div>
+                        </div>
+                    </div>
+                    @{
+                        if (ViewBag.Estado != null)
+                        {
+                            <div class="form-group">
+                                <div class="row">
+                                    <div class="col-lg-8">
+                                        <label for="cidadeResidenciaPessoaCadastroAuxiliar">Cidade:</label>
+                                        <input id="cidadeResidenciaPessoaCadastroAuxiliar" type="text" class="form-control" />
+                                    </div>
+                                    <div class="col-lg-4">
+                                        <label for="ufResidenciaPessoaCadastroAuxiliar">Uf:</label>
+                                        @Html.DropDownList("ufResidenciaPessoaCadastroAuxiliar", new SelectList(ViewBag.Estado, "Uf", "Nome"), "Uf", new { @class = "form-control" })
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    }
+                    @{
+                        if (ViewBag.TipoResidencia != null)
+                        {
+                            <div class="form-group">
+                                <div class="row">
+                                    <div class="col-lg-12">
+                                        <label for="tipoResidenciaPessoaCadastroAuxiliar">Tipo Residência:</label>
+                                        @Html.DropDownList("tipoResidenciaPessoaCadastroAuxiliar", new SelectList(ViewBag.TipoResidencia, "Id", "Nome"), "Tipo Residência", new { @class = "form-control" })
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    }
                 </div>
-            </div>
-            <div class="modal-footer">
-                <input id="btnIncluirPessoaCadastroAuxiliar" type="button" class="btn btn-primary" value="Incluir" data-id="" data-nome="" data-id-usuario-logado="@usuarioDto.Id" onclick="incluirPessoaCadastroAuxiliar(this)" />
+                <div class="modal-footer">
+                    <input id="btnIncluirPessoaCadastroAuxiliar" type="button" class="btn btn-primary" value="Incluir" data-id="" data-nome="" data-id-usuario-logado="@usuarioDto.Id" onclick="incluirPessoaCadastroAuxiliar(this)" />
+                </div>
             </div>
         </div>
     </div>

@@ -17,6 +17,9 @@ namespace ProjetoTransportadora.Web.Controllers
         private SituacaoMultaBusiness situacaoMultaBusiness;
         private MontadoraBusiness montadoraBusiness;
         private PessoaBusiness pessoaBusiness;
+        private EstadoBusiness estadoBusiness;
+        private TipoResidenciaBusiness tipoResidenciaBusiness;
+        private TipoTelefoneBusiness tipoTelefoneBusiness;
 
         public VeiculoController()
         {
@@ -25,6 +28,9 @@ namespace ProjetoTransportadora.Web.Controllers
             situacaoMultaBusiness = new SituacaoMultaBusiness();
             montadoraBusiness = new MontadoraBusiness();
             pessoaBusiness = new PessoaBusiness();
+            estadoBusiness = new EstadoBusiness();
+            tipoResidenciaBusiness = new TipoResidenciaBusiness();
+            tipoTelefoneBusiness = new TipoTelefoneBusiness();
         }
 
         public ActionResult Index()
@@ -32,6 +38,9 @@ namespace ProjetoTransportadora.Web.Controllers
             ViewBag.SituacaoVeiculo = situacaoVeiculoBusiness.Listar(new SituacaoVeiculoDto() { Ativo = true });
             ViewBag.SituacaoMulta = situacaoMultaBusiness.Listar();
             ViewBag.Montadora = montadoraBusiness.Listar(new MontadoraDto() { Ativo = true });
+            ViewBag.Estado = estadoBusiness.Listar(new EstadoDto());
+            ViewBag.TipoResidencia = tipoResidenciaBusiness.Listar(new TipoResidenciaDto() { Ativo = true });
+            ViewBag.TipoTelefone = tipoTelefoneBusiness.Listar(new TipoTelefoneDto() { Ativo = true });
 
             return View();
         }
@@ -218,9 +227,9 @@ namespace ProjetoTransportadora.Web.Controllers
                     double dLargura;
                     double.TryParse(largura, out dLargura);
 
-                    var idMontadora = 0;                    
+                    var idMontadora = 0;
                     var montadoraDto = montadoraBusiness.Obter(new MontadoraDto() { Nome = montadora });
-                    
+
                     if (montadoraDto != null)
                         idMontadora = montadoraDto.Id;
 

@@ -16,6 +16,7 @@ namespace ProjetoTransportadora.Web.Controllers
         private EstadoBusiness estadoBusiness;
         private TipoTelefoneBusiness tipoTelefoneBusiness;
         private ProdutoBusiness produtoBusiness;
+        private TipoResidenciaBusiness tipoResidenciaBusiness;
 
         public PessoaJuridicaController()
         {
@@ -23,6 +24,7 @@ namespace ProjetoTransportadora.Web.Controllers
             estadoBusiness = new EstadoBusiness();
             tipoTelefoneBusiness = new TipoTelefoneBusiness();
             produtoBusiness = new ProdutoBusiness();
+            tipoResidenciaBusiness = new TipoResidenciaBusiness();
         }
 
         public ActionResult Index()
@@ -30,6 +32,7 @@ namespace ProjetoTransportadora.Web.Controllers
             ViewBag.Estado = estadoBusiness.Listar(new EstadoDto());
             ViewBag.TipoTelefone = tipoTelefoneBusiness.Listar(new TipoTelefoneDto() { Ativo = true });
             ViewBag.Produto = produtoBusiness.Listar(new ProdutoDto() { Ativo = true });
+            ViewBag.TipoResidencia = tipoResidenciaBusiness.Listar(new TipoResidenciaDto() { Ativo = true });
 
             return View();
         }

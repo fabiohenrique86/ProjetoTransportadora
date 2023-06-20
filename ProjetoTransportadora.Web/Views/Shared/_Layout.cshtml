@@ -104,6 +104,7 @@
         .table > tbody > tr > td, .table > tbody > tr > th, .table > tfoot > tr > td, .table > tfoot > tr > th, .table > thead > tr > td, .table > thead > tr > th {
             vertical-align: middle;
         }
+
         .rolagem-vertical {
             overflow-x: hidden;
             overflow-y: auto;
@@ -240,7 +241,7 @@
 
 
 
-<script type="text/javascript">
+    <script type="text/javascript">
 
         $(document).ready(function () {
 
@@ -358,6 +359,39 @@
 
             });
 
+            $(".cepAuxiliar").change(function () {
+                var cep = $(this).val().replace("-", "");
+
+                // verificação cep
+                if (cep == null || cep == "") { return; }
+
+                $.ajax({
+                    dataType: "json",
+                    type: "GET",
+                    url: "https://viacep.com.br/ws/" + cep + "/json/",
+                    contentType: "application/json",
+                    success: function (data) {
+
+                        if (data == null || data.erro)
+                            return;
+
+                        $("#logradouroResidenciaPessoaCadastroAuxiliar").val("");
+                        $("#complementoResidenciaPessoaCadastroAuxiliar").val("");
+                        $("#bairroResidenciaPessoaCadastroAuxiliar").val("");
+                        $("#cidadeResidenciaPessoaCadastroAuxiliar").val("");
+                        $("#ufResidenciaPessoaCadastroAuxiliar").val("");
+                        $("#numeroResidenciaPessoaCadastroAuxiliar").val("");
+
+                        $("#logradouroResidenciaPessoaCadastroAuxiliar").val(data.logradouro);
+                        $("#complementoResidenciaPessoaCadastroAuxiliar").val(data.complemento);
+                        $("#bairroResidenciaPessoaCadastroAuxiliar").val(data.bairro);
+                        $("#cidadeResidenciaPessoaCadastroAuxiliar").val(data.localidade);
+                        $("#ufResidenciaPessoaCadastroAuxiliar").val(data.uf);
+                    }
+                });
+
+            });
+
         });
 
         function obterNomeEstado(uf) {
@@ -465,11 +499,6 @@
             $("#btnIncluirPessoaCadastroAuxiliar").data("nome", $(o).data("nome"));
             $("#btnIncluirPessoaCadastroAuxiliar").data("sem-vinculo", $(o).data("sem-vinculo"));
 
-            //if ($(o).data("sem-vinculo") == true)
-            //    $("#divDocumentoPessoaCadastroAuxiliar").hide();
-            //else
-            //    $("#divDocumentoPessoaCadastroAuxiliar").show();
-
             $("#modalPessoaCadastroAuxiliar").modal('show');
         }
 
@@ -480,6 +509,18 @@
             $("#btnIncluirPessoaCadastroAuxiliar").data("sem-vinculo", false);
             $("#nomePessoaCadastroAuxiliar").val("");
             $("#documentoPessoaCadastroAuxiliar").val("");
+            $("#dataNascimentoPessoaCadastroAuxiliar").val("");
+            $("#emailPessoaCadastroAuxiliar").val("");
+            $("#tipoTelefonePessoaCadastroAuxiliar").val("");
+            $("#telefonePessoaCadastroAuxiliar").val("");
+            $("#cepResidenciaPessoaCadastroAuxiliar").val("");
+            $("#logradouroResidenciaPessoaCadastroAuxiliar").val("");
+            $("#numeroResidenciaPessoaCadastroAuxiliar").val("");
+            $("#complementoResidenciaPessoaCadastroAuxiliar").val("");
+            $("#bairroResidenciaPessoaCadastroAuxiliar").val("");
+            $("#cidadeResidenciaPessoaCadastroAuxiliar").val("");
+            $("#ufResidenciaPessoaCadastroAuxiliar").val("");
+            $("#tipoResidenciaPessoaCadastroAuxiliar").val("");
         }
 
         function preencherCampoExternoPessoaCadastroAuxiliar(id, nome, data) {
@@ -508,6 +549,29 @@
                 url = "/PessoaJuridica/IncluirAuxiliar";
             }
 
+            pessoaDto.DataNascimento = $("#dataNascimentoPessoaCadastroAuxiliar").val();
+
+            if ($("#emailPessoaCadastroAuxiliar").val() != "") {
+                pessoaDto.PessoaEmailDto = [];
+                pessoaDto.PessoaEmailDto.push({ "Email": $("#emailPessoaCadastroAuxiliar").val() });
+            }
+
+            var telefone = $("#telefonePessoaCadastroAuxiliar").val().replace(/\D/g, "");
+
+            if (telefone != "") {
+                pessoaDto.PessoaTelefoneDto = [];
+                pessoaDto.PessoaTelefoneDto.push({ "IdTipoTelefone": $("#tipoTelefonePessoaCadastroAuxiliar").val(), "DDD": telefone.substring(0, 2), "Numero": telefone.substring(2) });
+            }
+
+            pessoaDto.CepResidencia = $("#cepResidenciaPessoaCadastroAuxiliar").val();
+            pessoaDto.LogradouroResidencia = $("#logradouroResidenciaPessoaCadastroAuxiliar").val();
+            pessoaDto.NumeroResidencia = $("#numeroResidenciaPessoaCadastroAuxiliar").val();
+            pessoaDto.ComplementoResidencia = $("#complementoResidenciaPessoaCadastroAuxiliar").val();
+            pessoaDto.BairroResidencia = $("#bairroResidenciaPessoaCadastroAuxiliar").val();
+            pessoaDto.CidadeResidencia = $("#cidadeResidenciaPessoaCadastroAuxiliar").val();
+            pessoaDto.UfResidencia = $("#ufResidenciaPessoaCadastroAuxiliar").val();
+            pessoaDto.IdTipoResidencia = $("#tipoResidenciaPessoaCadastroAuxiliar").val();
+
             pessoaDto.IdUsuarioCadastro = $(o).data("id-usuario-logado");
             pessoaDto.DataCadastro = '@DateTime.UtcNow';
             pessoaDto.SemVinculo = $(o).data("sem-vinculo");
@@ -535,7 +599,7 @@
             beforeSend: function () { $.blockUI({ message: '<h5>Carregando...</h4>' }); },
             complete: function () { $.unblockUI(); }
         });
-</script>
+    </script>
     @RenderSection("scripts", required: false)
 </body>
 </html>
