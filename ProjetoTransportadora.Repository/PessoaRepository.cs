@@ -325,7 +325,30 @@ namespace ProjetoTransportadora.Repository
                     var pessoaAvalista = projetoTransportadoraEntities.Pessoa.FirstOrDefault(x => x.Id == item.IdAvalista);
 
                     if (pessoaAvalista != null)
-                        item.AvalistaDto = new PessoaDto() { Id = pessoaAvalista.Id, Nome = pessoaAvalista.Nome, IdTipoPessoa = pessoaAvalista.IdTipoPessoa, Cpf = pessoaAvalista.Cpf };
+                    {
+                        item.AvalistaDto = new PessoaDto()
+                        {
+                            Id = pessoaAvalista.Id,
+                            Nome = pessoaAvalista.Nome,
+                            IdTipoPessoa = pessoaAvalista.IdTipoPessoa,
+                            Cpf = pessoaAvalista.Cpf,
+                            PessoaTelefoneDto = pessoaAvalista.PessoaTelefone.Select(y => new PessoaTelefoneDto()
+                            {
+                                Id = y.Id,
+                                Pais = y.Pais,
+                                DDD = y.DDD,
+                                Numero = y.Numero,
+                                NomeContato = y.NomeContato,
+                                IdTipoTelefone = y.IdTipoTelefone
+                            }).ToList(),
+                            PessoaEmailDto = pessoaAvalista.PessoaEmail.Select(y => new PessoaEmailDto()
+                            {
+                                Id = y.Id,
+                                Email = y.Email,
+                                NomeContato = y.NomeContato
+                            }).ToList()
+                        };
+                    }
                 }
 
                 foreach (var item in p.PessoaContratoDto)
