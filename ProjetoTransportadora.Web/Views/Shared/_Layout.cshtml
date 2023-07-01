@@ -511,7 +511,7 @@
                 return tel;
         }
 
-        function abrirModalPessoaCadastroAuxiliar(o) {            
+        function abrirModalPessoaCadastroAuxiliar(o) {
             limparFormularioPessoaCadastroAuxiliar();
 
             $("#lblTituloPessoaCadastroAuxiliar").html($(o).data("titulo"));
@@ -562,7 +562,7 @@
                 $("#" + idEmail).val(email);
         }
 
-        function incluirPessoaCadastroAuxiliar (o) {
+        function incluirPessoaCadastroAuxiliar(o) {
 
             var pessoaDto = {};
 
@@ -625,6 +625,35 @@
 
                     preencherCampoExternoPessoaCadastroAuxiliar($(o).data("id"), $(o).data("nome"), $("#documentoPessoaCadastroAuxiliar").val(), { Id: data.Id, Nome: pessoaDto.Nome }, $(o).data("id-telefone"), telefone, $(o).data("id-email"), $("#emailPessoaCadastroAuxiliar").val());
                     $("#modalPessoaCadastroAuxiliar").modal('hide');
+                }
+            });
+        }
+
+        function incluirPessoaCadastroAuxiliarSimples(nome, idUsuarioLogado, idHiddenCampo, idCampo) {
+
+            var pessoaDto = {};
+
+            pessoaDto.Nome = nome;
+            pessoaDto.IdTipoPessoa = '@TipoPessoaDto.TipoPessoa.PessoaFísica.GetHashCode()';
+            pessoaDto.IdUsuarioCadastro = idUsuarioLogado;
+            pessoaDto.DataCadastro = '@DateTime.UtcNow';
+            pessoaDto.SemVinculo = true;
+
+            $.ajax({
+                dataType: "json",
+                type: "POST",
+                url: "/PessoaFisica/IncluirAuxiliar",
+                data: JSON.stringify(pessoaDto),
+                contentType: "application/json",
+                success: function (data) {
+
+                    if (!data.Sucesso) {
+                        alert(data.Erro ? "danger" : "warning", data.Mensagem);
+                        return;
+                    }
+
+                    $("#" + idHiddenCampo).val(data.Id);
+                    $("#" + idCampo).val(nome);
                 }
             });
         }
