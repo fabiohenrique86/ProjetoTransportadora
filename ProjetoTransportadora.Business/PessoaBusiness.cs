@@ -91,7 +91,12 @@ namespace ProjetoTransportadora.Business
                     foreach (var pessoaAvalistaDto in pessoaDto.PessoaAvalistaDto)
                     {
                         pessoaAvalistaDto.IdPessoa = idPessoa;
-                        pessoaAvalistaBusiness.Incluir(pessoaAvalistaDto);
+
+                        // caso não exista avalista, cadastra-o. Caso possua-o, vinculá-o.
+                        if (pessoaAvalistaDto.IdAvalista <= 0)
+                            pessoaAvalistaDto.IdAvalista = this.Incluir(pessoaAvalistaDto.AvalistaDto);
+                        else
+                            pessoaAvalistaBusiness.Incluir(pessoaAvalistaDto);
                     }
 
                     foreach (var pessoaTelefoneDto in pessoaDto.PessoaTelefoneDto)
@@ -106,16 +111,16 @@ namespace ProjetoTransportadora.Business
                         pessoaEmailBusiness.Incluir(pessoaEmailDto);
                     }
 
-                    foreach (var pessoaHistoricoDto in pessoaDto.PessoaHistoricoDto)
-                    {
-                        pessoaHistoricoDto.IdPessoa = idPessoa;
-                        pessoaHistoricoBusiness.Incluir(pessoaHistoricoDto);
-                    }
-
                     foreach (var pessoaReferenciaDto in pessoaDto.PessoaReferenciaDto)
                     {
                         pessoaReferenciaDto.IdPessoa = idPessoa;
                         pessoaReferenciaBusiness.Incluir(pessoaReferenciaDto);
+                    }
+
+                    foreach (var pessoaHistoricoDto in pessoaDto.PessoaHistoricoDto)
+                    {
+                        pessoaHistoricoDto.IdPessoa = idPessoa;
+                        pessoaHistoricoBusiness.Incluir(pessoaHistoricoDto);
                     }
 
                     transactionScope.Complete();
@@ -159,6 +164,12 @@ namespace ProjetoTransportadora.Business
                     {
                         pessoaEmailDto.IdPessoa = idPessoa;
                         pessoaEmailBusiness.Incluir(pessoaEmailDto);
+                    }
+
+                    foreach (var pessoaReferenciaDto in pessoaDto.PessoaReferenciaDto)
+                    {
+                        pessoaReferenciaDto.IdPessoa = idPessoa;
+                        pessoaReferenciaBusiness.Incluir(pessoaReferenciaDto);
                     }
 
                     foreach (var pessoaHistoricoDto in pessoaDto.PessoaHistoricoDto)

@@ -20,10 +20,8 @@
         <EntityTypeShape EntityType="ProjetoTransportadoraModel.SituacaoVeiculo" Width="1.5" PointX="4.75" PointY="8.75" />
         <EntityTypeShape EntityType="ProjetoTransportadoraModel.TipoResidencia" Width="1.5" PointX="6.75" PointY="8.75" />
         <EntityTypeShape EntityType="ProjetoTransportadoraModel.PessoaHistorico" Width="1.5" PointX="17.875" PointY="2.5" />
-        <EntityTypeShape EntityType="ProjetoTransportadoraModel.PessoaReferencia" Width="1.5" PointX="12.25" PointY="2.125" />
         <EntityTypeShape EntityType="ProjetoTransportadoraModel.TipoReferencia" Width="1.5" PointX="15" PointY="2.25" />
         <EntityTypeShape EntityType="ProjetoTransportadoraModel.TipoTelefone" Width="1.5" PointX="15.125" PointY="9.375" />
-        <AssociationConnector Association="ProjetoTransportadoraModel.FK_PessoaReferencia_TipoReferencia" />
         <EntityTypeShape EntityType="ProjetoTransportadoraModel.Funcionalidade" Width="1.5" PointX="2.125" PointY="11.75" />
         <EntityTypeShape EntityType="ProjetoTransportadoraModel.GrupoFuncionalidade" Width="1.5" PointX="3" PointY="0.75" />
         <AssociationConnector Association="ProjetoTransportadoraModel.FK_GrupoFuncionalidade_Funcionalidade" />
@@ -40,7 +38,6 @@
         <AssociationConnector Association="ProjetoTransportadoraModel.FK_Pessoa_TipoPessoa" />
         <AssociationConnector Association="ProjetoTransportadoraModel.FK_Pessoa_TipoResidencia" />
         <AssociationConnector Association="ProjetoTransportadoraModel.FK_PessoaHistorico_Pessoa" />
-        <AssociationConnector Association="ProjetoTransportadoraModel.FK_PessoaReferencia_Pessoa" />
         <EntityTypeShape EntityType="ProjetoTransportadoraModel.SituacaoMulta" Width="1.5" PointX="21" PointY="0.875" />
         <EntityTypeShape EntityType="ProjetoTransportadoraModel.VeiculoHistorico" Width="1.5" PointX="20.5" PointY="14.875" />
         <EntityTypeShape EntityType="ProjetoTransportadoraModel.Veiculo" Width="1.5" PointX="18.25" PointY="10.5" />
@@ -78,6 +75,9 @@
         <EntityTypeShape EntityType="ProjetoTransportadoraModel.PessoaTelefone" Width="1.5" PointX="17.375" PointY="6.375" />
         <AssociationConnector Association="ProjetoTransportadoraModel.FK_PessoaTelefone_Pessoa" />
         <AssociationConnector Association="ProjetoTransportadoraModel.FK_PessoaTelefone_TipoTelefone" />
+        <EntityTypeShape EntityType="ProjetoTransportadoraModel.PessoaReferencia" Width="1.5" PointX="12.5" PointY="2.125" />
+        <AssociationConnector Association="ProjetoTransportadoraModel.FK_PessoaReferencia_Pessoa" />
+        <AssociationConnector Association="ProjetoTransportadoraModel.FK_PessoaReferencia_TipoReferencia" />
         </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

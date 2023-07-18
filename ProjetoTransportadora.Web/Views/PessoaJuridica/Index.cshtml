@@ -14,7 +14,7 @@
 {
     <style type="text/css">
         .modal-lg {
-            width: 85%;
+            width: 95%;
         }
 
         .modal-md {
@@ -57,6 +57,7 @@
 
             $("#tbPessoaTelefone").DataTable().clear().draw();
             $("#tbPessoaEmail").DataTable().clear().draw();
+            $("#tbPessoaReferencia").DataTable().clear().draw();
             $("#tbPessoaHistorico").DataTable().clear().draw();
             $("#tbPessoaContrato").DataTable().clear().draw();
         }
@@ -93,6 +94,7 @@
             $("#tempoResidencial").val(data.TempoResidencial);
 
             var tipoTelefoneDto = @Html.Raw(Json.Encode(ViewBag.TipoTelefone));
+            var tipoReferenciaDto = @Html.Raw(Json.Encode(ViewBag.TipoReferencia));
 
             // aba - contato
 
@@ -135,6 +137,34 @@
                     }]).draw();
             });
 
+            // aba - referências
+
+            $("#tbPessoaReferencia").DataTable().clear().draw();
+            $(data.PessoaReferenciaDto).each(function (i, o) {
+
+                var id = Math.floor((Math.random() * 100000000) + 1);
+
+                var selectTipoReferencia = "<select id='" + id + "' name='tipoReferencia' class='form-control idTipoReferencia'>"
+                selectTipoReferencia += "<option value=''>Tipo Referência</option>";
+                $(tipoReferenciaDto).each(function (i, e) {
+                    selectTipoReferencia += "<option value='" + e.Id + "'>" + e.Nome + "</option>";
+                });
+                selectTipoReferencia += '</select>';
+
+                $("#tbPessoaReferencia").DataTable().rows.add([
+                    {
+                        "Id": o.Id,
+                        "DataReferencia": "<input type='text' class='form-control data datepicker text-center dataReferencia' value='" + moment(o.DataReferencia).format("DD/MM/YYYY") + "' />",
+                        "IdTipoReferencia": selectTipoReferencia,
+                        "Telefone": "<input type='text' class='form-control celularDDD text-center telefoneReferencia' value='" + o.Telefone + "' />",
+                        "Nome": "<input type='text' class='form-control text-center nomeReferencia' value='" + (o.Nome == null ? "" : o.Nome) + "' />",
+                        "Descricao": "<textarea class='form-control descricaoReferencia' rows='3'>" + o.Descricao + "</textarea>",
+                        "Acao": "<i class='glyphicon glyphicon-remove' title='Excluir' style='cursor: pointer'></i>"
+                    }]).draw();
+
+                $("#" + id).val(o.IdTipoReferencia);
+            });
+
             // aba - histórico
 
             $("#tbPessoaHistorico").DataTable().clear().draw();
@@ -160,6 +190,7 @@
             $(".cnpj").mask("00.000.000/0000-00");
             $(".valor").mask("000.000.000,00", { reverse: true });
             $(".ddd").mask("00");
+
             $(".celular").mask("9999-99999").focusout(function (event) {
                 var target, phone, element;
                 target = (event.currentTarget) ? event.currentTarget : event.srcElement;
@@ -176,8 +207,37 @@
 
             $(".celular").trigger('focusout');
 
+            $(".celularDDD").mask("(##) 9999-99999").focusout(function (event) {
+                var target, phone, element;
+                target = (event.currentTarget) ? event.currentTarget : event.srcElement;
+                phone = target.value.replace(/\D/g, '');
+                element = $(target);
+                element.unmask();
+                if (phone.length > 10) {
+                    element.mask("(99) 99999-9999");
+                }
+                else {
+                    element.mask("(99) 9999-99999");
+                }
+            });
+            $(".celularDDD").trigger('focusout');
+
             $(".dataHistorico").mask("00/00/0000");
             $(".dataHistorico").datepicker({
+                dateFormat: 'dd/mm/yy',
+                dayNames: ['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado'],
+                dayNamesMin: ['D', 'S', 'T', 'Q', 'Q', 'S', 'S', 'D'],
+                dayNamesShort: ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb', 'Dom'],
+                monthNames: ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'],
+                monthNamesShort: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'],
+                nextText: 'Próximo',
+                prevText: 'Anterior',
+                changeMonth: true,
+                changeYear: true
+            });
+
+            $(".dataReferencia").mask("00/00/0000");
+            $(".dataReferencia").datepicker({
                 dateFormat: 'dd/mm/yy',
                 dayNames: ['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado'],
                 dayNamesMin: ['D', 'S', 'T', 'Q', 'Q', 'S', 'S', 'D'],
@@ -386,6 +446,35 @@
                     ]
             });
 
+            var tbPessoaReferencia = $("#tbPessoaReferencia").DataTable({
+                "ordering": false,
+                "bFilter": false,
+                "paging": false,
+                "ordering": false,
+                "info": false,
+                "searching": false,
+                "autoWidth": false,
+                "language": {
+                    "lengthMenu": "_MENU_ registros por página",
+                    "zeroRecords": "Sem registros a serem exibidos",
+                    "info": "Página _PAGE_ de _PAGES_",
+                    "infoEmpty": "Sem registros a serem exibidos",
+                    "infoFiltered": "(filtrados de _MAX_ total de registros)",
+                    "sSearch": "Pesquisar",
+                    "oPaginate": { "sNext": "Próximo", "sPrevious": "Anterior", "sFirst": "Primeiro", "sLast": "Último" }
+                },
+                "columns":
+                    [
+                        { "data": "Id", "className": "text-center", "visible": false, "width": "5%" },
+                        { "data": "DataReferencia", "className": "text-center", "width": "5%" },
+                        { "data": "IdTipoReferencia", "className": "text-center", "width": "10%" },
+                        { "data": "Telefone", "className": "text-center", "width": "10%" },
+                        { "data": "Nome", "className": "text-center", "width": "20%" },
+                        { "data": "Descricao", "className": "text-center", "width": "45%" },
+                        { "data": "Acao", "className": "text-center", "width": "5%" }
+                    ]
+            });
+
             var tbPessoaHistorico = $("#tbPessoaHistorico").DataTable({
                 "ordering": false,
                 "bFilter": false,
@@ -440,7 +529,7 @@
                     ]
             });
 
-            // botão excluir tbPessoaEmail
+            // botão excluir tbPessoaTelefone
             $('#tbPessoaTelefone tbody').on('click', 'i.glyphicon-remove', function () {
                 if (confirm("Deseja realmente excluir o telefone?")) {
                     tbPessoaTelefone.row($(this).parents('tr')).remove().draw();
@@ -451,6 +540,13 @@
             $('#tbPessoaEmail tbody').on('click', 'i.glyphicon-remove', function () {
                 if (confirm("Deseja realmente excluir o e-mail?")) {
                     tbPessoaEmail.row($(this).parents('tr')).remove().draw();
+                }
+            });
+
+            // botão excluir tbPessoaReferencia
+            $('#tbPessoaReferencia tbody').on('click', 'i.glyphicon-remove', function () {
+                if (confirm("Deseja realmente excluir a referência?")) {
+                    tbPessoaReferencia.row($(this).parents('tr')).remove().draw();
                 }
             });
 
@@ -667,6 +763,23 @@
                         });
                 });
 
+                // aba - referências
+
+                pessoaDto.PessoaReferenciaDto = [];
+                tbPessoaReferencia.rows().every(function (rowIdx, tableLoop, rowLoop) {
+
+                    pessoaDto.PessoaReferenciaDto.push
+                        ({
+                            "Id": this.data().Id,
+                            "IdPessoa": pessoaDto.Id,
+                            "DataReferencia": $($($(".dataReferencia")[rowIdx]).parents("tr").children().eq(0)).children().val(),
+                            "IdTipoReferencia": $($($(".idTipoReferencia")[rowIdx]).parents("tr").children().eq(1)).children().val(),
+                            "Telefone": $($($(".telefoneReferencia")[rowIdx]).parents("tr").children().eq(2)).children().val().replace(/[^\d]/g, ""),
+                            "Nome": $($($(".nomeReferencia")[rowIdx]).parents("tr").children().eq(3)).children().val(),
+                            "Descricao": $($($(".descricaoReferencia")[rowIdx]).parents("tr").children().eq(4)).children().val()
+                        });
+                });
+
                 // aba - histórico
 
                 pessoaDto.PessoaHistoricoDto = [];
@@ -780,6 +893,58 @@
                     "NomeContato": "<input type='text' class='form-control nomeContatoEmail' />",
                     "Acao": "<i class='glyphicon glyphicon-remove' title='Excluir' style='cursor: pointer'></i>"
                 }]).draw();
+            });
+
+            $("#btnAdicionarPessoaReferencia").click(function () {
+
+                var tipoReferenciaDto = @Html.Raw(Json.Encode(ViewBag.TipoReferencia));
+
+                var selectTipoReferencia = "<select name='tipoReferencia' class='form-control idTipoReferencia'>"
+                selectTipoReferencia += "<option value=''>Tipo Referência</option>";
+                $(tipoReferenciaDto).each(function (i, e) {
+                    selectTipoReferencia += "<option value='" + e.Id + "'>" + e.Nome + "</option>";
+                });
+                selectTipoReferencia += '</select>';
+
+                tbPessoaReferencia.rows.add([
+                {
+                    "Id": 0,
+                    "DataReferencia": "<input type='text' class='form-control data datepicker text-center dataReferencia' />",
+                    "IdTipoReferencia": selectTipoReferencia,
+                    "Telefone": "<input type='text' class='form-control celularDDD telefoneReferencia' />",
+                    "Nome": "<input type='text' class='form-control nomeReferencia' />",
+                    "Descricao": "<textarea class='form-control descricaoReferencia' rows='3'></textarea>",
+                    "Acao": "<i class='glyphicon glyphicon-remove' title='Excluir' style='cursor: pointer'></i>"
+                }]).draw();
+
+                $(".dataReferencia").mask("00/00/0000");
+
+                $(".dataReferencia").datepicker({
+                    dateFormat: 'dd/mm/yy',
+                    dayNames: ['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado'],
+                    dayNamesMin: ['D', 'S', 'T', 'Q', 'Q', 'S', 'S', 'D'],
+                    dayNamesShort: ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb', 'Dom'],
+                    monthNames: ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'],
+                    monthNamesShort: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'],
+                    nextText: 'Próximo',
+                    prevText: 'Anterior',
+                    changeMonth: true,
+                    changeYear: true
+                });
+
+                $(".telefoneReferencia").mask("(##) 9999-99999").focusout(function (event) {
+                    var target, phone, element;
+                    target = (event.currentTarget) ? event.currentTarget : event.srcElement;
+                    phone = target.value.replace(/\D/g, '');
+                    element = $(target);
+                    element.unmask();
+                    if (phone.length > 10) {
+                        element.mask("(99) 99999-9999");
+                    }
+                    else {
+                        element.mask("(99) 9999-99999");
+                    }
+                });
             });
 
             $("#btnAdicionarPessoaHistorico").click(function () {
@@ -933,19 +1098,19 @@
                         <div class="row">
                             <ul id="myTab" class="nav nav-tabs nav-justified" role="tablist">
                                 <li class="nav-item">
-                                    <a class="nav-link active" id="empresa-tab" data-toggle="tab" href="#empresa" role="tab" aria-controls="empresa" aria-selected="true">Empresa</a>
+                                    <a class="nav-link active" id="empresa-tab" data-toggle="tab" href="#empresa" role="tab" aria-controls="empresa" aria-selected="true" style="height: 61px">Empresa</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link" id="localizacao-tab" data-toggle="tab" href="#localizacao" role="tab" aria-controls="localizacao" aria-selected="false">Localização</a>
+                                    <a class="nav-link" id="contato-tab" data-toggle="tab" href="#contato" role="tab" aria-controls="contato" aria-selected="false" style="height: 61px">Contatos</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link" id="contato-tab" data-toggle="tab" href="#contato" role="tab" aria-controls="contato" aria-selected="false">Contatos</a>
+                                    <a class="nav-link" id="referencias-tab" data-toggle="tab" href="#referencias" role="tab" aria-controls="referencias" aria-selected="false" style="height: 61px">Referências</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link" id="historico-tab" data-toggle="tab" href="#historico" role="tab" aria-controls="historico" aria-selected="false">Histórico</a>
+                                    <a class="nav-link" id="historico-tab" data-toggle="tab" href="#historico" role="tab" aria-controls="historico" aria-selected="false" style="height: 61px">Histórico</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link" id="contratos-tab" data-toggle="tab" href="#contratos" role="tab" aria-controls="contratos" aria-selected="false">Contratos</a>
+                                    <a class="nav-link" id="contratos-tab" data-toggle="tab" href="#contratos" role="tab" aria-controls="contratos" aria-selected="false" style="height: 61px">Contratos</a>
                                 </li>
                             </ul>
                             <div class="tab-content">
@@ -984,100 +1149,127 @@
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
-                                </div>
-                                <div class="tab-pane" id="localizacao" role="tabpanel" aria-labelledby="localizacao-tab">
-                                    <div class="form-group">
-                                        <div class="row">
-                                            <div class="col-md-2">
-                                                <label for="cepResidencia">Cep:</label>
-                                                <input id="cepResidencia" type="text" class="form-control cep" />
+                                        <div class="form-group">
+                                            <div class="row">
+                                                <div class="col-md-2">
+                                                    <label for="cepResidencia">Cep:</label>
+                                                    <input id="cepResidencia" type="text" class="form-control cep" />
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <div class="row">
-                                            <div class="col-md-5">
-                                                <label for="logradouroResidencia">Logradouro:</label>
-                                                <input id="logradouroResidencia" type="text" class="form-control" />
-                                            </div>
-                                            <div class="col-md-2">
-                                                <label for="numeroResidencia">Número:</label>
-                                                <input id="numeroResidencia" type="text" class="form-control" />
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <div class="row">
-                                            <div class="col-md-4">
-                                                <label for="complementoResidencia">Complemento:</label>
-                                                <input id="complementoResidencia" type="text" class="form-control" />
-                                            </div>
-                                            <div class="col-md-3">
-                                                <label for="bairroResidencia">Bairro:</label>
-                                                <input id="bairroResidencia" type="text" class="form-control" />
+                                        <div class="form-group">
+                                            <div class="row">
+                                                <div class="col-md-5">
+                                                    <label for="logradouroResidencia">Logradouro:</label>
+                                                    <input id="logradouroResidencia" type="text" class="form-control" />
+                                                </div>
+                                                <div class="col-md-2">
+                                                    <label for="numeroResidencia">Número:</label>
+                                                    <input id="numeroResidencia" type="text" class="form-control" />
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <div class="row">
-                                            <div class="col-md-4">
-                                                <label for="cidadeResidencia">Cidade:</label>
-                                                <input id="cidadeResidencia" type="text" class="form-control" />
+                                        <div class="form-group">
+                                            <div class="row">
+                                                <div class="col-md-4">
+                                                    <label for="complementoResidencia">Complemento:</label>
+                                                    <input id="complementoResidencia" type="text" class="form-control" />
+                                                </div>
+                                                <div class="col-md-3">
+                                                    <label for="bairroResidencia">Bairro:</label>
+                                                    <input id="bairroResidencia" type="text" class="form-control" />
+                                                </div>
                                             </div>
-                                            <div class="col-md-3">
-                                                <label for="ufResidencia">Uf:</label>
-                                                @Html.DropDownList("ufResidencia", new SelectList(ViewBag.Estado, "Uf", "Nome"), "Uf", new { @class = "form-control" })
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="row">
+                                                <div class="col-md-4">
+                                                    <label for="cidadeResidencia">Cidade:</label>
+                                                    <input id="cidadeResidencia" type="text" class="form-control" />
+                                                </div>
+                                                <div class="col-md-3">
+                                                    <label for="ufResidencia">Uf:</label>
+                                                    @Html.DropDownList("ufResidencia", new SelectList(ViewBag.Estado, "Uf", "Nome"), "Uf", new { @class = "form-control" })
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="tab-pane" id="contato" role="tabpanel" aria-labelledby="contato-tab">
-                                    <h4>Telefones</h4>
-                                    <hr />
+                                    <div class="rolagem-vertical">
+                                        <h4>Telefones</h4>
+                                        <hr />
+                                        <div class="form-group">
+                                            <div class="row">
+                                                <div class="col-md-12 text-right">
+                                                    <input id="btnAdicionarPessoaTelefone" type="button" class="btn" value="Adicionar Telefone" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="table-responsive">
+                                                <table id="tbPessoaTelefone" class="table nowrap" style="width: 100%">
+                                                    <thead>
+                                                        <tr>
+                                                            <td class="text-center" style="width: 5%"><b>Id</b></td>
+                                                            <td class="text-center" style="width: 5%"><b>País</b></td>
+                                                            <td class="text-center" style="width: 5%"><b>DDD</b></td>
+                                                            <td class="text-center" style="width: 20%"><b>Número</b></td>
+                                                            <td class="text-center" style="width: 50%"><b>Nome do Contato</b></td>
+                                                            <td class="text-center" style="width: 15%"><b>Tipo Telefone</b></td>
+                                                            <td class="text-center" style="width: 5%"><b>Ação</b></td>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody></tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                        <h4>E-mails</h4>
+                                        <hr />
+                                        <div class="form-group">
+                                            <div class="row">
+                                                <div class="col-md-12 text-right">
+                                                    <input id="btnAdicionarPessoaEmail" type="button" class="btn" value="Adicionar Email" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="table-responsive">
+                                                <table id="tbPessoaEmail" class="table nowrap" style="width: 100%">
+                                                    <thead>
+                                                        <tr>
+                                                            <td class="text-center" style="width: 5%"><b>Id</b></td>
+                                                            <td class="text-center" style="width: 45%"><b>E-mail</b></td>
+                                                            <td class="text-center" style="width: 50%"><b>Nome do Contato</b></td>
+                                                            <td class="text-center" style="width: 5%"><b>Ação</b></td>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody></tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="tab-pane" id="referencias" role="tabpanel" aria-labelledby="referencias-tab">
                                     <div class="form-group">
                                         <div class="row">
                                             <div class="col-md-12 text-right">
-                                                <input id="btnAdicionarPessoaTelefone" type="button" class="btn" value="Adicionar Telefone" />
+                                                <input id="btnAdicionarPessoaReferencia" type="button" class="btn" value="Adicionar Referência" />
                                             </div>
                                         </div>
                                     </div>
                                     <div class="form-group">
-                                        <div class="table-responsive">
-                                            <table id="tbPessoaTelefone" class="table nowrap" style="width: 100%">
+                                        <div class="table-responsive rolagem-vertical">
+                                            <table id="tbPessoaReferencia" class="table nowrap" style="width: 100%">
                                                 <thead>
                                                     <tr>
-                                                        <td class="text-center" style="width: 5%"><b>Id</b></td>
-                                                        <td class="text-center" style="width: 5%"><b>País</b></td>
-                                                        <td class="text-center" style="width: 5%"><b>DDD</b></td>
-                                                        <td class="text-center" style="width: 20%"><b>Número</b></td>
-                                                        <td class="text-center" style="width: 50%"><b>Nome do Contato</b></td>
-                                                        <td class="text-center" style="width: 15%"><b>Tipo Telefone</b></td>
-                                                        <td class="text-center" style="width: 5%"><b>Ação</b></td>
-                                                    </tr>
-                                                </thead>
-                                                <tbody></tbody>
-                                            </table>
-                                        </div>
-                                    </div>
-                                    <h4>E-mails</h4>
-                                    <hr />
-                                    <div class="form-group">
-                                        <div class="row">
-                                            <div class="col-md-12 text-right">
-                                                <input id="btnAdicionarPessoaEmail" type="button" class="btn" value="Adicionar Email" />
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <div class="table-responsive">
-                                            <table id="tbPessoaEmail" class="table nowrap" style="width: 100%">
-                                                <thead>
-                                                    <tr>
-                                                        <td class="text-center" style="width: 5%"><b>Id</b></td>
-                                                        <td class="text-center" style="width: 45%"><b>E-mail</b></td>
-                                                        <td class="text-center" style="width: 50%"><b>Nome do Contato</b></td>
-                                                        <td class="text-center" style="width: 5%"><b>Ação</b></td>
+                                                        <td class="text-center"><b>Id</b></td>
+                                                        <td class="text-center"><b>Data Referência</b></td>
+                                                        <td class="text-center"><b>Tipo Referência</b></td>
+                                                        <td class="text-center"><b>Telefone</b></td>
+                                                        <td class="text-center"><b>Nome</b></td>
+                                                        <td class="text-center"><b>Descrição</b></td>
+                                                        <td class="text-center"><b>Ação</b></td>
                                                     </tr>
                                                 </thead>
                                                 <tbody></tbody>
@@ -1094,7 +1286,7 @@
                                         </div>
                                     </div>
                                     <div class="form-group">
-                                        <div class="table-responsive">
+                                        <div class="table-responsive rolagem-vertical">
                                             <table id="tbPessoaHistorico" class="table nowrap" style="width: 100%">
                                                 <thead>
                                                     <tr>

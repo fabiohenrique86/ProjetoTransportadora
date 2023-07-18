@@ -1,0 +1,225 @@
+﻿@using ProjetoTransportadora.Dto;
+
+@{
+    UsuarioDto usuarioDto = null;
+
+    if (Session[System.Configuration.ConfigurationManager.AppSettings["ProjetoTransportadora.Usuario"]] != null)
+    {
+        usuarioDto = (UsuarioDto)Session[System.Configuration.ConfigurationManager.AppSettings["ProjetoTransportadora.Usuario"]];
+    }
+}
+
+<div id="panelPessoaCadastroAvalista" style="display: none">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-lg-9" style="padding-top: 15px"><input type='hidden' class='avalista' /><input type='text' class='form-control text-center' placeholder='Avalista (Mínimo de 3 caracteres - CPF ou Nome)' /></div>
+                    <div class="col-lg-2" style="padding-top: 15px"><input type="button" class="btn btn-primary" value="Excluir Avalista" /></div>
+                    <div class="col-lg-1 text-right" style="padding-top: 15px"><a id="lnkExpandirRecolher" href="#" data-toggle="collapse" data-target='#idCollapse' aria-expanded="true" aria-controls="idCollapse">Expandir/Recolher</a></div>
+                </div>
+            </div>
+        </div>
+        <div id='idCollapse' class="colapse collapse in">
+            <div class="panel-body">
+                <div class="rolagem-vertical">
+                    <div class="form-group">
+                        <div class="row">
+                            <div class="col-md-7">
+                                <label for="nomePessoaCadastroAvalista">Nome:</label>
+                                <input name="nomePessoaCadastroAvalista" type="text" class="form-control" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="row">
+                            <div class="col-md-3">
+                                <label>Cpf:</label>
+                                <input name="cpfPessoaCadastroAvalista" type="text" class="form-control cpf" />
+                            </div>
+                            <div class="col-md-2">
+                                <label>Rg:</label>
+                                <input name="rgPessoaCadastroAvalista" type="text" class="form-control" />
+                            </div>
+                            <div class="col-md-2">
+                                <label>Data Nascimento:</label>
+                                <input id="dataNascimentoPessoaCadastroAvalista" type="text" class="form-control data" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <label>Naturalidade:</label>
+                                <input name="cidadeNascimentoPessoaCadastroAvalista" type="text" class="form-control" />
+                            </div>
+                            <div class="col-md-3">
+                                <label>Uf:</label>
+                                @Html.DropDownList("ufNascimentoPessoaCadastroAvalista", new SelectList(ViewBag.Estado, "Uf", "Nome"), "Uf", new { @class = "form-control" })
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="row">
+                            <div class="col-md-3">
+                                <label>Estado Civil:</label>
+                                @Html.DropDownList("estadoCivilPessoaCadastroAvalista", new SelectList(ViewBag.EstadoCivil, "Id", "Nome"), "Estado Civil", new { @class = "form-control" })
+                            </div>
+                            <div class="col-md-4">
+                                <label>Regime de Casamento:</label>
+                                @Html.DropDownList("regimeCasamentoPessoaCadastroAvalista", new SelectList(ViewBag.RegimeCasamento, "Id", "Nome"), "Regime de Casamento", new { @class = "form-control" })
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="row">
+                            <div class="col-md-7">
+                                <label class="control-label">Cônjuge:</label>
+                                <input id="conjugeAvalistaInput" type="text" class="form-control" placeholder="Cônjuge (Mínimo de 3 caracteres - CPF ou Nome)" />
+                                <input id="conjugeAvalistaHidden" type="hidden" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="row">
+                            <div class="col-md-7">
+                                <label class="control-label">Pai:</label>
+                                <input id="paiAvalistaInput" type="text" class="form-control" placeholder="Pai (Mínimo de 3 caracteres - CPF ou Nome)" />
+                                <input id="paiAvalistaHidden" type="hidden" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="row">
+                            <div class="col-md-7">
+                                <label class="control-label">Mãe:</label>
+                                <input id="maeAvalistaInput" type="text" class="form-control" placeholder="Mãe (Mínimo de 3 caracteres - CPF ou Nome)" />
+                                <input id="maeAvalistaHidden" type="hidden" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="row">
+                            <div class="col-md-2">
+                                <label>Cep:</label>
+                                <input id="cepResidenciaPessoaCadastroAvalista" type="text" class="form-control cep" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="row">
+                            <div class="col-md-5">
+                                <label>Logradouro:</label>
+                                <input id="logradouroResidenciaPessoaCadastroAvalista" type="text" class="form-control" />
+                            </div>
+                            <div class="col-md-2">
+                                <label>Número:</label>
+                                <input id="numeroResidenciaPessoaCadastroAvalista" type="text" class="form-control" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <label>Complemento:</label>
+                                <input id="complementoResidenciaPessoaCadastroAvalista" type="text" class="form-control" />
+                            </div>
+                            <div class="col-md-3">
+                                <label>Bairro:</label>
+                                <input id="bairroResidenciaPessoaCadastroAvalista" type="text" class="form-control" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <label>Cidade:</label>
+                                <input id="cidadeResidenciaPessoaCadastroAvalista" type="text" class="form-control" />
+                            </div>
+                            <div class="col-md-3">
+                                <label>Uf:</label>
+                                @Html.DropDownList("ufResidenciaPessoaCadastroAvalista", new SelectList(ViewBag.Estado, "Uf", "Nome"), "Uf", new { @class = "form-control" })
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="row">
+                            <div class="col-md-3">
+                                <label>Tipo Residência:</label>
+                                @Html.DropDownList("tipoResidenciaPessoaCadastroAvalista", new SelectList(ViewBag.TipoResidencia, "Id", "Nome"), "Tipo Residência", new { @class = "form-control" })
+                            </div>
+                            <div class="col-md-2">
+                                <label>Valor Aluguel:</label>
+                                <input name="valorAluguelPessoaCadastroAvalista" type="text" class="form-control valor" />
+                            </div>
+                            <div class="col-md-2">
+                                <label>Tempo na Residência:</label>
+                                <input name="tempoResidencialPessoaCadastroAvalista" type="text" class="form-control" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label>Profissão:</label>
+                                <input name="profissaoPessoaCadastroAvalista" type="text" class="form-control" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label>Empresa Trabalho:</label>
+                                <input name="empresaTrabalhoPessoaCadastroAvalista" type="text" class="form-control" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <label>Cargo:</label>
+                                <input name="cargoPessoaCadastroAvalista" type="text" class="form-control" />
+                            </div>
+                            <div class="col-md-2">
+                                <label>Data Admissão:</label>
+                                <input id="dataAdmissaoPessoaCadastroAvalista" type="text" class="form-control data" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="row">
+                            <div class="col-md-3">
+                                <label>Valor Salário:</label>
+                                <input name="valorSalarioPessoaCadastroAvalista" type="text" class="form-control valor" />
+                            </div>
+                            <div class="col-md-3">
+                                <label>Data Referência Salário:</label>
+                                <input id="dataReferenciaSalarioPessoaCadastroAvalista" type="text" class="form-control data" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label>Empresa Pessoal:</label>
+                                <input name="empresaPessoalPessoaCadastroAvalista" type="text" class="form-control" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="row">
+                            <div class="col-md-3">
+                                <label>Telefone Empresa:</label>
+                                <input name="telefoneEmpresaPessoaCadastroAvalista" type="text" class="form-control celularDDD" />
+                            </div>
+                            <div class="col-md-3">
+                                <label for="emailEmpresaPessoaCadastroAvalista">E-mail Empresa:</label>
+                                <input name="emailEmpresaPessoaCadastroAvalista" type="text" class="form-control" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

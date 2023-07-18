@@ -19,8 +19,10 @@ namespace ProjetoTransportadora.Repository
         public int IdTipoReferencia { get; set; }
         public System.DateTime DataReferencia { get; set; }
         public string Descricao { get; set; }
+        public string Telefone { get; set; }
+        public string Nome { get; set; }
     
-        public virtual TipoReferencia TipoReferencia { get; set; }
         public virtual Pessoa Pessoa { get; set; }
+        public virtual TipoReferencia TipoReferencia { get; set; }
     }
 }

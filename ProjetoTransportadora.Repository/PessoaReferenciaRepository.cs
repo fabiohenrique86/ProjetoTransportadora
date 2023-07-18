@@ -19,7 +19,9 @@ namespace ProjetoTransportadora.Repository
                 IdPessoa = pessoaReferenciaDto.IdPessoa,
                 IdTipoReferencia = pessoaReferenciaDto.IdTipoReferencia,
                 DataReferencia = pessoaReferenciaDto.DataReferencia,
-                Descricao = pessoaReferenciaDto.Descricao
+                Descricao = pessoaReferenciaDto.Descricao,
+                Telefone = pessoaReferenciaDto.Telefone,
+                Nome = pessoaReferenciaDto.Nome
             };
 
             projetoTransportadoraEntities.PessoaReferencia.Add(pessoaReferencia);

@@ -38,7 +38,6 @@ namespace ProjetoTransportadora.Repository
         public virtual DbSet<SituacaoVeiculo> SituacaoVeiculo { get; set; }
         public virtual DbSet<TipoResidencia> TipoResidencia { get; set; }
         public virtual DbSet<PessoaHistorico> PessoaHistorico { get; set; }
-        public virtual DbSet<PessoaReferencia> PessoaReferencia { get; set; }
         public virtual DbSet<TipoReferencia> TipoReferencia { get; set; }
         public virtual DbSet<TipoTelefone> TipoTelefone { get; set; }
         public virtual DbSet<Funcionalidade> Funcionalidade { get; set; }
@@ -57,5 +56,6 @@ namespace ProjetoTransportadora.Repository
         public virtual DbSet<Contrato> Contrato { get; set; }
         public virtual DbSet<PessoaEmail> PessoaEmail { get; set; }
         public virtual DbSet<PessoaTelefone> PessoaTelefone { get; set; }
+        public virtual DbSet<PessoaReferencia> PessoaReferencia { get; set; }
     }
 }

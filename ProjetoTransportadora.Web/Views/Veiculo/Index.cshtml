@@ -606,9 +606,9 @@
                 // aba - implemento
 
                 veiculoDto.Implemento = $("#implementoV").val();
-                veiculoDto.Comprimento = $("#comprimento").val();
-                veiculoDto.Altura = $("#altura").val();
-                veiculoDto.Largura = $("#largura").val();
+                veiculoDto.Comprimento = $("#comprimento").val().replace(".", ",");
+                veiculoDto.Altura = $("#altura").val().replace(".", ",");
+                veiculoDto.Largura = $("#largura").val().replace(".", ",");
 
                  // aba - valores
 
@@ -618,7 +618,7 @@
                 veiculoDto.ValorVenda = $("#valorVenda").val();
                 veiculoDto.DataRecuperacao = $("#dataRecuperacao").val();
                 veiculoDto.DataValorFIPE = $("#dataValorFIPE").val();
-                veiculoDto.ValorFIPE= $("#valorFIPE").val();
+                veiculoDto.ValorFIPE = $("#valorFIPE").val();
                 veiculoDto.ValorTransportadora = $("#valorTransportadora").val();
 
                 // aba - multas
@@ -1094,7 +1094,7 @@
                                         <div class="row">
                                             <div class="col-md-2">
                                                 <label for="comprimento">Comprimento:</label>
-                                                <input id="comprimento" name="comprimento" type="text" class="form-control comprimento" />
+                                                <input id="comprimento" name="comprimento" type="text" class="form-control comprimento" maxlength="5" />
                                             </div>
                                         </div>
                                     </div>
@@ -1102,7 +1102,7 @@
                                         <div class="row">
                                             <div class="col-md-2">
                                                 <label for="altura">Altura:</label>
-                                                <input id="altura" name="altura" type="text" class="form-control altura" />
+                                                <input id="altura" name="altura" type="text" class="form-control altura" maxlength="5" />
                                             </div>
                                         </div>
                                     </div>
@@ -1110,7 +1110,7 @@
                                         <div class="row">
                                             <div class="col-md-2">
                                                 <label for="largura">Largura:</label>
-                                                <input id="largura" name="largura" type="text" class="form-control largura" />
+                                                <input id="largura" name="largura" type="text" class="form-control largura" maxlength="5" />
                                             </div>
                                         </div>
                                     </div>

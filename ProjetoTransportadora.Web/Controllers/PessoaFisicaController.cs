@@ -110,7 +110,7 @@ namespace ProjetoTransportadora.Web.Controllers
         {
             var lista = pessoaBusiness.Listar(pessoaDto);
 
-            string csv = "Nome; Estado Civil; Rg; Cpf; Data de Nascimento; Cidade Nascimento; Uf Nascimento; Cep Residência; Logradouro Residência; Número Residência; Complemento Residência; Bairro Residência; Cidade Residência; Uf Residência; Profissão; Tipo Residência; Tempo Residencial; Valor Aluguel; Nome Mãe; Nome Pai; Nome Conjuge; Regime Casamento; Empresa Pessoal; Empresa Trabalho; Data Admissão; Cargo; Valor Salário; Data Referência Salário; Valor Frete" + Environment.NewLine;
+            string csv = "Nome; Estado Civil; Rg; Cpf; Data de Nascimento; Cidade Nascimento; Uf Nascimento; Cep Residência; Logradouro Residência; Número Residência; Complemento Residência; Bairro Residência; Cidade Residência; Uf Residência; Profissão; Tipo Residência; Tempo Residencial; Valor Aluguel; Nome Mãe; Nome Pai; Nome Conjuge; Regime Casamento; Empresa Pessoal; Empresa Trabalho; Data Admissão; Cargo; Valor Salário; Data Referência Salário" + Environment.NewLine;
 
             foreach (var item in lista)
             {
@@ -156,8 +156,7 @@ namespace ProjetoTransportadora.Web.Controllers
                 csv += item.Cargo + ";";
                 csv += (item.ValorSalario == null ? "" : item.ValorSalario.GetValueOrDefault().ToString("C")) + ";";
                 csv += (item.DataReferenciaSalario == null ? "" : item.DataReferenciaSalario.GetValueOrDefault().ToString("dd/MM/yyyy")) + ";";
-                csv += (item.ValorFrete == null ? "" : item.ValorFrete.GetValueOrDefault().ToString("C")) + ";";
-
+                
                 csv += Environment.NewLine;
             }
 
@@ -224,7 +223,6 @@ namespace ProjetoTransportadora.Web.Controllers
                     var cargo = linhaArquivo[25];
                     var valorSalario = linhaArquivo[26];
                     var dataReferenciaSalario = linhaArquivo[27];
-                    var valorFrete = linhaArquivo[28];
 
                     var idEstadoCivil = estadoCivilBusiness.Listar(new EstadoCivilDto() { Nome = estadoCivil }).FirstOrDefault()?.Id;
                     var idTipoResidencia = tipoResidenciaBusiness.Listar(new TipoResidenciaDto() { Nome = tipoResidencia }).FirstOrDefault()?.Id;
@@ -251,9 +249,6 @@ namespace ProjetoTransportadora.Web.Controllers
                     double vlSalario;
                     double.TryParse(valorSalario, out vlSalario);
 
-                    double vlFrete;
-                    double.TryParse(valorFrete, out vlFrete);
-
                     var pessoaDto = new PessoaDto()
                     {
                         Nome = nome,
@@ -279,7 +274,6 @@ namespace ProjetoTransportadora.Web.Controllers
                         Cargo = cargo,
                         ValorSalario = vlSalario,
                         DataReferenciaSalario = dtReferenciaSalario,
-                        ValorFrete = vlFrete,
                         EmpresaPessoal = empresaPessoal,
                         EmpresaTrabalho = empresaTrabalho,
                         DataCadastro = dataCadastro,

@@ -214,7 +214,6 @@ namespace ProjetoTransportadora.Repository
                 Cargo = x.Cargo,
                 ValorSalario = x.ValorSalario,
                 DataReferenciaSalario = x.DataReferenciaSalario,
-                ValorFrete = x.ValorFrete,
                 Cnpj = x.Cnpj,
                 IdProduto = x.IdProduto,
                 ProdutoDto = x.Produto == null ? null : new ProdutoDto() { Id = x.Produto.Id, Nome = x.Produto.Nome },
@@ -270,7 +269,9 @@ namespace ProjetoTransportadora.Repository
                     IdPessoa = w.IdPessoa,
                     IdTipoReferencia = w.IdTipoReferencia,
                     DataReferencia = w.DataReferencia,
-                    Descricao = w.Descricao
+                    Descricao = w.Descricao,
+                    Telefone = w.Telefone,
+                    Nome = w.Nome
                 }).ToList(),
                 PessoaContratoDto = x.Contrato.Select(w => new ContratoDto()
                 {
@@ -390,7 +391,6 @@ namespace ProjetoTransportadora.Repository
                 Cargo = pessoaDto.Cargo,
                 ValorSalario = pessoaDto.ValorSalario,
                 DataReferenciaSalario = pessoaDto.DataReferenciaSalario ?? null,
-                ValorFrete = pessoaDto.ValorFrete,
                 Cnpj = pessoaDto.Cnpj,
                 IdProduto = pessoaDto.IdProduto,
                 DataAbertura = pessoaDto.DataAbertura ?? null,
@@ -456,7 +456,6 @@ namespace ProjetoTransportadora.Repository
             pessoa.Cargo = pessoaDto.Cargo;
             pessoa.ValorSalario = pessoaDto.ValorSalario;
             pessoa.DataReferenciaSalario = pessoaDto.DataReferenciaSalario ?? null;
-            pessoa.ValorFrete = pessoaDto.ValorFrete;
             pessoa.Cnpj = pessoaDto.Cnpj;
             pessoa.IdProduto = pessoaDto.IdProduto;
             pessoa.DataAbertura = pessoaDto.DataAbertura ?? null;

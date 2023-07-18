@@ -123,7 +123,7 @@
                 simulacaoDto.ValorPrincipal = $("#valorPrincipal").val();
                 simulacaoDto.DataPrimeiraParcela = $("#dataPrimeiraParcela").val();
                 simulacaoDto.QuantidadeParcela = $("#quantidadeParcela").val();
-                simulacaoDto.TaxaMensalJuros = $("#taxaMensalJuros").val();
+                simulacaoDto.TaxaMensalJuros = $("#taxaMensalJuros").val().replace(".", ",");
                 simulacaoDto.ValorDocumentacao = $("#valorDocumentacao").val();
                 simulacaoDto.ValorTarifa = $("#valorTarifa").val();
                 simulacaoDto.ValorDesconto = $("#valorDesconto").val();
@@ -221,7 +221,7 @@
                             </div>
                             <div class="col-md-2">
                                 <label for="taxaMensalJuros">Taxa Mensal Juros:</label>
-                                <input id="taxaMensalJuros" name="taxaMensalJuros" type="text" class="form-control taxa" placeholder="Taxa Mensal Juros" />
+                                <input id="taxaMensalJuros" name="taxaMensalJuros" type="text" class="form-control taxa" placeholder="Taxa Mensal Juros" maxlength="5" />
                             </div>
                         </div>
                     </div>

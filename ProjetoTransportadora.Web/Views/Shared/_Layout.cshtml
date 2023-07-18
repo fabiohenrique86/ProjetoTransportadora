@@ -239,8 +239,6 @@
     @Scripts.Render("~/bundles/blockUI")
     @Scripts.Render("~/bundles/fullcalendar")
 
-
-
     <script type="text/javascript">
 
         $(document).ready(function () {
@@ -277,10 +275,10 @@
 
             // mask
             $(".ano").mask("0000");
-            $(".comprimento").mask("#0,00");
-            $(".altura").mask("#0,00");
-            $(".largura").mask("#0,00");
-            $(".taxa").mask("##,##", { reverse: true });
+            //$(".comprimento").mask("#0,00");
+            //$(".altura").mask("#0,00");
+            //$(".largura").mask("#0,00");
+            //$(".taxa").mask("#,#,##", { reverse: false });
             $(".parcela").mask("000");
             $(".data").mask("00/00/0000");
             $(".valor").mask("000.000.000,00", { reverse: true });
@@ -394,6 +392,23 @@
 
         });
 
+        function mascaraTelefoneDDD(campo) {
+            $("#" + campo).mask("(##) 9999-99999").focusout(function (event) {
+                var target, phone, element;
+                target = (event.currentTarget) ? event.currentTarget : event.srcElement;
+                phone = target.value.replace(/\D/g, '');
+                element = $(target);
+                element.unmask();
+                if (phone.length > 10) {
+                    element.mask("(99) 99999-9999");
+                }
+                else {
+                    element.mask("(99) 9999-99999");
+                }
+            });
+            $("#" + campo).trigger('focusout');
+        }
+
         function obterNomeEstado(uf) {
             switch (uf) {
                 case "AC":
@@ -494,6 +509,10 @@
         }
 
         function formatarTelefone(telefone) {
+
+            if (telefone == null)
+                return "";
+
             var tel = telefone.toString().replace(/[^\d]/g, "");
 
             if (tel == null || tel == "")
@@ -512,6 +531,7 @@
         }
 
         function abrirModalPessoaCadastroAuxiliar(o) {
+
             limparFormularioPessoaCadastroAuxiliar();
 
             $("#lblTituloPessoaCadastroAuxiliar").html($(o).data("titulo"));
@@ -524,7 +544,81 @@
             $("#btnIncluirPessoaCadastroAuxiliar").data("id-telefone", $(o).data("id-telefone"));
             $("#btnIncluirPessoaCadastroAuxiliar").data("id-email", $(o).data("id-email"));
 
-            $("#modalPessoaCadastroAuxiliar").modal('show');
+            //$("#idPessoaCadastroAuxiliar").val("");
+            $("#lblAcaoPessoaCadastroAuxiliar").text("Incluir");
+            $("#btnIncluirPessoaCadastroAuxiliar").val("Incluir");
+
+            if ($(o).data("editar") == true) {
+
+                var id = $("#" + $(o).data("id")).val();
+
+                if (id == "" || id == undefined) {
+                    $("#modalPessoaCadastroAuxiliar").modal('show');
+                    return;
+                }
+
+                $("#lblAcaoPessoaCadastroAuxiliar").text("Editar");
+                $("#btnIncluirPessoaCadastroAuxiliar").val("Editar");
+                $("#idPessoaCadastroAuxiliar").val(id);
+
+                $.ajax({
+                    dataType: "json",
+                    type: "GET",
+                    url: "/PessoaFisica/Listar",
+                    data: { Id: id },
+                    contentType: "application/json",
+                    success: function (data) {
+
+                        if (!data.Sucesso) {
+                            alert(data.Erro ? "danger" : "warning", data.Mensagem);
+                            return;
+                        }
+
+                        preencherModalPessoaCadastroAuxiliar(data.Data[0]);
+                        $("#modalPessoaCadastroAuxiliar").modal('show');
+                    }
+                });
+            }
+            else {
+                $("#modalPessoaCadastroAuxiliar").modal('show');
+            }
+        }
+
+        function preencherModalPessoaCadastroAuxiliar(pessoaDto) {
+
+            $("#pessoaDtoCadastroAuxiliar").text(JSON.stringify(pessoaDto));
+            $("#nomePessoaCadastroAuxiliar").val(pessoaDto.Nome);
+
+            if (pessoaDto.Cpf != null) {
+                $("#documentoPessoaCadastroAuxiliar").val(pessoaDto.Cpf);
+                $("#documentoPessoaCadastroAuxiliar").mask("000.000.000-00");
+            }
+            else {
+                $("#documentoPessoaCadastroAuxiliar").val(pessoaDto.Cnpj);
+                $("#documentoPessoaCadastroAuxiliar").mask("00.000.000/0000-00");
+            }
+
+            if (pessoaDto.PessoaEmailDto != null && pessoaDto.PessoaEmailDto.length > 0)
+                $("#emailPessoaCadastroAuxiliar").val(pessoaDto.PessoaEmailDto[0].Email);
+
+            if (pessoaDto.DataNascimento != null)
+                $("#dataNascimentoPessoaCadastroAuxiliar").val(moment(pessoaDto.DataNascimento).format("DD/MM/YYYY"));
+
+            if (pessoaDto.PessoaTelefoneDto != null && pessoaDto.PessoaTelefoneDto.length > 0) {
+                $("#telefonePessoaCadastroAuxiliar").val(pessoaDto.PessoaTelefoneDto[0].DDD?.toString() + pessoaDto.PessoaTelefoneDto[0].Numero?.toString());
+                mascaraTelefoneDDD("telefonePessoaCadastroAuxiliar");
+                $("#tipoTelefonePessoaCadastroAuxiliar").val(pessoaDto.PessoaTelefoneDto[0].IdTipoTelefone);
+            }
+
+            $("#cepResidenciaPessoaCadastroAuxiliar").val(pessoaDto.CepResidencia);
+            $("#cepResidenciaPessoaCadastroAuxiliar").mask("00000-000");
+            $("#logradouroResidenciaPessoaCadastroAuxiliar").val(pessoaDto.LogradouroResidencia);
+            $("#numeroResidenciaPessoaCadastroAuxiliar").val(pessoaDto.NumeroResidencia);
+            $("#complementoResidenciaPessoaCadastroAuxiliar").val(pessoaDto.ComplementoResidencia);
+            $("#bairroResidenciaPessoaCadastroAuxiliar").val(pessoaDto.BairroResidencia);
+            $("#cidadeResidenciaPessoaCadastroAuxiliar").val(pessoaDto.CidadeResidencia);
+            $("#ufResidenciaPessoaCadastroAuxiliar").val(pessoaDto.UfResidencia);
+            $("#tipoResidenciaPessoaCadastroAuxiliar").val(pessoaDto.IdTipoResidencia);
         }
 
         function limparFormularioPessoaCadastroAuxiliar() {
@@ -546,10 +640,13 @@
             $("#cidadeResidenciaPessoaCadastroAuxiliar").val("");
             $("#ufResidenciaPessoaCadastroAuxiliar").val("");
             $("#tipoResidenciaPessoaCadastroAuxiliar").val("");
+            $("#idPessoaCadastroAuxiliar").val("");
+            $("#pessoaDtoCadastroAuxiliar").val("");
         }
 
         function preencherCampoExternoPessoaCadastroAuxiliar(id, nome, documento, data, idTelefone, telefone, idEmail, email) {
             $("#" + id).val(data.Id);
+
             if (documento == null || documento == "")
                 $("#" + nome).val(data.Nome);
             else
@@ -564,8 +661,14 @@
 
         function incluirPessoaCadastroAuxiliar(o) {
 
-            var pessoaDto = {};
+            var pessoaDto = null;
 
+            if ($("#pessoaDtoCadastroAuxiliar").text() == "" || $("#pessoaDtoCadastroAuxiliar").text() == null)
+                pessoaDto = {};
+            else
+                pessoaDto = JSON.parse($("#pessoaDtoCadastroAuxiliar").text());
+
+            pessoaDto.Id = $("#idPessoaCadastroAuxiliar").val();
             pessoaDto.Nome = $("#nomePessoaCadastroAuxiliar").val();
 
             var labelDocumento = $("#lblDocumentoPessoaCadastroAuxiliar").text();
@@ -586,15 +689,29 @@
             pessoaDto.DataNascimento = $("#dataNascimentoPessoaCadastroAuxiliar").val();
 
             if ($("#emailPessoaCadastroAuxiliar").val() != "") {
-                pessoaDto.PessoaEmailDto = [];
-                pessoaDto.PessoaEmailDto.push({ "Email": $("#emailPessoaCadastroAuxiliar").val() });
+                if (pessoaDto.Id <= 0 || pessoaDto.PessoaEmailDto.length <= 0) {
+                    pessoaDto.PessoaEmailDto = [];
+                    pessoaDto.PessoaEmailDto.push({ "Email": $("#emailPessoaCadastroAuxiliar").val(), "IdPessoa": pessoaDto.Id });
+                }
+                else {
+                    pessoaDto.PessoaEmailDto[0].Email = $("#emailPessoaCadastroAuxiliar").val();
+                    pessoaDto.PessoaEmailDto[0].IdPessoa = pessoaDto.Id;
+                }
             }
 
             var telefone = $("#telefonePessoaCadastroAuxiliar").val().replace(/\D/g, "");
 
             if (telefone != "") {
-                pessoaDto.PessoaTelefoneDto = [];
-                pessoaDto.PessoaTelefoneDto.push({ "IdTipoTelefone": $("#tipoTelefonePessoaCadastroAuxiliar").val(), "DDD": telefone.substring(0, 2), "Numero": telefone.substring(2) });
+                if (pessoaDto.Id <= 0 || pessoaDto.PessoaTelefoneDto.length <= 0) {
+                    pessoaDto.PessoaTelefoneDto = [];
+                    pessoaDto.PessoaTelefoneDto.push({ "IdTipoTelefone": $("#tipoTelefonePessoaCadastroAuxiliar").val(), "DDD": telefone.substring(0, 2), "Numero": telefone.substring(2), "IdPessoa": pessoaDto.Id });
+                }
+                else {
+                    pessoaDto.PessoaTelefoneDto[0].IdTipoTelefone = $("#tipoTelefonePessoaCadastroAuxiliar").val();
+                    pessoaDto.PessoaTelefoneDto[0].DDD = telefone.substring(0, 2);
+                    pessoaDto.PessoaTelefoneDto[0].Numero = telefone.substring(2);
+                    pessoaDto.PessoaTelefoneDto[0].IdPessoa = pessoaDto.Id;
+                }
             }
 
             pessoaDto.CepResidencia = $("#cepResidenciaPessoaCadastroAuxiliar").val();
@@ -606,8 +723,14 @@
             pessoaDto.UfResidencia = $("#ufResidenciaPessoaCadastroAuxiliar").val();
             pessoaDto.IdTipoResidencia = $("#tipoResidenciaPessoaCadastroAuxiliar").val();
 
-            pessoaDto.IdUsuarioCadastro = $(o).data("id-usuario-logado");
-            pessoaDto.DataCadastro = '@DateTime.UtcNow';
+            if (pessoaDto.Id > 0) {
+                url = "/PessoaFisica/Alterar";
+            }
+            else {
+                pessoaDto.IdUsuarioCadastro = $(o).data("id-usuario-logado");
+                pessoaDto.DataCadastro = '@DateTime.UtcNow';
+            }
+
             pessoaDto.SemVinculo = $(o).data("sem-vinculo");
 
             $.ajax({
@@ -623,7 +746,13 @@
                         return;
                     }
 
-                    preencherCampoExternoPessoaCadastroAuxiliar($(o).data("id"), $(o).data("nome"), $("#documentoPessoaCadastroAuxiliar").val(), { Id: data.Id, Nome: pessoaDto.Nome }, $(o).data("id-telefone"), telefone, $(o).data("id-email"), $("#emailPessoaCadastroAuxiliar").val());
+                    if (pessoaDto.Id <= 0) {
+                        preencherCampoExternoPessoaCadastroAuxiliar($(o).data("id"), $(o).data("nome"), $("#documentoPessoaCadastroAuxiliar").val(), { Id: data.Id, Nome: pessoaDto.Nome }, $(o).data("id-telefone"), telefone, $(o).data("id-email"), $("#emailPessoaCadastroAuxiliar").val());
+                    }
+                    else {
+                        preencherCampoExternoPessoaCadastroAuxiliar($(o).data("id"), $(o).data("nome"), $("#documentoPessoaCadastroAuxiliar").val(), { Id: data.Data[0].Id, Nome: pessoaDto.Nome }, null, null, null, null);
+                    }
+
                     $("#modalPessoaCadastroAuxiliar").modal('hide');
                 }
             });
@@ -656,7 +785,7 @@
                     $("#" + idCampo).val(nome);
                 }
             });
-        }
+        }        
 
         $.ajaxSetup({
             beforeSend: function () { $.blockUI({ message: '<h5>Carregando...</h4>' }); },
