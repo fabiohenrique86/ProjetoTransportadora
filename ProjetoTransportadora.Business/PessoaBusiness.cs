@@ -88,15 +88,18 @@ namespace ProjetoTransportadora.Business
                 {
                     idPessoa = pessoaRepository.Incluir(pessoaDto);
 
+                    if (pessoaDto.Id > 0)
+                        pessoaAvalistaBusiness.Excluir(pessoaDto.Id);
+
                     foreach (var pessoaAvalistaDto in pessoaDto.PessoaAvalistaDto)
                     {
                         pessoaAvalistaDto.IdPessoa = idPessoa;
 
-                        // caso não exista avalista, cadastra-o. Caso possua-o, vinculá-o.
-                        if (pessoaAvalistaDto.IdAvalista <= 0)
+                        // caso exista avalista, cadastra-o
+                        if (pessoaAvalistaDto.AvalistaDto != null)
                             pessoaAvalistaDto.IdAvalista = this.Incluir(pessoaAvalistaDto.AvalistaDto);
-                        else
-                            pessoaAvalistaBusiness.Incluir(pessoaAvalistaDto);
+
+                        pessoaAvalistaBusiness.Incluir(pessoaAvalistaDto);
                     }
 
                     foreach (var pessoaTelefoneDto in pessoaDto.PessoaTelefoneDto)
@@ -250,7 +253,16 @@ namespace ProjetoTransportadora.Business
 
                 pessoaAvalistaBusiness.Excluir(pessoaDto.Id);
                 foreach (var pessoaAvalistaDto in pessoaDto.PessoaAvalistaDto)
+                {
+                    // caso exista avalista, cadastra-o
+                    if (pessoaAvalistaDto.AvalistaDto != null)
+                    {
+                        pessoaAvalistaDto.IdAvalista = this.Incluir(pessoaAvalistaDto.AvalistaDto);
+                        pessoaAvalistaDto.IdPessoa = pessoaDto.Id;
+                    }
+
                     pessoaAvalistaBusiness.Incluir(pessoaAvalistaDto);
+                }
 
                 pessoaTelefoneBusiness.Excluir(pessoaDto.Id);
                 foreach (var pessoaTelefoneDto in pessoaDto.PessoaTelefoneDto)

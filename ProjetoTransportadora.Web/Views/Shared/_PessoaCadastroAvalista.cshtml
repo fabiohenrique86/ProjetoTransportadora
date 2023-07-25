@@ -10,17 +10,27 @@
 }
 
 <div id="panelPessoaCadastroAvalista" style="display: none">
-    <div class="panel panel-default">
+    <div class="panel panel-default panel-avalista">
         <div class="panel-heading">
             <div class="form-group">
                 <div class="row">
-                    <div class="col-lg-9" style="padding-top: 15px"><input id="idAvalistaHidden" type='hidden' class='avalista' /><input id="idAvalistaInput" type='text' class='form-control text-center' placeholder='Avalista (Mínimo de 3 caracteres - CPF ou Nome)' /></div>
-                    <div class="col-lg-2" style="padding-top: 15px"><input type="button" class="btn btn-primary excluirAvalista" value="Excluir Avalista" /></div>
-                    <div class="col-lg-1 text-right" style="padding-top: 15px"><a id="lnkExpandirRecolher" href="#" data-toggle="collapse" data-target='#idCollapse' aria-expanded="true" aria-controls="idCollapse">Expandir/Recolher</a></div>
+                    <div class="col-lg-11" style="padding-top: 15px">
+                        <div class="input-group">
+                            <input id="idAvalistaHidden" type='hidden' class='avalista' />
+                            <input id="idAvalistaInput" type='text' class='form-control text-center' placeholder='Avalista (Mínimo de 3 caracteres - CPF ou Nome)' />
+                            <div class="input-group-addon excluirAvalista" style="cursor: pointer"><i class="glyphicon glyphicon-minus"></i></div>
+                        </div>
+                    </div>
+                    @*<div class="col-lg-2" style="padding-top: 15px">
+                        <input type="button" class="btn btn-primary excluirAvalista" value="Excluir Avalista" />
+                    </div>*@
+                    <div class="col-lg-1 text-right" style="padding-top: 15px">
+                        <a id="lnkExpandirRecolher" href="#" data-toggle="collapse" data-target='#idCollapse' aria-expanded="false" aria-controls="idCollapse">Expandir/Recolher</a>
+                    </div>
                 </div>
             </div>
         </div>
-        <div id='idCollapse' class="colapse collapse in">
+        <div id='idCollapse' class="colapse collapse">
             <div class="panel-body">
                 <div class="rolagem-vertical">
                     <div class="form-group">

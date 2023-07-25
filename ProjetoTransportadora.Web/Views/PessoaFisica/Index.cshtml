@@ -62,12 +62,380 @@
             $("#valorSalario").val("");
             $("#dataReferenciaSalario").val("");
 
-            //$("#tbPessoaAvalista").DataTable().clear().draw();
             $("#tbPessoaTelefone").DataTable().clear().draw();
             $("#tbPessoaEmail").DataTable().clear().draw();
             $("#tbPessoaHistorico").DataTable().clear().draw();
             $("#tbPessoaReferencia").DataTable().clear().draw();
             $("#tbPessoaContrato").DataTable().clear().draw();
+        }
+
+        function carregarAvalista(avalistaDto) {
+
+            var idRandomAvalista = Math.floor((Math.random() * 100000000) + 1);
+
+            var htmlPartial = $("#panelPessoaCadastroAvalista").html();
+
+            // seta novos ids para cada collapse panel
+            htmlPartial = htmlPartial.replace("idCollapse", idRandomAvalista);
+            htmlPartial = htmlPartial.replace("idCollapse", idRandomAvalista);
+            htmlPartial = htmlPartial.replace("idCollapse", idRandomAvalista);
+
+            var idCep = "cepResidenciaPessoaCadastroAvalista_" + idRandomAvalista;
+            var idLogradouroResidencia = "logradouroResidenciaPessoaCadastroAvalista_" + idRandomAvalista;
+            var idNumeroResidencia = "numeroResidenciaPessoaCadastroAvalista_" + idRandomAvalista;
+            var idComplementoResidencia = "complementoResidenciaPessoaCadastroAvalista_" + idRandomAvalista;
+            var idBairroResidencia = "bairroResidenciaPessoaCadastroAvalista_" + idRandomAvalista;
+            var idCidadeResidencia = "cidadeResidenciaPessoaCadastroAvalista_" + idRandomAvalista;
+            var idUfResidencia = "ufResidenciaPessoaCadastroAvalista_" + idRandomAvalista;
+
+            htmlPartial = htmlPartial.replace("cepResidenciaPessoaCadastroAvalista", idCep);
+            htmlPartial = htmlPartial.replace("logradouroResidenciaPessoaCadastroAvalista", idLogradouroResidencia);
+            htmlPartial = htmlPartial.replace("numeroResidenciaPessoaCadastroAvalista", idNumeroResidencia);
+            htmlPartial = htmlPartial.replace("complementoResidenciaPessoaCadastroAvalista", idComplementoResidencia);
+            htmlPartial = htmlPartial.replace("bairroResidenciaPessoaCadastroAvalista", idBairroResidencia);
+            htmlPartial = htmlPartial.replace("cidadeResidenciaPessoaCadastroAvalista", idCidadeResidencia);
+            htmlPartial = htmlPartial.replace("ufResidenciaPessoaCadastroAvalista", idUfResidencia);
+
+            var conjugeAvalistaInput = "conjugeAvalistaInput_" + idRandomAvalista;
+            var conjugeAvalistaHidden = "conjugeAvalistaHidden_" + idRandomAvalista;
+            var paiAvalistaInput = "paiAvalistaInput_" + idRandomAvalista;
+            var paiAvalistaHidden = "paiAvalistaHidden_" + idRandomAvalista;
+            var maeAvalistaInput = "maeAvalistaInput_" + idRandomAvalista;
+            var maeAvalistaHidden = "maeAvalistaHidden_" + idRandomAvalista;
+
+            htmlPartial = htmlPartial.replace("conjugeAvalistaInput", conjugeAvalistaInput);
+            htmlPartial = htmlPartial.replace("conjugeAvalistaHidden", conjugeAvalistaHidden);
+            htmlPartial = htmlPartial.replace("paiAvalistaInput", paiAvalistaInput);
+            htmlPartial = htmlPartial.replace("paiAvalistaHidden", paiAvalistaHidden);
+            htmlPartial = htmlPartial.replace("maeAvalistaInput", maeAvalistaInput);
+            htmlPartial = htmlPartial.replace("maeAvalistaHidden", maeAvalistaHidden);
+
+            var dataNascimentoAvalista = "dataNascimentoPessoaCadastroAvalista_" + idRandomAvalista;
+            var dataAdmissaoAvalista = "dataAdmissaoPessoaCadastroAvalista_" + idRandomAvalista;
+            var dataReferenciaAvalista = "dataReferenciaSalarioPessoaCadastroAvalista_" + idRandomAvalista;
+
+            htmlPartial = htmlPartial.replace("dataNascimentoPessoaCadastroAvalista", dataNascimentoAvalista);
+            htmlPartial = htmlPartial.replace("dataAdmissaoPessoaCadastroAvalista", dataAdmissaoAvalista);
+            htmlPartial = htmlPartial.replace("dataReferenciaSalarioPessoaCadastroAvalista", dataReferenciaAvalista);
+
+            var idAvalistaHidden = "idAvalistaHidden_" + idRandomAvalista;
+            var idAvalistaInput = "idAvalistaInput_" + idRandomAvalista;
+
+            htmlPartial = htmlPartial.replace("idAvalistaHidden", idAvalistaHidden);
+            htmlPartial = htmlPartial.replace("idAvalistaInput", idAvalistaInput);
+
+            $("#divAvalista").append(htmlPartial);
+
+            // setando os valores, se houverem
+            if (avalistaDto != null) {
+                //$("#" + idCep).val(avalistaDto.CepResidencia);
+                //$("#" + idLogradouroResidencia).val(avalistaDto.LogradouroResidencia);
+                //$("#" + idNumeroResidencia).val(avalistaDto.NumeroResidencia);
+                //$("#" + idComplementoResidencia).val(avalistaDto.ComplementoResidencia);
+                //$("#" + idBairroResidencia).val(avalistaDto.BairroResidencia);
+                //$("#" + idCidadeResidencia).val(avalistaDto.CidadeResidencia);
+                //$("#" + idUfResidencia).val(avalistaDto.UfResidencia);
+
+                //if (avalistaDto.PessoaConjugeDto != null) {
+                //    $("#" + conjugeAvalistaHidden).val(avalistaDto.PessoaConjugeDto.Id);
+                //    $("#" + conjugeAvalistaInput).val(avalistaDto.PessoaConjugeDto.Nome);
+                //}
+
+                //if (avalistaDto.PessoaPaiDto != null) {
+                //    $("#" + paiAvalistaHidden).val(avalistaDto.PessoaPaiDto.Id);
+                //    $("#" + paiAvalistaInput).val(avalistaDto.PessoaPaiDto.Nome);
+                //}
+
+                //if (avalistaDto.PessoaMaeDto != null) {
+                //    $("#" + maeAvalistaHidden).val(avalistaDto.PessoaMaeDto.Id);
+                //    $("#" + maeAvalistaInput).val(avalistaDto.PessoaMaeDto.Nome);
+                //}
+
+                //$("#" + dataNascimentoAvalista).val(avalistaDto.DataNascimento);
+                //$("#" + dataAdmissaoAvalista).val(avalistaDto.DataAdmissao);
+                //$("#" + dataReferenciaAvalista).val(avalistaDto.DataReferenciaSalario);
+
+                $("#" + idAvalistaHidden).val(avalistaDto.Id);
+                $("#" + idAvalistaInput).val(avalistaDto.Nome);
+            }
+
+            $("#" + dataNascimentoAvalista).datepicker({
+                dateFormat: 'dd/mm/yy',
+                dayNames: ['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado'],
+                dayNamesMin: ['D', 'S', 'T', 'Q', 'Q', 'S', 'S', 'D'],
+                dayNamesShort: ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb', 'Dom'],
+                monthNames: ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'],
+                monthNamesShort: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'],
+                nextText: 'Próximo',
+                prevText: 'Anterior',
+                changeMonth: true,
+                changeYear: true
+            });
+
+            $("#" + dataAdmissaoAvalista).datepicker({
+                dateFormat: 'dd/mm/yy',
+                dayNames: ['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado'],
+                dayNamesMin: ['D', 'S', 'T', 'Q', 'Q', 'S', 'S', 'D'],
+                dayNamesShort: ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb', 'Dom'],
+                monthNames: ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'],
+                monthNamesShort: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'],
+                nextText: 'Próximo',
+                prevText: 'Anterior',
+                changeMonth: true,
+                changeYear: true
+            });
+
+            $("#" + dataReferenciaAvalista).datepicker({
+                dateFormat: 'dd/mm/yy',
+                dayNames: ['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado'],
+                dayNamesMin: ['D', 'S', 'T', 'Q', 'Q', 'S', 'S', 'D'],
+                dayNamesShort: ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb', 'Dom'],
+                monthNames: ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'],
+                monthNamesShort: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'],
+                nextText: 'Próximo',
+                prevText: 'Anterior',
+                changeMonth: true,
+                changeYear: true
+            });
+
+            $(".cpf").mask("000.000.000-00");
+            $(".cep").mask("00000-000");
+            $(".valor").mask("000.000.000,00", { reverse: true });
+            $(".data").mask("00/00/0000");
+            $(".celularDDD").mask("(##) 9999-99999").focusout(function (event) {
+                var target, phone, element;
+                target = (event.currentTarget) ? event.currentTarget : event.srcElement;
+                phone = target.value.replace(/\D/g, '');
+                element = $(target);
+                element.unmask();
+                if (phone.length > 10) {
+                    element.mask("(99) 99999-9999");
+                }
+                else {
+                    element.mask("(99) 9999-99999");
+                }
+            });
+
+            $("#" + idCep).change(function () {
+                var cep = $(this).val().replace("-", "");
+
+                // verificação cep
+                if (cep == null || cep == "") { return; }
+
+                $.ajax({
+                    dataType: "json",
+                    type: "GET",
+                    url: "https://viacep.com.br/ws/" + cep + "/json/",
+                    contentType: "application/json",
+                    success: function (data) {
+
+                        if (data == null || data.erro)
+                            return;
+
+                        $("#" + idLogradouroResidencia).val("");
+                        $("#" + idComplementoResidencia).val("");
+                        $("#" + idBairroResidencia).val("");
+                        $("#" + idCidadeResidencia).val("");
+                        $("#" + idUfResidencia).val("");
+                        $("#" + idNumeroResidencia).val("");
+
+                        $("#" + idLogradouroResidencia).val(data.logradouro);
+                        $("#" + idComplementoResidencia).val(data.complemento);
+                        $("#" + idBairroResidencia).val(data.bairro);
+                        $("#" + idCidadeResidencia).val(data.localidade);
+                        $("#" + idUfResidencia).val(data.uf);
+                    }
+                });
+
+            });
+
+            $("#" + conjugeAvalistaInput).autocomplete({
+                minLength: 3,
+                source: function (request, response) {
+
+                    var nome = null;
+                    var cpf = null;
+                    var numero = parseInt(request.term);
+
+                    if (isNaN(numero))
+                        nome = request.term;
+                    else
+                        cpf = request.term;
+
+                    $.getJSON("/PessoaFisica/ListarAutoComplete", { Nome: nome, Cpf: cpf, IdTipoPessoa: '@TipoPessoaDto.TipoPessoa.PessoaFísica.GetHashCode()', Ativo: true }, function (data, status, xhr) {
+                        // se não houver pessoa cadastrada, retorna mensagem ao usuário
+                        if (data == null || data.Data.length <= 0) {
+                            data.Data.push({ Id: 0, Nome: "Pessoa não cadastrada", Cpf: null });
+                        }
+                        response($.map(data.Data, function (pessoa)
+                        {
+                            if (pessoa.Cpf == null)
+                                return { label: pessoa.Nome, value: pessoa.Id }
+                            else
+                                return { label: pessoa.Nome + " (" + formatarCpf(pessoa.Cpf) + ")", value: pessoa.Id }
+                        }));
+                    });
+                },
+                select: function (event, ui) {
+                    // apaga a pesquisa do cliente selecionado
+                    if (ui.item.label == "Pessoa não cadastrada") {
+                        ui.item.label = "";
+                        ui.item.value = "";
+                        return;
+                    }
+                    $("#" + conjugeAvalistaHidden).val(ui.item.value);
+                    ui.item.label = ui.item.label;
+                    ui.item.value = ui.item.label;
+                },
+                change: function (event, ui) {
+                    if (ui == null || ui.item == undefined || ui.item == null) {
+                        $("#" + conjugeAvalistaInput).val("");
+                        $("#" + conjugeAvalistaHidden).val("");
+                    }
+                }
+            });
+
+            $("#" + paiAvalistaInput).autocomplete({
+                minLength: 3,
+                source: function (request, response) {
+
+                    var nome = null;
+                    var cpf = null;
+                    var numero = parseInt(request.term);
+
+                    if (isNaN(numero))
+                        nome = request.term;
+                    else
+                        cpf = request.term;
+
+                    $.getJSON("/PessoaFisica/ListarAutoComplete", { Nome: nome, Cpf: cpf, IdTipoPessoa: '@TipoPessoaDto.TipoPessoa.PessoaFísica.GetHashCode()', Ativo: true }, function (data, status, xhr) {
+                        // se não houver pessoa cadastrada, retorna mensagem ao usuário
+                        if (data == null || data.Data.length <= 0) {
+                            data.Data.push({ Id: 0, Nome: "Pessoa não cadastrada", Cpf: null });
+                        }
+                        response($.map(data.Data, function (pessoa)
+                        {
+                            if (pessoa.Cpf == null)
+                                return { label: pessoa.Nome, value: pessoa.Id }
+                            else
+                                return { label: pessoa.Nome + " (" + formatarCpf(pessoa.Cpf) + ")", value: pessoa.Id }
+                        }));
+                    });
+                },
+                select: function (event, ui) {
+                    // apaga a pesquisa do cliente selecionado
+                    if (ui.item.label == "Pessoa não cadastrada") {
+                        ui.item.label = "";
+                        ui.item.value = "";
+                        return;
+                    }
+                    $("#" + paiAvalistaHidden).val(ui.item.value);
+                    ui.item.label = ui.item.label;
+                    ui.item.value = ui.item.label;
+                },
+                change: function (event, ui) {
+                    if (ui == null || ui.item == undefined || ui.item == null) {
+                        $("#" + paiAvalistaInput).val("");
+                        $("#" + paiAvalistaHidden).val("");
+                    }
+                }
+            });
+
+            $("#" + maeAvalistaInput).autocomplete({
+                minLength: 3,
+                source: function (request, response) {
+
+                    var nome = null;
+                    var cpf = null;
+                    var numero = parseInt(request.term);
+
+                    if (isNaN(numero))
+                        nome = request.term;
+                    else
+                        cpf = request.term;
+
+                    $.getJSON("/PessoaFisica/ListarAutoComplete", { Nome: nome, Cpf: cpf, IdTipoPessoa: '@TipoPessoaDto.TipoPessoa.PessoaFísica.GetHashCode()', Ativo: true }, function (data, status, xhr) {
+                        // se não houver pessoa cadastrada, retorna mensagem ao usuário
+                        if (data == null || data.Data.length <= 0) {
+                            data.Data.push({ Id: 0, Nome: "Pessoa não cadastrada", Cpf: null });
+                        }
+                        response($.map(data.Data, function (pessoa)
+                        {
+                            if (pessoa.Cpf == null)
+                                return { label: pessoa.Nome, value: pessoa.Id }
+                            else
+                                return { label: pessoa.Nome + " (" + formatarCpf(pessoa.Cpf) + ")", value: pessoa.Id }
+                        }));
+                    });
+                },
+                select: function (event, ui) {
+                    // apaga a pesquisa do cliente selecionado
+                    if (ui.item.label == "Pessoa não cadastrada") {
+                        ui.item.label = "";
+                        ui.item.value = "";
+                        return;
+                    }
+                    $("#" + maeAvalistaHidden).val(ui.item.value);
+                    ui.item.label = ui.item.label;
+                    ui.item.value = ui.item.label;
+                },
+                change: function (event, ui) {
+                    if (ui == null || ui.item == undefined || ui.item == null) {
+                        $("#" + maeAvalistaInput).val("");
+                        $("#" + maeAvalistaHidden).val("");
+                    }
+                }
+            });
+
+            $("#" + idAvalistaInput).autocomplete({
+                minLength: 3,
+                source: function (request, response) {
+
+                    var nome = null;
+                    var cpf = null;
+                    var numero = parseInt(request.term);
+
+                    if (isNaN(numero))
+                        nome = request.term;
+                    else
+                        cpf = request.term;
+
+                    $.getJSON("/PessoaFisica/ListarAutoComplete", { Nome: nome, Cpf: cpf, IdTipoPessoa: '@TipoPessoaDto.TipoPessoa.PessoaFísica.GetHashCode()', Ativo: true }, function (data, status, xhr) {
+                        // se não houver pessoa cadastrada, retorna mensagem ao usuário
+                        if (data == null || data.Data.length <= 0) {
+                            data.Data.push({ Id: 0, Nome: "Pessoa não cadastrada", Cpf: null });
+                        }
+                        response($.map(data.Data, function (pessoa)
+                        {
+                            if (pessoa.Cpf == null)
+                                return { label: pessoa.Nome, value: pessoa.Id }
+                            else
+                                return { label: pessoa.Nome + " (" + formatarCpf(pessoa.Cpf) + ")", value: pessoa.Id }
+                        }));
+                    });
+                },
+                select: function (event, ui) {
+                    // apaga a pesquisa do cliente selecionado
+                    if (ui.item.label == "Pessoa não cadastrada") {
+                        ui.item.label = "";
+                        ui.item.value = "";
+                        return;
+                    }
+                    $("#" + idAvalistaHidden).val(ui.item.value);
+                    ui.item.label = ui.item.label;
+                    ui.item.value = ui.item.label;
+                },
+                change: function (event, ui) {
+                    if (ui == null || ui.item == undefined || ui.item == null) {
+                        $("#" + idAvalistaHidden).val("");
+                        $("#" + idAvalistaInput).val("");
+                    }
+                }
+            });
+
+            $(".excluirAvalista").click(function (o) {
+                (o.currentTarget).parentElement.parentElement.parentElement.parentElement.parentElement.parentElement.remove();
+            });
         }
 
         function carregarDadosModal(data) {
@@ -90,80 +458,12 @@
 
             // aba - avalistas
 
-            //$("#tbPessoaAvalista").DataTable().clear().draw();
+            $("#divAvalista .panel-avalista").each(function (i, o) {
+                $(o).remove();
+            });
+
             $(data.PessoaAvalistaDto).each(function (i, o) {
-
-                @*var idAvalistaHidden = Math.floor((Math.random() * 100000000) + 1);
-                var idAvalistaInput = Math.floor((Math.random() * 100000000) + 1);
-                var idTelefoneAvalista = Math.floor((Math.random() * 100000000) + 1);
-                var idEmailAvalista = Math.floor((Math.random() * 100000000) + 1);
-
-                $("#tbPessoaAvalista").DataTable().rows.add([
-                    {
-                        "Id": o.Id,
-                        "IdAvalista": "<input type='hidden' id='" + idAvalistaHidden + "' value='" + o.IdAvalista + "' class='avalista' /> <input id='" + idAvalistaInput + "' type='text' class='form-control text-center' placeholder='Avalista (Mínimo de 3 caracteres - CPF ou Nome)' value='" + o.AvalistaDto.Nome + " (" + formatarCpf(o.AvalistaDto.Cpf) + ")'/>",
-                        "Telefone": "<input id='" + idTelefoneAvalista + "' type='text' disabled='disabled' class='form-control telefoneAvalista' value='" + (o.AvalistaDto.PessoaTelefoneDto == null || o.AvalistaDto.PessoaTelefoneDto.length <= 0 ? "" : formatarTelefone(o.AvalistaDto.PessoaTelefoneDto[0].DDD?.toString() + o.AvalistaDto.PessoaTelefoneDto[0].Numero?.toString())) + "'/>",
-                        "Email": "<input id='" + idEmailAvalista + "' type='text' disabled='disabled' class='form-control emailAvalista' value='" + (o.AvalistaDto.PessoaEmailDto == null || o.AvalistaDto.PessoaEmailDto.length <= 0 ? "" : o.AvalistaDto.PessoaEmailDto[0].Email) + "'/>",
-                        "Acao": "<i class='glyphicon glyphicon-remove' title='Excluir' style='cursor: pointer'></i>"
-                    }]).draw();
-
-                $("#" + idAvalistaInput).autocomplete({
-                    minLength: 3,
-                    source: function (request, response) {
-
-                        var nome = null;
-                        var cpf = null;
-                        var numero = parseInt(request.term);
-
-                        if (isNaN(numero))
-                            nome = request.term;
-                        else
-                            cpf = request.term;
-
-                        $.getJSON("/PessoaFisica/ListarAutoComplete", { Nome: nome, Cpf: cpf, IdTipoPessoa: '@TipoPessoaDto.TipoPessoa.PessoaFísica.GetHashCode()', Ativo: true }, function (data, status, xhr) {
-                            // se não houver pessoa cadastrada, retorna mensagem ao usuário
-                            if (data == null || data.Data.length <= 0) {
-                                data.Data.push({ Id: 0, Nome: "Pessoa não cadastrada", Cpf: null });
-                            }
-                            response($.map(data.Data, function (pessoa)
-                            {
-                                if (pessoa.Cpf == null)
-                                    return { label: pessoa.Nome, value: pessoa.Id }
-                                else
-                                    return {
-                                        label: pessoa.Nome + " (" + formatarCpf(pessoa.Cpf) + ")",
-                                        value: pessoa.Id,
-                                        telefone: pessoa.PessoaTelefoneDto == null || pessoa.PessoaTelefoneDto.length <= 0 ? "" : formatarTelefone(pessoa.PessoaTelefoneDto[0].DDD?.toString() + pessoa.PessoaTelefoneDto[0].Numero?.toString()),
-                                        email: pessoa.PessoaEmailDto == null || pessoa.PessoaEmailDto.length <= 0 ? "" : pessoa.PessoaEmailDto[0].Email
-                                    }
-                            }));
-                        });
-                    },
-                    select: function (event, ui) {
-                        // apaga a pesquisa do cliente selecionado
-                        if (ui.item.label == "Pessoa não cadastrada") {
-                            ui.item.label = "";
-                            ui.item.value = "";
-                            $("#" + idTelefoneAvalista).val("");
-                            $("#" + idEmailAvalista).val("");
-                            return;
-                        }
-                        $("#" + idAvalistaHidden).val(ui.item.value);
-                        ui.item.label = ui.item.label;
-                        ui.item.value = ui.item.label;
-                        $("#" + idTelefoneAvalista).val(ui.item.telefone);
-                        $("#" + idEmailAvalista).val(ui.item.email);
-                    },
-                    change: function (event, ui) {
-                        if (ui == null || ui.item == undefined || ui.item == null) {
-                            $("#" + idAvalistaInput).val("");
-                            $("#" + idAvalistaHidden).val("");
-                            $("#" + idTelefoneAvalista).val("");
-                            $("#" + idEmailAvalista).val("");
-                        }
-                    }
-                });*@
-
+                carregarAvalista(o.AvalistaDto);
             });
 
             // aba - contatos
@@ -638,33 +938,6 @@
                     ]
             });
 
-            //var tbPessoaAvalista = $("#tbPessoaAvalista").DataTable({
-            //    "ordering": false,
-            //    "bFilter": false,
-            //    "paging": false,
-            //    "ordering": false,
-            //    "info": false,
-            //    "searching": false,
-            //    "autoWidth": false,
-            //    "language": {
-            //        "lengthMenu": "_MENU_ registros por página",
-            //        "zeroRecords": "Sem registros a serem exibidos",
-            //        "info": "Página _PAGE_ de _PAGES_",
-            //        "infoEmpty": "Sem registros a serem exibidos",
-            //        "infoFiltered": "(filtrados de _MAX_ total de registros)",
-            //        "sSearch": "Pesquisar",
-            //        "oPaginate": { "sNext": "Próximo", "sPrevious": "Anterior", "sFirst": "Primeiro", "sLast": "Último" }
-            //    },
-            //    "columns":
-            //        [
-            //            { "data": "Id", "className": "text-center", "visible": false, "width": "5%" },
-            //            { "data": "IdAvalista", "className": "text-center", "width": "50%" },
-            //            { "data": "Telefone", "className": "text-center", "width": "20%" },
-            //            { "data": "Email", "className": "text-center", "width": "20%" },
-            //            { "data": "Acao", "className": "text-center", "width": "5%" }
-            //        ]
-            //});
-
             var tbPessoaContrato = $("#tbPessoaContrato").DataTable({
                 "ordering": false,
                 "bFilter": false,
@@ -692,13 +965,6 @@
                         { "data": "SituacaoContratoDto.Nome", "className": "text-center" }
                     ]
             });
-
-            // botão excluir tbPessoaAvalista
-            //$('#tbPessoaAvalista tbody').on('click', 'i.glyphicon-remove', function () {
-            //    if (confirm("Deseja realmente excluir o avalista?")) {
-            //        tbPessoaAvalista.row($(this).parents('tr')).remove().draw();
-            //    }
-            //});
 
             // botão excluir tbPessoaTelefone
             $('#tbPessoaTelefone tbody').on('click', 'i.glyphicon-remove', function () {
@@ -948,64 +1214,58 @@
 
                 pessoaDto.PessoaAvalistaDto = [];
 
-                // vinculando um avalista
-                $(".avalista").each(function (i, o) {
-                    if ($(o).val() != "")
-                        pessoaDto.PessoaAvalistaDto.push({ "IdPessoa": pessoaDto.Id, "IdAvalista": $(o).val() });
+                $(".panel-avalista").each(function (i, o) {
+
+                    var idAvalistaHidden = $(o).find("input[id^='idAvalistaHidden_']").val();
+
+                    if (idAvalistaHidden == undefined)
+                        return;
+
+                    if (idAvalistaHidden != "") {
+                        // update
+                        pessoaDto.PessoaAvalistaDto.push({ "IdPessoa": pessoaDto.Id, "IdAvalista": idAvalistaHidden });
+                    }
+                    else {
+                        // insert
+                        pessoaDto.PessoaAvalistaDto.push({
+                            "AvalistaDto": {
+                                "IdUsuarioCadastro": '@usuarioDto.Id',
+                                "DataCadastro": '@DateTime.UtcNow',
+                                "IdTipoPessoa": '@TipoPessoaDto.TipoPessoa.PessoaFísica.GetHashCode()',
+                                "Nome": $(o).find("input[name='nomePessoaCadastroAvalista']").val(),
+                                "Cpf": $(o).find("input[name='cpfPessoaCadastroAvalista']").val(),
+                                "Rg": $(o).find("input[name='rgPessoaCadastroAvalista']").val(),
+                                "DataNascimento": $(o).find("input[id^='dataNascimentoPessoaCadastroAvalista']").val(),
+                                "CidadeNascimento": $(o).find("input[name='cidadeNascimentoPessoaCadastroAvalista']").val(),
+                                "UfNascimento": $(o).find("input[select='ufNascimentoPessoaCadastroAvalista']").val(),
+                                "IdEstadoCivil": $(o).find("select[name='estadoCivilPessoaCadastroAvalista']").val(),
+                                "IdRegimeCasamento": $(o).find("select[name='regimeCasamentoPessoaCadastroAvalista']").val(),
+                                "IdConjuge": $(o).find("input[id^='conjugeAvalistaHidden']").val(),
+                                "IdPai": $(o).find("input[id^='paiAvalistaHidden']").val(),
+                                "IdMae": $(o).find("input[id^='maeAvalistaHidden']").val(),
+                                "CepResidencia": $(o).find("input[id^='cepResidenciaPessoaCadastroAvalista']").val(),
+                                "LogradouroResidencia": $(o).find("input[id^='logradouroResidenciaPessoaCadastroAvalista']").val(),
+                                "NumeroResidencia": $(o).find("input[id^='numeroResidenciaPessoaCadastroAvalista']").val(),
+                                "ComplementoResidencia": $(o).find("input[id^='complementoResidenciaPessoaCadastroAvalista']").val(),
+                                "BairroResidencia": $(o).find("input[id^='bairroResidenciaPessoaCadastroAvalista']").val(),
+                                "CidadeResidencia": $(o).find("input[id^='cidadeResidenciaPessoaCadastroAvalista']").val(),
+                                "UfResidencia": $(o).find("select[id^='ufResidenciaPessoaCadastroAvalista']").val(),
+                                "IdTipoResidencia": $(o).find("select[name^='tipoResidenciaPessoaCadastroAvalista']").val(),
+                                "ValorAluguel": $(o).find("input[name^='valorAluguelPessoaCadastroAvalista']").val(),
+                                "TempoResidencial": $(o).find("input[name^='tempoResidencialPessoaCadastroAvalista']").val(),
+                                "Profissao": $(o).find("input[name^='profissaoPessoaCadastroAvalista']").val(),
+                                "EmpresaTrabalho": $(o).find("input[name^='empresaTrabalhoPessoaCadastroAvalista']").val(),
+                                "Cargo": $(o).find("input[name^='cargoPessoaCadastroAvalista']").val(),
+                                "DataAdmissao": $(o).find("input[id^='dataAdmissaoPessoaCadastroAvalista']").val(),
+                                "ValorSalario": $(o).find("input[name^='valorSalarioPessoaCadastroAvalista']").val(),
+                                "DataReferenciaSalario": $(o).find("input[id^='dataReferenciaSalarioPessoaCadastroAvalista']").val(),
+                                "EmpresaPessoal": $(o).find("input[name^='empresaPessoalPessoaCadastroAvalista']").val(),
+                                "TelefoneEmpresa": $(o).find("input[name^='telefoneEmpresaPessoaCadastroAvalista']").val(),
+                                "EmailEmpresa": $(o).find("input[name^='emailEmpresaPessoaCadastroAvalista']").val()
+                            }
+                        });
+                    }
                 });
-
-                // cadastrando um avalista
-                $("#divAvalista .panel-body").each(function (i, o) {
-
-                    pessoaDto.PessoaAvalistaDto.push({
-                        "AvalistaDto": {
-                            "IdTipoPessoa": '@TipoPessoaDto.TipoPessoa.PessoaFísica.GetHashCode()',
-                            "Nome": $(o).find("input[name='nomePessoaCadastroAvalista']").val(),
-                            "Cpf": $(o).find("input[name='cpfPessoaCadastroAvalista']").val(),
-                            "Rg": $(o).find("input[name='rgPessoaCadastroAvalista']").val(),
-                            "DataNascimento": $(o).find("input[name='dataNascimentoPessoaCadastroAvalista']").val(),
-                            "CidadeNascimento": $(o).find("input[name='cidadeNascimentoPessoaCadastroAvalista']").val(),
-                            "UfNascimento": $(o).find("input[name='ufNascimentoPessoaCadastroAvalista']").val(),
-                            "IdEstadoCivil": $(o).find("input[name='estadoCivilPessoaCadastroAvalista']").val(),
-                            "IdRegimeCasamento": $(o).find("input[name='regimeCasamentoPessoaCadastroAvalista']").val(),
-                            "IdConjuge": $(o).find("input[id^='conjugeAvalistaHidden']").val(),
-                            "IdPai": $(o).find("input[id^='paiAvalistaHidden']").val(),
-                            "IdMae": $(o).find("input[id^='maeAvalistaHidden']").val(),
-                            "CepResidencia": $(o).find("input[id^='cepResidenciaPessoaCadastroAvalista']").val(),
-                            "LogradouroResidencia": $(o).find("input[id^='logradouroResidenciaPessoaCadastroAvalista']").val(),
-                            "NumeroResidencia": $(o).find("input[id^='numeroResidenciaPessoaCadastroAvalista']").val(),
-                            "ComplementoResidencia": $(o).find("input[id^='complementoResidenciaPessoaCadastroAvalista']").val(),
-                            "BairroResidencia": $(o).find("input[id^='bairroResidenciaPessoaCadastroAvalista']").val(),
-                            "CidadeResidencia": $(o).find("input[id^='cidadeResidenciaPessoaCadastroAvalista']").val(),
-                            "UfResidencia": $(o).find("input[id^='ufResidenciaPessoaCadastroAvalista']").val(),
-                            "IdTipoResidencia": $(o).find("input[name^='tipoResidenciaPessoaCadastroAvalista']").val(),
-                            "ValorAluguel": $(o).find("input[name^='valorAluguelPessoaCadastroAvalista']").val(),
-                            "TempoResidencial": $(o).find("input[name^='tempoResidencialPessoaCadastroAvalista']").val(),
-                            "Profissao": $(o).find("input[name^='profissaoPessoaCadastroAvalista']").val(),
-                            "EmpresaTrabalho": $(o).find("input[name^='empresaTrabalhoPessoaCadastroAvalista']").val(),
-                            "Cargo": $(o).find("input[name^='cargoPessoaCadastroAvalista']").val(),
-                            "DataAdmissao": $(o).find("input[id^='dataAdmissaoPessoaCadastroAvalista']").val(),
-                            "ValorSalario": $(o).find("input[name^='valorSalarioPessoaCadastroAvalista']").val(),
-                            "DataReferenciaSalario": $(o).find("input[id^='dataReferenciaSalarioPessoaCadastroAvalista']").val(),
-                            "EmpresaPessoal": $(o).find("input[name^='empresaPessoalPessoaCadastroAvalista']").val(),
-                            "TelefoneEmpresa": $(o).find("input[name^='telefoneEmpresaPessoaCadastroAvalista']").val(),
-                            "EmailEmpresa": $(o).find("input[name^='emailEmpresaPessoaCadastroAvalista']").val()
-                        }
-                    });
-
-                });
-
-                debugger;
-
-                //tbPessoaAvalista.rows().every(function (rowIdx, tableLoop, rowLoop) {
-
-                //    pessoaDto.PessoaAvalistaDto.push
-                //        ({
-                //            "Id": this.data().Id,
-                //            "IdPessoa": pessoaDto.Id,
-                //            "IdAvalista": $($(".avalista")[rowIdx]).val()
-                //        });
-                //});
 
                 // aba - contatos
 
@@ -1281,340 +1541,7 @@
             });
 
             $("#btnAdicionarPessoaAvalista").click(function () {
-
-                var idRandomAvalista = Math.floor((Math.random() * 100000000) + 1);
-
-                var htmlPartial = $("#panelPessoaCadastroAvalista").html();
-
-                // seta novos ids para cada collapse panel
-                htmlPartial = htmlPartial.replace("idCollapse", idRandomAvalista);
-                htmlPartial = htmlPartial.replace("idCollapse", idRandomAvalista);
-                htmlPartial = htmlPartial.replace("idCollapse", idRandomAvalista);
-
-                var idCep = "cepResidenciaPessoaCadastroAvalista_" + idRandomAvalista;
-                var idLogradouroResidencia = "logradouroResidenciaPessoaCadastroAvalista_" + idRandomAvalista;
-                var idNumeroResidencia = "numeroResidenciaPessoaCadastroAvalista_" + idRandomAvalista;
-                var idComplementoResidencia = "complementoResidenciaPessoaCadastroAvalista_" + idRandomAvalista;
-                var idBairroResidencia = "bairroResidenciaPessoaCadastroAvalista_" + idRandomAvalista;
-                var idCidadeResidencia = "cidadeResidenciaPessoaCadastroAvalista_" + idRandomAvalista;
-                var idUfResidencia = "ufResidenciaPessoaCadastroAvalista_" + idRandomAvalista;
-
-                htmlPartial = htmlPartial.replace("cepResidenciaPessoaCadastroAvalista", idCep);
-                htmlPartial = htmlPartial.replace("logradouroResidenciaPessoaCadastroAvalista", idLogradouroResidencia);
-                htmlPartial = htmlPartial.replace("numeroResidenciaPessoaCadastroAvalista", idNumeroResidencia);
-                htmlPartial = htmlPartial.replace("complementoResidenciaPessoaCadastroAvalista", idComplementoResidencia);
-                htmlPartial = htmlPartial.replace("bairroResidenciaPessoaCadastroAvalista", idBairroResidencia);
-                htmlPartial = htmlPartial.replace("cidadeResidenciaPessoaCadastroAvalista", idCidadeResidencia);
-                htmlPartial = htmlPartial.replace("ufResidenciaPessoaCadastroAvalista", idUfResidencia);
-
-                var conjugeAvalistaInput = "conjugeAvalistaInput_" + idRandomAvalista;
-                var conjugeAvalistaHidden = "conjugeAvalistaHidden_" + idRandomAvalista;
-                var paiAvalistaInput = "paiAvalistaInput_" + idRandomAvalista;
-                var paiAvalistaHidden = "paiAvalistaHidden_" + idRandomAvalista;
-                var maeAvalistaInput = "maeAvalistaInput_" + idRandomAvalista;
-                var maeAvalistaHidden = "maeAvalistaHidden_" + idRandomAvalista;
-
-                htmlPartial = htmlPartial.replace("conjugeAvalistaInput", conjugeAvalistaInput);
-                htmlPartial = htmlPartial.replace("conjugeAvalistaHidden", conjugeAvalistaHidden);
-                htmlPartial = htmlPartial.replace("paiAvalistaInput", paiAvalistaInput);
-                htmlPartial = htmlPartial.replace("paiAvalistaHidden", paiAvalistaHidden);
-                htmlPartial = htmlPartial.replace("maeAvalistaInput", maeAvalistaInput);
-                htmlPartial = htmlPartial.replace("maeAvalistaHidden", maeAvalistaHidden);
-
-                var dataNascimentoAvalista = "dataNascimentoPessoaCadastroAvalista_" + idRandomAvalista;
-                var dataAdmissaoAvalista = "dataAdmissaoPessoaCadastroAvalista_" + idRandomAvalista;
-                var dataReferenciaAvalista = "dataReferenciaSalarioPessoaCadastroAvalista_" + idRandomAvalista;
-
-                htmlPartial = htmlPartial.replace("dataNascimentoPessoaCadastroAvalista", dataNascimentoAvalista);
-                htmlPartial = htmlPartial.replace("dataAdmissaoPessoaCadastroAvalista", dataAdmissaoAvalista);
-                htmlPartial = htmlPartial.replace("dataReferenciaSalarioPessoaCadastroAvalista", dataReferenciaAvalista);
-
-                var idAvalistaHidden = "idAvalistaHidden_" + idRandomAvalista;
-                var idAvalistaInput = "idAvalistaInput_" + idRandomAvalista;
-
-                htmlPartial = htmlPartial.replace("idAvalistaHidden", idAvalistaHidden);
-                htmlPartial = htmlPartial.replace("idAvalistaInput", idAvalistaInput);
-
-                $("#divAvalista").append(htmlPartial);
-
-                $("#" + dataNascimentoAvalista).datepicker({
-                    dateFormat: 'dd/mm/yy',
-                    dayNames: ['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado'],
-                    dayNamesMin: ['D', 'S', 'T', 'Q', 'Q', 'S', 'S', 'D'],
-                    dayNamesShort: ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb', 'Dom'],
-                    monthNames: ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'],
-                    monthNamesShort: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'],
-                    nextText: 'Próximo',
-                    prevText: 'Anterior',
-                    changeMonth: true,
-                    changeYear: true
-                });
-
-                $("#" + dataAdmissaoAvalista).datepicker({
-                    dateFormat: 'dd/mm/yy',
-                    dayNames: ['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado'],
-                    dayNamesMin: ['D', 'S', 'T', 'Q', 'Q', 'S', 'S', 'D'],
-                    dayNamesShort: ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb', 'Dom'],
-                    monthNames: ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'],
-                    monthNamesShort: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'],
-                    nextText: 'Próximo',
-                    prevText: 'Anterior',
-                    changeMonth: true,
-                    changeYear: true
-                });
-
-                $("#" + dataReferenciaAvalista).datepicker({
-                    dateFormat: 'dd/mm/yy',
-                    dayNames: ['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado'],
-                    dayNamesMin: ['D', 'S', 'T', 'Q', 'Q', 'S', 'S', 'D'],
-                    dayNamesShort: ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb', 'Dom'],
-                    monthNames: ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'],
-                    monthNamesShort: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'],
-                    nextText: 'Próximo',
-                    prevText: 'Anterior',
-                    changeMonth: true,
-                    changeYear: true
-                });
-
-                $(".cpf").mask("000.000.000-00");
-                $(".cep").mask("00000-000");
-                $(".valor").mask("000.000.000,00", { reverse: true });
-                $(".data").mask("00/00/0000");
-                $(".celularDDD").mask("(##) 9999-99999").focusout(function (event) {
-                    var target, phone, element;
-                    target = (event.currentTarget) ? event.currentTarget : event.srcElement;
-                    phone = target.value.replace(/\D/g, '');
-                    element = $(target);
-                    element.unmask();
-                    if (phone.length > 10) {
-                        element.mask("(99) 99999-9999");
-                    }
-                    else {
-                        element.mask("(99) 9999-99999");
-                    }
-                });
-
-                $("#" + idCep).change(function () {
-                    var cep = $(this).val().replace("-", "");
-
-                    // verificação cep
-                    if (cep == null || cep == "") { return; }
-
-                    $.ajax({
-                        dataType: "json",
-                        type: "GET",
-                        url: "https://viacep.com.br/ws/" + cep + "/json/",
-                        contentType: "application/json",
-                        success: function (data) {
-
-                            if (data == null || data.erro)
-                                return;
-
-                            $("#" + idLogradouroResidencia).val("");
-                            $("#" + idComplementoResidencia).val("");
-                            $("#" + idBairroResidencia).val("");
-                            $("#" + idCidadeResidencia).val("");
-                            $("#" + idUfResidencia).val("");
-                            $("#" + idNumeroResidencia).val("");
-
-                            $("#" + idLogradouroResidencia).val(data.logradouro);
-                            $("#" + idComplementoResidencia).val(data.complemento);
-                            $("#" + idBairroResidencia).val(data.bairro);
-                            $("#" + idCidadeResidencia).val(data.localidade);
-                            $("#" + idUfResidencia).val(data.uf);
-                        }
-                    });
-
-                });
-
-                $("#" + conjugeAvalistaInput).autocomplete({
-                    minLength: 3,
-                    source: function (request, response) {
-
-                        var nome = null;
-                        var cpf = null;
-                        var numero = parseInt(request.term);
-
-                        if (isNaN(numero))
-                            nome = request.term;
-                        else
-                            cpf = request.term;
-
-                        $.getJSON("/PessoaFisica/ListarAutoComplete", { Nome: nome, Cpf: cpf, IdTipoPessoa: '@TipoPessoaDto.TipoPessoa.PessoaFísica.GetHashCode()', Ativo: true }, function (data, status, xhr) {
-                            // se não houver pessoa cadastrada, retorna mensagem ao usuário
-                            if (data == null || data.Data.length <= 0) {
-                                data.Data.push({ Id: 0, Nome: "Pessoa não cadastrada", Cpf: null });
-                            }
-                            response($.map(data.Data, function (pessoa)
-                            {
-                                if (pessoa.Cpf == null)
-                                    return { label: pessoa.Nome, value: pessoa.Id }
-                                else
-                                    return { label: pessoa.Nome + " (" + formatarCpf(pessoa.Cpf) + ")", value: pessoa.Id }
-                            }));
-                        });
-                    },
-                    select: function (event, ui) {
-                        // apaga a pesquisa do cliente selecionado
-                        if (ui.item.label == "Pessoa não cadastrada") {
-                            ui.item.label = "";
-                            ui.item.value = "";
-                            return;
-                        }
-                        $("#" + conjugeAvalistaHidden).val(ui.item.value);
-                        ui.item.label = ui.item.label;
-                        ui.item.value = ui.item.label;
-                    },
-                    change: function (event, ui) {
-                        if (ui == null || ui.item == undefined || ui.item == null) {
-                            $("#" + conjugeAvalistaInput).val("");
-                            $("#" + conjugeAvalistaHidden).val("");
-                        }
-                    }
-                });
-
-                $("#" + paiAvalistaInput).autocomplete({
-                    minLength: 3,
-                    source: function (request, response) {
-
-                        var nome = null;
-                        var cpf = null;
-                        var numero = parseInt(request.term);
-
-                        if (isNaN(numero))
-                            nome = request.term;
-                        else
-                            cpf = request.term;
-
-                        $.getJSON("/PessoaFisica/ListarAutoComplete", { Nome: nome, Cpf: cpf, IdTipoPessoa: '@TipoPessoaDto.TipoPessoa.PessoaFísica.GetHashCode()', Ativo: true }, function (data, status, xhr) {
-                            // se não houver pessoa cadastrada, retorna mensagem ao usuário
-                            if (data == null || data.Data.length <= 0) {
-                                data.Data.push({ Id: 0, Nome: "Pessoa não cadastrada", Cpf: null });
-                            }
-                            response($.map(data.Data, function (pessoa)
-                            {
-                                if (pessoa.Cpf == null)
-                                    return { label: pessoa.Nome, value: pessoa.Id }
-                                else
-                                    return { label: pessoa.Nome + " (" + formatarCpf(pessoa.Cpf) + ")", value: pessoa.Id }
-                            }));
-                        });
-                    },
-                    select: function (event, ui) {
-                        // apaga a pesquisa do cliente selecionado
-                        if (ui.item.label == "Pessoa não cadastrada") {
-                            ui.item.label = "";
-                            ui.item.value = "";
-                            return;
-                        }
-                        $("#" + paiAvalistaHidden).val(ui.item.value);
-                        ui.item.label = ui.item.label;
-                        ui.item.value = ui.item.label;
-                    },
-                    change: function (event, ui) {
-                        if (ui == null || ui.item == undefined || ui.item == null) {
-                            $("#" + paiAvalistaInput).val("");
-                            $("#" + paiAvalistaHidden).val("");
-                        }
-                    }
-                });
-
-                $("#" + maeAvalistaInput).autocomplete({
-                    minLength: 3,
-                    source: function (request, response) {
-
-                        var nome = null;
-                        var cpf = null;
-                        var numero = parseInt(request.term);
-
-                        if (isNaN(numero))
-                            nome = request.term;
-                        else
-                            cpf = request.term;
-
-                        $.getJSON("/PessoaFisica/ListarAutoComplete", { Nome: nome, Cpf: cpf, IdTipoPessoa: '@TipoPessoaDto.TipoPessoa.PessoaFísica.GetHashCode()', Ativo: true }, function (data, status, xhr) {
-                            // se não houver pessoa cadastrada, retorna mensagem ao usuário
-                            if (data == null || data.Data.length <= 0) {
-                                data.Data.push({ Id: 0, Nome: "Pessoa não cadastrada", Cpf: null });
-                            }
-                            response($.map(data.Data, function (pessoa)
-                            {
-                                if (pessoa.Cpf == null)
-                                    return { label: pessoa.Nome, value: pessoa.Id }
-                                else
-                                    return { label: pessoa.Nome + " (" + formatarCpf(pessoa.Cpf) + ")", value: pessoa.Id }
-                            }));
-                        });
-                    },
-                    select: function (event, ui) {
-                        // apaga a pesquisa do cliente selecionado
-                        if (ui.item.label == "Pessoa não cadastrada") {
-                            ui.item.label = "";
-                            ui.item.value = "";
-                            return;
-                        }
-                        $("#" + maeAvalistaHidden).val(ui.item.value);
-                        ui.item.label = ui.item.label;
-                        ui.item.value = ui.item.label;
-                    },
-                    change: function (event, ui) {
-                        if (ui == null || ui.item == undefined || ui.item == null) {
-                            $("#" + maeAvalistaInput).val("");
-                            $("#" + maeAvalistaHidden).val("");
-                        }
-                    }
-                });
-
-                $("#" + idAvalistaInput).autocomplete({
-                    minLength: 3,
-                    source: function (request, response) {
-
-                        var nome = null;
-                        var cpf = null;
-                        var numero = parseInt(request.term);
-
-                        if (isNaN(numero))
-                            nome = request.term;
-                        else
-                            cpf = request.term;
-
-                        $.getJSON("/PessoaFisica/ListarAutoComplete", { Nome: nome, Cpf: cpf, IdTipoPessoa: '@TipoPessoaDto.TipoPessoa.PessoaFísica.GetHashCode()', Ativo: true }, function (data, status, xhr) {
-                            // se não houver pessoa cadastrada, retorna mensagem ao usuário
-                            if (data == null || data.Data.length <= 0) {
-                                data.Data.push({ Id: 0, Nome: "Pessoa não cadastrada", Cpf: null });
-                            }
-                            response($.map(data.Data, function (pessoa)
-                            {
-                                if (pessoa.Cpf == null)
-                                    return { label: pessoa.Nome, value: pessoa.Id }
-                                else
-                                    return { label: pessoa.Nome + " (" + formatarCpf(pessoa.Cpf) + ")", value: pessoa.Id }
-                            }));
-                        });
-                    },
-                    select: function (event, ui) {
-                        // apaga a pesquisa do cliente selecionado
-                        if (ui.item.label == "Pessoa não cadastrada") {
-                            ui.item.label = "";
-                            ui.item.value = "";
-                            return;
-                        }
-                        $("#" + idAvalistaHidden).val(ui.item.value);
-                        ui.item.label = ui.item.label;
-                        ui.item.value = ui.item.label;
-                    },
-                    change: function (event, ui) {
-                        if (ui == null || ui.item == undefined || ui.item == null) {
-                            $("#" + idAvalistaHidden).val("");
-                            $("#" + idAvalistaInput).val("");
-                        }
-                    }
-                });
-
-                $(".excluirAvalista").click(function (o) {
-                    (o.currentTarget).parentElement.parentElement.parentElement.parentElement.parentElement.remove();
-                });
-
+                carregarAvalista(null);
             });
 
             $("#btnExportar").click(function () {
@@ -1979,20 +1906,6 @@
                                         </div>
                                     </div>
                                     <div id="divAvalista" class="form-group">
-                                        @*<div class="table-responsive rolagem-vertical">
-                                                <table id="tbPessoaAvalista" class="table nowrap" style="width: 100%">
-                                                    <thead>
-                                                        <tr>
-                                                            <td class="text-center" style="width: 5%"><b>Id</b></td>
-                                                            <td class="text-center" style="width: 50%"><b>Avalista</b></td>
-                                                            <td class="text-center" style="width: 20%"><b>Telefone</b></td>
-                                                            <td class="text-center" style="width: 20%"><b>E-mail</b></td>
-                                                            <td class="text-center" style="width: 5%"><b>Ação</b></td>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody></tbody>
-                                                </table>
-                                            </div>*@
                                     </div>
                                 </div>
                                 <div class="tab-pane" id="contato" role="tabpanel" aria-labelledby="contato-tab">
