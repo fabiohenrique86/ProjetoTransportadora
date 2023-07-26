@@ -41,7 +41,7 @@ namespace ProjetoTransportadora.Web.Filters
                 {
                     logBusiness.Incluir(new LogDto() { Exception = exception.ToString(), DataCadastro = DateTime.UtcNow });
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
 
                 }
