@@ -98,17 +98,29 @@
 
             var conjugeAvalistaInput = "conjugeAvalistaInput_" + idRandomAvalista;
             var conjugeAvalistaHidden = "conjugeAvalistaHidden_" + idRandomAvalista;
+            var conjugeAvalistaAdicionar = "conjugeAvalistaAdicionar_" + idRandomAvalista;
+            var conjugeAvalistaEditar = "conjugeAvalistaEditar_" + idRandomAvalista;
+
             var paiAvalistaInput = "paiAvalistaInput_" + idRandomAvalista;
             var paiAvalistaHidden = "paiAvalistaHidden_" + idRandomAvalista;
+            var paiAvalistaAdicionar = "paiAvalistaAdicionar_" + idRandomAvalista;
+
             var maeAvalistaInput = "maeAvalistaInput_" + idRandomAvalista;
             var maeAvalistaHidden = "maeAvalistaHidden_" + idRandomAvalista;
+            var maeAvalistaAdicionar = "maeAvalistaAdicionar_" + idRandomAvalista;
 
             htmlPartial = htmlPartial.replace("conjugeAvalistaInput", conjugeAvalistaInput);
             htmlPartial = htmlPartial.replace("conjugeAvalistaHidden", conjugeAvalistaHidden);
+            htmlPartial = htmlPartial.replace("conjugeAvalistaAdicionar", conjugeAvalistaAdicionar);
+            htmlPartial = htmlPartial.replace("conjugeAvalistaEditar", conjugeAvalistaEditar);
+
             htmlPartial = htmlPartial.replace("paiAvalistaInput", paiAvalistaInput);
             htmlPartial = htmlPartial.replace("paiAvalistaHidden", paiAvalistaHidden);
+            htmlPartial = htmlPartial.replace("paiAvalistaAdicionar", paiAvalistaAdicionar);
+
             htmlPartial = htmlPartial.replace("maeAvalistaInput", maeAvalistaInput);
             htmlPartial = htmlPartial.replace("maeAvalistaHidden", maeAvalistaHidden);
+            htmlPartial = htmlPartial.replace("maeAvalistaAdicionar", maeAvalistaAdicionar);
 
             var dataNascimentoAvalista = "dataNascimentoPessoaCadastroAvalista_" + idRandomAvalista;
             var dataAdmissaoAvalista = "dataAdmissaoPessoaCadastroAvalista_" + idRandomAvalista;
@@ -125,6 +137,18 @@
             htmlPartial = htmlPartial.replace("idAvalistaInput", idAvalistaInput);
 
             $("#divAvalista").append(htmlPartial);
+
+            $("#" + paiAvalistaAdicionar).data("id", paiAvalistaHidden);
+            $("#" + paiAvalistaAdicionar).data("nome", paiAvalistaInput);
+
+            $("#" + maeAvalistaAdicionar).data("id", maeAvalistaHidden);
+            $("#" + maeAvalistaAdicionar).data("nome", maeAvalistaInput);
+
+            $("#" + conjugeAvalistaAdicionar).data("id", conjugeAvalistaHidden);
+            $("#" + conjugeAvalistaAdicionar).data("nome", conjugeAvalistaInput);
+
+            $("#" + conjugeAvalistaEditar).data("id", conjugeAvalistaHidden);
+            $("#" + conjugeAvalistaEditar).data("nome", conjugeAvalistaInput);
 
             // setando os valores, se houverem
             if (avalistaDto != null) {
@@ -335,8 +359,13 @@
                 },
                 change: function (event, ui) {
                     if (ui == null || ui.item == undefined || ui.item == null) {
-                        $("#" + paiAvalistaInput).val("");
-                        $("#" + paiAvalistaHidden).val("");
+                        if (confirm("Deseja cadastrar essa pessoa?")) {
+                            incluirPessoaCadastroAuxiliarSimples($("#" + paiAvalistaInput).val(), '@usuarioDto.Id', paiAvalistaHidden, paiAvalistaInput);
+                        }
+                        else {
+                            $("#" + paiAvalistaInput).val("");
+                            $("#" + paiAvalistaHidden).val("");
+                        }
                     }
                 }
             });
@@ -381,8 +410,13 @@
                 },
                 change: function (event, ui) {
                     if (ui == null || ui.item == undefined || ui.item == null) {
-                        $("#" + maeAvalistaInput).val("");
-                        $("#" + maeAvalistaHidden).val("");
+                        if (confirm("Deseja cadastrar essa pessoa?")) {
+                            incluirPessoaCadastroAuxiliarSimples($("#" + maeAvalistaInput).val(), '@usuarioDto.Id', maeAvalistaHidden, maeAvalistaInput);
+                        }
+                        else {
+                            $("#" + maeAvalistaInput).val("");
+                            $("#" + maeAvalistaHidden).val("");
+                        }
                     }
                 }
             });
@@ -930,10 +964,10 @@
                     [
                         { "data": "Id", "className": "text-center", "visible": false, "width": "5%" },
                         { "data": "DataReferencia", "className": "text-center", "width": "5%" },
-                        { "data": "IdTipoReferencia", "className": "text-center", "width": "10%" },
-                        { "data": "Telefone", "className": "text-center", "width": "10%" },
+                        { "data": "IdTipoReferencia", "className": "text-center", "width": "15%" },
+                        { "data": "Telefone", "className": "text-center", "width": "15%" },
                         { "data": "Nome", "className": "text-center", "width": "20%" },
-                        { "data": "Descricao", "className": "text-center", "width": "45%" },
+                        { "data": "Descricao", "className": "text-center", "width": "35%" },
                         { "data": "Acao", "className": "text-center", "width": "5%" }
                     ]
             });
