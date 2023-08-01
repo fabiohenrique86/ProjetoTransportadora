@@ -697,6 +697,8 @@
                     pessoaDto.PessoaEmailDto[0].IdPessoa = pessoaDto.Id;
                 }
             }
+            else
+                pessoaDto.PessoaEmailDto = [];
 
             var telefone = $("#telefonePessoaCadastroAuxiliar").val().replace(/\D/g, "");
 
@@ -712,6 +714,8 @@
                     pessoaDto.PessoaTelefoneDto[0].IdPessoa = pessoaDto.Id;
                 }
             }
+            else
+                pessoaDto.PessoaTelefoneDto = [];
 
             pessoaDto.CepResidencia = $("#cepResidenciaPessoaCadastroAuxiliar").val();
             pessoaDto.LogradouroResidencia = $("#logradouroResidenciaPessoaCadastroAuxiliar").val();
