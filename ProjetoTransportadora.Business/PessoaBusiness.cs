@@ -95,9 +95,12 @@ namespace ProjetoTransportadora.Business
                     {
                         pessoaAvalistaDto.IdPessoa = idPessoa;
 
-                        // caso exista avalista, cadastra-o
-                        if (pessoaAvalistaDto.AvalistaDto != null)
+                        // caso não exista avalista, cadastra-o
+                        // caso exista, atualiza-o
+                        if (pessoaAvalistaDto.IdAvalista <= 0)
                             pessoaAvalistaDto.IdAvalista = this.Incluir(pessoaAvalistaDto.AvalistaDto);
+                        else
+                            this.AlterarAvalista(pessoaAvalistaDto.AvalistaDto);
 
                         pessoaAvalistaBusiness.Incluir(pessoaAvalistaDto);
                     }
@@ -254,12 +257,14 @@ namespace ProjetoTransportadora.Business
                 pessoaAvalistaBusiness.Excluir(pessoaDto.Id);
                 foreach (var pessoaAvalistaDto in pessoaDto.PessoaAvalistaDto)
                 {
-                    // caso exista avalista, cadastra-o
-                    if (pessoaAvalistaDto.AvalistaDto != null)
-                    {
+                    // caso não exista avalista, cadastra-o
+                    // caso exista, atualiza-o
+                    if (pessoaAvalistaDto.IdAvalista <= 0) { 
                         pessoaAvalistaDto.IdAvalista = this.Incluir(pessoaAvalistaDto.AvalistaDto);
                         pessoaAvalistaDto.IdPessoa = pessoaDto.Id;
                     }
+                    else
+                        this.AlterarAvalista(pessoaAvalistaDto.AvalistaDto);
 
                     pessoaAvalistaBusiness.Incluir(pessoaAvalistaDto);
                 }
@@ -313,6 +318,25 @@ namespace ProjetoTransportadora.Business
             }
 
             pessoaRepository.AlterarStatus(pessoaDto);
+        }
+
+        public void AlterarAvalista(PessoaDto pessoaDto)
+        {
+            if (pessoaDto == null)
+                throw new BusinessException("PessoaDto é nulo");
+
+            if (pessoaDto.Id <= 0)
+                throw new BusinessException("Id é obrigatório");
+
+            var existePessoa = pessoaRepository.Existe(new PessoaDto() { Id = pessoaDto.Id });
+
+            if (!existePessoa)
+                throw new BusinessException($"Pessoa Id ({pessoaDto.Id}) não está cadastrada");
+
+            pessoaDto.Cpf = pessoaDto.Cpf?.Replace(".", "").Replace("-", "").Trim();
+            pessoaDto.Cnpj = pessoaDto.Cnpj?.Replace(".", "").Replace("-", "").Replace("/", "");
+
+            pessoaRepository.Alterar(pessoaDto);
         }
     }
 }

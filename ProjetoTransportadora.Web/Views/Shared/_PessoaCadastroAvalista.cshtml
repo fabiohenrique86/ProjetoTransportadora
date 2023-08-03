@@ -32,8 +32,8 @@
                     <div class="form-group">
                         <div class="row">
                             <div class="col-md-7">
-                                <label for="nomePessoaCadastroAvalista">Nome:</label>
-                                <input name="nomePessoaCadastroAvalista" type="text" class="form-control" />
+                                <label>Nome:</label>
+                                <input id="nomePessoaCadastroAvalista" type="text" class="form-control" />
                             </div>
                         </div>
                     </div>
@@ -41,11 +41,11 @@
                         <div class="row">
                             <div class="col-md-3">
                                 <label>Cpf:</label>
-                                <input name="cpfPessoaCadastroAvalista" type="text" class="form-control cpf" />
+                                <input id="cpfPessoaCadastroAvalista" type="text" class="form-control cpf" />
                             </div>
                             <div class="col-md-2">
                                 <label>Rg:</label>
-                                <input name="rgPessoaCadastroAvalista" type="text" class="form-control" />
+                                <input id="rgPessoaCadastroAvalista" type="text" class="form-control" />
                             </div>
                             <div class="col-md-2">
                                 <label>Data Nascimento:</label>
@@ -57,11 +57,11 @@
                         <div class="row">
                             <div class="col-md-4">
                                 <label>Naturalidade:</label>
-                                <input name="cidadeNascimentoPessoaCadastroAvalista" type="text" class="form-control" />
+                                <input id="cidadeNascimentoPessoaCadastroAvalista" type="text" class="form-control" />
                             </div>
                             <div class="col-md-3">
                                 <label>Uf:</label>
-                                @Html.DropDownList("ufNascimentoPessoaCadastroAvalista", new SelectList(ViewBag.Estado, "Uf", "Nome"), "Uf", new { @class = "form-control" })
+                                @Html.DropDownList("ufNascimentoPessoaCadastroAvalista", new SelectList(ViewBag.Estado, "Uf", "Nome"), "Uf", new { @id = "ufNascimentoPessoaCadastroAvalista", @class = "form-control", Name = string.Empty })
                             </div>
                         </div>
                     </div>
@@ -69,11 +69,11 @@
                         <div class="row">
                             <div class="col-md-3">
                                 <label>Estado Civil:</label>
-                                @Html.DropDownList("estadoCivilPessoaCadastroAvalista", new SelectList(ViewBag.EstadoCivil, "Id", "Nome"), "Estado Civil", new { @class = "form-control" })
+                                @Html.DropDownList("estadoCivilPessoaCadastroAvalista", new SelectList(ViewBag.EstadoCivil, "Id", "Nome"), "Estado Civil", new { @id = "estadoCivilPessoaCadastroAvalista", @class = "form-control", Name = string.Empty })
                             </div>
                             <div class="col-md-4">
                                 <label>Regime de Casamento:</label>
-                                @Html.DropDownList("regimeCasamentoPessoaCadastroAvalista", new SelectList(ViewBag.RegimeCasamento, "Id", "Nome"), "Regime de Casamento", new { @class = "form-control" })
+                                @Html.DropDownList("regimeCasamentoPessoaCadastroAvalista", new SelectList(ViewBag.RegimeCasamento, "Id", "Nome"), "Regime de Casamento", new { @id = "regimeCasamentoPessoaCadastroAvalista", @class = "form-control", Name = string.Empty })
                             </div>
                         </div>
                     </div>
@@ -154,7 +154,7 @@
                             </div>
                             <div class="col-md-3">
                                 <label>Uf:</label>
-                                @Html.DropDownList("ufResidenciaPessoaCadastroAvalista", new SelectList(ViewBag.Estado, "Uf", "Nome"), "Uf", new { @class = "form-control" })
+                                @Html.DropDownList("ufResidenciaPessoaCadastroAvalista", new SelectList(ViewBag.Estado, "Uf", "Nome"), "Uf", new { @id = "ufResidenciaPessoaCadastroAvalista", @class = "form-control", Name = string.Empty })
                             </div>
                         </div>
                     </div>
@@ -162,15 +162,15 @@
                         <div class="row">
                             <div class="col-md-3">
                                 <label>Tipo Residência:</label>
-                                @Html.DropDownList("tipoResidenciaPessoaCadastroAvalista", new SelectList(ViewBag.TipoResidencia, "Id", "Nome"), "Tipo Residência", new { @class = "form-control" })
+                                @Html.DropDownList("tipoResidenciaPessoaCadastroAvalista", new SelectList(ViewBag.TipoResidencia, "Id", "Nome"), "Tipo Residência", new { @id = "tipoResidenciaPessoaCadastroAvalista", @class = "form-control", Name = string.Empty })
                             </div>
                             <div class="col-md-2">
                                 <label>Valor Aluguel:</label>
-                                <input name="valorAluguelPessoaCadastroAvalista" type="text" class="form-control valor" />
+                                <input id="valorAluguelPessoaCadastroAvalista" type="text" class="form-control valor" />
                             </div>
                             <div class="col-md-2">
                                 <label>Tempo na Residência:</label>
-                                <input name="tempoResidencialPessoaCadastroAvalista" type="text" class="form-control" />
+                                <input id="tempoResidencialPessoaCadastroAvalista" type="text" class="form-control ano" placeholder="Meses" />
                             </div>
                         </div>
                     </div>
@@ -178,7 +178,7 @@
                         <div class="row">
                             <div class="col-md-6">
                                 <label>Profissão:</label>
-                                <input name="profissaoPessoaCadastroAvalista" type="text" class="form-control" />
+                                <input id="profissaoPessoaCadastroAvalista" type="text" class="form-control" />
                             </div>
                         </div>
                     </div>
@@ -186,7 +186,7 @@
                         <div class="row">
                             <div class="col-md-6">
                                 <label>Empresa Trabalho:</label>
-                                <input name="empresaTrabalhoPessoaCadastroAvalista" type="text" class="form-control" />
+                                <input id="empresaTrabalhoPessoaCadastroAvalista" type="text" class="form-control" />
                             </div>
                         </div>
                     </div>
@@ -194,7 +194,7 @@
                         <div class="row">
                             <div class="col-md-4">
                                 <label>Cargo:</label>
-                                <input name="cargoPessoaCadastroAvalista" type="text" class="form-control" />
+                                <input id="cargoPessoaCadastroAvalista" type="text" class="form-control" />
                             </div>
                             <div class="col-md-2">
                                 <label>Data Admissão:</label>
@@ -206,7 +206,7 @@
                         <div class="row">
                             <div class="col-md-3">
                                 <label>Valor Salário:</label>
-                                <input name="valorSalarioPessoaCadastroAvalista" type="text" class="form-control valor" />
+                                <input id="valorSalarioPessoaCadastroAvalista" type="text" class="form-control valor" />
                             </div>
                             <div class="col-md-3">
                                 <label>Data Referência Salário:</label>
@@ -218,7 +218,7 @@
                         <div class="row">
                             <div class="col-md-6">
                                 <label>Empresa Pessoal:</label>
-                                <input name="empresaPessoalPessoaCadastroAvalista" type="text" class="form-control" />
+                                <input id="empresaPessoalPessoaCadastroAvalista" type="text" class="form-control" />
                             </div>
                         </div>
                     </div>
@@ -226,11 +226,11 @@
                         <div class="row">
                             <div class="col-md-3">
                                 <label>Telefone Empresa:</label>
-                                <input name="telefoneEmpresaPessoaCadastroAvalista" type="text" class="form-control celularDDD" />
+                                <input id="telefoneEmpresaPessoaCadastroAvalista" type="text" class="form-control celularDDD" />
                             </div>
                             <div class="col-md-3">
-                                <label for="emailEmpresaPessoaCadastroAvalista">E-mail Empresa:</label>
-                                <input name="emailEmpresaPessoaCadastroAvalista" type="text" class="form-control" />
+                                <label>E-mail Empresa:</label>
+                                <input id="emailEmpresaPessoaCadastroAvalista" type="text" class="form-control" />
                             </div>
                         </div>
                     </div>

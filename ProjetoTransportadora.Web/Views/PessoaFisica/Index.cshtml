@@ -39,10 +39,12 @@
             if (opcao) {
                 $("#modalPessoaFisica input, #modalPessoaFisica select, #modalPessoaFisica textarea").removeProp("disabled");
                 $("i.glyphicon-remove").show();
+                $(".input-group").removeProp("disabled");
             }
             else {
                 $("#modalPessoaFisica input, #modalPessoaFisica select, #modalPessoaFisica textarea").prop("disabled", "disabled");
                 $("i.glyphicon-remove").hide();
+                $(".input-group").prop("disabled", "disabled");
             }
         }
 
@@ -62,6 +64,7 @@
             $("#valorSalario").val("");
             $("#dataReferenciaSalario").val("");
 
+            $("#divAvalista").html("");
             $("#tbPessoaTelefone").DataTable().clear().draw();
             $("#tbPessoaEmail").DataTable().clear().draw();
             $("#tbPessoaHistorico").DataTable().clear().draw();
@@ -69,16 +72,98 @@
             $("#tbPessoaContrato").DataTable().clear().draw();
         }
 
-        function carregarAvalista(avalistaDto) {
+        function carregarAvalista(idAvalistaInput, avalistaDto) {
 
-            var idRandomAvalista = Math.floor((Math.random() * 100000000) + 1);
+            var o = $("#" + idAvalistaInput).parent().parent().parent().parent().parent().parent();
+
+            $(o).find("input[id^='nomePessoaCadastroAvalista']").val(avalistaDto.Nome);
+            $(o).find("input[id^='cpfPessoaCadastroAvalista']").val(formatarCpf(avalistaDto.Cpf));
+            $(o).find("input[id^='rgPessoaCadastroAvalista']").val(avalistaDto.Rg);
+
+            if (avalistaDto.DataNascimento != null)
+                $(o).find("input[id^='dataNascimentoPessoaCadastroAvalista']").val(moment(avalistaDto.DataNascimento).format("DD/MM/YYYY"));
+
+            $(o).find("input[id^='cidadeNascimentoPessoaCadastroAvalista']").val(avalistaDto.CidadeNascimento);
+            $(o).find("select[id^='ufNascimentoPessoaCadastroAvalista']").val(avalistaDto.UfNascimento);
+            $(o).find("select[id^='estadoCivilPessoaCadastroAvalista']").val(avalistaDto.IdEstadoCivil);
+            $(o).find("select[id^='regimeCasamentoPessoaCadastroAvalista']").val(avalistaDto.IdRegimeCasamento);
+
+            if (avalistaDto.PessoaConjugeDto != null) {
+                $(o).find("input[id^='conjugeAvalistaHidden']").val(avalistaDto.PessoaConjugeDto.Id);
+                $(o).find("input[id^='conjugeAvalistaInput']").val(avalistaDto.PessoaConjugeDto.Nome);
+            }
+
+            if (avalistaDto.PessoaPaiDto != null) {
+                $(o).find("input[id^='paiAvalistaHidden']").val(avalistaDto.PessoaPaiDto.Id);
+                $(o).find("input[id^='paiAvalistaInput']").val(avalistaDto.PessoaPaiDto.Nome);
+            }
+
+            if (avalistaDto.PessoaMaeDto != null) {
+                $(o).find("input[id^='maeAvalistaHidden']").val(avalistaDto.PessoaMaeDto.Id);
+                $(o).find("input[id^='maeAvalistaInput']").val(avalistaDto.PessoaMaeDto.Nome);
+            }
+
+            $(o).find("input[id^='cepResidenciaPessoaCadastroAvalista']").val(avalistaDto.CepResidencia);
+            $(o).find("input[id^='logradouroResidenciaPessoaCadastroAvalista']").val(avalistaDto.LogradouroResidencia);
+            $(o).find("input[id^='numeroResidenciaPessoaCadastroAvalista']").val(avalistaDto.NumeroResidencia);
+            $(o).find("input[id^='complementoResidenciaPessoaCadastroAvalista']").val(avalistaDto.ComplementoResidencia);
+            $(o).find("input[id^='bairroResidenciaPessoaCadastroAvalista']").val(avalistaDto.BairroResidencia);
+            $(o).find("input[id^='cidadeResidenciaPessoaCadastroAvalista']").val(avalistaDto.CidadeResidencia);
+            $(o).find("select[id^='ufResidenciaPessoaCadastroAvalista']").val(avalistaDto.UfResidencia);
+            $(o).find("select[id^='tipoResidenciaPessoaCadastroAvalista']").val(avalistaDto.IdTipoResidencia);
+
+            if (avalistaDto.ValorAluguel != null)
+                $(o).find("input[id^='valorAluguelPessoaCadastroAvalista']").val(Globalize.format(avalistaDto.ValorAluguel, "n2"));
+
+            $(o).find("input[id^='tempoResidencialPessoaCadastroAvalista']").val(avalistaDto.TempoResidencial);
+            $(o).find("input[id^='profissaoPessoaCadastroAvalista']").val(avalistaDto.Profissao);
+            $(o).find("input[id^='empresaTrabalhoPessoaCadastroAvalista']").val(avalistaDto.EmpresaTrabalho);
+            $(o).find("input[id^='cargoPessoaCadastroAvalista']").val(avalistaDto.Cargo);
+
+            if (avalistaDto.DataAdmissao != null)
+                $(o).find("input[id^='dataAdmissaoPessoaCadastroAvalista']").val(moment(avalistaDto.DataAdmissao).format("DD/MM/YYYY"));
+
+            if (avalistaDto.ValorSalario != null)
+                $(o).find("input[id^='valorSalarioPessoaCadastroAvalista']").val(Globalize.format(avalistaDto.ValorSalario, "n2"));
+
+            if (avalistaDto.DataReferenciaSalario != null)
+                $(o).find("input[id^='dataReferenciaSalarioPessoaCadastroAvalista']").val(moment(avalistaDto.DataReferenciaSalario).format("DD/MM/YYYY"));
+
+            $(o).find("input[id^='empresaPessoalPessoaCadastroAvalista']").val(avalistaDto.EmpresaPessoal);
+            $(o).find("input[id^='telefoneEmpresaPessoaCadastroAvalista']").val(formatarTelefone(avalistaDto.TelefoneEmpresa));
+            $(o).find("input[id^='emailEmpresaPessoaCadastroAvalista']").val(avalistaDto.EmailEmpresa);
+        }
+
+        function carregarModalAvalista(avalistaDto) {
 
             var htmlPartial = $("#panelPessoaCadastroAvalista").html();
+
+            // set o id randômico
+            var idRandomAvalista = Math.floor((Math.random() * 100000000) + 1);
 
             // seta novos ids para cada collapse panel
             htmlPartial = htmlPartial.replace("idCollapse", idRandomAvalista);
             htmlPartial = htmlPartial.replace("idCollapse", idRandomAvalista);
             htmlPartial = htmlPartial.replace("idCollapse", idRandomAvalista);
+
+            var idNomePessoaCadastroAvalista = "nomePessoaCadastroAvalista_" + idRandomAvalista;
+            var idCpfPessoaCadastroAvalista = "cpfPessoaCadastroAvalista_" + idRandomAvalista;
+            var idRgPessoaCadastroAvalista = "rgPessoaCadastroAvalista_" + idRandomAvalista;
+            var idCidadeNascimentoPessoaCadastroAvalista = "cidadeNascimentoPessoaCadastroAvalista_" + idRandomAvalista;
+            var idUfNascimentoPessoaCadastroAvalista = "ufNascimentoPessoaCadastroAvalista_" + idRandomAvalista;
+            var idEstadoCivilPessoaCadastroAvalista = "estadoCivilPessoaCadastroAvalista_" + idRandomAvalista;
+            var idRegimeCasamentoPessoaCadastroAvalista = "regimeCasamentoPessoaCadastroAvalista_" + idRandomAvalista;
+
+            var idTipoResidenciaPessoaCadastroAvalista = "tipoResidenciaPessoaCadastroAvalista_" + idRandomAvalista;
+            var idValorAluguelPessoaCadastroAvalista = "valorAluguelPessoaCadastroAvalista_" + idRandomAvalista;
+            var idTempoResidencialPessoaCadastroAvalista = "tempoResidencialPessoaCadastroAvalista_" + idRandomAvalista;
+            var idProfissaoPessoaCadastroAvalista = "profissaoPessoaCadastroAvalista_" + idRandomAvalista;
+            var idEmpresaTrabalhoPessoaCadastroAvalista = "empresaTrabalhoPessoaCadastroAvalista_" + idRandomAvalista;
+            var idCargoPessoaCadastroAvalista = "cargoPessoaCadastroAvalista_" + idRandomAvalista;
+            var idValorSalarioPessoaCadastroAvalista = "valorSalarioPessoaCadastroAvalista_" + idRandomAvalista;
+            var idEmpresaPessoalPessoaCadastroAvalista = "empresaPessoalPessoaCadastroAvalista_" + idRandomAvalista;
+            var idTelefoneEmpresaPessoaCadastroAvalista = "telefoneEmpresaPessoaCadastroAvalista_" + idRandomAvalista;
+            var idEmailEmpresaPessoaCadastroAvalista = "emailEmpresaPessoaCadastroAvalista_" + idRandomAvalista;
 
             var idCep = "cepResidenciaPessoaCadastroAvalista_" + idRandomAvalista;
             var idLogradouroResidencia = "logradouroResidenciaPessoaCadastroAvalista_" + idRandomAvalista;
@@ -87,6 +172,25 @@
             var idBairroResidencia = "bairroResidenciaPessoaCadastroAvalista_" + idRandomAvalista;
             var idCidadeResidencia = "cidadeResidenciaPessoaCadastroAvalista_" + idRandomAvalista;
             var idUfResidencia = "ufResidenciaPessoaCadastroAvalista_" + idRandomAvalista;
+
+            htmlPartial = htmlPartial.replace("nomePessoaCadastroAvalista", idNomePessoaCadastroAvalista);
+            htmlPartial = htmlPartial.replace("cpfPessoaCadastroAvalista", idCpfPessoaCadastroAvalista);
+            htmlPartial = htmlPartial.replace("rgPessoaCadastroAvalista", idRgPessoaCadastroAvalista);
+            htmlPartial = htmlPartial.replace("cidadeNascimentoPessoaCadastroAvalista", idCidadeNascimentoPessoaCadastroAvalista);
+            htmlPartial = htmlPartial.replace("ufNascimentoPessoaCadastroAvalista", idUfNascimentoPessoaCadastroAvalista);
+            htmlPartial = htmlPartial.replace("estadoCivilPessoaCadastroAvalista", idEstadoCivilPessoaCadastroAvalista);
+            htmlPartial = htmlPartial.replace("regimeCasamentoPessoaCadastroAvalista", idRegimeCasamentoPessoaCadastroAvalista);
+
+            htmlPartial = htmlPartial.replace("tipoResidenciaPessoaCadastroAvalista", idTipoResidenciaPessoaCadastroAvalista);
+            htmlPartial = htmlPartial.replace("valorAluguelPessoaCadastroAvalista", idValorAluguelPessoaCadastroAvalista);
+            htmlPartial = htmlPartial.replace("tempoResidencialPessoaCadastroAvalista", idTempoResidencialPessoaCadastroAvalista);
+            htmlPartial = htmlPartial.replace("profissaoPessoaCadastroAvalista", idProfissaoPessoaCadastroAvalista);
+            htmlPartial = htmlPartial.replace("empresaTrabalhoPessoaCadastroAvalista", idEmpresaTrabalhoPessoaCadastroAvalista);
+            htmlPartial = htmlPartial.replace("cargoPessoaCadastroAvalista", idCargoPessoaCadastroAvalista);
+            htmlPartial = htmlPartial.replace("valorSalarioPessoaCadastroAvalista", idValorSalarioPessoaCadastroAvalista);
+            htmlPartial = htmlPartial.replace("empresaPessoalPessoaCadastroAvalista", idEmpresaPessoalPessoaCadastroAvalista);
+            htmlPartial = htmlPartial.replace("telefoneEmpresaPessoaCadastroAvalista", idTelefoneEmpresaPessoaCadastroAvalista);
+            htmlPartial = htmlPartial.replace("emailEmpresaPessoaCadastroAvalista", idEmailEmpresaPessoaCadastroAvalista);
 
             htmlPartial = htmlPartial.replace("cepResidenciaPessoaCadastroAvalista", idCep);
             htmlPartial = htmlPartial.replace("logradouroResidenciaPessoaCadastroAvalista", idLogradouroResidencia);
@@ -152,32 +256,62 @@
 
             // setando os valores, se houverem
             if (avalistaDto != null) {
-                //$("#" + idCep).val(avalistaDto.CepResidencia);
-                //$("#" + idLogradouroResidencia).val(avalistaDto.LogradouroResidencia);
-                //$("#" + idNumeroResidencia).val(avalistaDto.NumeroResidencia);
-                //$("#" + idComplementoResidencia).val(avalistaDto.ComplementoResidencia);
-                //$("#" + idBairroResidencia).val(avalistaDto.BairroResidencia);
-                //$("#" + idCidadeResidencia).val(avalistaDto.CidadeResidencia);
-                //$("#" + idUfResidencia).val(avalistaDto.UfResidencia);
 
-                //if (avalistaDto.PessoaConjugeDto != null) {
-                //    $("#" + conjugeAvalistaHidden).val(avalistaDto.PessoaConjugeDto.Id);
-                //    $("#" + conjugeAvalistaInput).val(avalistaDto.PessoaConjugeDto.Nome);
-                //}
+                $("#" + idNomePessoaCadastroAvalista).val(avalistaDto.Nome);
+                $("#" + idCpfPessoaCadastroAvalista).val(avalistaDto.Cpf);
+                $("#" + idRgPessoaCadastroAvalista).val(avalistaDto.Rg);
+                $("#" + idCidadeNascimentoPessoaCadastroAvalista).val(avalistaDto.CidadeNascimento);
+                $("#" + idUfNascimentoPessoaCadastroAvalista).val(avalistaDto.UfNascimento);
+                $("#" + idEstadoCivilPessoaCadastroAvalista).val(avalistaDto.IdEstadoCivil);
+                $("#" + idRegimeCasamentoPessoaCadastroAvalista).val(avalistaDto.IdRegimeCasamento);
+                $("#" + idTipoResidenciaPessoaCadastroAvalista).val(avalistaDto.IdTipoResidencia);
 
-                //if (avalistaDto.PessoaPaiDto != null) {
-                //    $("#" + paiAvalistaHidden).val(avalistaDto.PessoaPaiDto.Id);
-                //    $("#" + paiAvalistaInput).val(avalistaDto.PessoaPaiDto.Nome);
-                //}
+                if (avalistaDto.ValorAluguel != null)
+                    $("#" + idValorAluguelPessoaCadastroAvalista).val(Globalize.format(avalistaDto.ValorAluguel, "n2"));
 
-                //if (avalistaDto.PessoaMaeDto != null) {
-                //    $("#" + maeAvalistaHidden).val(avalistaDto.PessoaMaeDto.Id);
-                //    $("#" + maeAvalistaInput).val(avalistaDto.PessoaMaeDto.Nome);
-                //}
+                $("#" + idTempoResidencialPessoaCadastroAvalista).val(avalistaDto.TempoResidencial);
+                $("#" + idProfissaoPessoaCadastroAvalista).val(avalistaDto.Profissao);
+                $("#" + idEmpresaTrabalhoPessoaCadastroAvalista).val(avalistaDto.EmpresaTrabalho);
+                $("#" + idCargoPessoaCadastroAvalista).val(avalistaDto.Cargo);
 
-                //$("#" + dataNascimentoAvalista).val(avalistaDto.DataNascimento);
-                //$("#" + dataAdmissaoAvalista).val(avalistaDto.DataAdmissao);
-                //$("#" + dataReferenciaAvalista).val(avalistaDto.DataReferenciaSalario);
+                if (avalistaDto.ValorSalario != null)
+                    $("#" + idValorSalarioPessoaCadastroAvalista).val(Globalize.format(avalistaDto.ValorSalario, "n2"));
+
+                $("#" + idEmpresaPessoalPessoaCadastroAvalista).val(avalistaDto.EmpresaPessoal);
+                $("#" + idTelefoneEmpresaPessoaCadastroAvalista).val(avalistaDto.TelefoneEmpresa);
+                $("#" + idEmailEmpresaPessoaCadastroAvalista).val(avalistaDto.EmailEmpresa);
+
+                $("#" + idCep).val(avalistaDto.CepResidencia);
+                $("#" + idLogradouroResidencia).val(avalistaDto.LogradouroResidencia);
+                $("#" + idNumeroResidencia).val(avalistaDto.NumeroResidencia);
+                $("#" + idComplementoResidencia).val(avalistaDto.ComplementoResidencia);
+                $("#" + idBairroResidencia).val(avalistaDto.BairroResidencia);
+                $("#" + idCidadeResidencia).val(avalistaDto.CidadeResidencia);
+                $("#" + idUfResidencia).val(avalistaDto.UfResidencia);
+
+                if (avalistaDto.PessoaConjugeDto != null) {
+                    $("#" + conjugeAvalistaHidden).val(avalistaDto.PessoaConjugeDto.Id);
+                    $("#" + conjugeAvalistaInput).val(avalistaDto.PessoaConjugeDto.Nome);
+                }
+
+                if (avalistaDto.PessoaPaiDto != null) {
+                    $("#" + paiAvalistaHidden).val(avalistaDto.PessoaPaiDto.Id);
+                    $("#" + paiAvalistaInput).val(avalistaDto.PessoaPaiDto.Nome);
+                }
+
+                if (avalistaDto.PessoaMaeDto != null) {
+                    $("#" + maeAvalistaHidden).val(avalistaDto.PessoaMaeDto.Id);
+                    $("#" + maeAvalistaInput).val(avalistaDto.PessoaMaeDto.Nome);
+                }
+
+                if (avalistaDto.DataNascimento != null)
+                    $("#" + dataNascimentoAvalista).val(moment(avalistaDto.DataNascimento).format("DD/MM/YYYY"));
+
+                if (avalistaDto.DataAdmissao != null)
+                    $("#" + dataAdmissaoAvalista).val(moment(avalistaDto.DataAdmissao).format("DD/MM/YYYY"));
+
+                if (avalistaDto.DataReferenciaSalario != null)
+                    $("#" + dataReferenciaAvalista).val(moment(avalistaDto.DataReferenciaSalario).format("DD/MM/YYYY"));
 
                 $("#" + idAvalistaHidden).val(avalistaDto.Id);
                 $("#" + idAvalistaInput).val(avalistaDto.Nome);
@@ -226,6 +360,7 @@
             $(".cep").mask("00000-000");
             $(".valor").mask("000.000.000,00", { reverse: true });
             $(".data").mask("00/00/0000");
+            $(".ano").mask("0000");
             $(".celularDDD").mask("(##) 9999-99999").focusout(function (event) {
                 var target, phone, element;
                 target = (event.currentTarget) ? event.currentTarget : event.srcElement;
@@ -434,7 +569,7 @@
                     else
                         cpf = request.term;
 
-                    $.getJSON("/PessoaFisica/ListarAutoComplete", { Nome: nome, Cpf: cpf, IdTipoPessoa: '@TipoPessoaDto.TipoPessoa.PessoaFísica.GetHashCode()', Ativo: true }, function (data, status, xhr) {
+                    $.getJSON("/PessoaFisica/Listar", { Nome: nome, Cpf: cpf, IdTipoPessoa: '@TipoPessoaDto.TipoPessoa.PessoaFísica.GetHashCode()', Ativo: true }, function (data, status, xhr) {
                         // se não houver pessoa cadastrada, retorna mensagem ao usuário
                         if (data == null || data.Data.length <= 0) {
                             data.Data.push({ Id: 0, Nome: "Pessoa não cadastrada", Cpf: null });
@@ -442,9 +577,9 @@
                         response($.map(data.Data, function (pessoa)
                         {
                             if (pessoa.Cpf == null)
-                                return { label: pessoa.Nome, value: pessoa.Id }
+                                return { label: pessoa.Nome, value: pessoa.Id, avalistaDto: pessoa }
                             else
-                                return { label: pessoa.Nome + " (" + formatarCpf(pessoa.Cpf) + ")", value: pessoa.Id }
+                                return { label: pessoa.Nome + " (" + formatarCpf(pessoa.Cpf) + ")", value: pessoa.Id, avalistaDto: pessoa }
                         }));
                     });
                 },
@@ -455,6 +590,9 @@
                         ui.item.value = "";
                         return;
                     }
+
+                    carregarAvalista(idAvalistaInput, ui.item.avalistaDto);
+
                     $("#" + idAvalistaHidden).val(ui.item.value);
                     ui.item.label = ui.item.label;
                     ui.item.value = ui.item.label;
@@ -497,7 +635,7 @@
             });
 
             $(data.PessoaAvalistaDto).each(function (i, o) {
-                carregarAvalista(o.AvalistaDto);
+                carregarModalAvalista(o.AvalistaDto);
             });
 
             // aba - contatos
@@ -1255,50 +1393,48 @@
                     if (idAvalistaHidden == undefined)
                         return;
 
-                    if (idAvalistaHidden != "") {
-                        // update
-                        pessoaDto.PessoaAvalistaDto.push({ "IdPessoa": pessoaDto.Id, "IdAvalista": idAvalistaHidden });
-                    }
-                    else {
-                        // insert
-                        pessoaDto.PessoaAvalistaDto.push({
-                            "AvalistaDto": {
-                                "IdUsuarioCadastro": '@usuarioDto.Id',
-                                "DataCadastro": '@DateTime.UtcNow',
-                                "IdTipoPessoa": '@TipoPessoaDto.TipoPessoa.PessoaFísica.GetHashCode()',
-                                "Nome": $(o).find("input[name='nomePessoaCadastroAvalista']").val(),
-                                "Cpf": $(o).find("input[name='cpfPessoaCadastroAvalista']").val(),
-                                "Rg": $(o).find("input[name='rgPessoaCadastroAvalista']").val(),
-                                "DataNascimento": $(o).find("input[id^='dataNascimentoPessoaCadastroAvalista']").val(),
-                                "CidadeNascimento": $(o).find("input[name='cidadeNascimentoPessoaCadastroAvalista']").val(),
-                                "UfNascimento": $(o).find("input[select='ufNascimentoPessoaCadastroAvalista']").val(),
-                                "IdEstadoCivil": $(o).find("select[name='estadoCivilPessoaCadastroAvalista']").val(),
-                                "IdRegimeCasamento": $(o).find("select[name='regimeCasamentoPessoaCadastroAvalista']").val(),
-                                "IdConjuge": $(o).find("input[id^='conjugeAvalistaHidden']").val(),
-                                "IdPai": $(o).find("input[id^='paiAvalistaHidden']").val(),
-                                "IdMae": $(o).find("input[id^='maeAvalistaHidden']").val(),
-                                "CepResidencia": $(o).find("input[id^='cepResidenciaPessoaCadastroAvalista']").val(),
-                                "LogradouroResidencia": $(o).find("input[id^='logradouroResidenciaPessoaCadastroAvalista']").val(),
-                                "NumeroResidencia": $(o).find("input[id^='numeroResidenciaPessoaCadastroAvalista']").val(),
-                                "ComplementoResidencia": $(o).find("input[id^='complementoResidenciaPessoaCadastroAvalista']").val(),
-                                "BairroResidencia": $(o).find("input[id^='bairroResidenciaPessoaCadastroAvalista']").val(),
-                                "CidadeResidencia": $(o).find("input[id^='cidadeResidenciaPessoaCadastroAvalista']").val(),
-                                "UfResidencia": $(o).find("select[id^='ufResidenciaPessoaCadastroAvalista']").val(),
-                                "IdTipoResidencia": $(o).find("select[name^='tipoResidenciaPessoaCadastroAvalista']").val(),
-                                "ValorAluguel": $(o).find("input[name^='valorAluguelPessoaCadastroAvalista']").val(),
-                                "TempoResidencial": $(o).find("input[name^='tempoResidencialPessoaCadastroAvalista']").val(),
-                                "Profissao": $(o).find("input[name^='profissaoPessoaCadastroAvalista']").val(),
-                                "EmpresaTrabalho": $(o).find("input[name^='empresaTrabalhoPessoaCadastroAvalista']").val(),
-                                "Cargo": $(o).find("input[name^='cargoPessoaCadastroAvalista']").val(),
-                                "DataAdmissao": $(o).find("input[id^='dataAdmissaoPessoaCadastroAvalista']").val(),
-                                "ValorSalario": $(o).find("input[name^='valorSalarioPessoaCadastroAvalista']").val(),
-                                "DataReferenciaSalario": $(o).find("input[id^='dataReferenciaSalarioPessoaCadastroAvalista']").val(),
-                                "EmpresaPessoal": $(o).find("input[name^='empresaPessoalPessoaCadastroAvalista']").val(),
-                                "TelefoneEmpresa": $(o).find("input[name^='telefoneEmpresaPessoaCadastroAvalista']").val(),
-                                "EmailEmpresa": $(o).find("input[name^='emailEmpresaPessoaCadastroAvalista']").val()
-                            }
-                        });
-                    }
+                    pessoaDto.PessoaAvalistaDto.push({
+                        "IdPessoa": pessoaDto.Id,
+                        "IdAvalista": idAvalistaHidden,
+                        "AvalistaDto":
+                        {
+                            "Id": idAvalistaHidden,
+                            "IdUsuarioCadastro": '@usuarioDto.Id',
+                            "DataCadastro": '@DateTime.UtcNow',
+                            "IdTipoPessoa": '@TipoPessoaDto.TipoPessoa.PessoaFísica.GetHashCode()',
+                            "Nome": $(o).find("input[id^='nomePessoaCadastroAvalista']").val(),
+                            "Cpf": $(o).find("input[id^='cpfPessoaCadastroAvalista']").val(),
+                            "Rg": $(o).find("input[id^='rgPessoaCadastroAvalista']").val(),
+                            "DataNascimento": $(o).find("input[id^='dataNascimentoPessoaCadastroAvalista']").val(),
+                            "CidadeNascimento": $(o).find("input[id^='cidadeNascimentoPessoaCadastroAvalista']").val(),
+                            "UfNascimento": $(o).find("select[id^='ufNascimentoPessoaCadastroAvalista']").val(),
+                            "IdEstadoCivil": $(o).find("select[id^='estadoCivilPessoaCadastroAvalista']").val(),
+                            "IdRegimeCasamento": $(o).find("select[id^='regimeCasamentoPessoaCadastroAvalista']").val(),
+                            "IdConjuge": $(o).find("input[id^='conjugeAvalistaHidden']").val(),
+                            "IdPai": $(o).find("input[id^='paiAvalistaHidden']").val(),
+                            "IdMae": $(o).find("input[id^='maeAvalistaHidden']").val(),
+                            "CepResidencia": $(o).find("input[id^='cepResidenciaPessoaCadastroAvalista']").val(),
+                            "LogradouroResidencia": $(o).find("input[id^='logradouroResidenciaPessoaCadastroAvalista']").val(),
+                            "NumeroResidencia": $(o).find("input[id^='numeroResidenciaPessoaCadastroAvalista']").val(),
+                            "ComplementoResidencia": $(o).find("input[id^='complementoResidenciaPessoaCadastroAvalista']").val(),
+                            "BairroResidencia": $(o).find("input[id^='bairroResidenciaPessoaCadastroAvalista']").val(),
+                            "CidadeResidencia": $(o).find("input[id^='cidadeResidenciaPessoaCadastroAvalista']").val(),
+                            "UfResidencia": $(o).find("select[id^='ufResidenciaPessoaCadastroAvalista']").val(),
+                            "IdTipoResidencia": $(o).find("select[id^='tipoResidenciaPessoaCadastroAvalista']").val(),
+                            "ValorAluguel": $(o).find("input[id^='valorAluguelPessoaCadastroAvalista']").val(),
+                            "TempoResidencial": $(o).find("input[id^='tempoResidencialPessoaCadastroAvalista']").val(),
+                            "Profissao": $(o).find("input[id^='profissaoPessoaCadastroAvalista']").val(),
+                            "EmpresaTrabalho": $(o).find("input[id^='empresaTrabalhoPessoaCadastroAvalista']").val(),
+                            "Cargo": $(o).find("input[id^='cargoPessoaCadastroAvalista']").val(),
+                            "DataAdmissao": $(o).find("input[id^='dataAdmissaoPessoaCadastroAvalista']").val(),
+                            "ValorSalario": $(o).find("input[id^='valorSalarioPessoaCadastroAvalista']").val(),
+                            "DataReferenciaSalario": $(o).find("input[id^='dataReferenciaSalarioPessoaCadastroAvalista']").val(),
+                            "EmpresaPessoal": $(o).find("input[id^='empresaPessoalPessoaCadastroAvalista']").val(),
+                            "TelefoneEmpresa": $(o).find("input[id^='telefoneEmpresaPessoaCadastroAvalista']").val(),
+                            "EmailEmpresa": $(o).find("input[id^='emailEmpresaPessoaCadastroAvalista']").val()
+                        }
+                    });
+
                 });
 
                 // aba - contatos
@@ -1575,7 +1711,7 @@
             });
 
             $("#btnAdicionarPessoaAvalista").click(function () {
-                carregarAvalista(null);
+                carregarModalAvalista(null);
             });
 
             $("#btnExportar").click(function () {
@@ -1865,7 +2001,7 @@
                                                 </div>
                                                 <div class="col-md-2">
                                                     <label for="tempoResidencial">Tempo na Residência:</label>
-                                                    <input id="tempoResidencial" type="text" class="form-control" />
+                                                    <input id="tempoResidencial" type="text" class="form-control ano" placeholder="Meses" />
                                                 </div>
                                             </div>
                                         </div>
@@ -1939,7 +2075,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div id="divAvalista" class="form-group">
+                                    <div id="divAvalista" class="form-group rolagem-vertical">
                                     </div>
                                 </div>
                                 <div class="tab-pane" id="contato" role="tabpanel" aria-labelledby="contato-tab">
