@@ -532,6 +532,10 @@
 
         function abrirModalPessoaCadastroAuxiliar(o) {
 
+            // se o elemento estiver disabled, não mostrar modal
+            if ($(o).prop("disabled") != undefined)
+                return;
+
             limparFormularioPessoaCadastroAuxiliar();
 
             $("#lblTituloPessoaCadastroAuxiliar").html($(o).data("titulo"));

@@ -40,11 +40,13 @@
                 $("#modalPessoaFisica input, #modalPessoaFisica select, #modalPessoaFisica textarea").removeProp("disabled");
                 $("i.glyphicon-remove").show();
                 $(".input-group").removeProp("disabled");
+                $(".input-group-addon").removeProp("disabled");
             }
             else {
                 $("#modalPessoaFisica input, #modalPessoaFisica select, #modalPessoaFisica textarea").prop("disabled", "disabled");
                 $("i.glyphicon-remove").hide();
                 $(".input-group").prop("disabled", "disabled");
+                $(".input-group-addon").prop("disabled", "disabled");
             }
         }
 
