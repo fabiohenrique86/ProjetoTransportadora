@@ -39,10 +39,14 @@
             if (opcao) {
                 $("#modalPessoaJuridica input, #modalPessoaJuridica select, #modalPessoaJuridica textarea").removeProp("disabled");
                 $("i.glyphicon-remove").show();
+                $(".input-group").removeProp("disabled");
+                $(".input-group-addon").removeProp("disabled");
             }
             else {
                 $("#modalPessoaJuridica input, #modalPessoaJuridica select, #modalPessoaJuridica textarea").prop("disabled", "disabled");
                 $("i.glyphicon-remove").hide();
+                $(".input-group").prop("disabled", "disabled");
+                $(".input-group-addon").prop("disabled", "disabled");
             }
         }
 
