@@ -63,20 +63,7 @@ namespace ProjetoTransportadora.Web.Filters
             if (controller == "Transportadora" && action == "Index")
                 return;
 
-            // importar
-            if (action == "Importar")
-                return;
-
-            // exportar
-            if (action == "Exportar")
-                return;
-
-            // listar auto complete
-            if (action == "ListarAutoComplete")
-                return;
-
-            // gerar parcelas
-            if (action == "GerarParcelas")
+            if (action == "Importar" || action == "Exportar" || action == "ListarAutoComplete" || action == "Calcular" || action == "GerarParcelas")
                 return;
 
             var temPermissao = false;
