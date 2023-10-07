@@ -39,14 +39,23 @@ namespace ProjetoTransportadora.Web.Controllers
             ViewBag.Produto = produtoBusiness.Listar(new ProdutoDto() { Ativo = true });
             ViewBag.Canal = canalBusiness.Listar(new CanalDto() { Ativo = true });
 
-            // Se existe uma simulação, inclui a simulação na view
-            if (TempData["SimulacaoDto"] != null)
+            // Se existe uma simulação e veio do botão 'GerarContrato', inclui a simulação na view
+            if (TempData["SimulacaoDto"] != null && TempData["GerarContrato"] != null)
             {
                 ViewBag.SimulacaoDto = TempData["SimulacaoDto"];
                 TempData.Remove("SimulacaoDto");
+                TempData.Remove("GerarContrato");
             }
 
             return View();
+        }
+
+        [HttpPost]
+        public JsonResult ListarGridParcela(ContratoDto contratoDto)
+        {
+            var lista = contratoBusiness.ListarGridParcela(contratoDto);
+
+            return Json(new { Sucesso = true, Mensagem = "Contrato listado com sucesso", Data = lista }, JsonRequestBehavior.AllowGet);
         }
 
         [HttpPost]

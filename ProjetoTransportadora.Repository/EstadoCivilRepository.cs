@@ -33,7 +33,7 @@ namespace ProjetoTransportadora.Repository
             if (!string.IsNullOrEmpty(estadoCivilDto.Nome))
                 query = query.Where(x => x.Nome == estadoCivilDto.Nome);
 
-            return query.FirstOrDefault() != null ? true : false;
+            return query.Count() > 0 ? true : false;
         }
 
         public List<EstadoCivilDto> Listar(EstadoCivilDto estadoCivilDto = null)

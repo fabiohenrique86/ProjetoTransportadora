@@ -29,5 +29,15 @@ namespace ProjetoTransportadora.Web.Controllers
 
             return Json(new { Sucesso = true, Mensagem = "Simulação gerada com sucesso", Data = simulacaoDto.ContratoParcelaDto }, JsonRequestBehavior.AllowGet);
         }
+
+        [HttpPost]
+        public JsonResult GerarContrato()
+        {
+            TempData["GerarContrato"] = true;
+            TempData.Keep("GerarContrato");
+            TempData.Keep("SimulacaoDto");
+
+            return Json(new { Sucesso = true, Mensagem = "Simulação gerada com sucesso" }, JsonRequestBehavior.AllowGet);
+        }
     }
 }

@@ -17,8 +17,8 @@ namespace ProjetoTransportadora.Repository
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Produto()
         {
-            this.Pessoa = new HashSet<Pessoa>();
             this.Contrato = new HashSet<Contrato>();
+            this.Pessoa = new HashSet<Pessoa>();
         }
     
         public int Id { get; set; }
@@ -30,8 +30,8 @@ namespace ProjetoTransportadora.Repository
         public Nullable<System.DateTime> DataInativacao { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Pessoa> Pessoa { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Contrato> Contrato { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Pessoa> Pessoa { get; set; }
     }
 }

@@ -51,6 +51,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BaseBusiness.cs" />
+    <Compile Include="ContratoParcelaHistoricoBusiness.cs" />
     <Compile Include="ContratoParcelaBusiness.cs" />
     <Compile Include="FuncionalidadeBusiness.cs" />
     <Compile Include="EstadoBusiness.cs" />
@@ -59,6 +60,7 @@
     <Compile Include="FeriadoBusiness.cs" />
     <Compile Include="CanalBusiness.cs" />
     <Compile Include="PessoaAvalistaBusiness.cs" />
+    <Compile Include="SituacaoParcelaBusiness.cs" />
     <Compile Include="SituacaoMultaBusiness.cs" />
     <Compile Include="SituacaoContratoBusiness.cs" />
     <Compile Include="ContratoBusiness.cs" />

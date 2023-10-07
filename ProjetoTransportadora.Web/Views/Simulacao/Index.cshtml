@@ -112,7 +112,26 @@
                         { "data": function (data, type, row) { return data["ValorJuros"] != null ? Globalize.format(data.ValorJuros, "n2") : "" }, "className": "text-center" },
                         { "data": function (data, type, row) { return data["ValorAmortizacao"] != null ? Globalize.format(data.ValorAmortizacao, "n2") : "" }, "className": "text-center" },
                         { "data": function (data, type, row) { return data["ValorSaldoAtual"] != null ? Globalize.format(data.ValorSaldoAtual, "n2") : "" }, "className": "text-center" }
-                    ]
+                    ],
+                "footerCallback": function (row, data, start, end, display) {
+
+                    var api = this.api();
+
+                    var intVal = function (i) { return typeof i === 'string' ? parseFloat(i.replace(".", "").replace(",", ".")) : typeof i === 'number' ? i : 0; };
+
+                    var valorParcelaTotal = api.column(7).data().reduce(function (a, b) { return intVal(a) + intVal(b); }, 0);
+                    var valorSaldoAnteriorTotal = api.column(8).data().reduce(function (a, b) { return intVal(a) + intVal(b); }, 0);
+                    var valorJurosTotal = api.column(9).data().reduce(function (a, b) { return intVal(a) + intVal(b); }, 0);
+                    var valorAmortizacaoTotal = api.column(10).data().reduce(function (a, b) { return intVal(a) + intVal(b); }, 0);
+                    var valorSaldoAtualTotal = api.column(11).data().reduce(function (a, b) { return intVal(a) + intVal(b); }, 0);
+
+                    $(api.column(0).footer()).html('Total');
+                    $(api.column(7).footer()).html(Globalize.format(valorParcelaTotal, "n2"));
+                    $(api.column(8).footer()).html(Globalize.format(valorSaldoAnteriorTotal, "n2"));
+                    $(api.column(9).footer()).html(Globalize.format(valorJurosTotal, "n2"));
+                    $(api.column(10).footer()).html(Globalize.format(valorAmortizacaoTotal, "n2"));
+                    $(api.column(11).footer()).html(Globalize.format(valorSaldoAtualTotal, "n2"));
+                }
             });
 
             $("#btnGerarParcela").click(function () {
@@ -160,7 +179,24 @@
             });
 
             $("#btnGerarContrato").click(function () {
-                window.location.href = "/Contrato/Index";
+
+                $.ajax({
+                    dataType: "json",
+                    type: "POST",
+                    url: "/Simulacao/GerarContrato",
+                    data: {},
+                    contentType: "application/json",
+                    success: function (data) {
+
+                        if (!data.Sucesso) {
+                            alert(data.Erro ? "danger" : "warning", data.Mensagem);
+                            return;
+                        }
+
+                        window.location.href = "/Contrato/Index";
+                    }
+                });
+                
             });
 
             $("#btnNovaSimulacao").click(function () {
@@ -275,6 +311,22 @@
                                     </tr>
                                 </thead>
                                 <tbody></tbody>
+                                <tfoot align="left">
+                                    <tr>
+                                        <th></th>
+                                        <th></th>
+                                        <th></th>
+                                        <th></th>
+                                        <th></th>
+                                        <th></th>
+                                        <th></th>
+                                        <th></th>
+                                        <th></th>
+                                        <th></th>
+                                        <th></th>
+                                        <th></th>
+                                    </tr>
+                                </tfoot>
                             </table>
                         </div>
                     </div>

@@ -17,10 +17,10 @@ namespace ProjetoTransportadora.Repository
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Veiculo()
         {
-            this.VeiculoHistorico = new HashSet<VeiculoHistorico>();
-            this.VeiculoMulta = new HashSet<VeiculoMulta>();
             this.Contrato = new HashSet<Contrato>();
             this.Contrato1 = new HashSet<Contrato>();
+            this.VeiculoHistorico = new HashSet<VeiculoHistorico>();
+            this.VeiculoMulta = new HashSet<VeiculoMulta>();
         }
     
         public int Id { get; set; }
@@ -54,6 +54,10 @@ namespace ProjetoTransportadora.Repository
         public Nullable<int> IdUsuarioInativacao { get; set; }
         public Nullable<System.DateTime> DataInativacao { get; set; }
     
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Contrato> Contrato { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Contrato> Contrato1 { get; set; }
         public virtual Montadora Montadora { get; set; }
         public virtual Pessoa PessoaProprietarioAnterior { get; set; }
         public virtual Pessoa PessoaProprietarioAtual { get; set; }
@@ -62,9 +66,5 @@ namespace ProjetoTransportadora.Repository
         public virtual ICollection<VeiculoHistorico> VeiculoHistorico { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<VeiculoMulta> VeiculoMulta { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Contrato> Contrato { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Contrato> Contrato1 { get; set; }
     }
 }

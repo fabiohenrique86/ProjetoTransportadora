@@ -1,7 +1,6 @@
 ﻿using ProjetoTransportadora.Business;
 using ProjetoTransportadora.Dto;
 using System;
-using System.Linq;
 using System.Web.Mvc;
 
 namespace ProjetoTransportadora.Web.Controllers

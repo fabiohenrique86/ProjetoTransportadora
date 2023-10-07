@@ -50,6 +50,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ContratoDto.cs" />
+    <Compile Include="ContratoParcelaHistoricoDto.cs" />
+    <Compile Include="ContratoParcelaResiduoDto.cs" />
     <Compile Include="EstadoDto.cs" />
     <Compile Include="ContratoParcelaDto.cs" />
     <Compile Include="PessoaAvalistaDto.cs" />
@@ -65,6 +67,7 @@
     <Compile Include="SituacaoMultaDto.cs" />
     <Compile Include="SituacaoContratoDto.cs" />
     <Compile Include="SituacaoParcelaDto.cs" />
+    <Compile Include="TipoContratoDto.cs" />
     <Compile Include="TipoPessoaDto .cs" />
     <Compile Include="TipoRelacaoDto.cs" />
     <Compile Include="TipoReferenciaDto.cs" />

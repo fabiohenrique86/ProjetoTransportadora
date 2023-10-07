@@ -18,7 +18,7 @@ namespace ProjetoTransportadora.Repository
         public int IdPessoa { get; set; }
         public int IdAvalista { get; set; }
     
-        public virtual Pessoa Avalista { get; set; }
         public virtual Pessoa Pessoa { get; set; }
+        public virtual Pessoa Pessoa1 { get; set; }
     }
 }

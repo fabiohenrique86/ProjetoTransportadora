@@ -17,8 +17,8 @@ namespace ProjetoTransportadora.Repository
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Grupo()
         {
-            this.UsuarioGrupo = new HashSet<UsuarioGrupo>();
             this.GrupoFuncionalidade = new HashSet<GrupoFuncionalidade>();
+            this.UsuarioGrupo = new HashSet<UsuarioGrupo>();
         }
     
         public int Id { get; set; }
@@ -30,8 +30,8 @@ namespace ProjetoTransportadora.Repository
         public Nullable<System.DateTime> DataInativacao { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<UsuarioGrupo> UsuarioGrupo { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<GrupoFuncionalidade> GrupoFuncionalidade { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<UsuarioGrupo> UsuarioGrupo { get; set; }
     }
 }

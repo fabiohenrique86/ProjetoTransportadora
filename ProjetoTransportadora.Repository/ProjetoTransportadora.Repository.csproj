@@ -1,5 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="..\packages\EntityFramework.6.4.4\build\EntityFramework.props" Condition="Exists('..\packages\EntityFramework.6.4.4\build\EntityFramework.props')" />
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v*.*\WebApplications\Microsoft.WebApplication.targets" />
   <PropertyGroup>
@@ -13,6 +14,8 @@
     <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -40,14 +43,15 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
-      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.dll</HintPath>
+      <HintPath>..\packages\EntityFramework.6.4.4\lib\net45\EntityFramework.dll</HintPath>
     </Reference>
     <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
-      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+      <HintPath>..\packages\EntityFramework.6.4.4\lib\net45\EntityFramework.SqlServer.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Data.Entity" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Security" />
     <Reference Include="System.Xml.Linq" />
@@ -68,6 +72,10 @@
       <DependentUpon>ProjetoTransportadoraModel.tt</DependentUpon>
     </Compile>
     <Compile Include="ContratoParcela.cs">
+      <DependentUpon>ProjetoTransportadoraModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ContratoParcelaHistoricoRepository.cs" />
+    <Compile Include="ContratoParcelaHistorico.cs">
       <DependentUpon>ProjetoTransportadoraModel.tt</DependentUpon>
     </Compile>
     <Compile Include="EstadoCivil.cs">
@@ -96,6 +104,9 @@
     <Compile Include="Montadora.cs">
       <DependentUpon>ProjetoTransportadoraModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="PessoaHistorico.cs">
+      <DependentUpon>ProjetoTransportadoraModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Pessoa.cs">
       <DependentUpon>ProjetoTransportadoraModel.tt</DependentUpon>
     </Compile>
@@ -107,73 +118,16 @@
       <DependentUpon>ProjetoTransportadoraModel.tt</DependentUpon>
     </Compile>
     <Compile Include="PessoaEmailRepository.cs" />
-    <Compile Include="PessoaHistorico.cs">
-      <DependentUpon>ProjetoTransportadoraModel.tt</DependentUpon>
-    </Compile>
     <Compile Include="PessoaReferencia.cs">
       <DependentUpon>ProjetoTransportadoraModel.tt</DependentUpon>
     </Compile>
     <Compile Include="PessoaTelefone.cs">
       <DependentUpon>ProjetoTransportadoraModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="SituacaoContrato.cs">
-      <DependentUpon>ProjetoTransportadoraModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="SituacaoContratoRepository.cs" />
-    <Compile Include="SituacaoParcela.cs">
-      <DependentUpon>ProjetoTransportadoraModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Veiculo.cs">
-      <DependentUpon>ProjetoTransportadoraModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="ContratoHistoricoRepository.cs" />
-    <Compile Include="VeiculoMulta.cs">
-      <DependentUpon>ProjetoTransportadoraModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="ContratoParcelaRepository.cs" />
-    <Compile Include="VeiculoMultaRepository.cs" />
-    <Compile Include="VeiculoHistoricoRepository.cs" />
-    <Compile Include="PessoaHistoricoRepository.cs" />
-    <Compile Include="PessoaReferenciaRepository.cs" />
-    <Compile Include="SituacaoMulta.cs">
-      <DependentUpon>ProjetoTransportadoraModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="SituacaoMultaRepository.cs" />
-    <Compile Include="VeiculoHistorico.cs">
-      <DependentUpon>ProjetoTransportadoraModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="ContratoRepository.cs" />
-    <Compile Include="VeiculoRepository.cs" />
-    <Compile Include="PessoaTelefoneRepository.cs" />
     <Compile Include="Produto.cs">
       <DependentUpon>ProjetoTransportadoraModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="ProdutoRepository.cs" />
-    <Compile Include="FuncionalidadeRepository.cs" />
-    <Compile Include="RegimeCasamento.cs">
-      <DependentUpon>ProjetoTransportadoraModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="SituacaoVeiculo.cs">
-      <DependentUpon>ProjetoTransportadoraModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="SituacaoVeiculoRepository.cs" />
-    <Compile Include="TipoPessoa.cs">
-      <DependentUpon>ProjetoTransportadoraModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="TipoReferencia.cs">
-      <DependentUpon>ProjetoTransportadoraModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="TipoReferenciaRepository.cs" />
-    <Compile Include="TipoResidencia.cs">
-      <DependentUpon>ProjetoTransportadoraModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="TipoTelefone.cs">
-      <DependentUpon>ProjetoTransportadoraModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="TipoTelefoneRepository.cs" />
-    <Compile Include="TipoResidenciaRepository.cs" />
-    <Compile Include="RegimeCasamentoRepository.cs" />
-    <Compile Include="MontadoraRepository.cs" />
+    <Compile Include="ProjetoTransportadoraEntities.cs" />
     <Compile Include="ProjetoTransportadoraModel.Context.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -189,12 +143,71 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>ProjetoTransportadoraModel.edmx</DependentUpon>
     </Compile>
+    <Compile Include="RegimeCasamento.cs">
+      <DependentUpon>ProjetoTransportadoraModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SituacaoContrato.cs">
+      <DependentUpon>ProjetoTransportadoraModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SituacaoMulta.cs">
+      <DependentUpon>ProjetoTransportadoraModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SituacaoParcela.cs">
+      <DependentUpon>ProjetoTransportadoraModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SituacaoParcelaRepository.cs" />
+    <Compile Include="SituacaoContratoRepository.cs" />
+    <Compile Include="ContratoHistoricoRepository.cs" />
+    <Compile Include="ContratoParcelaRepository.cs" />
+    <Compile Include="SituacaoVeiculo.cs">
+      <DependentUpon>ProjetoTransportadoraModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TipoContrato.cs">
+      <DependentUpon>ProjetoTransportadoraModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TipoPessoa.cs">
+      <DependentUpon>ProjetoTransportadoraModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TipoReferencia.cs">
+      <DependentUpon>ProjetoTransportadoraModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TipoResidencia.cs">
+      <DependentUpon>ProjetoTransportadoraModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TipoTelefone.cs">
+      <DependentUpon>ProjetoTransportadoraModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Usuario.cs">
       <DependentUpon>ProjetoTransportadoraModel.tt</DependentUpon>
     </Compile>
     <Compile Include="UsuarioGrupo.cs">
       <DependentUpon>ProjetoTransportadoraModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Veiculo.cs">
+      <DependentUpon>ProjetoTransportadoraModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="VeiculoHistorico.cs">
+      <DependentUpon>ProjetoTransportadoraModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="VeiculoMulta.cs">
+      <DependentUpon>ProjetoTransportadoraModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="VeiculoMultaRepository.cs" />
+    <Compile Include="VeiculoHistoricoRepository.cs" />
+    <Compile Include="PessoaHistoricoRepository.cs" />
+    <Compile Include="PessoaReferenciaRepository.cs" />
+    <Compile Include="SituacaoMultaRepository.cs" />
+    <Compile Include="ContratoRepository.cs" />
+    <Compile Include="VeiculoRepository.cs" />
+    <Compile Include="PessoaTelefoneRepository.cs" />
+    <Compile Include="ProdutoRepository.cs" />
+    <Compile Include="FuncionalidadeRepository.cs" />
+    <Compile Include="SituacaoVeiculoRepository.cs" />
+    <Compile Include="TipoReferenciaRepository.cs" />
+    <Compile Include="TipoTelefoneRepository.cs" />
+    <Compile Include="TipoResidenciaRepository.cs" />
+    <Compile Include="RegimeCasamentoRepository.cs" />
+    <Compile Include="MontadoraRepository.cs" />
     <Compile Include="UsuarioGrupoRepository.cs" />
     <Compile Include="GrupoRepository.cs" />
     <Compile Include="LogRepository.cs" />
@@ -209,23 +222,24 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <None Include="App.Config" />
+    <None Include="packages.config" />
     <EntityDeploy Include="ProjetoTransportadoraModel.edmx">
       <Generator>EntityModelCodeGenerator</Generator>
       <LastGenOutput>ProjetoTransportadoraModel.Designer.cs</LastGenOutput>
     </EntityDeploy>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="App.Config" />
-    <None Include="packages.config" />
     <None Include="ProjetoTransportadoraModel.edmx.diagram">
       <DependentUpon>ProjetoTransportadoraModel.edmx</DependentUpon>
     </None>
   </ItemGroup>
   <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
+  <ItemGroup>
     <Content Include="ProjetoTransportadoraModel.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>ProjetoTransportadoraModel.Context.cs</LastGenOutput>
       <DependentUpon>ProjetoTransportadoraModel.edmx</DependentUpon>
+      <LastGenOutput>ProjetoTransportadoraModel.Context.cs</LastGenOutput>
     </Content>
     <Content Include="ProjetoTransportadoraModel.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
@@ -233,8 +247,13 @@
       <LastGenOutput>ProjetoTransportadoraModel.cs</LastGenOutput>
     </Content>
   </ItemGroup>
-  <ItemGroup>
-    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
-  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\packages\EntityFramework.6.4.4\build\EntityFramework.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\EntityFramework.6.4.4\build\EntityFramework.props'))" />
+    <Error Condition="!Exists('..\packages\EntityFramework.6.4.4\build\EntityFramework.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\EntityFramework.6.4.4\build\EntityFramework.targets'))" />
+  </Target>
+  <Import Project="..\packages\EntityFramework.6.4.4\build\EntityFramework.targets" Condition="Exists('..\packages\EntityFramework.6.4.4\build\EntityFramework.targets')" />
 </Project>

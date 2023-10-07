@@ -22,6 +22,11 @@ namespace ProjetoTransportadora.Business
             feriadoBusiness = new FeriadoBusiness();
         }
 
+        public dynamic ListarGridParcela(ContratoDto contratoDto = null)
+        {
+            return contratoRepository.ListarGridParcela(contratoDto);
+        }
+
         public dynamic ListarGrid(ContratoDto contratoDto = null)
         {
             return contratoRepository.ListarGrid(contratoDto);
@@ -39,6 +44,11 @@ namespace ProjetoTransportadora.Business
         public int ListarTotal(ContratoDto contratoDto = null)
         {
             return contratoRepository.ListarTotal(contratoDto);
+        }
+
+        public bool Existe(ContratoDto contratoDto)
+        {
+            return contratoRepository.Existe(contratoDto);
         }
 
         public List<ContratoDto> Listar(ContratoDto contratoDto = null)
@@ -65,20 +75,23 @@ namespace ProjetoTransportadora.Business
             if (contratoDto.IdVeiculo <= 0)
                 throw new BusinessException("Veículo é obrigatório");
 
-            if (contratoDto.DataBaixa.GetValueOrDefault() != DateTime.MinValue)
-            {
-                if (contratoDto.DataBaixa < contratoDto.DataContrato)
-                    throw new BusinessException("Data da Baixa deve ser maior ou igual a Data do Contrato");
-            }
+            //if (contratoDto.DataBaixa.GetValueOrDefault() != DateTime.MinValue)
+            //{
+            //    if (contratoDto.DataBaixa < contratoDto.DataContrato)
+            //        throw new BusinessException("Data da Baixa deve ser maior ou igual a Data do Contrato");
+            //}
 
-            if (contratoDto.DataAntecipacao.GetValueOrDefault() != DateTime.MinValue)
-            {
-                if (contratoDto.DataAntecipacao < contratoDto.DataContrato)
-                    throw new BusinessException("Data da Antecipação deve ser maior ou igual a Data do Contrato");
-            }
+            //if (contratoDto.DataAntecipacao.GetValueOrDefault() != DateTime.MinValue)
+            //{
+            //    if (contratoDto.DataAntecipacao < contratoDto.DataContrato)
+            //        throw new BusinessException("Data da Antecipação deve ser maior ou igual a Data do Contrato");
+            //}
 
             if (contratoDto.ContratoParcelaDto == null || contratoDto.ContratoParcelaDto.Count <= 0)
                 throw new BusinessException("Quantidade de parcelas do Contrato é obrigatório");
+
+            if (contratoDto.IdTipoContrato <= 0)
+                throw new BusinessException("Tipo de Cálculo é obrigatório");
 
             using (TransactionScope scope = new TransactionScope(TransactionScopeOption.Required))
             {
@@ -120,7 +133,7 @@ namespace ProjetoTransportadora.Business
                 throw new BusinessException("Valor da Antecipação é obrigatório");
 
             if (contratoDto.IdUsuarioAntecipacao <= 0)
-                throw new BusinessException("IdUsuarioAntecipação é obrigatório");
+                throw new BusinessException("Id Usuário Antecipação é obrigatório");
 
             var contrato = contratoRepository.Obter(new ContratoDto() { Id = contratoDto.Id });
 
@@ -151,7 +164,7 @@ namespace ProjetoTransportadora.Business
 
                     if (listaContratoParcelaDto[i].DataInicio >= contratoDto.DataAntecipacao) // parcela a vencer
                     {
-                        listaContratoParcelaDto[i].ValorDesconto = listaContratoParcelaDto[i].ValorJuros;
+                        listaContratoParcelaDto[i].ValorDescontoJuros = listaContratoParcelaDto[i].ValorJuros;
                         listaContratoParcelaDto[i].ValorParcela = listaContratoParcelaDto[i].ValorAmortizacao.GetValueOrDefault();
                         listaContratoParcelaDto[i].ValorMulta = 0;
                         listaContratoParcelaDto[i].ValorMora = 0;
@@ -164,12 +177,12 @@ namespace ProjetoTransportadora.Business
 
                             listaContratoParcelaDto[i].ValorMora = Math.Round(listaContratoParcelaDto[i].ValorOriginal * (contrato.TaxaMora.GetValueOrDefault() / 100) * (diasCorridos / 30D), 2);
                             listaContratoParcelaDto[i].ValorMulta = Math.Round(listaContratoParcelaDto[i].ValorOriginal * (contrato.TaxaMulta.GetValueOrDefault() / 100), 2);
-                            listaContratoParcelaDto[i].ValorDesconto = 0;
+                            listaContratoParcelaDto[i].ValorDescontoJuros = 0;
                             listaContratoParcelaDto[i].ValorParcela = Math.Round(listaContratoParcelaDto[i].ValorAmortizacao.GetValueOrDefault() +
                                                                                 listaContratoParcelaDto[i].ValorJuros.GetValueOrDefault() +
                                                                                 listaContratoParcelaDto[i].ValorMora.GetValueOrDefault() +
                                                                                 listaContratoParcelaDto[i].ValorMulta.GetValueOrDefault() -
-                                                                                listaContratoParcelaDto[i].ValorDesconto.GetValueOrDefault(), 2);
+                                                                                listaContratoParcelaDto[i].ValorDescontoJuros.GetValueOrDefault(), 2);
                         }
                         else // parcela atual
                         {
@@ -177,12 +190,12 @@ namespace ProjetoTransportadora.Business
 
                             listaContratoParcelaDto[i].ValorMora = 0;
                             listaContratoParcelaDto[i].ValorMulta = 0;
-                            listaContratoParcelaDto[i].ValorDesconto = listaContratoParcelaDto[i].ValorJuros - Math.Round(listaContratoParcelaDto[i].ValorAmortizacao.GetValueOrDefault() * (contrato.TaxaJuros / 100) * (diasCorridos / 30D), 2);
+                            listaContratoParcelaDto[i].ValorDescontoJuros = listaContratoParcelaDto[i].ValorJuros - Math.Round(listaContratoParcelaDto[i].ValorAmortizacao.GetValueOrDefault() * (contrato.TaxaJuros / 100) * (diasCorridos / 30D), 2);
                             listaContratoParcelaDto[i].ValorParcela = Math.Round(listaContratoParcelaDto[i].ValorAmortizacao.GetValueOrDefault() +
                                                                                 listaContratoParcelaDto[i].ValorJuros.GetValueOrDefault() +
                                                                                 listaContratoParcelaDto[i].ValorMora.GetValueOrDefault() +
                                                                                 listaContratoParcelaDto[i].ValorMulta.GetValueOrDefault() -
-                                                                                listaContratoParcelaDto[i].ValorDesconto.GetValueOrDefault(), 2);
+                                                                                listaContratoParcelaDto[i].ValorDescontoJuros.GetValueOrDefault(), 2);
                         }
                     }
 

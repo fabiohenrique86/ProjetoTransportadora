@@ -13,23 +13,23 @@ namespace ProjetoTransportadora.Business
             contratoHistoricoRepository = new ContratoHistoricoRepository();
         }
 
-        public int Incluir(ContratoHistoricoDto ContratoHistoricoDto)
+        public int Incluir(ContratoHistoricoDto contratoHistoricoDto)
         {
             var idContratoHistorico = 0;
 
-            if (ContratoHistoricoDto == null)
+            if (contratoHistoricoDto == null)
                 throw new BusinessException("ContratoHistoricoDto é nulo");
 
-            if (ContratoHistoricoDto.IdContrato <= 0)
+            if (contratoHistoricoDto.IdContrato <= 0)
                 throw new BusinessException("IdContrato é obrigatório");
 
-            if (ContratoHistoricoDto.DataHistorico == DateTime.MinValue)
+            if (contratoHistoricoDto.DataHistorico == DateTime.MinValue)
                 throw new BusinessException("Data Histórico é obrigatório");
 
-            if (string.IsNullOrEmpty(ContratoHistoricoDto.Descricao))
+            if (string.IsNullOrEmpty(contratoHistoricoDto.Descricao))
                 throw new BusinessException("Descrição Histórico é obrigatório");
 
-            idContratoHistorico = contratoHistoricoRepository.Incluir(ContratoHistoricoDto);
+            idContratoHistorico = contratoHistoricoRepository.Incluir(contratoHistoricoDto);
 
             return idContratoHistorico;
         }

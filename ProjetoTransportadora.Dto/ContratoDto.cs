@@ -61,5 +61,6 @@ namespace ProjetoTransportadora.Dto
         public virtual List<ContratoParcelaDto> ContratoParcelaDto { get; set; }
         public DateTime DataContratoInicial { get; set; }
         public DateTime DataContratoFinal { get; set; }
+        public int IdTipoContrato { get; set; }
     }
 }

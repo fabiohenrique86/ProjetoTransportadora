@@ -17,23 +17,23 @@ namespace ProjetoTransportadora.Repository
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Pessoa()
         {
-            this.Pessoa1 = new HashSet<Pessoa>();
-            this.Pessoa11 = new HashSet<Pessoa>();
-            this.Pessoa12 = new HashSet<Pessoa>();
-            this.Pessoa13 = new HashSet<Pessoa>();
-            this.PessoaHistorico = new HashSet<PessoaHistorico>();
-            this.Veiculo = new HashSet<Veiculo>();
-            this.Veiculo1 = new HashSet<Veiculo>();
-            this.VeiculoMulta = new HashSet<VeiculoMulta>();
-            this.PessoaAvalista1 = new HashSet<PessoaAvalista>();
-            this.PessoaAvalista = new HashSet<PessoaAvalista>();
             this.Contrato = new HashSet<Contrato>();
             this.Contrato1 = new HashSet<Contrato>();
             this.Contrato2 = new HashSet<Contrato>();
             this.Contrato3 = new HashSet<Contrato>();
+            this.Pessoa1 = new HashSet<Pessoa>();
+            this.Pessoa11 = new HashSet<Pessoa>();
+            this.Pessoa12 = new HashSet<Pessoa>();
+            this.Pessoa13 = new HashSet<Pessoa>();
+            this.PessoaAvalista = new HashSet<PessoaAvalista>();
+            this.PessoaAvalista1 = new HashSet<PessoaAvalista>();
             this.PessoaEmail = new HashSet<PessoaEmail>();
-            this.PessoaTelefone = new HashSet<PessoaTelefone>();
+            this.PessoaHistorico = new HashSet<PessoaHistorico>();
             this.PessoaReferencia = new HashSet<PessoaReferencia>();
+            this.PessoaTelefone = new HashSet<PessoaTelefone>();
+            this.Veiculo = new HashSet<Veiculo>();
+            this.Veiculo1 = new HashSet<Veiculo>();
+            this.VeiculoMulta = new HashSet<VeiculoMulta>();
         }
     
         public int Id { get; set; }
@@ -78,6 +78,14 @@ namespace ProjetoTransportadora.Repository
         public string TelefoneEmpresa { get; set; }
         public string EmailEmpresa { get; set; }
     
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Contrato> Contrato { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Contrato> Contrato1 { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Contrato> Contrato2 { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Contrato> Contrato3 { get; set; }
         public virtual EstadoCivil EstadoCivil { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Pessoa> Pessoa1 { get; set; }
@@ -96,30 +104,22 @@ namespace ProjetoTransportadora.Repository
         public virtual TipoPessoa TipoPessoa { get; set; }
         public virtual TipoResidencia TipoResidencia { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<PessoaAvalista> PessoaAvalista { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<PessoaAvalista> PessoaAvalista1 { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<PessoaEmail> PessoaEmail { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<PessoaHistorico> PessoaHistorico { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<PessoaReferencia> PessoaReferencia { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<PessoaTelefone> PessoaTelefone { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Veiculo> Veiculo { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Veiculo> Veiculo1 { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<VeiculoMulta> VeiculoMulta { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<PessoaAvalista> PessoaAvalista1 { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<PessoaAvalista> PessoaAvalista { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Contrato> Contrato { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Contrato> Contrato1 { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Contrato> Contrato2 { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Contrato> Contrato3 { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<PessoaEmail> PessoaEmail { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<PessoaTelefone> PessoaTelefone { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<PessoaReferencia> PessoaReferencia { get; set; }
     }
 }

@@ -58,18 +58,20 @@ namespace ProjetoTransportadora.Repository
         public Nullable<double> ValorVeiculoEntrada { get; set; }
         public Nullable<double> TaxaMulta { get; set; }
         public Nullable<double> TaxaMora { get; set; }
+        public int IdTipoContrato { get; set; }
     
         public virtual Canal Canal { get; set; }
         public virtual Pessoa PessoaCliente { get; set; }
-        public virtual Pessoa Pessoa1 { get; set; }
-        public virtual Pessoa Pessoa2 { get; set; }
-        public virtual Pessoa Pessoa3 { get; set; }
+        public virtual Pessoa PessoaFiador { get; set; }
+        public virtual Pessoa PessoaIndicacao { get; set; }
+        public virtual Pessoa PessoaPromotor { get; set; }
         public virtual Produto Produto { get; set; }
         public virtual SituacaoContrato SituacaoContrato { get; set; }
         public virtual Veiculo Veiculo { get; set; }
         public virtual Veiculo VeiculoEntrada { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<ContratoHistorico> ContratoHistorico { get; set; }
+        public virtual TipoContrato TipoContrato { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<ContratoParcela> ContratoParcela { get; set; }
     }

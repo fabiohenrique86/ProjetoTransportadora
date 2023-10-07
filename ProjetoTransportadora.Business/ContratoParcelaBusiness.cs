@@ -4,6 +4,7 @@ using ProjetoTransportadora.Repository;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Transactions;
 
 namespace ProjetoTransportadora.Business
 {
@@ -11,16 +12,76 @@ namespace ProjetoTransportadora.Business
     {
         FeriadoBusiness feriadoBusiness;
         ContratoParcelaRepository contratoParcelaRepository;
+        ContratoParcelaHistoricoBusiness contratoParcelaHistoricoBusiness;
+        ContratoRepository contratoRepository;
 
         public ContratoParcelaBusiness()
         {
             feriadoBusiness = new FeriadoBusiness();
             contratoParcelaRepository = new ContratoParcelaRepository();
+            contratoParcelaHistoricoBusiness = new ContratoParcelaHistoricoBusiness();
+            contratoRepository = new ContratoRepository();
         }
 
         public List<ContratoParcelaDto> Listar(ContratoParcelaDto contratoParcelaDto)
         {
             return contratoParcelaRepository.Listar(contratoParcelaDto);
+        }
+
+        public dynamic Calcular(int idContrato, int idContratoParcela, DateTime dataPagamento, double taxaMulta, double taxaMora, double valorResiduo, double valorAcrescimo, double valorDescontoParcela)
+        {
+            if (idContratoParcela <= 0)
+                throw new BusinessException("Id é obrigatório");
+
+            if (dataPagamento == DateTime.MinValue)
+                throw new BusinessException("Data Pagamento é obrigatório");
+
+            var contratoParcelaDto = contratoParcelaRepository.Obter(new ContratoParcelaDto() { Id = idContratoParcela });
+
+            if (contratoParcelaDto == null)
+                throw new BusinessException($"Contrato parcela ({idContratoParcela}) não existe");
+
+            if (dataPagamento <= contratoParcelaDto.DataInicio)
+            {
+                contratoParcelaDto.ValorDescontoJuros = contratoParcelaDto.ValorJuros;
+                contratoParcelaDto.ValorJuros = 0;
+            }
+            else if (dataPagamento > contratoParcelaDto.DataVencimento)
+            {
+                contratoParcelaDto.ValorDescontoJuros = 0;
+            }
+            else if (dataPagamento > contratoParcelaDto.DataInicio && dataPagamento < contratoParcelaDto.DataVencimento)
+            {
+                var contrato = contratoRepository.Obter(new ContratoDto() { Id = idContrato });
+
+                if (contrato == null)
+                    throw new BusinessException($"Contrato ({idContrato}) não existe");
+
+                double diasCalculo = contratoParcelaDto.DataVencimento.Subtract(dataPagamento).Days;
+                contratoParcelaDto.ValorDescontoJuros = contratoParcelaDto.ValorOriginal * Math.Pow((1D + (contrato.TaxaJuros / 100)), ((diasCalculo / 30D) - 1D)); // taxaJuros do contrato?
+            }
+
+            double diasAtraso = contratoParcelaDto.DataVencimento.Subtract(dataPagamento).Days;
+
+            contratoParcelaDto.ValorMulta = (taxaMulta / 100) * contratoParcelaDto.ValorOriginal;
+            contratoParcelaDto.ValorMora = contratoParcelaDto.ValorOriginal * Math.Pow((1 + (taxaMora / 100)), ((diasAtraso / 30D) - 1D));
+            contratoParcelaDto.ValorParcela = contratoParcelaDto.ValorAmortizacao.GetValueOrDefault()
+                                            + contratoParcelaDto.ValorJuros.GetValueOrDefault()
+                                            + valorAcrescimo
+                                            + contratoParcelaDto.ValorMulta.GetValueOrDefault()
+                                            + contratoParcelaDto.ValorMora.GetValueOrDefault()
+                                            - contratoParcelaDto.ValorDescontoJuros.GetValueOrDefault()
+                                            - valorDescontoParcela
+                                            - valorResiduo;
+
+            return new 
+            { 
+                ValorDescontoJuros = contratoParcelaDto.ValorDescontoJuros,
+                ValorJuros = contratoParcelaDto.ValorJuros,
+                ValorMulta = contratoParcelaDto.ValorMulta,
+                ValorMora = contratoParcelaDto.ValorMora,
+                ValorParcela = contratoParcelaDto.ValorParcela,
+            };
         }
 
         public void Antecipar(ContratoParcelaDto contratoParcelaDto)
@@ -31,7 +92,7 @@ namespace ProjetoTransportadora.Business
             if (contratoParcelaDto.Id <= 0)
                 throw new BusinessException("Id é obrigatório");
 
-            var existeContratoParcela = contratoParcelaRepository.Existe(new ContratoParcelaDto() { Id = contratoParcelaDto.Id });
+            var existeContratoParcela = contratoParcelaRepository.Existe(contratoParcelaDto.Id);
 
             if (!existeContratoParcela)
                 throw new BusinessException($"ContratoParcelaDto Id ({contratoParcelaDto.Id}) não está cadastrado");
@@ -47,7 +108,7 @@ namespace ProjetoTransportadora.Business
             if (contratoParcelaDto.Id <= 0)
                 throw new BusinessException("Id é obrigatório");
 
-            var existeContratoParcela = contratoParcelaRepository.Existe(new ContratoParcelaDto() { Id = contratoParcelaDto.Id });
+            var existeContratoParcela = contratoParcelaRepository.Existe(contratoParcelaDto.Id);
 
             if (!existeContratoParcela)
                 throw new BusinessException($"ContratoParcelaDto Id ({contratoParcelaDto.Id}) não está cadastrado");
@@ -69,7 +130,7 @@ namespace ProjetoTransportadora.Business
                 throw new BusinessException("Contrato é obrigatório");
 
             if (contratoParcelaDto.IdSituacaoParcela <= 0)
-                throw new BusinessException("IdSituacaoParcela é obrigatório");
+                throw new BusinessException("Id Situação Parcela é obrigatório");
 
             if (contratoParcelaDto.DataInicio == DateTime.MinValue)
                 throw new BusinessException("Data Início é obrigatório");
@@ -86,6 +147,44 @@ namespace ProjetoTransportadora.Business
             idContratoParcela = contratoParcelaRepository.Incluir(contratoParcelaDto);
 
             return idContratoParcela;
+        }
+
+        public void Alterar(ContratoParcelaDto contratoParcelaDto)
+        {
+            if (contratoParcelaDto == null)
+                throw new BusinessException("contratoParcelaDto é nulo");
+
+            if (contratoParcelaDto.Id <= 0)
+                throw new BusinessException("Id é obrigatório");
+
+            if (contratoParcelaDto.IdSituacaoParcela == SituacaoParcelaDto.EnumSituacaoParcela.Paga.GetHashCode())
+            { 
+                if (contratoParcelaDto.DataPagamento.GetValueOrDefault() == DateTime.MinValue)
+                    throw new BusinessException($"Data do Pagamento é obrigatória");
+            }
+
+            var existeContratoParcela = contratoParcelaRepository.Existe(contratoParcelaDto.Id);
+
+            if (!existeContratoParcela)
+                throw new BusinessException($"Contrato Parcela ({contratoParcelaDto.Id}) não existe");
+
+            var contrato = contratoRepository.Obter(new ContratoDto() { ContratoParcelaDto = new List<ContratoParcelaDto>() { new ContratoParcelaDto() { Id = contratoParcelaDto.Id } } });
+
+            if (contrato == null)
+                throw new BusinessException($"Contrato não existe");
+
+            using (var transactionScope = new TransactionScope(TransactionScopeOption.Required))
+            {
+                // ContratoParcela
+                contratoParcelaRepository.Alterar(contratoParcelaDto);
+
+                // ContratoParcelaHistoricoDto
+                contratoParcelaHistoricoBusiness.Excluir(contratoParcelaDto.Id);
+                foreach (var contratoParcelaHistoricoDto in contratoParcelaDto.ContratoParcelaHistoricoDto)
+                    contratoParcelaHistoricoBusiness.Incluir(contratoParcelaHistoricoDto);
+
+                transactionScope.Complete();
+            }
         }
 
         public List<ContratoParcelaDto> Gerar(SimulacaoDto simulacaoDto)
@@ -157,8 +256,6 @@ namespace ProjetoTransportadora.Business
                 });
             }
 
-            //somaFatorInvertido = Math.Round(somaFatorInvertido, 6);
-
             for (int i = 0; i < parcelasDto.Count(); i++)
             {
                 valorSaldoAtual = 0;
@@ -182,7 +279,8 @@ namespace ProjetoTransportadora.Business
 
                 parcelasDto[i].ValorOriginal = valorParcela;
                 parcelasDto[i].ValorMora = 0;
-                parcelasDto[i].ValorDesconto = 0;
+                parcelasDto[i].ValorDescontoJuros = 0;
+                parcelasDto[i].ValorDescontoParcela = 0;
                 parcelasDto[i].ValorMulta = 0;
                 parcelasDto[i].IdSituacaoParcela = SituacaoParcelaDto.EnumSituacaoParcela.Pendente.GetHashCode();
                 parcelasDto[i].SituacaoParcelaDto = new SituacaoParcelaDto() { Id = SituacaoParcelaDto.EnumSituacaoParcela.Pendente.GetHashCode(), Nome = SituacaoParcelaDto.EnumSituacaoParcela.Pendente.ToString() };

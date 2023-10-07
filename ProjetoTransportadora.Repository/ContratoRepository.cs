@@ -38,7 +38,7 @@ namespace ProjetoTransportadora.Repository
             if (contratoDto.NumeroContrato > 0)
                 query = query.Where(x => x.NumeroContrato == contratoDto.NumeroContrato);
 
-            return query.FirstOrDefault() != null ? true : false;
+            return query.Count() > 0 ? true : false;
         }
 
         public ContratoDto Obter(ContratoDto contratoDto)
@@ -60,6 +60,44 @@ namespace ProjetoTransportadora.Repository
                 TaxaMora = x.TaxaMora,
                 TaxaMulta = x.TaxaMulta
             }).FirstOrDefault();
+        }
+
+        public dynamic ListarGridParcela(ContratoDto contratoDto = null)
+        {
+            var idContratoParcela = contratoDto.ContratoParcelaDto?.FirstOrDefault()?.Id;
+            var placa = contratoDto.VeiculoDto?.Placa;
+            var idSituacaoParcela = contratoDto.ContratoParcelaDto?.FirstOrDefault()?.IdSituacaoParcela;
+            var dataVencimentoInicio = contratoDto.ContratoParcelaDto?.FirstOrDefault()?.DataVencimentoInicio;
+            var dataVencimentoFim = contratoDto.ContratoParcelaDto?.FirstOrDefault()?.DataVencimentoFim;
+
+            var query = (from cp in projetoTransportadoraEntities.ContratoParcela
+                          join c in projetoTransportadoraEntities.Contrato on cp.IdContrato equals c.Id
+                          join p in projetoTransportadoraEntities.Pessoa on c.PessoaCliente.Id equals p.Id
+                          join sp in projetoTransportadoraEntities.SituacaoParcela on cp.IdSituacaoParcela equals sp.Id
+                          where c.Id == (contratoDto.Id > 0 ? contratoDto.Id : c.Id)
+                          && c.IdCliente == (contratoDto.IdCliente > 0 ? contratoDto.IdCliente : c.IdCliente)
+                          && c.IdProduto == (contratoDto.IdProduto > 0 ? contratoDto.IdProduto : c.IdProduto)
+                          && c.Veiculo.Placa.Contains(!string.IsNullOrEmpty(placa) ? placa : c.Veiculo.Placa)
+                          && c.IdSituacaoContrato == (contratoDto.IdSituacaoContrato > 0 ? contratoDto.IdSituacaoContrato : c.IdSituacaoContrato)
+                          && c.DataContrato >= (contratoDto.DataContratoInicial != DateTime.MinValue ? contratoDto.DataContratoInicial : c.DataContrato)
+                          && c.DataContrato <= (contratoDto.DataContratoFinal != DateTime.MinValue ? contratoDto.DataContratoFinal : c.DataContrato)
+                          && cp.DataVencimento >= (dataVencimentoInicio != DateTime.MinValue ? dataVencimentoInicio : cp.DataVencimento)
+                          && cp.DataVencimento <= (dataVencimentoFim != DateTime.MinValue ? dataVencimentoFim : cp.DataVencimento)
+                          && cp.Id == (idContratoParcela > 0 ? idContratoParcela : cp.Id)
+                          && cp.IdSituacaoParcela == (idSituacaoParcela > 0 ? idSituacaoParcela : cp.IdSituacaoParcela)
+                          select new
+                          {
+                              Id = c.Id,
+                              NumeroParcela = cp.NumeroParcela,
+                              IdContratoParcela = cp.Id,
+                              NomeCliente = p.Nome,
+                              DataVencimento = cp.DataVencimento,
+                              ValorParcela = cp.ValorParcela,
+                              IdSituacaoParcela = sp.Id,
+                              NomeSituacaoParcela = sp.Nome
+                          });
+
+            return query.ToList();
         }
 
         public dynamic ListarGrid(ContratoDto contratoDto = null)
@@ -262,6 +300,7 @@ namespace ProjetoTransportadora.Repository
                 DataInativacao = x.DataInativacao,
                 IdUsuarioAntecipacao = x.IdUsuarioAntecipacao,
                 IdUsuarioBaixa = x.IdUsuarioBaixa,
+                IdTipoContrato = x.IdTipoContrato,
                 ContratoParcelaDto = x.ContratoParcela.Select(w => new ContratoParcelaDto()
                 {
                     Id = w.Id,
@@ -279,8 +318,10 @@ namespace ProjetoTransportadora.Repository
                     ValorJuros = w.ValorJuros,
                     ValorMulta = w.ValorMulta,
                     ValorMora = w.ValorMora,
-                    ValorDesconto = w.ValorDesconto,
-                    ValorParcela = w.ValorParcela
+                    ValorDescontoJuros = w.ValorDescontoJuros,
+                    ValorDescontoParcela = w.ValorDescontoParcela,
+                    ValorParcela = w.ValorParcela,
+                    DataInicio = w.DataInicio
                 }).ToList(),
                 ContratoHistoricoDto = x.ContratoHistorico.Select(w => new ContratoHistoricoDto()
                 {
@@ -358,7 +399,8 @@ namespace ProjetoTransportadora.Repository
                 TaxaMulta = contratoDto.TaxaMulta,
                 Ativo = true,
                 IdUsuarioCadastro = contratoDto.IdUsuarioCadastro,
-                DataCadastro = contratoDto.DataCadastro
+                DataCadastro = contratoDto.DataCadastro,
+                IdTipoContrato = contratoDto.IdTipoContrato
             };
 
             projetoTransportadoraEntities.Contrato.Add(contrato);

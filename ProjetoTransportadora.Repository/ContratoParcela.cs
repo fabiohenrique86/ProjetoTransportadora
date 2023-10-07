@@ -14,6 +14,12 @@ namespace ProjetoTransportadora.Repository
     
     public partial class ContratoParcela
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public ContratoParcela()
+        {
+            this.ContratoParcelaHistorico = new HashSet<ContratoParcelaHistorico>();
+        }
+    
         public int Id { get; set; }
         public int NumeroParcela { get; set; }
         public int IdContrato { get; set; }
@@ -28,11 +34,18 @@ namespace ProjetoTransportadora.Repository
         public Nullable<double> ValorJuros { get; set; }
         public Nullable<double> ValorMulta { get; set; }
         public Nullable<double> ValorMora { get; set; }
-        public Nullable<double> ValorDesconto { get; set; }
         public double ValorParcela { get; set; }
         public System.DateTime DataInicio { get; set; }
+        public Nullable<double> TaxaMulta { get; set; }
+        public Nullable<double> TaxaMora { get; set; }
+        public Nullable<double> ValorDescontoJuros { get; set; }
+        public Nullable<double> ValorDescontoParcela { get; set; }
+        public Nullable<double> ValorAcrescimo { get; set; }
+        public Nullable<double> ValorResiduo { get; set; }
     
-        public virtual SituacaoParcela SituacaoParcela { get; set; }
         public virtual Contrato Contrato { get; set; }
+        public virtual SituacaoParcela SituacaoParcela { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<ContratoParcelaHistorico> ContratoParcelaHistorico { get; set; }
     }
 }
