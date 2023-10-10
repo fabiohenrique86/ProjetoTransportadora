@@ -122,7 +122,6 @@
 
                     $("#btnAntecipar").removeProp("disabled");
                     $("#dataAntecipacao").removeProp("disabled");
-                    $("#valorSaldoAntecipacao").removeProp("disabled");
                     $("#valorAntecipacao").removeProp("disabled");
 
                     $("#modalContrato").modal('show');
@@ -309,9 +308,31 @@
                     $("#lblTitulo").text(id);
 
                     $("#btnIncluir").hide();
-                    $("#btnAntecipar").hide();
-                    $("#btnBaixar").hide();
                     $("#btnAlterar").show();
+
+                    // checagem se existe algum parcela com status diferente de 'Pendente'
+                    var temParcelaComStatusDiferenteDePendente = false;
+                    for (var i = 0; i < data.Data[0].ContratoParcelaDto.length; i++) {
+                        if (data.Data[0].ContratoParcelaDto[i].IdSituacaoParcela != '@SituacaoParcelaDto.EnumSituacaoParcela.Pendente.GetHashCode()') {
+                            temParcelaComStatusDiferenteDePendente = true;
+                            break;
+                        }
+                    }
+
+                    if (temParcelaComStatusDiferenteDePendente)
+                        $("#btnGerarParcela").prop("disabled", "disabled");
+                    else
+                        $("#btnGerarParcela").removeProp("disabled");
+
+                    // aba antecipação
+                    $("#dataAntecipacao").prop("disabled", "disabled");
+                    $("#valorSaldoAntecipacao").prop("disabled", "disabled");
+                    $("#valorAntecipacao").prop("disabled", "disabled");
+                    $("#btnAntecipar").hide();
+
+                    // aba baixa
+                    $("#dataBaixa").prop("disabled", "disabled");
+                    $("#btnBaixar").hide();
 
                     $("#modalContrato").modal('show');
                     $('#dados-tab').click();
@@ -324,10 +345,14 @@
             if (opcao) {
                 $("#modalContrato input, #modalContrato select, #modalContrato textarea").removeProp("disabled");
                 $("i.glyphicon-remove").show();
+                $(".input-group").removeProp("disabled");
+                $(".input-group-addon").removeProp("disabled");
             }
             else {
                 $("#modalContrato input, #modalContrato select, #modalContrato textarea").prop("disabled", "disabled");
                 $("i.glyphicon-remove").hide();
+                $(".input-group").prop("disabled", "disabled");
+                $(".input-group-addon").prop("disabled", "disabled");
             }
         }
 
@@ -388,6 +413,33 @@
             var valorFinanciado = valorVeiculo - valorEntrada + valorDocumentacao - valorDesconto + valorTarifa - valorVeiculoEntrada - valorDinheiro - valorDepositado;
 
             $("#valorFinanciado").val(Globalize.format(valorFinanciado, "n2"));
+        }
+
+        function calcularValorSaldoAntecipacao() {
+
+            var contratoDto = {};
+
+            contratoDto.Id = $("#idContrato").val();
+            contratoDto.DataAntecipacao = $("#dataAntecipacao").val();
+            contratoDto.ValorAntecipacao = $("#valorAntecipacao").val();
+            contratoDto.SimulacaoAntecipacao = true;
+
+            $.ajax({
+                dataType: "json",
+                type: "POST",
+                url: "/Contrato/Antecipar",
+                data: JSON.stringify(contratoDto),
+                contentType: "application/json",
+                success: function (data) {
+
+                    if (!data.Sucesso) {
+                        alert(data.Erro ? "danger" : "warning", data.Mensagem);
+                        return;
+                    }
+
+                    $("#valorSaldoAntecipacao").val(Globalize.format(data.ValorSaldoAntecipacao, "n2"));
+                }
+            });
         }
 
         $(document).ready(function () {
@@ -520,6 +572,8 @@
                         { "data": function (data, type, row) { return data["ValorMulta"] != null ? Globalize.format(data.ValorMulta, "n2") : "" }, "className": "text-center" },
                         { "data": function (data, type, row) { return data["ValorMora"] != null ? Globalize.format(data.ValorMora, "n2") : "" }, "className": "text-center" },
                         { "data": function (data, type, row) { return data["ValorDescontoJuros"] != null ? Globalize.format(data.ValorDescontoJuros, "n2") : "" }, "className": "text-center" },
+                        { "data": function (data, type, row) { return data["ValorDescontoParcela"] != null ? Globalize.format(data.ValorDescontoParcela, "n2") : "" }, "className": "text-center" },
+                        { "data": function (data, type, row) { return data["ValorResiduo"] != null ? Globalize.format(data.ValorResiduo, "n2") : "" }, "className": "text-center" },
                         { "data": function (data, type, row) { return data["ValorParcela"] != null ? Globalize.format(data.ValorParcela, "n2") : "" }, "className": "text-center" },
                         { "data": "SituacaoParcelaDto.Nome", "className": "text-center" }
                     ],
@@ -529,22 +583,26 @@
 
                     var intVal = function (i) { return typeof i === 'string' ? parseFloat(i.replace(".", "").replace(",", ".")) : typeof i === 'number' ? i : 0; };
 
-                    var valorOriginalTotal = api.column(7).data().reduce(function (a, b) { return intVal(a) + intVal(b); }, 0);
-                    var valorAmortizacaoTotal = api.column(8).data().reduce(function (a, b) { return intVal(a) + intVal(b); }, 0);
-                    var valorJurosTotal = api.column(9).data().reduce(function (a, b) { return intVal(a) + intVal(b); }, 0);
-                    var valorMultaTotal = api.column(10).data().reduce(function (a, b) { return intVal(a) + intVal(b); }, 0);
-                    var valorMoraTotal = api.column(11).data().reduce(function (a, b) { return intVal(a) + intVal(b); }, 0);
-                    var valorDescontoTotal = api.column(12).data().reduce(function (a, b) { return intVal(a) + intVal(b); }, 0);
-                    var valorParcelaTotal = api.column(13).data().reduce(function (a, b) { return intVal(a) + intVal(b); }, 0);
+                    var valorOriginal = api.column(7).data().reduce(function (a, b) { return intVal(a) + intVal(b); }, 0);
+                    var valorAmortizacao = api.column(8).data().reduce(function (a, b) { return intVal(a) + intVal(b); }, 0);
+                    var valorJuros = api.column(9).data().reduce(function (a, b) { return intVal(a) + intVal(b); }, 0);
+                    var valorMulta = api.column(10).data().reduce(function (a, b) { return intVal(a) + intVal(b); }, 0);
+                    var valorMora = api.column(11).data().reduce(function (a, b) { return intVal(a) + intVal(b); }, 0);
+                    var valorDescontoJuros = api.column(12).data().reduce(function (a, b) { return intVal(a) + intVal(b); }, 0);
+                    var valorDescontoParcela = api.column(13).data().reduce(function (a, b) { return intVal(a) + intVal(b); }, 0);
+                    var valorResiduo = api.column(14).data().reduce(function (a, b) { return intVal(a) + intVal(b); }, 0);
+                    var valorParcela = api.column(15).data().reduce(function (a, b) { return intVal(a) + intVal(b); }, 0);
 
                     $(api.column(0).footer()).html('Total');
-                    $(api.column(7).footer()).html(Globalize.format(valorOriginalTotal, "n2"));
-                    $(api.column(8).footer()).html(Globalize.format(valorAmortizacaoTotal, "n2"));
-                    $(api.column(9).footer()).html(Globalize.format(valorJurosTotal, "n2"));
-                    $(api.column(10).footer()).html(Globalize.format(valorMultaTotal, "n2"));
-                    $(api.column(11).footer()).html(Globalize.format(valorMoraTotal, "n2"));
-                    $(api.column(12).footer()).html(Globalize.format(valorDescontoTotal, "n2"));
-                    $(api.column(13).footer()).html(Globalize.format(valorParcelaTotal, "n2"));
+                    $(api.column(7).footer()).html(Globalize.format(valorOriginal, "n2"));
+                    $(api.column(8).footer()).html(Globalize.format(valorAmortizacao, "n2"));
+                    $(api.column(9).footer()).html(Globalize.format(valorJuros, "n2"));
+                    $(api.column(10).footer()).html(Globalize.format(valorMulta, "n2"));
+                    $(api.column(11).footer()).html(Globalize.format(valorMora, "n2"));
+                    $(api.column(12).footer()).html(Globalize.format(valorDescontoJuros, "n2"));
+                    $(api.column(13).footer()).html(Globalize.format(valorDescontoParcela, "n2"));
+                    $(api.column(14).footer()).html(Globalize.format(valorResiduo, "n2"));
+                    $(api.column(15).footer()).html(Globalize.format(valorParcela, "n2"));
                 }
             });
 
@@ -1145,6 +1203,7 @@
 
                 var simulacaoDto = {};
 
+                simulacaoDto.IdContrato = $("#idContrato").val();
                 simulacaoDto.DataInicio = $("#dataContrato").val();
                 simulacaoDto.DataPrimeiraParcela = $("#dataPrimeiraParcela").val();
                 simulacaoDto.ValorFinanciado = $("#valorFinanciado").val();
@@ -1178,11 +1237,12 @@
 
                 var contratoDto = {};
 
-                contratoDto.Id = $("#contratoIdAntecipar").val();
+                contratoDto.Id = $("#idContrato").val();
                 contratoDto.DataAntecipacao = $("#dataAntecipacao").val();
                 contratoDto.ValorAntecipacao = $("#valorAntecipacao").val();
                 contratoDto.IdSituacaoContrato = '@SituacaoContratoDto.EnumSituacaoContrato.Antecipado.GetHashCode()';
                 contratoDto.IdUsuarioAntecipacao = '@usuarioDto.Id';
+                contratoDto.SimulacaoAntecipacao = false;
 
                 $.ajax({
                     dataType: "json",
@@ -1222,7 +1282,7 @@
 
                 var contratoDto = {};
 
-                contratoDto.Id = $("#contratoIdBaixar").val();
+                contratoDto.Id = $("#idContrato").val();
                 contratoDto.DataBaixa = $("#dataBaixa").val();
                 contratoDto.IdSituacaoContrato = '@SituacaoContratoDto.EnumSituacaoContrato.Baixado.GetHashCode()';
                 contratoDto.IdUsuarioBaixa = '@usuarioDto.Id';
@@ -1603,12 +1663,18 @@
                                                 <input id="valorParcela" type="text" class="form-control valor" />
                                             </div>
                                             <div class="col-md-3">
-                                                <label for="taxaMulta">Taxa Multa:</label>
-                                                <input id="taxaMulta" type="text" class="form-control" disabled="disabled" />
+                                                <label class="control-label" for="taxaMulta">Taxa Multa:</label>
+                                                <div class="input-group">
+                                                    <input id="taxaMulta" type="text" class="form-control" disabled="disabled" />
+                                                    <div class="input-group-addon">%</div>
+                                                </div>
                                             </div>
                                             <div class="col-md-3">
-                                                <label for="taxaMora">Taxa Mora:</label>
-                                                <input id="taxaMora" type="text" class="form-control" disabled="disabled" />
+                                                <label class="control-label" for="taxaMora">Taxa Mora:</label>
+                                                <div class="input-group">
+                                                    <input id="taxaMora" type="text" class="form-control" disabled="disabled" />
+                                                    <div class="input-group-addon">%</div>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -1684,8 +1750,11 @@
                                                 <input id="valorFinanciado" type="text" class="form-control valor" disabled="disabled" />
                                             </div>
                                             <div class="col-md-2">
-                                                <label for="taxaJuros">Taxa Juros:</label>
-                                                <input id="taxaJuros" type="text" class="form-control taxa" />
+                                                <label class="control-label" for="taxaJuros">Taxa Juros:</label>
+                                                <div class="input-group">
+                                                    <input id="taxaJuros" type="text" class="form-control taxa" />
+                                                    <div class="input-group-addon">%</div>
+                                                </div>
                                             </div>
                                             <div class="col-md-2">
                                                 <label for="quantidadeParcela">Quantidade Parcelas:</label>
@@ -1732,6 +1801,8 @@
                                                         <td class="text-center"><b>Valor Multa</b></td>
                                                         <td class="text-center"><b>Valor Mora</b></td>
                                                         <td class="text-center"><b>Valor Desconto Juros</b></td>
+                                                        <td class="text-center"><b>Valor Desconto Parcela</b></td>
+                                                        <td class="text-center"><b>Valor Resíduo</b></td>
                                                         <td class="text-center"><b>Valor Parcela</b></td>
                                                         <td class="text-center"><b>Situação</b></td>
                                                     </tr>
@@ -1739,6 +1810,8 @@
                                                 <tbody></tbody>
                                                 <tfoot align="left">
                                                     <tr>
+                                                        <th></th>
+                                                        <th></th>
                                                         <th></th>
                                                         <th></th>
                                                         <th></th>
@@ -1800,7 +1873,7 @@
                                         <div class="row">
                                             <div class="col-md-4">
                                                 <label for="dataAntecipacao">Data Antecipação:</label>
-                                                <input id="dataAntecipacao" type="text" class="form-control data datepicker" />
+                                                <input id="dataAntecipacao" type="text" class="form-control data datepicker" onchange="calcularValorSaldoAntecipacao()" />
                                             </div>
                                             <div class="col-md-4">
                                                 <label for="valorSaldoAntecipacao">Valor Saldo Antecipação:</label>

@@ -22,5 +22,8 @@ namespace ProjetoTransportadora.Dto
         public double ValorDinheiro { get; set; }
         public double ValorFinanciado { get; set; }
         public List<ContratoParcelaDto> ContratoParcelaDto { get; set; }
+
+        // campos referentes a filtros
+        public int IdContrato { get; set; }
     }
 }

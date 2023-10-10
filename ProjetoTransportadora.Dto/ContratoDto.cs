@@ -59,8 +59,11 @@ namespace ProjetoTransportadora.Dto
         public virtual VeiculoDto VeiculoEntradaDto { get; set; }
         public virtual List<ContratoHistoricoDto> ContratoHistoricoDto { get; set; }
         public virtual List<ContratoParcelaDto> ContratoParcelaDto { get; set; }
+        public int IdTipoContrato { get; set; }
+
+        // filtros
         public DateTime DataContratoInicial { get; set; }
         public DateTime DataContratoFinal { get; set; }
-        public int IdTipoContrato { get; set; }
+        public bool SimulacaoAntecipacao { get; set; }
     }
 }

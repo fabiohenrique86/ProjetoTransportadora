@@ -58,7 +58,7 @@ namespace ProjetoTransportadora.Business
                     throw new BusinessException($"Contrato ({idContrato}) não existe");
 
                 double diasCalculo = contratoParcelaDto.DataVencimento.Subtract(dataPagamento).Days;
-                contratoParcelaDto.ValorDescontoJuros = contratoParcelaDto.ValorOriginal * Math.Pow((1D + (contrato.TaxaJuros / 100)), ((diasCalculo / 30D) - 1D)); // taxaJuros do contrato?
+                contratoParcelaDto.ValorDescontoJuros = contratoParcelaDto.ValorOriginal * Math.Pow((1D + (contrato.TaxaJuros / 100)), ((diasCalculo / 30D) - 1D));
             }
 
             double diasAtraso = contratoParcelaDto.DataVencimento.Subtract(dataPagamento).Days;
@@ -214,6 +214,20 @@ namespace ProjetoTransportadora.Business
 
             if (simulacaoDto.DataInicio.DayOfWeek == DayOfWeek.Saturday || simulacaoDto.DataInicio.DayOfWeek == DayOfWeek.Sunday)
                 throw new BusinessException("Data de Início deve ser dia útil");
+
+            // validação de geração de parcela por Status
+            if (simulacaoDto.IdContrato > 0)
+            {
+                var listaContratoParcelaDto = contratoParcelaRepository.ListarSimples(new ContratoParcelaDto() { IdContrato = simulacaoDto.IdContrato });
+
+                if (listaContratoParcelaDto != null && listaContratoParcelaDto.Count() > 0)
+                {
+                    var temParcelaComStatusDiferenteDePendente = listaContratoParcelaDto.Any(x => x.IdSituacaoParcela != SituacaoParcelaDto.EnumSituacaoParcela.Pendente.GetHashCode());
+
+                    if (temParcelaComStatusDiferenteDePendente)
+                        throw new BusinessException("Não é permitido gerar parcelas, pois existe pelo menos uma parcela com situação diferente de Pendente");
+                }
+            }
 
             DateTime dataVencimento;
             double diasContrato = 0;

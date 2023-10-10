@@ -44,17 +44,17 @@ namespace ProjetoTransportadora.Repository
                 DataPagamento = x.DataPagamento,
                 DataEmissao = x.DataEmissao,
                 ValorOriginal = x.ValorOriginal,
-                ValorAmortizacao = x.ValorAmortizacao,
-                ValorJuros = x.ValorJuros,
-                ValorMulta = x.ValorMulta,
-                ValorMora = x.ValorMora,
-                ValorDescontoJuros = x.ValorDescontoJuros,
-                ValorDescontoParcela = x.ValorDescontoParcela,
+                ValorAmortizacao = x.ValorAmortizacao ?? 0D,
+                ValorJuros = x.ValorJuros ?? 0D,
+                ValorMulta = x.ValorMulta ?? 0D,
+                ValorMora = x.ValorMora ?? 0D,
+                ValorDescontoJuros = x.ValorDescontoJuros ?? 0D,
+                ValorDescontoParcela = x.ValorDescontoParcela ?? 0D,
                 ValorParcela = x.ValorParcela,
-                TaxaMora = x.TaxaMora,
-                TaxaMulta = x.TaxaMulta,
-                ValorAcrescimo = x.ValorAcrescimo,
-                ValorResiduo = x.ValorResiduo,
+                TaxaMora = x.TaxaMora ?? 0D,
+                TaxaMulta = x.TaxaMulta ?? 0D,
+                ValorAcrescimo = x.ValorAcrescimo ?? 0D,
+                ValorResiduo = x.ValorResiduo ?? 0D,
             }).FirstOrDefault();
         }
 
@@ -84,17 +84,17 @@ namespace ProjetoTransportadora.Repository
                 DataPagamento = x.DataPagamento,
                 DataEmissao = x.DataEmissao,
                 ValorOriginal = x.ValorOriginal,
-                ValorAmortizacao = x.ValorAmortizacao,
-                ValorJuros = x.ValorJuros,
-                ValorMulta = x.ValorMulta,
-                ValorMora = x.ValorMora,
-                ValorDescontoJuros = x.ValorDescontoJuros,
-                ValorDescontoParcela = x.ValorDescontoParcela,
+                ValorAmortizacao = x.ValorAmortizacao ?? 0D,
+                ValorJuros = x.ValorJuros ?? 0D,
+                ValorMulta = x.ValorMulta ?? 0D,
+                ValorMora = x.ValorMora ?? 0D,
+                ValorDescontoJuros = x.ValorDescontoJuros ?? 0D,
+                ValorDescontoParcela = x.ValorDescontoParcela ?? 0D,
                 ValorParcela = x.ValorParcela,
-                TaxaMora = x.TaxaMora,
-                TaxaMulta = x.TaxaMulta,
-                ValorAcrescimo = x.ValorAcrescimo,
-                ValorResiduo = x.ValorResiduo,
+                TaxaMora = x.TaxaMora ?? 0D,
+                TaxaMulta = x.TaxaMulta ?? 0D,
+                ValorAcrescimo = x.ValorAcrescimo ?? 0D,
+                ValorResiduo = x.ValorResiduo ?? 0D,
                 ContratoParcelaHistoricoDto = x.ContratoParcelaHistorico.Select(w => new ContratoParcelaHistoricoDto()
                 {
                     Id = w.Id,
@@ -120,13 +120,52 @@ namespace ProjetoTransportadora.Repository
                         {
                             NumeroParcela = cpr.NumeroParcela,
                             DataVencimento = cpr.DataVencimento,
-                            ValorResiduo = cpr.ValorResiduo
+                            ValorResiduo = cpr.ValorResiduo ?? 0D
                         });
                     }
 
                     cp.ValorResiduo = listaContratoParcela.Sum(x => x.ValorResiduo);
                 }
             }
+
+            return lista;
+        }
+
+        public List<ContratoParcelaDto> ListarSimples(ContratoParcelaDto contratoParcelaDto)
+        {
+            IQueryable<ContratoParcela> query = projetoTransportadoraEntities.ContratoParcela;
+
+            if (contratoParcelaDto.Id > 0)
+                query = query.Where(x => x.Id == contratoParcelaDto.Id);
+
+            if (contratoParcelaDto.IdContrato > 0)
+                query = query.Where(x => x.IdContrato == contratoParcelaDto.IdContrato);
+
+            var lista = query.Select(x => new ContratoParcelaDto()
+            {
+                Id = x.Id,
+                NumeroParcela = x.NumeroParcela,
+                IdContrato = x.IdContrato,
+                IdSituacaoParcela = x.IdSituacaoParcela,
+                DataInicio = x.DataInicio,
+                DataVencimento = x.DataVencimento,
+                DiasParcela = x.DiasParcela,
+                DiasContrato = x.DiasContrato,
+                DataPagamento = x.DataPagamento,
+                DataEmissao = x.DataEmissao,
+                ValorOriginal = x.ValorOriginal,
+                ValorAmortizacao = x.ValorAmortizacao ?? 0D,
+                ValorJuros = x.ValorJuros ?? 0D,
+                ValorMulta = x.ValorMulta ?? 0D,
+                ValorMora = x.ValorMora ?? 0D,
+                ValorDescontoJuros = x.ValorDescontoJuros ?? 0D,
+                ValorDescontoParcela = x.ValorDescontoParcela ?? 0D,
+                ValorParcela = x.ValorParcela,
+                TaxaMora = x.TaxaMora ?? 0D,
+                TaxaMulta = x.TaxaMulta ?? 0D,
+                ValorAcrescimo = x.ValorAcrescimo ?? 0D,
+                ValorResiduo = x.ValorResiduo ?? 0D
+            }).OrderBy(x => x.NumeroParcela).ToList();
 
             return lista;
         }
@@ -145,17 +184,17 @@ namespace ProjetoTransportadora.Repository
                 DataPagamento = contratoParcelaDto.DataPagamento,
                 DataEmissao = contratoParcelaDto.DataEmissao,
                 ValorOriginal = contratoParcelaDto.ValorOriginal,
-                ValorAmortizacao = contratoParcelaDto.ValorAmortizacao,
-                ValorJuros = contratoParcelaDto.ValorJuros,
-                ValorMulta = contratoParcelaDto.ValorMulta,
-                ValorMora = contratoParcelaDto.ValorMora,
-                ValorDescontoJuros = contratoParcelaDto.ValorDescontoJuros,
-                ValorDescontoParcela = contratoParcelaDto.ValorDescontoParcela,
+                ValorAmortizacao = contratoParcelaDto.ValorAmortizacao ?? 0D,
+                ValorJuros = contratoParcelaDto.ValorJuros ?? 0D,
+                ValorMulta = contratoParcelaDto.ValorMulta ?? 0D,
+                ValorMora = contratoParcelaDto.ValorMora ?? 0D,
+                ValorDescontoJuros = contratoParcelaDto.ValorDescontoJuros ?? 0D,
+                ValorDescontoParcela = contratoParcelaDto.ValorDescontoParcela ?? 0D,
                 ValorParcela = contratoParcelaDto.ValorParcela,
-                TaxaMulta = contratoParcelaDto.TaxaMulta,
-                TaxaMora = contratoParcelaDto.TaxaMora,
-                ValorAcrescimo = contratoParcelaDto.ValorAcrescimo,
-                ValorResiduo = contratoParcelaDto.ValorResiduo
+                TaxaMulta = contratoParcelaDto.TaxaMulta ?? 0D,
+                TaxaMora = contratoParcelaDto.TaxaMora ?? 0D,
+                ValorAcrescimo = contratoParcelaDto.ValorAcrescimo ?? 0D,
+                ValorResiduo = contratoParcelaDto.ValorResiduo ?? 0D
             };
 
             projetoTransportadoraEntities.ContratoParcela.Add(contratoParcela);
@@ -219,9 +258,9 @@ namespace ProjetoTransportadora.Repository
 
         public void Excluir(int idContrato)
         {
-            var contratoParcela = projetoTransportadoraEntities.ContratoParcela.Where(x => x.IdContrato == idContrato);
+            var listaContratoParcela = projetoTransportadoraEntities.ContratoParcela.Where(x => x.IdContrato == idContrato);
 
-            projetoTransportadoraEntities.ContratoParcela.RemoveRange(contratoParcela);
+            projetoTransportadoraEntities.ContratoParcela.RemoveRange(listaContratoParcela);
 
             projetoTransportadoraEntities.SaveChanges();
         }

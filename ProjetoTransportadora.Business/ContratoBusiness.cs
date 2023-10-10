@@ -75,18 +75,6 @@ namespace ProjetoTransportadora.Business
             if (contratoDto.IdVeiculo <= 0)
                 throw new BusinessException("Veículo é obrigatório");
 
-            //if (contratoDto.DataBaixa.GetValueOrDefault() != DateTime.MinValue)
-            //{
-            //    if (contratoDto.DataBaixa < contratoDto.DataContrato)
-            //        throw new BusinessException("Data da Baixa deve ser maior ou igual a Data do Contrato");
-            //}
-
-            //if (contratoDto.DataAntecipacao.GetValueOrDefault() != DateTime.MinValue)
-            //{
-            //    if (contratoDto.DataAntecipacao < contratoDto.DataContrato)
-            //        throw new BusinessException("Data da Antecipação deve ser maior ou igual a Data do Contrato");
-            //}
-
             if (contratoDto.ContratoParcelaDto == null || contratoDto.ContratoParcelaDto.Count <= 0)
                 throw new BusinessException("Quantidade de parcelas do Contrato é obrigatório");
 
@@ -115,7 +103,7 @@ namespace ProjetoTransportadora.Business
             return idContrato;
         }
 
-        public void Antecipar(ContratoDto contratoDto)
+        public List<ContratoParcelaDto> Antecipar(ContratoDto contratoDto)
         {
             if (contratoDto == null)
                 throw new BusinessException("ContratoDto é nulo");
@@ -123,22 +111,31 @@ namespace ProjetoTransportadora.Business
             if (contratoDto.Id <= 0)
                 throw new BusinessException("Id é obrigatório");
 
-            if (contratoDto.IdSituacaoContrato <= 0)
-                throw new BusinessException("Situação do Contrato é obrigatório");
+            if (!contratoDto.SimulacaoAntecipacao)
+            {
+                if (contratoDto.IdSituacaoContrato <= 0)
+                    throw new BusinessException("Situação do Contrato é obrigatório");
+            }
 
             if (contratoDto.DataAntecipacao.GetValueOrDefault() == DateTime.MinValue)
                 throw new BusinessException("Data da Antecipação é obrigatório");
 
-            if (contratoDto.ValorAntecipacao <= 0)
-                throw new BusinessException("Valor da Antecipação é obrigatório");
+            if (!contratoDto.SimulacaoAntecipacao)
+            {
+                if (contratoDto.ValorAntecipacao <= 0)
+                    throw new BusinessException("Valor da Antecipação é obrigatório");
+            }
 
-            if (contratoDto.IdUsuarioAntecipacao <= 0)
-                throw new BusinessException("Id Usuário Antecipação é obrigatório");
+            if (!contratoDto.SimulacaoAntecipacao)
+            {
+                if (contratoDto.IdUsuarioAntecipacao <= 0)
+                    throw new BusinessException("Id Usuário Antecipação é obrigatório");
+            }
 
             var contrato = contratoRepository.Obter(new ContratoDto() { Id = contratoDto.Id });
 
             if (contrato == null)
-                throw new BusinessException($"Contrato Id ({contratoDto.Id}) não está cadastrado");
+                throw new BusinessException($"Contrato Id ({contratoDto.Id}) não existe");
 
             if (contratoDto.DataAntecipacao < contrato.DataContrato)
                 throw new BusinessException("Data da Antecipação deve ser maior ou igual à Data do Contrato");
@@ -160,7 +157,8 @@ namespace ProjetoTransportadora.Business
             {
                 for (int i = 0; i < listaContratoParcelaDto.Count; i++)
                 {
-                    listaContratoParcelaDto[i].IdSituacaoParcela = SituacaoParcelaDto.EnumSituacaoParcela.Antecipado.GetHashCode();
+                    if (!contratoDto.SimulacaoAntecipacao)
+                        listaContratoParcelaDto[i].IdSituacaoParcela = SituacaoParcelaDto.EnumSituacaoParcela.Antecipado.GetHashCode();
 
                     if (listaContratoParcelaDto[i].DataInicio >= contratoDto.DataAntecipacao) // parcela a vencer
                     {
@@ -182,7 +180,8 @@ namespace ProjetoTransportadora.Business
                                                                                 listaContratoParcelaDto[i].ValorJuros.GetValueOrDefault() +
                                                                                 listaContratoParcelaDto[i].ValorMora.GetValueOrDefault() +
                                                                                 listaContratoParcelaDto[i].ValorMulta.GetValueOrDefault() -
-                                                                                listaContratoParcelaDto[i].ValorDescontoJuros.GetValueOrDefault(), 2);
+                                                                                listaContratoParcelaDto[i].ValorDescontoJuros.GetValueOrDefault() -
+                                                                                listaContratoParcelaDto[i].ValorDescontoParcela.GetValueOrDefault(), 2);
                         }
                         else // parcela atual
                         {
@@ -195,17 +194,22 @@ namespace ProjetoTransportadora.Business
                                                                                 listaContratoParcelaDto[i].ValorJuros.GetValueOrDefault() +
                                                                                 listaContratoParcelaDto[i].ValorMora.GetValueOrDefault() +
                                                                                 listaContratoParcelaDto[i].ValorMulta.GetValueOrDefault() -
-                                                                                listaContratoParcelaDto[i].ValorDescontoJuros.GetValueOrDefault(), 2);
+                                                                                listaContratoParcelaDto[i].ValorDescontoJuros.GetValueOrDefault() -
+                                                                                listaContratoParcelaDto[i].ValorDescontoParcela.GetValueOrDefault(), 2);
                         }
                     }
 
-                    contratoParcelaBusiness.Antecipar(listaContratoParcelaDto[i]);
+                    if (!contratoDto.SimulacaoAntecipacao)
+                        contratoParcelaBusiness.Antecipar(listaContratoParcelaDto[i]);
                 }
 
-                contratoRepository.Antecipar(contratoDto);
+                if (!contratoDto.SimulacaoAntecipacao)
+                    contratoRepository.Antecipar(contratoDto);
 
                 transactionScope.Complete();
             }
+
+            return listaContratoParcelaDto;
         }
 
         public void Baixar(ContratoDto contratoDto)

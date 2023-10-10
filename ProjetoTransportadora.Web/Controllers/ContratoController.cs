@@ -91,13 +91,18 @@ namespace ProjetoTransportadora.Web.Controllers
         [HttpPost]
         public JsonResult Antecipar(ContratoDto contratoDto)
         {
-            contratoBusiness.Antecipar(contratoDto);
+            var listaContratoParcela = contratoBusiness.Antecipar(contratoDto);
 
-            var listaContrato = contratoBusiness.ListarGrid(new ContratoDto() { Id = contratoDto.Id });
-            var listaSituacaoContratoResumo = contratoBusiness.ListarSituacaoContratoResumo();
-            var listaSituacaoParcelaResumo = contratoBusiness.ListarSituacaoParcelaResumo();
+            if (!contratoDto.SimulacaoAntecipacao)
+            {
+                var listaContrato = contratoBusiness.ListarGrid(new ContratoDto() { Id = contratoDto.Id });
+                var listaSituacaoContratoResumo = contratoBusiness.ListarSituacaoContratoResumo();
+                var listaSituacaoParcelaResumo = contratoBusiness.ListarSituacaoParcelaResumo();
 
-            return Json(new { Sucesso = true, Mensagem = "Contrato listado com sucesso", Data = listaContrato, SituacaoContratoResumo = listaSituacaoContratoResumo, SituacaoParcelaResumo = listaSituacaoParcelaResumo }, JsonRequestBehavior.AllowGet);
+                return Json(new { Sucesso = true, Mensagem = "Contrato listado com sucesso", Data = listaContrato, SituacaoContratoResumo = listaSituacaoContratoResumo, SituacaoParcelaResumo = listaSituacaoParcelaResumo }, JsonRequestBehavior.AllowGet);
+            }
+
+            return Json(new { Sucesso = true, Mensagem = "Contrato listado com sucesso", ValorSaldoAntecipacao = listaContratoParcela?.Sum(x => x.ValorParcela) }, JsonRequestBehavior.AllowGet);
         }
 
         [HttpPost]
