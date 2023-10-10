@@ -808,6 +808,24 @@
             });
         }
 
+        function removerPlaceholder(formulario) {
+            $("#" + formulario + " :input").each(function (a, b) {
+                if (this.placeholder != "") {
+                    this.dataset.placeholder = this.placeholder;
+                    this.placeholder = '';
+                }
+            });            
+        }
+
+        function incluirPlaceholder(formulario) {
+            $("#" + formulario + " :input").each(function (a, b) {
+                if (this.dataset.placeholder != "") {
+                    this.placeholder = this.dataset.placeholder;
+                    this.dataset.placeholder = '';
+                }
+            });
+        }
+
         $.ajaxSetup({
             beforeSend: function () { $.blockUI({ message: '<h5>Carregando...</h4>' }); },
             complete: function () { $.unblockUI(); }

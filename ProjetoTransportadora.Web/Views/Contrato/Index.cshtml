@@ -35,18 +35,43 @@
 {
     <script type="text/javascript">
 
+        function habilitarAbaAntecipacao(opcao) {            
+            if (opcao) {
+                $("#dataAntecipacao").removeProp("disabled");
+                $("#valorAntecipacao").removeProp("disabled");
+                $("#btnAntecipar").show();
+            }
+            else {
+                $("#dataAntecipacao").prop("disabled", "disabled");                
+                $("#valorAntecipacao").prop("disabled", "disabled");
+                $("#btnAntecipar").hide();
+            }
+            $("#valorSaldoAntecipacao").prop("disabled", "disabled");
+        }
+
+        function habilitarAbaBaixa(opcao) {
+            if (opcao) {
+                $("#dataBaixa").removeProp("disabled");
+                $("#btnBaixar").show();
+            }
+            else {
+                $("#dataBaixa").prop("disabled", "disabled");
+                $("#btnBaixar").hide();
+            }
+        }
+
         function carregarModalNovo() {
 
             $("#lblAcao").html("Novo");
             $("#lblTitulo").html("");
 
             $("#btnAlterar").hide();
-            $("#btnAntecipar").hide();
-            $("#btnBaixar").hide();
             $("#btnIncluir").show();
 
             limparFormulario();
             habilitarModal(true);
+            habilitarAbaAntecipacao(false);
+            habilitarAbaBaixa(false);
 
             $("#valorParcela").prop("disabled", "disabled");
             $("#valorFinanciado").prop("disabled", "disabled");
@@ -80,11 +105,9 @@
 
                     $("#btnIncluir").hide();
                     $("#btnAlterar").hide();
-                    $("#btnAntecipar").hide();
-                    $("#btnBaixar").show();
 
-                    $("#btnBaixar").removeProp("disabled");
-                    $("#dataBaixa").removeProp("disabled");
+                    habilitarAbaAntecipacao(false);
+                    habilitarAbaBaixa(true);
 
                     $("#modalContrato").modal('show');
                     $('#baixar-tab').click();
@@ -117,12 +140,9 @@
 
                     $("#btnIncluir").hide();
                     $("#btnAlterar").hide();
-                    $("#btnBaixar").hide();
-                    $("#btnAntecipar").show();
 
-                    $("#btnAntecipar").removeProp("disabled");
-                    $("#dataAntecipacao").removeProp("disabled");
-                    $("#valorAntecipacao").removeProp("disabled");
+                    habilitarAbaBaixa(false);
+                    habilitarAbaAntecipacao(true);
 
                     $("#modalContrato").modal('show');
                     $('#antecipar-tab').click();
@@ -200,12 +220,11 @@
             $("#valorFinanciadoVeiculo").val(Globalize.format(data.ValorFinanciadoVeiculo, "n2"));
 
             // aba - parcelas
+
             $("#tbContratoParcela").DataTable().clear();
             $("#tbContratoParcela").DataTable().rows.add(data.ContratoParcelaDto).draw();
 
             // aba - histórico
-            //$("#tbContratoHistorico").DataTable().clear();
-            //$("#tbContratoHistorico").DataTable().rows.add(data.ContratoHistoricoDto).draw();
 
             $("#tbContratoHistorico").DataTable().clear().draw();
             $(data.ContratoHistoricoDto).each(function (i, o) {
@@ -251,7 +270,10 @@
             });
         }
 
-        function carregarModalConsultar(id) {
+        function carregarModalConsultar(id)
+        {
+            removerPlaceholder("modalContrato");
+            
             $.ajax({
                 dataType: "json",
                 type: "POST",
@@ -275,8 +297,9 @@
 
                     $("#btnIncluir").hide();
                     $("#btnAlterar").hide();
-                    $("#btnAntecipar").hide();
-                    $("#btnBaixar").hide();
+
+                    habilitarAbaAntecipacao(false);
+                    habilitarAbaBaixa(false);
 
                     $("#modalContrato").modal('show');
                     $('#dados-tab').click();
@@ -285,7 +308,10 @@
 
         }
 
-        function carregarModalAlterar(id) {
+        function carregarModalAlterar(id)
+        {
+            incluirPlaceholder("modalContrato");
+
             $.ajax({
                 dataType: "json",
                 type: "POST",
@@ -324,15 +350,8 @@
                     else
                         $("#btnGerarParcela").removeProp("disabled");
 
-                    // aba antecipação
-                    $("#dataAntecipacao").prop("disabled", "disabled");
-                    $("#valorSaldoAntecipacao").prop("disabled", "disabled");
-                    $("#valorAntecipacao").prop("disabled", "disabled");
-                    $("#btnAntecipar").hide();
-
-                    // aba baixa
-                    $("#dataBaixa").prop("disabled", "disabled");
-                    $("#btnBaixar").hide();
+                    habilitarAbaAntecipacao(false);
+                    habilitarAbaBaixa(false);
 
                     $("#modalContrato").modal('show');
                     $('#dados-tab').click();

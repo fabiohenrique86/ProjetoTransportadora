@@ -144,6 +144,18 @@ namespace ProjetoTransportadora.Business
             if (contratoParcelaDto.ValorOriginal <= 0)
                 throw new BusinessException("Valor Original é obrigatório");
 
+            if (contratoParcelaDto.NumeroParcela == 1)
+            {
+                var contrato = contratoRepository.Obter(new ContratoDto() { Id = contratoParcelaDto.IdContrato });
+
+                if (contrato == null)
+                    throw new BusinessException($"Contrato {contratoParcelaDto.IdContrato} não existe");
+
+                if (contratoParcelaDto.DataVencimento.Year < contrato.DataContrato.Year || 
+                    (contratoParcelaDto.DataVencimento.Year == contrato.DataContrato.Year && contratoParcelaDto.DataVencimento.Month <= contrato.DataContrato.Month))
+                    throw new BusinessException("Data Vencimento da 1ª parcela não pode ser no mesmo mês do início do contrato");
+            }
+
             idContratoParcela = contratoParcelaRepository.Incluir(contratoParcelaDto);
 
             return idContratoParcela;
