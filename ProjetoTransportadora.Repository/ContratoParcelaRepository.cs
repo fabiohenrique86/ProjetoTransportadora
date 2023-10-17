@@ -1,4 +1,5 @@
 ﻿using ProjetoTransportadora.Dto;
+using System;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
@@ -12,6 +13,20 @@ namespace ProjetoTransportadora.Repository
         public ContratoParcelaRepository()
         {
             projetoTransportadoraEntities = new ProjetoTransportadoraEntities();
+        }
+
+        public int ListarParcelaPaga(ContratoParcelaDto contratoParcelaDto)
+        {
+            IQueryable<ContratoParcela> query = projetoTransportadoraEntities.ContratoParcela;
+
+            var dataPagamento = contratoParcelaDto.DataPagamento.GetValueOrDefault();
+
+            if (dataPagamento != DateTime.MinValue)
+                query = query.Where(x => x.DataPagamento.Value.Month == dataPagamento.Month && x.DataPagamento.Value.Year == dataPagamento.Year);
+
+            query = query.Where(x => x.IdSituacaoParcela == (int)SituacaoParcelaDto.EnumSituacaoParcela.Paga);
+
+            return query.Count();
         }
 
         public bool Existe(int idContratoParcela)

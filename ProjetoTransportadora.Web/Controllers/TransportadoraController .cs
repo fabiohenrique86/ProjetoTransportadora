@@ -11,6 +11,7 @@ namespace ProjetoTransportadora.Web.Controllers
         private UsuarioBusiness usuarioBusiness;
         private VeiculoBusiness veiculoBusiness;
         private ContratoBusiness contratoBusiness;
+        private ContratoParcelaBusiness contratoParcelaBusiness;
 
         public TransportadoraController()
         {
@@ -18,6 +19,7 @@ namespace ProjetoTransportadora.Web.Controllers
             usuarioBusiness = new UsuarioBusiness();
             veiculoBusiness = new VeiculoBusiness();
             contratoBusiness = new ContratoBusiness();
+            contratoParcelaBusiness = new ContratoParcelaBusiness();
         }
 
         public ActionResult Index()
@@ -27,6 +29,7 @@ namespace ProjetoTransportadora.Web.Controllers
             ViewBag.QuantidadeUsuarios = usuarioBusiness.ListarTotal(new UsuarioDto() { Ativo = true, DataCadastro = DateTime.Now });
             ViewBag.QuantidadeContratos = contratoBusiness.ListarTotal(new ContratoDto() { Ativo = true, DataCadastro = DateTime.Now });
             ViewBag.QuantidadeVeiculos = veiculoBusiness.ListarTotal(new VeiculoDto() { Ativo = true, DataCadastro = DateTime.Now });
+            ViewBag.QuantidadeParcelaPaga = contratoParcelaBusiness.ListarParcelaPaga(new ContratoParcelaDto() { DataPagamento = DateTime.Now });
 
             return View();
         }
