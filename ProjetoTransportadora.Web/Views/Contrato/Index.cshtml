@@ -35,14 +35,23 @@
 {
     <script type="text/javascript">
 
-        function habilitarAbaAntecipacao(opcao) {            
+        function habilitarAbaValores(opcao) {
+            if (opcao) {
+                $("#valores :input").removeProp("disabled");
+            }
+            else {
+                $("#valores :input").prop("disabled", "disabled");
+            }
+        }
+
+        function habilitarAbaAntecipacao(opcao) {
             if (opcao) {
                 $("#dataAntecipacao").removeProp("disabled");
                 $("#valorAntecipacao").removeProp("disabled");
                 $("#btnAntecipar").show();
             }
             else {
-                $("#dataAntecipacao").prop("disabled", "disabled");                
+                $("#dataAntecipacao").prop("disabled", "disabled");
                 $("#valorAntecipacao").prop("disabled", "disabled");
                 $("#btnAntecipar").hide();
             }
@@ -273,7 +282,7 @@
         function carregarModalConsultar(id)
         {
             removerPlaceholder("modalContrato");
-            
+
             $.ajax({
                 dataType: "json",
                 type: "POST",
@@ -346,12 +355,17 @@
                     }
 
                     if (temParcelaComStatusDiferenteDePendente)
-                        $("#btnGerarParcela").prop("disabled", "disabled");
+                        habilitarAbaValores(false);
                     else
-                        $("#btnGerarParcela").removeProp("disabled");
+                        habilitarAbaValores(true);
 
                     habilitarAbaAntecipacao(false);
                     habilitarAbaBaixa(false);
+
+                    $("#valorParcela").prop("disabled", "disabled");
+                    $("#valorFinanciado").prop("disabled", "disabled");
+                    $("#valorFinanciadoDocumentacao").removeProp("disabled");
+                    $("#valorFinanciadoVeiculo").removeProp("disabled");
 
                     $("#modalContrato").modal('show');
                     $('#dados-tab').click();
@@ -1083,6 +1097,7 @@
 
                     contratoDto.ContratoParcelaDto.push
                     ({
+                        "IdContrato": contratoDto.Id,
                         "NumeroParcela": data.NumeroParcela,
                         "DataEmissao": moment(data.DataEmissao).format("YYYY/MM/DD"),
                         "DataInicio": moment(data.DataInicio).format("YYYY/MM/DD"),
@@ -1109,14 +1124,14 @@
                 tbContratoHistorico.rows().every(function (rowIdx, tableLoop, rowLoop)
                 {
                     contratoDto.ContratoHistoricoDto.push
-                        ({
-                            "Id": this.data().Id,
-                            "IdContrato": contratoDto.Id,
-                            "DataHistorico": $($($(".dataHistorico")[rowIdx]).parents("tr").children().eq(0)).children().val(),
-                            "Descricao": $($($(".descricaoHistorico")[rowIdx]).parents("tr").children().eq(1)).children().val(),
-                            "IdUsuarioCadastro": '@usuarioDto.Id',
-                            "DataCadastro": '@DateTime.UtcNow'
-                        });
+                    ({
+                        "Id": this.data().Id,
+                        "IdContrato": contratoDto.Id,
+                        "DataHistorico": $($($(".dataHistorico")[rowIdx]).parents("tr").children().eq(0)).children().val(),
+                        "Descricao": $($($(".descricaoHistorico")[rowIdx]).parents("tr").children().eq(1)).children().val(),
+                        "IdUsuarioCadastro": '@usuarioDto.Id',
+                        "DataCadastro": '@DateTime.UtcNow'
+                    });
                 });
 
                 var url = "";
@@ -1228,6 +1243,7 @@
                 simulacaoDto.ValorFinanciado = $("#valorFinanciado").val();
                 simulacaoDto.QuantidadeParcela = $("#quantidadeParcela").val();
                 simulacaoDto.TaxaMensalJuros = $("#taxaJuros").val();
+                simulacaoDto.IdTipoContrato = $("input[name='tipoContrato']:checked").val();
 
                 $.ajax({
                     dataType: "json",
@@ -1423,6 +1439,9 @@
             if (simulacaoDto != null)
             {
                 carregarModalNovo();
+
+                if (simulacaoDto.IdTipoContrato > 0)
+                    $("input[name='tipoContrato'][value=" + simulacaoDto.IdTipoContrato + "]").prop("checked", true);
 
                 $("#dataContrato").val(moment(simulacaoDto.DataInicio).format("DD/MM/YYYY"));
                 $("#valorVeiculo").val(Globalize.format(simulacaoDto.ValorPrincipal, "n2"));

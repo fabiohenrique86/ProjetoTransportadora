@@ -39,7 +39,7 @@
         }
 
         function limparFormulario() {
-            $("input").not(':button').val("");
+            $("input").not(':button').not(':radio').val("");
             $("#tbParcela").DataTable().clear().draw();
         }
 
@@ -149,6 +149,7 @@
                 simulacaoDto.ValorBens = $("#valorBens").val();
                 simulacaoDto.ValorDinheiro = $("#valorDinheiro").val();
                 simulacaoDto.ValorFinanciado = $("#valorFinanciado").val();
+                simulacaoDto.IdTipoContrato = $("input[name='tipoContrato']:checked").val();
 
                 $.ajax({
                     dataType: "json",
@@ -239,6 +240,15 @@
                 <div class="tab-pane active" id="simulacao" role="tabpanel" aria-labelledby="simulacao-tab">
                     <div class="form-group">
                         <div class="row">
+                            <div class="col-md-2">
+                                <label>Tipo de Cálculo:</label>
+                                <label class="radio-inline">
+                                    <input type="radio" name="tipoContrato" checked value="1" />Diário
+                                </label>
+                                <label class="radio-inline">
+                                    <input type="radio" name="tipoContrato" value="2" /> Mensal
+                                </label>
+                            </div>
                             <div class="col-md-2">
                                 <label for="dataInicio">Data Início:</label>
                                 <input id="dataInicio" type="text" class="form-control data datepicker" placeholder="Data Início" />

@@ -71,31 +71,31 @@ namespace ProjetoTransportadora.Repository
             var dataVencimentoFim = contratoDto.ContratoParcelaDto?.FirstOrDefault()?.DataVencimentoFim;
 
             var query = (from cp in projetoTransportadoraEntities.ContratoParcela
-                          join c in projetoTransportadoraEntities.Contrato on cp.IdContrato equals c.Id
-                          join p in projetoTransportadoraEntities.Pessoa on c.PessoaCliente.Id equals p.Id
-                          join sp in projetoTransportadoraEntities.SituacaoParcela on cp.IdSituacaoParcela equals sp.Id
-                          where c.Id == (contratoDto.Id > 0 ? contratoDto.Id : c.Id)
-                          && c.IdCliente == (contratoDto.IdCliente > 0 ? contratoDto.IdCliente : c.IdCliente)
-                          && c.IdProduto == (contratoDto.IdProduto > 0 ? contratoDto.IdProduto : c.IdProduto)
-                          && c.Veiculo.Placa.Contains(!string.IsNullOrEmpty(placa) ? placa : c.Veiculo.Placa)
-                          && c.IdSituacaoContrato == (contratoDto.IdSituacaoContrato > 0 ? contratoDto.IdSituacaoContrato : c.IdSituacaoContrato)
-                          && c.DataContrato >= (contratoDto.DataContratoInicial != DateTime.MinValue ? contratoDto.DataContratoInicial : c.DataContrato)
-                          && c.DataContrato <= (contratoDto.DataContratoFinal != DateTime.MinValue ? contratoDto.DataContratoFinal : c.DataContrato)
-                          && cp.DataVencimento >= (dataVencimentoInicio != DateTime.MinValue ? dataVencimentoInicio : cp.DataVencimento)
-                          && cp.DataVencimento <= (dataVencimentoFim != DateTime.MinValue ? dataVencimentoFim : cp.DataVencimento)
-                          && cp.Id == (idContratoParcela > 0 ? idContratoParcela : cp.Id)
-                          && cp.IdSituacaoParcela == (idSituacaoParcela > 0 ? idSituacaoParcela : cp.IdSituacaoParcela)
-                          select new
-                          {
-                              Id = c.Id,
-                              NumeroParcela = cp.NumeroParcela,
-                              IdContratoParcela = cp.Id,
-                              NomeCliente = p.Nome,
-                              DataVencimento = cp.DataVencimento,
-                              ValorParcela = cp.ValorParcela,
-                              IdSituacaoParcela = sp.Id,
-                              NomeSituacaoParcela = sp.Nome
-                          });
+                         join c in projetoTransportadoraEntities.Contrato on cp.IdContrato equals c.Id
+                         join p in projetoTransportadoraEntities.Pessoa on c.PessoaCliente.Id equals p.Id
+                         join sp in projetoTransportadoraEntities.SituacaoParcela on cp.IdSituacaoParcela equals sp.Id
+                         where c.Id == (contratoDto.Id > 0 ? contratoDto.Id : c.Id)
+                         && c.IdCliente == (contratoDto.IdCliente > 0 ? contratoDto.IdCliente : c.IdCliente)
+                         && c.IdProduto == (contratoDto.IdProduto > 0 ? contratoDto.IdProduto : c.IdProduto)
+                         && c.Veiculo.Placa.Contains(!string.IsNullOrEmpty(placa) ? placa : c.Veiculo.Placa)
+                         && c.IdSituacaoContrato == (contratoDto.IdSituacaoContrato > 0 ? contratoDto.IdSituacaoContrato : c.IdSituacaoContrato)
+                         && c.DataContrato >= (contratoDto.DataContratoInicial != DateTime.MinValue ? contratoDto.DataContratoInicial : c.DataContrato)
+                         && c.DataContrato <= (contratoDto.DataContratoFinal != DateTime.MinValue ? contratoDto.DataContratoFinal : c.DataContrato)
+                         && cp.DataVencimento >= (dataVencimentoInicio != DateTime.MinValue ? dataVencimentoInicio : cp.DataVencimento)
+                         && cp.DataVencimento <= (dataVencimentoFim != DateTime.MinValue ? dataVencimentoFim : cp.DataVencimento)
+                         && cp.Id == (idContratoParcela > 0 ? idContratoParcela : cp.Id)
+                         && cp.IdSituacaoParcela == (idSituacaoParcela > 0 ? idSituacaoParcela : cp.IdSituacaoParcela)
+                         select new
+                         {
+                             Id = c.Id,
+                             NumeroParcela = cp.NumeroParcela,
+                             IdContratoParcela = cp.Id,
+                             NomeCliente = p.Nome,
+                             DataVencimento = cp.DataVencimento,
+                             ValorParcela = cp.ValorParcela,
+                             IdSituacaoParcela = sp.Id,
+                             NomeSituacaoParcela = sp.Nome
+                         });
 
             return query.ToList();
         }
@@ -411,6 +411,45 @@ namespace ProjetoTransportadora.Repository
             projetoTransportadoraEntities.SaveChanges();
 
             return contrato.Id;
+        }
+
+        public void Alterar(ContratoDto contratoDto)
+        {
+            var contrato = projetoTransportadoraEntities.Contrato.FirstOrDefault(x => x.Id == contratoDto.Id);
+
+            contrato.NumeroContrato = contratoDto.NumeroContrato;
+            contrato.IdCliente = contratoDto.IdCliente;
+            contrato.IdVeiculo = contratoDto.IdVeiculo;
+            contrato.IdProduto = contratoDto.IdProduto;
+            //contrato.IdSituacaoContrato = contratoDto.IdSituacaoContrato;
+            contrato.IdCanal = contratoDto.IdCanal;
+            contrato.DataContrato = contratoDto.DataContrato;
+            contrato.IdFiador = contratoDto.IdFiador;
+            contrato.IdIndicacao = contratoDto.IdIndicacao;
+            contrato.IdPromotor = contratoDto.IdPromotor;
+            contrato.DataPrimeiraParcela = contratoDto.DataPrimeiraParcela;
+            contrato.DataBaixa = contratoDto.DataBaixa;
+            contrato.DataAntecipacao = contratoDto.DataAntecipacao;
+            contrato.ValorAntecipacao = contratoDto.ValorAntecipacao;
+            contrato.ValorVeiculo = contratoDto.ValorVeiculo;
+            contrato.ValorEntrada = contratoDto.ValorEntrada;
+            contrato.ValorDocumentacao = contratoDto.ValorDocumentacao;
+            contrato.ValorDesconto = contratoDto.ValorDesconto;
+            contrato.ValorFinanciadoVeiculo = contratoDto.ValorFinanciadoVeiculo;
+            contrato.ValorFinanciadoDocumentacao = contratoDto.ValorFinanciadoDocumentacao;
+            contrato.IdVeiculoEntrada = contratoDto.IdVeiculoEntrada;
+            contrato.ValorVeiculoEntrada = contratoDto.ValorVeiculoEntrada;
+            contrato.ValorFinanciado = contratoDto.ValorFinanciado;
+            contrato.ValorDinheiro = contratoDto.ValorDinheiro;
+            contrato.ValorDepositado = contratoDto.ValorDepositado;
+            contrato.TaxaJuros = contratoDto.TaxaJuros;
+            contrato.ValorTarifa = contratoDto.ValorTarifa;
+            contrato.TaxaMora = contratoDto.TaxaMora;
+            contrato.TaxaMulta = contratoDto.TaxaMulta;
+            contrato.IdTipoContrato = contratoDto.IdTipoContrato;
+
+            projetoTransportadoraEntities.Entry(contrato).State = EntityState.Modified;
+            projetoTransportadoraEntities.SaveChanges();
         }
 
         public void Antecipar(ContratoDto contratoDto)

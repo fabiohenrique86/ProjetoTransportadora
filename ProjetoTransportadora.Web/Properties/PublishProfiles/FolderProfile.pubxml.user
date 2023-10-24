@@ -15,10 +15,10 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>02/22/2013 05:43:40</publishTime>
     </File>
     <File Include="bin/EntityFramework.dll">
-      <publishTime>04/17/2023 12:27:10</publishTime>
+      <publishTime>04/16/2020 17:38:42</publishTime>
     </File>
     <File Include="bin/EntityFramework.SqlServer.dll">
-      <publishTime>04/17/2023 12:27:10</publishTime>
+      <publishTime>04/16/2020 17:38:56</publishTime>
     </File>
     <File Include="bin/Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll">
       <publishTime>04/17/2023 12:27:11</publishTime>
@@ -30,31 +30,31 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>04/17/2023 12:27:11</publishTime>
     </File>
     <File Include="bin/ProjetoTransportadora.Business.dll">
-      <publishTime>08/07/2023 10:15:19</publishTime>
+      <publishTime>10/17/2023 11:18:17</publishTime>
     </File>
     <File Include="bin/ProjetoTransportadora.Business.pdb">
-      <publishTime>08/07/2023 10:15:19</publishTime>
+      <publishTime>10/17/2023 11:18:17</publishTime>
     </File>
     <File Include="bin/ProjetoTransportadora.Dto.dll">
-      <publishTime>08/07/2023 10:15:18</publishTime>
+      <publishTime>10/17/2023 11:18:16</publishTime>
     </File>
     <File Include="bin/ProjetoTransportadora.Dto.pdb">
-      <publishTime>08/07/2023 10:15:18</publishTime>
+      <publishTime>10/17/2023 11:18:16</publishTime>
     </File>
     <File Include="bin/ProjetoTransportadora.Repository.dll">
-      <publishTime>08/07/2023 10:15:19</publishTime>
+      <publishTime>10/17/2023 11:18:17</publishTime>
     </File>
     <File Include="bin/ProjetoTransportadora.Repository.dll.config">
-      <publishTime>04/24/2023 10:49:07</publishTime>
+      <publishTime>09/18/2023 22:05:49</publishTime>
     </File>
     <File Include="bin/ProjetoTransportadora.Repository.pdb">
-      <publishTime>08/07/2023 10:15:19</publishTime>
+      <publishTime>10/17/2023 11:18:17</publishTime>
     </File>
     <File Include="bin/ProjetoTransportadora.Web.dll">
-      <publishTime>08/07/2023 10:15:19</publishTime>
+      <publishTime>10/17/2023 11:18:17</publishTime>
     </File>
     <File Include="bin/ProjetoTransportadora.Web.pdb">
-      <publishTime>08/07/2023 10:15:19</publishTime>
+      <publishTime>10/17/2023 11:18:17</publishTime>
     </File>
     <File Include="bin/pt-br/System.Web.Helpers.resources.dll">
       <publishTime>08/08/2012 14:51:22</publishTime>
@@ -387,7 +387,7 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>06/06/2023 11:59:23</publishTime>
     </File>
     <File Include="Views/Contrato/Index.cshtml">
-      <publishTime>06/20/2023 14:08:01</publishTime>
+      <publishTime>10/10/2023 10:40:43</publishTime>
     </File>
     <File Include="Views/Dashboard/Index.cshtml">
       <publishTime>03/17/2023 14:27:47</publishTime>
@@ -407,6 +407,9 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
     <File Include="Views/Montadora/Index.cshtml">
       <publishTime>06/06/2023 11:59:23</publishTime>
     </File>
+    <File Include="Views/Parcela/Index.cshtml">
+      <publishTime>10/09/2023 22:02:34</publishTime>
+    </File>
     <File Include="Views/Permissao/Index.cshtml">
       <publishTime>06/06/2023 09:59:45</publishTime>
     </File>
@@ -423,7 +426,7 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>06/06/2023 11:59:23</publishTime>
     </File>
     <File Include="Views/Shared/_Layout.cshtml">
-      <publishTime>08/05/2023 17:59:37</publishTime>
+      <publishTime>10/10/2023 10:42:04</publishTime>
     </File>
     <File Include="Views/Shared/_PessoaCadastroAuxiliar.cshtml">
       <publishTime>07/12/2023 20:42:52</publishTime>
@@ -432,7 +435,7 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>08/07/2023 10:08:05</publishTime>
     </File>
     <File Include="Views/Simulacao/Index.cshtml">
-      <publishTime>07/12/2023 20:11:43</publishTime>
+      <publishTime>09/28/2023 07:45:32</publishTime>
     </File>
     <File Include="Views/SituacaoVeiculo/Index.cshtml">
       <publishTime>06/06/2023 11:59:23</publishTime>
@@ -441,7 +444,7 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>06/06/2023 11:59:23</publishTime>
     </File>
     <File Include="Views/Transportadora/Index.cshtml">
-      <publishTime>05/05/2023 15:43:03</publishTime>
+      <publishTime>10/14/2023 17:19:17</publishTime>
     </File>
     <File Include="Views/Usuario/Index.cshtml">
       <publishTime>06/06/2023 11:59:23</publishTime>
@@ -462,7 +465,7 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>04/20/2023 15:16:47</publishTime>
     </File>
     <File Include="Web.config">
-      <publishTime>08/07/2023 10:15:19</publishTime>
+      <publishTime>10/17/2023 11:18:17</publishTime>
     </File>
   </ItemGroup>
 </Project>

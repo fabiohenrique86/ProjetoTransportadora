@@ -166,6 +166,14 @@ namespace ProjetoTransportadora.Business
             return idContratoParcela;
         }
 
+        public void Excluir(int idContrato)
+        {
+            if (idContrato <= 0)
+                throw new BusinessException("IdContrato é obrigatório");
+
+            contratoParcelaRepository.Excluir(idContrato);
+        }
+
         public void Alterar(ContratoParcelaDto contratoParcelaDto)
         {
             if (contratoParcelaDto == null)
@@ -226,11 +234,22 @@ namespace ProjetoTransportadora.Business
             if (simulacaoDto.TaxaMensalJuros <= 0)
                 throw new BusinessException("Taxa Mensal Juros é obrigatório");
 
+            if (simulacaoDto.IdTipoContrato <= 0)
+                throw new BusinessException("Tipo de Cálculo é obrigatório");
+
             if (simulacaoDto.DataPrimeiraParcela < simulacaoDto.DataInicio)
                 throw new BusinessException("Data Primeira Parcela deve ser posterior a Data de Início.");
 
             if (simulacaoDto.DataInicio.DayOfWeek == DayOfWeek.Saturday || simulacaoDto.DataInicio.DayOfWeek == DayOfWeek.Sunday)
                 throw new BusinessException("Data de Início deve ser dia útil");
+
+            if (simulacaoDto.IdTipoContrato == TipoContratoDto.EnumTipoContrato.Mensal.GetHashCode())
+            {
+                if (simulacaoDto.DataPrimeiraParcela.Year < simulacaoDto.DataInicio.Year)
+                    throw new BusinessException("Data Primeira Parcela deve ser no mês seguinte a Data de Início.");
+                else if (simulacaoDto.DataPrimeiraParcela.Year == simulacaoDto.DataInicio.Year && simulacaoDto.DataPrimeiraParcela.Month <= simulacaoDto.DataInicio.Month)
+                    throw new BusinessException("Data Primeira Parcela deve ser no mês seguinte a Data de Início.");
+            }
 
             // validação de geração de parcela por Status
             if (simulacaoDto.IdContrato > 0)
@@ -270,7 +289,13 @@ namespace ProjetoTransportadora.Business
                 diasContrato = Convert.ToDouble(dataVencimento.Subtract(simulacaoDto.DataInicio).Days);
                 diasParcela = parcelaAnterior == null ? diasContrato : Convert.ToDouble(dataVencimento.Subtract(parcelaAnterior.DataVencimento).Days);
 
-                fator = Math.Pow((1 + (simulacaoDto.TaxaMensalJuros / 100)), (diasContrato / 30D));
+                if (simulacaoDto.IdTipoContrato == TipoContratoDto.EnumTipoContrato.Diario.GetHashCode())
+                    fator = Math.Pow((1 + (simulacaoDto.TaxaMensalJuros / 100)), (diasContrato / 30D));
+                else if (simulacaoDto.IdTipoContrato == TipoContratoDto.EnumTipoContrato.Mensal.GetHashCode())
+                    fator = Math.Pow((1 + (simulacaoDto.TaxaMensalJuros / 100)), i);
+                else
+                    throw new BusinessException($"Tipo de cálculo ({simulacaoDto.IdTipoContrato}) informado é inválido");
+
                 fatorInvertido = 1 / fator;
                 somaFatorInvertido += fatorInvertido;
 
@@ -313,6 +338,8 @@ namespace ProjetoTransportadora.Business
                 parcelasDto[i].ValorDescontoJuros = 0;
                 parcelasDto[i].ValorDescontoParcela = 0;
                 parcelasDto[i].ValorMulta = 0;
+                parcelasDto[i].ValorResiduo = 0;
+                parcelasDto[i].ValorAcrescimo = 0;
                 parcelasDto[i].IdSituacaoParcela = SituacaoParcelaDto.EnumSituacaoParcela.Pendente.GetHashCode();
                 parcelasDto[i].SituacaoParcelaDto = new SituacaoParcelaDto() { Id = SituacaoParcelaDto.EnumSituacaoParcela.Pendente.GetHashCode(), Nome = SituacaoParcelaDto.EnumSituacaoParcela.Pendente.ToString() };
             }

@@ -819,7 +819,7 @@
 
         function incluirPlaceholder(formulario) {
             $("#" + formulario + " :input").each(function (a, b) {
-                if (this.dataset.placeholder != "") {
+                if (this.dataset.placeholder != "" && this.dataset.placeholder !== undefined) {
                     this.placeholder = this.dataset.placeholder;
                     this.dataset.placeholder = '';
                 }

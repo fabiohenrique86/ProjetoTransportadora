@@ -103,6 +103,33 @@ namespace ProjetoTransportadora.Business
             return idContrato;
         }
 
+        public void Alterar(ContratoDto contratoDto)
+        {
+            if (contratoDto == null)
+                throw new BusinessException("ContratoDto é nulo");
+
+            if (contratoDto.Id <= 0)
+                throw new BusinessException("Id é obrigatório");
+
+            if (contratoDto.DataContrato >= contratoDto.DataPrimeiraParcela)
+                throw new BusinessException("Data do Contrato tem que menor do que a Data Primeira Parcela do contrato");
+
+            using (TransactionScope scope = new TransactionScope(TransactionScopeOption.Required))
+            {
+                contratoRepository.Alterar(contratoDto);
+
+                contratoHistoricoBusiness.Excluir(contratoDto.Id);
+                foreach (var contratoHistoricoDto in contratoDto.ContratoHistoricoDto)
+                    contratoHistoricoBusiness.Incluir(contratoHistoricoDto);
+
+                contratoParcelaBusiness.Excluir(contratoDto.Id);
+                foreach (var contratoparcelaDto in contratoDto.ContratoParcelaDto)
+                    contratoParcelaBusiness.Incluir(contratoparcelaDto);
+
+                scope.Complete();
+            }
+        }
+
         public List<ContratoParcelaDto> Antecipar(ContratoDto contratoDto)
         {
             if (contratoDto == null)

@@ -89,6 +89,20 @@ namespace ProjetoTransportadora.Web.Controllers
         }
 
         [HttpPost]
+        public JsonResult Alterar(ContratoDto contratoDto)
+        {
+            contratoBusiness.Alterar(contratoDto);
+
+            var contrato = new ContratoDto() { Id = contratoDto.Id };
+
+            var listaContrato = contratoBusiness.ListarGrid(contrato);
+            var listaSituacaoContratoResumo = contratoBusiness.ListarSituacaoContratoResumo(contrato);
+            var listaSituacaoParcelaResumo = contratoBusiness.ListarSituacaoParcelaResumo(contrato);
+
+            return Json(new { Sucesso = true, Mensagem = "Contrato listado com sucesso", Data = listaContrato, SituacaoContratoResumo = listaSituacaoContratoResumo, SituacaoParcelaResumo = listaSituacaoParcelaResumo }, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpPost]
         public JsonResult Antecipar(ContratoDto contratoDto)
         {
             var listaContratoParcela = contratoBusiness.Antecipar(contratoDto);
