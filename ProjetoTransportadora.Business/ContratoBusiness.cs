@@ -14,12 +14,15 @@ namespace ProjetoTransportadora.Business
         ContratoHistoricoBusiness contratoHistoricoBusiness;
         ContratoParcelaBusiness contratoParcelaBusiness;
         FeriadoBusiness feriadoBusiness;
+        ContratoParcelaHistoricoBusiness contratoParcelaHistoricoBusiness;
+
         public ContratoBusiness()
         {
             contratoRepository = new ContratoRepository();
             contratoHistoricoBusiness = new ContratoHistoricoBusiness();
             contratoParcelaBusiness = new ContratoParcelaBusiness();
             feriadoBusiness = new FeriadoBusiness();
+            contratoParcelaHistoricoBusiness = new ContratoParcelaHistoricoBusiness();
         }
 
         public dynamic ListarGridParcela(ContratoDto contratoDto = null)
@@ -112,21 +115,31 @@ namespace ProjetoTransportadora.Business
                 throw new BusinessException("Id é obrigatório");
 
             if (contratoDto.DataContrato >= contratoDto.DataPrimeiraParcela)
-                throw new BusinessException("Data do Contrato tem que menor do que a Data Primeira Parcela do contrato");
+                throw new BusinessException("Data Contrato tem que ser menor do que a Data Primeira Parcela do contrato");
 
-            using (TransactionScope scope = new TransactionScope(TransactionScopeOption.Required))
+            using (TransactionScope transactionScope = new TransactionScope(TransactionScopeOption.Required))
             {
+                // contrato
                 contratoRepository.Alterar(contratoDto);
 
+                // contratoHistorico
                 contratoHistoricoBusiness.Excluir(contratoDto.Id);
                 foreach (var contratoHistoricoDto in contratoDto.ContratoHistoricoDto)
                     contratoHistoricoBusiness.Incluir(contratoHistoricoDto);
 
+                // contratoParcelaHistorico
+                foreach (var contratoparcelaDto in contratoDto.ContratoParcelaDto)
+                {
+                    if (contratoparcelaDto.Id > 0)
+                        contratoParcelaHistoricoBusiness.Excluir(contratoparcelaDto.Id);
+                }
+
+                // contratoParcela
                 contratoParcelaBusiness.Excluir(contratoDto.Id);
                 foreach (var contratoparcelaDto in contratoDto.ContratoParcelaDto)
                     contratoParcelaBusiness.Incluir(contratoparcelaDto);
 
-                scope.Complete();
+                transactionScope.Complete();
             }
         }
 

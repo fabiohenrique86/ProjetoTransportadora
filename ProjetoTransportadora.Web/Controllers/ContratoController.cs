@@ -85,7 +85,7 @@ namespace ProjetoTransportadora.Web.Controllers
             var listaSituacaoContratoResumo = contratoBusiness.ListarSituacaoContratoResumo();
             var listaSituacaoParcelaResumo = contratoBusiness.ListarSituacaoParcelaResumo();
 
-            return Json(new { Sucesso = true, Mensagem = "Contrato listado com sucesso", Data = listaContrato, SituacaoContratoResumo = listaSituacaoContratoResumo, SituacaoParcelaResumo = listaSituacaoParcelaResumo }, JsonRequestBehavior.AllowGet);
+            return Json(new { Sucesso = true, Mensagem = "Contrato incluído com sucesso", Data = listaContrato, SituacaoContratoResumo = listaSituacaoContratoResumo, SituacaoParcelaResumo = listaSituacaoParcelaResumo }, JsonRequestBehavior.AllowGet);
         }
 
         [HttpPost]
@@ -93,13 +93,11 @@ namespace ProjetoTransportadora.Web.Controllers
         {
             contratoBusiness.Alterar(contratoDto);
 
-            var contrato = new ContratoDto() { Id = contratoDto.Id };
+            var listaContrato = contratoBusiness.ListarGrid(new ContratoDto() { Id = contratoDto.Id });
+            var listaSituacaoContratoResumo = contratoBusiness.ListarSituacaoContratoResumo();
+            var listaSituacaoParcelaResumo = contratoBusiness.ListarSituacaoParcelaResumo();
 
-            var listaContrato = contratoBusiness.ListarGrid(contrato);
-            var listaSituacaoContratoResumo = contratoBusiness.ListarSituacaoContratoResumo(contrato);
-            var listaSituacaoParcelaResumo = contratoBusiness.ListarSituacaoParcelaResumo(contrato);
-
-            return Json(new { Sucesso = true, Mensagem = "Contrato listado com sucesso", Data = listaContrato, SituacaoContratoResumo = listaSituacaoContratoResumo, SituacaoParcelaResumo = listaSituacaoParcelaResumo }, JsonRequestBehavior.AllowGet);
+            return Json(new { Sucesso = true, Mensagem = "Contrato alterado com sucesso", Data = listaContrato, SituacaoContratoResumo = listaSituacaoContratoResumo, SituacaoParcelaResumo = listaSituacaoParcelaResumo }, JsonRequestBehavior.AllowGet);
         }
 
         [HttpPost]
@@ -116,7 +114,7 @@ namespace ProjetoTransportadora.Web.Controllers
                 return Json(new { Sucesso = true, Mensagem = "Contrato listado com sucesso", Data = listaContrato, SituacaoContratoResumo = listaSituacaoContratoResumo, SituacaoParcelaResumo = listaSituacaoParcelaResumo }, JsonRequestBehavior.AllowGet);
             }
 
-            return Json(new { Sucesso = true, Mensagem = "Contrato listado com sucesso", ValorSaldoAntecipacao = listaContratoParcela?.Sum(x => x.ValorParcela) }, JsonRequestBehavior.AllowGet);
+            return Json(new { Sucesso = true, Mensagem = "Contrato antecipado com sucesso", ValorSaldoAntecipacao = listaContratoParcela?.Sum(x => x.ValorParcela) }, JsonRequestBehavior.AllowGet);
         }
 
         [HttpPost]
@@ -128,7 +126,7 @@ namespace ProjetoTransportadora.Web.Controllers
             var listaSituacaoContratoResumo = contratoBusiness.ListarSituacaoContratoResumo();
             var listaSituacaoParcelaResumo = contratoBusiness.ListarSituacaoParcelaResumo();
 
-            return Json(new { Sucesso = true, Mensagem = "Contrato listado com sucesso", Data = listaContrato, SituacaoContratoResumo = listaSituacaoContratoResumo, SituacaoParcelaResumo = listaSituacaoParcelaResumo }, JsonRequestBehavior.AllowGet);
+            return Json(new { Sucesso = true, Mensagem = "Contrato baixado com sucesso", Data = listaContrato, SituacaoContratoResumo = listaSituacaoContratoResumo, SituacaoParcelaResumo = listaSituacaoParcelaResumo }, JsonRequestBehavior.AllowGet);
         }
 
         [HttpGet]

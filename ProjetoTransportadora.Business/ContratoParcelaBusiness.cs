@@ -203,7 +203,7 @@ namespace ProjetoTransportadora.Business
                 // ContratoParcela
                 contratoParcelaRepository.Alterar(contratoParcelaDto);
 
-                // ContratoParcelaHistoricoDto
+                // ContratoParcelaHistorico
                 contratoParcelaHistoricoBusiness.Excluir(contratoParcelaDto.Id);
                 foreach (var contratoParcelaHistoricoDto in contratoParcelaDto.ContratoParcelaHistoricoDto)
                     contratoParcelaHistoricoBusiness.Incluir(contratoParcelaHistoricoDto);
@@ -214,16 +214,16 @@ namespace ProjetoTransportadora.Business
 
         public List<ContratoParcelaDto> Gerar(SimulacaoDto simulacaoDto)
         {
-            var parcelasDto = new List<ContratoParcelaDto>();
+            var listaContratoParcelaDto = new List<ContratoParcelaDto>();
 
             if (simulacaoDto == null)
                 throw new BusinessException("simulacaoDto é obrigatório");
 
             if (simulacaoDto.DataInicio == DateTime.MinValue)
-                throw new BusinessException("Data de Início é obrigatório ou é inválida");
+                throw new BusinessException("Data Início é obrigatório ou é inválida");
 
             if (simulacaoDto.DataPrimeiraParcela == DateTime.MinValue)
-                throw new BusinessException("Data da Primeira Parcela é obrigatório ou é inválida");
+                throw new BusinessException("Data Primeira Parcela é obrigatório ou é inválida");
 
             if (simulacaoDto.ValorFinanciado <= 0)
                 throw new BusinessException("Valor Financiado é obrigatório");
@@ -241,7 +241,7 @@ namespace ProjetoTransportadora.Business
                 throw new BusinessException("Data Primeira Parcela deve ser posterior a Data de Início.");
 
             if (simulacaoDto.DataInicio.DayOfWeek == DayOfWeek.Saturday || simulacaoDto.DataInicio.DayOfWeek == DayOfWeek.Sunday)
-                throw new BusinessException("Data de Início deve ser dia útil");
+                throw new BusinessException("Data Início deve ser dia útil");
 
             if (simulacaoDto.IdTipoContrato == TipoContratoDto.EnumTipoContrato.Mensal.GetHashCode())
             {
@@ -251,17 +251,21 @@ namespace ProjetoTransportadora.Business
                     throw new BusinessException("Data Primeira Parcela deve ser no mês seguinte a Data de Início.");
             }
 
-            // validação de geração de parcela por Status
             if (simulacaoDto.IdContrato > 0)
             {
-                var listaContratoParcelaDto = contratoParcelaRepository.ListarSimples(new ContratoParcelaDto() { IdContrato = simulacaoDto.IdContrato });
+                var listaContratoParcela = contratoParcelaRepository.Listar(new ContratoParcelaDto() { IdContrato = simulacaoDto.IdContrato });
 
-                if (listaContratoParcelaDto != null && listaContratoParcelaDto.Count() > 0)
+                if (listaContratoParcela != null && listaContratoParcela.Count() > 0)
                 {
-                    var temParcelaComStatusDiferenteDePendente = listaContratoParcelaDto.Any(x => x.IdSituacaoParcela != SituacaoParcelaDto.EnumSituacaoParcela.Pendente.GetHashCode());
+                    var temParcelaComStatusDiferenteDePendente = listaContratoParcela.Any(x => x.IdSituacaoParcela != SituacaoParcelaDto.EnumSituacaoParcela.Pendente.GetHashCode());
 
                     if (temParcelaComStatusDiferenteDePendente)
-                        throw new BusinessException("Não é permitido gerar parcelas, pois existe pelo menos uma parcela com situação diferente de Pendente");
+                        throw new BusinessException("Não é permitido gerar parcelas, pois existe(m) parcela(s) com situação diferente de Pendente");
+
+                    var temContratoParcelaHistorico = listaContratoParcela.Any(x => x.ContratoParcelaHistoricoDto.Any());
+
+                    if (temContratoParcelaHistorico)
+                        throw new BusinessException("Não é permitido gerar parcelas, pois existe(m) parcela(s) com histórico cadastrado");
                 }
             }
 
@@ -283,7 +287,7 @@ namespace ProjetoTransportadora.Business
                 diasParcela = 0;
                 fator = 0;
                 fatorInvertido = 0;
-                var parcelaAnterior = i == 1 ? null : parcelasDto[i - 2];
+                var parcelaAnterior = i == 1 ? null : listaContratoParcelaDto[i - 2];
 
                 dataVencimento = this.CalcularDataVencimento(i == 1 ? simulacaoDto.DataPrimeiraParcela : simulacaoDto.DataPrimeiraParcela.AddMonths(i - 1));
                 diasContrato = Convert.ToDouble(dataVencimento.Subtract(simulacaoDto.DataInicio).Days);
@@ -299,8 +303,9 @@ namespace ProjetoTransportadora.Business
                 fatorInvertido = 1 / fator;
                 somaFatorInvertido += fatorInvertido;
 
-                parcelasDto.Add(new ContratoParcelaDto()
+                listaContratoParcelaDto.Add(new ContratoParcelaDto()
                 {
+                    Id = simulacaoDto.ContratoParcelaDto?.Count() > 0 ? simulacaoDto.ContratoParcelaDto.FirstOrDefault(x => x.NumeroParcela == i) == null ? 0 : simulacaoDto.ContratoParcelaDto.FirstOrDefault(x => x.NumeroParcela == i).Id : 0,
                     NumeroParcela = i,
                     DataInicio = (i == 1 ? simulacaoDto.DataInicio : parcelaAnterior.DataVencimento),
                     DataVencimento = dataVencimento,                    
@@ -312,39 +317,39 @@ namespace ProjetoTransportadora.Business
                 });
             }
 
-            for (int i = 0; i < parcelasDto.Count(); i++)
+            for (int i = 0; i < listaContratoParcelaDto.Count(); i++)
             {
                 valorSaldoAtual = 0;
                 valorParcela = 0;
                 valorSaldoAnterior = 0;
                 valorJuros = 0;
                 valorAmortizacao = 0;
-                var parcelaAnterior = i == 0 ? null : parcelasDto[i - 1];
+                var parcelaAnterior = i == 0 ? null : listaContratoParcelaDto[i - 1];
 
                 valorParcela = Math.Round(simulacaoDto.ValorFinanciado / somaFatorInvertido, 2);
                 valorSaldoAnterior = i == 0 ? simulacaoDto.ValorFinanciado : parcelaAnterior.ValorSaldoAnterior - parcelaAnterior.ValorAmortizacao.GetValueOrDefault();
-                valorJuros = i == simulacaoDto.QuantidadeParcela - 1 ? Math.Round(valorParcela - valorSaldoAnterior, 2) : Math.Round(valorSaldoAnterior * (Math.Pow((1 + (simulacaoDto.TaxaMensalJuros / 100)), (Convert.ToDouble(parcelasDto[i].DiasParcela) / 30D)) - 1), 2);
+                valorJuros = i == simulacaoDto.QuantidadeParcela - 1 ? Math.Round(valorParcela - valorSaldoAnterior, 2) : Math.Round(valorSaldoAnterior * (Math.Pow((1 + (simulacaoDto.TaxaMensalJuros / 100)), (Convert.ToDouble(listaContratoParcelaDto[i].DiasParcela) / 30D)) - 1), 2);
                 valorAmortizacao = i == simulacaoDto.QuantidadeParcela - 1 ? valorSaldoAnterior - valorAmortizacao : valorParcela - valorJuros;
                 valorSaldoAtual = i == 0 ? simulacaoDto.ValorFinanciado - valorAmortizacao : valorSaldoAnterior - valorAmortizacao;
 
-                parcelasDto[i].ValorParcela = valorParcela;
-                parcelasDto[i].ValorSaldoAnterior = valorSaldoAnterior;
-                parcelasDto[i].ValorJuros = valorJuros;
-                parcelasDto[i].ValorAmortizacao = valorAmortizacao;
-                parcelasDto[i].ValorSaldoAtual = valorSaldoAtual;
-
-                parcelasDto[i].ValorOriginal = valorParcela;
-                parcelasDto[i].ValorMora = 0;
-                parcelasDto[i].ValorDescontoJuros = 0;
-                parcelasDto[i].ValorDescontoParcela = 0;
-                parcelasDto[i].ValorMulta = 0;
-                parcelasDto[i].ValorResiduo = 0;
-                parcelasDto[i].ValorAcrescimo = 0;
-                parcelasDto[i].IdSituacaoParcela = SituacaoParcelaDto.EnumSituacaoParcela.Pendente.GetHashCode();
-                parcelasDto[i].SituacaoParcelaDto = new SituacaoParcelaDto() { Id = SituacaoParcelaDto.EnumSituacaoParcela.Pendente.GetHashCode(), Nome = SituacaoParcelaDto.EnumSituacaoParcela.Pendente.ToString() };
+                listaContratoParcelaDto[i].ValorParcela = valorParcela;
+                listaContratoParcelaDto[i].ValorSaldoAnterior = valorSaldoAnterior;
+                listaContratoParcelaDto[i].ValorJuros = valorJuros;
+                listaContratoParcelaDto[i].ValorAmortizacao = valorAmortizacao;
+                listaContratoParcelaDto[i].ValorSaldoAtual = valorSaldoAtual;
+                
+                listaContratoParcelaDto[i].ValorOriginal = valorParcela;
+                listaContratoParcelaDto[i].ValorMora = 0;
+                listaContratoParcelaDto[i].ValorDescontoJuros = 0;
+                listaContratoParcelaDto[i].ValorDescontoParcela = 0;
+                listaContratoParcelaDto[i].ValorMulta = 0;
+                listaContratoParcelaDto[i].ValorResiduo = 0;
+                listaContratoParcelaDto[i].ValorAcrescimo = 0;
+                listaContratoParcelaDto[i].IdSituacaoParcela = SituacaoParcelaDto.EnumSituacaoParcela.Pendente.GetHashCode();
+                listaContratoParcelaDto[i].SituacaoParcelaDto = new SituacaoParcelaDto() { Id = SituacaoParcelaDto.EnumSituacaoParcela.Pendente.GetHashCode(), Nome = SituacaoParcelaDto.EnumSituacaoParcela.Pendente.ToString() };
             }
 
-            return parcelasDto;
+            return listaContratoParcelaDto;
         }
 
         private DateTime CalcularDataVencimento(DateTime dataVencimentoOriginal)

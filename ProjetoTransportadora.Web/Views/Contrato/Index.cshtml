@@ -592,6 +592,7 @@
                 },
                 "columns":
                     [
+                        { "data": "Id", "className": "text-center", "visible": false },
                         { "data": "NumeroParcela", "className": "text-center" },
                         { "data": function (data, type, row) { return data["DataEmissao"] != null ? moment(data["DataEmissao"]).format("DD/MM/YYYY") : "" }, "className": "text-center" },
                         { "data": function (data, type, row) { return data["DataInicio"] != null ? moment(data["DataInicio"]).format("DD/MM/YYYY") : "" }, "className": "text-center" },
@@ -616,26 +617,26 @@
 
                     var intVal = function (i) { return typeof i === 'string' ? parseFloat(i.replace(".", "").replace(",", ".")) : typeof i === 'number' ? i : 0; };
 
-                    var valorOriginal = api.column(7).data().reduce(function (a, b) { return intVal(a) + intVal(b); }, 0);
-                    var valorAmortizacao = api.column(8).data().reduce(function (a, b) { return intVal(a) + intVal(b); }, 0);
-                    var valorJuros = api.column(9).data().reduce(function (a, b) { return intVal(a) + intVal(b); }, 0);
-                    var valorMulta = api.column(10).data().reduce(function (a, b) { return intVal(a) + intVal(b); }, 0);
-                    var valorMora = api.column(11).data().reduce(function (a, b) { return intVal(a) + intVal(b); }, 0);
-                    var valorDescontoJuros = api.column(12).data().reduce(function (a, b) { return intVal(a) + intVal(b); }, 0);
-                    var valorDescontoParcela = api.column(13).data().reduce(function (a, b) { return intVal(a) + intVal(b); }, 0);
-                    var valorResiduo = api.column(14).data().reduce(function (a, b) { return intVal(a) + intVal(b); }, 0);
-                    var valorParcela = api.column(15).data().reduce(function (a, b) { return intVal(a) + intVal(b); }, 0);
+                    var valorOriginal = api.column(8).data().reduce(function (a, b) { return intVal(a) + intVal(b); }, 0);
+                    var valorAmortizacao = api.column(9).data().reduce(function (a, b) { return intVal(a) + intVal(b); }, 0);
+                    var valorJuros = api.column(10).data().reduce(function (a, b) { return intVal(a) + intVal(b); }, 0);
+                    var valorMulta = api.column(11).data().reduce(function (a, b) { return intVal(a) + intVal(b); }, 0);
+                    var valorMora = api.column(12).data().reduce(function (a, b) { return intVal(a) + intVal(b); }, 0);
+                    var valorDescontoJuros = api.column(13).data().reduce(function (a, b) { return intVal(a) + intVal(b); }, 0);
+                    var valorDescontoParcela = api.column(14).data().reduce(function (a, b) { return intVal(a) + intVal(b); }, 0);
+                    var valorResiduo = api.column(15).data().reduce(function (a, b) { return intVal(a) + intVal(b); }, 0);
+                    var valorParcela = api.column(16).data().reduce(function (a, b) { return intVal(a) + intVal(b); }, 0);
 
                     $(api.column(0).footer()).html('Total');
-                    $(api.column(7).footer()).html(Globalize.format(valorOriginal, "n2"));
-                    $(api.column(8).footer()).html(Globalize.format(valorAmortizacao, "n2"));
-                    $(api.column(9).footer()).html(Globalize.format(valorJuros, "n2"));
-                    $(api.column(10).footer()).html(Globalize.format(valorMulta, "n2"));
-                    $(api.column(11).footer()).html(Globalize.format(valorMora, "n2"));
-                    $(api.column(12).footer()).html(Globalize.format(valorDescontoJuros, "n2"));
-                    $(api.column(13).footer()).html(Globalize.format(valorDescontoParcela, "n2"));
-                    $(api.column(14).footer()).html(Globalize.format(valorResiduo, "n2"));
-                    $(api.column(15).footer()).html(Globalize.format(valorParcela, "n2"));
+                    $(api.column(8).footer()).html(Globalize.format(valorOriginal, "n2"));
+                    $(api.column(9).footer()).html(Globalize.format(valorAmortizacao, "n2"));
+                    $(api.column(10).footer()).html(Globalize.format(valorJuros, "n2"));
+                    $(api.column(11).footer()).html(Globalize.format(valorMulta, "n2"));
+                    $(api.column(12).footer()).html(Globalize.format(valorMora, "n2"));
+                    $(api.column(13).footer()).html(Globalize.format(valorDescontoJuros, "n2"));
+                    $(api.column(14).footer()).html(Globalize.format(valorDescontoParcela, "n2"));
+                    $(api.column(15).footer()).html(Globalize.format(valorResiduo, "n2"));
+                    $(api.column(16).footer()).html(Globalize.format(valorParcela, "n2"));
                 }
             });
 
@@ -1097,6 +1098,7 @@
 
                     contratoDto.ContratoParcelaDto.push
                     ({
+                        "Id": this.data().Id,
                         "IdContrato": contratoDto.Id,
                         "NumeroParcela": data.NumeroParcela,
                         "DataEmissao": moment(data.DataEmissao).format("YYYY/MM/DD"),
@@ -1111,10 +1113,13 @@
                         "ValorMulta": data.ValorMulta,
                         "ValorMora": data.ValorMora,
                         "ValorDescontoJuros": data.ValorDescontoJuros,
+                        "ValorDescontoParcela": data.ValorDescontoParcela,
                         "ValorParcela": data.ValorParcela,
                         "IdSituacaoParcela": data.SituacaoParcelaDto.Id,
                         "TaxaMulta": contratoDto.TaxaMulta,
-                        "TaxaMora": contratoDto.TaxaMora
+                        "TaxaMora": contratoDto.TaxaMora,
+                        "ValorAcrescimo": 0,
+                        "ValorResiduo": 0
                     });
                 });
 
@@ -1182,7 +1187,13 @@
                                 }
                             });
 
-                            $("#tbContrato").DataTable().row(idx).invalidate().data(data.Data).draw();
+                            $("#tbContrato").DataTable().row(idx).invalidate().data(data.Data[0]).draw();
+
+                            tbSituacaoContratoResumo.clear();
+                            tbSituacaoContratoResumo.rows.add(data.SituacaoContratoResumo).draw();
+
+                            tbSituacaoParcelaResumo.clear();
+                            tbSituacaoParcelaResumo.rows.add(data.SituacaoParcelaResumo).draw();
                         }
 
                         $("#modalContrato").modal('hide');
@@ -1244,6 +1255,17 @@
                 simulacaoDto.QuantidadeParcela = $("#quantidadeParcela").val();
                 simulacaoDto.TaxaMensalJuros = $("#taxaJuros").val();
                 simulacaoDto.IdTipoContrato = $("input[name='tipoContrato']:checked").val();
+
+                //simulacaoDto.ContratoParcelaDto = [];
+                //tbContratoParcela.rows().every(function (rowIdx, tableLoop, rowLoop) {
+                //    var data = this.data();
+                //    simulacaoDto.ContratoParcelaDto.push
+                //    ({
+                //        "Id": this.data().Id,
+                //        "IdContrato": simulacaoDto.Id,
+                //        "NumeroParcela": data.NumeroParcela
+                //    });
+                //});
 
                 $.ajax({
                     dataType: "json",
@@ -1826,6 +1848,7 @@
                                             <table id="tbContratoParcela" class="table table-hover nowrap" style="width: 100%">
                                                 <thead>
                                                     <tr>
+                                                        <td class="text-center"><b>Id</b></td>
                                                         <td class="text-center"><b>Parcela</b></td>
                                                         <td class="text-center"><b>Data Emissão</b></td>
                                                         <td class="text-center"><b>Data Início</b></td>
@@ -1848,6 +1871,7 @@
                                                 <tbody></tbody>
                                                 <tfoot align="left">
                                                     <tr>
+                                                        <th></th>
                                                         <th></th>
                                                         <th></th>
                                                         <th></th>
