@@ -33,7 +33,7 @@ namespace ProjetoTransportadora.Web.Controllers
             }
             catch (Exception)
             {
-
+                 
             }
         }
 
