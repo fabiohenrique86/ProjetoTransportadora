@@ -11,7 +11,7 @@ using System.Web;
 using System.Web.Mvc;
 
 namespace ProjetoTransportadora.Web.Controllers
-{
+{  
     public class ContratoParcelaController : BaseController
     {
         private ContratoParcelaBusiness contratoParcelaBusiness;
