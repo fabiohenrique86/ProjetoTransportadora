@@ -2,7 +2,7 @@
 using ProjetoTransportadora.Dto;
 using System.Linq;
 using System.Web.Mvc;
-
+ 
 namespace ProjetoTransportadora.Web.Controllers
 {
     public class CanalController : BaseController
