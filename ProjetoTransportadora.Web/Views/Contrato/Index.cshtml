@@ -1068,12 +1068,12 @@
                 contratoDto.IdIndicacao = $("#idIndicacao").val();
                 contratoDto.IdPromotor = $("#idPromotor").val();
                 contratoDto.IdCanal = $("#canal").val();
-                contratoDto.TaxaMulta = $("#taxaMulta").val();
-                contratoDto.TaxaMora = $("#taxaMora").val();
+                contratoDto.TaxaMulta = $("#taxaMulta").val().replace(".", ",");
+                contratoDto.TaxaMora = $("#taxaMora").val().replace(".", ",");
 
                 // aba - valores
 
-                contratoDto.IdTipoContrato = $("input[name='tipoContrato']:checked").val();
+                contratoDto.IdTipoContrato = $("#tipoContrato").val(); // $("input[name='tipoContrato']:checked").val();
                 contratoDto.DataPrimeiraParcela = $("#dataPrimeiraParcela").val();
                 contratoDto.ValorVeiculo = $("#valorVeiculo").val();
                 contratoDto.ValorEntrada = $("#valorEntrada").val();
@@ -1087,7 +1087,7 @@
                 contratoDto.ValorDinheiro = $("#valorDinheiro").val();
                 contratoDto.ValorTarifa = $("#valorTarifa").val();
                 contratoDto.ValorFinanciado = $("#valorFinanciado").val();
-                contratoDto.TaxaJuros = $("#taxaJuros").val();
+                contratoDto.TaxaJuros = $("#taxaJuros").val().replace(".", ",");
 
                 // aba - parcelas
 
@@ -1253,8 +1253,8 @@
                 simulacaoDto.DataPrimeiraParcela = $("#dataPrimeiraParcela").val();
                 simulacaoDto.ValorFinanciado = $("#valorFinanciado").val();
                 simulacaoDto.QuantidadeParcela = $("#quantidadeParcela").val();
-                simulacaoDto.TaxaMensalJuros = $("#taxaJuros").val();
-                simulacaoDto.IdTipoContrato = $("input[name='tipoContrato']:checked").val();
+                simulacaoDto.TaxaMensalJuros = $("#taxaJuros").val().replace(".", ",");
+                simulacaoDto.IdTipoContrato = $("#tipoContrato").val(); // $("input[name='tipoContrato']:checked").val();
 
                 //simulacaoDto.ContratoParcelaDto = [];
                 //tbContratoParcela.rows().every(function (rowIdx, tableLoop, rowLoop) {
@@ -1377,7 +1377,8 @@
                 });
             });
 
-            $("input[name='tipoContrato']").change(function () {
+            //$("input[name='tipoContrato']").change(function () {
+            $("#tipoContrato").change(function () {
                 var idTipoContrato = $(this).val();
                 if (idTipoContrato == '@ProjetoTransportadora.Dto.TipoContratoDto.EnumTipoContrato.Diario.GetHashCode()') {
                     $("#dataPrimeiraParcela").val("");
@@ -1463,7 +1464,8 @@
                 carregarModalNovo();
 
                 if (simulacaoDto.IdTipoContrato > 0)
-                    $("input[name='tipoContrato'][value=" + simulacaoDto.IdTipoContrato + "]").prop("checked", true);
+                    $("#tipoContrato").val(simulacaoDto.IdTipoContrato);
+                    //$("input[name='tipoContrato'][value=" + simulacaoDto.IdTipoContrato + "]").prop("checked", true);
 
                 $("#dataContrato").val(moment(simulacaoDto.DataInicio).format("DD/MM/YYYY"));
                 $("#valorVeiculo").val(Globalize.format(simulacaoDto.ValorPrincipal, "n2"));
@@ -1659,185 +1661,196 @@
                             <div class="tab-content">
                                 <br />
                                 <div class="tab-pane active" id="dados" role="tabpanel" aria-labelledby="dados-tab">
-                                    <div class="form-group">
-                                        <div class="row">
-                                            <div class="col-md-2">
-                                                <label for="dataContrato">Data Contrato:</label>
-                                                <input id="dataContrato" type="text" class="form-control data datepicker" />
-                                            </div>
-                                            <div class="col-md-4">
-                                                <label class="control-label" for="cliente">Cliente:</label>
-                                                <div class="input-group">
-                                                    <input id="cliente" type="text" class="form-control" placeholder="Cliente (Mínimo de 3 caracteres - CPF ou CNPJ ou Nome)" />
-                                                    <input id="idCliente" type="hidden" />
-                                                    <div class="input-group-addon" style="cursor: pointer" data-id="idCliente" data-nome="cliente" data-titulo="Cliente" data-sem-vinculo="false" data-documento="Cpf/Cnpj" onclick="abrirModalPessoaCadastroAuxiliar(this)">+</div>
+                                    <div class="rolagem-vertical">
+                                        <div class="form-group">
+                                            <div class="row">
+                                                <div class="col-md-2">
+                                                    <label for="dataContrato">Data Contrato:</label>
+                                                    <input id="dataContrato" type="text" class="form-control data datepicker" />
                                                 </div>
-                                            </div>
-                                            <div class="col-md-2">
-                                                <label for="produto">Produto:</label>
-                                                @Html.DropDownList("produto", new SelectList(ViewBag.Produto, "Id", "Nome"), "Selecione", new { @class = "form-control" })
-                                            </div>
-                                            <div class="col-md-4">
-                                                <label for="veiculo">Veículo:</label>
-                                                <input id="veiculo" type="text" class="form-control" placeholder="Veículo (Mínimo de 3 caracteres - Placa)" />
-                                                <input id="idVeiculo" type="hidden" />
+                                                <div class="col-md-4">
+                                                    <label class="control-label" for="cliente">Cliente:</label>
+                                                    <div class="input-group">
+                                                        <input id="cliente" type="text" class="form-control" placeholder="Cliente (Mínimo de 3 caracteres - CPF ou CNPJ ou Nome)" />
+                                                        <input id="idCliente" type="hidden" />
+                                                        <div class="input-group-addon" style="cursor: pointer" data-id="idCliente" data-nome="cliente" data-titulo="Cliente" data-sem-vinculo="false" data-documento="Cpf/Cnpj" onclick="abrirModalPessoaCadastroAuxiliar(this)">+</div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-2">
+                                                    <label for="produto">Produto:</label>
+                                                    @Html.DropDownList("produto", new SelectList(ViewBag.Produto, "Id", "Nome"), "Selecione", new { @class = "form-control" })
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <label for="veiculo">Veículo:</label>
+                                                    <input id="veiculo" type="text" class="form-control" placeholder="Veículo (Mínimo de 3 caracteres - Placa)" />
+                                                    <input id="idVeiculo" type="hidden" />
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <div class="row">
-                                            <div class="col-md-3">
-                                                <label class="control-label" for="fiador">Fiador:</label>
-                                                <div class="input-group">
-                                                    <input id="fiador" type="text" class="form-control" placeholder="Fiador (Mínimo de 3 caracteres - CPF ou CNPJ ou Nome)" />
-                                                    <input id="idFiador" type="hidden" />
-                                                    <div class="input-group-addon" style="cursor: pointer" data-id="idFiador" data-nome="fiador" data-titulo="Fiador" data-sem-vinculo="false" data-documento="Cpf/Cnpj" onclick="abrirModalPessoaCadastroAuxiliar(this)">+</div>
+                                        <div class="form-group">
+                                            <div class="row">
+                                                <div class="col-md-3">
+                                                    <label class="control-label" for="fiador">Fiador:</label>
+                                                    <div class="input-group">
+                                                        <input id="fiador" type="text" class="form-control" placeholder="Fiador (Mínimo de 3 caracteres - CPF ou CNPJ ou Nome)" />
+                                                        <input id="idFiador" type="hidden" />
+                                                        <div class="input-group-addon" style="cursor: pointer" data-id="idFiador" data-nome="fiador" data-titulo="Fiador" data-sem-vinculo="false" data-documento="Cpf/Cnpj" onclick="abrirModalPessoaCadastroAuxiliar(this)">+</div>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                            <div class="col-md-3">
-                                                <label class="control-label" for="indicacao">Indicação:</label>
-                                                <div class="input-group">
-                                                    <input id="indicacao" type="text" class="form-control" placeholder="Indicação (Mínimo de 3 caracteres - CPF ou CNPJ ou Nome)" />
-                                                    <input id="idIndicacao" type="hidden" />
-                                                    <div class="input-group-addon" style="cursor: pointer" data-id="idIndicacao" data-nome="indicacao" data-titulo="Indicação" data-sem-vinculo="false" data-documento="Cpf/Cnpj" onclick="abrirModalPessoaCadastroAuxiliar(this)">+</div>
+                                                <div class="col-md-3">
+                                                    <label class="control-label" for="indicacao">Indicação:</label>
+                                                    <div class="input-group">
+                                                        <input id="indicacao" type="text" class="form-control" placeholder="Indicação (Mínimo de 3 caracteres - CPF ou CNPJ ou Nome)" />
+                                                        <input id="idIndicacao" type="hidden" />
+                                                        <div class="input-group-addon" style="cursor: pointer" data-id="idIndicacao" data-nome="indicacao" data-titulo="Indicação" data-sem-vinculo="false" data-documento="Cpf/Cnpj" onclick="abrirModalPessoaCadastroAuxiliar(this)">+</div>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                            <div class="col-md-3">
-                                                <label class="control-label" for="promotor">Promotor:</label>
-                                                <div class="input-group">
-                                                    <input id="promotor" type="text" class="form-control" placeholder="Promotor (Mínimo de 3 caracteres - CPF ou CNPJ ou Nome)" />
-                                                    <input id="idPromotor" type="hidden" />
-                                                    <div class="input-group-addon" style="cursor: pointer" data-id="idPromotor" data-nome="promotor" data-titulo="Promotor" data-sem-vinculo="false" data-documento="Cpf/Cnpj" onclick="abrirModalPessoaCadastroAuxiliar(this)">+</div>
+                                                <div class="col-md-3">
+                                                    <label class="control-label" for="promotor">Promotor:</label>
+                                                    <div class="input-group">
+                                                        <input id="promotor" type="text" class="form-control" placeholder="Promotor (Mínimo de 3 caracteres - CPF ou CNPJ ou Nome)" />
+                                                        <input id="idPromotor" type="hidden" />
+                                                        <div class="input-group-addon" style="cursor: pointer" data-id="idPromotor" data-nome="promotor" data-titulo="Promotor" data-sem-vinculo="false" data-documento="Cpf/Cnpj" onclick="abrirModalPessoaCadastroAuxiliar(this)">+</div>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                            <div class="col-md-3">
-                                                <label for="canal">Canal:</label>
-                                                @Html.DropDownList("canal", new SelectList(ViewBag.Canal, "Id", "Nome"), "Selecione", new { @class = "form-control" })
+                                                <div class="col-md-3">
+                                                    <label for="canal">Canal:</label>
+                                                    @Html.DropDownList("canal", new SelectList(ViewBag.Canal, "Id", "Nome"), "Selecione", new { @class = "form-control" })
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <div class="row">
-                                            <div class="col-md-3">
-                                                <label for="valorParcela">Valor Parcela:</label>
-                                                <input id="valorParcela" type="text" class="form-control valor" />
-                                            </div>
-                                            <div class="col-md-3">
-                                                <label class="control-label" for="taxaMulta">Taxa Multa:</label>
-                                                <div class="input-group">
-                                                    <input id="taxaMulta" type="text" class="form-control" disabled="disabled" />
-                                                    <div class="input-group-addon">%</div>
+                                        <div class="form-group">
+                                            <div class="row">
+                                                <div class="col-md-3">
+                                                    <label for="valorParcela">Valor Parcela:</label>
+                                                    <input id="valorParcela" type="text" class="form-control valor" />
                                                 </div>
-                                            </div>
-                                            <div class="col-md-3">
-                                                <label class="control-label" for="taxaMora">Taxa Mora:</label>
-                                                <div class="input-group">
-                                                    <input id="taxaMora" type="text" class="form-control" disabled="disabled" />
-                                                    <div class="input-group-addon">%</div>
+                                                <div class="col-md-3">
+                                                    <label class="control-label" for="taxaMulta">Taxa Multa:</label>
+                                                    <div class="input-group">
+                                                        <input id="taxaMulta" type="text" class="form-control" disabled="disabled" />
+                                                        <div class="input-group-addon">%</div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-3">
+                                                    <label class="control-label" for="taxaMora">Taxa Mora:</label>
+                                                    <div class="input-group">
+                                                        <input id="taxaMora" type="text" class="form-control" disabled="disabled" />
+                                                        <div class="input-group-addon">%</div>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="tab-pane" id="valores" role="tabpanel" aria-labelledby="valores-tab">
-                                    <div class="form-group">
-                                        <div class="row">
-                                            <div class="col-md-2">
-                                                <label>Tipo de Cálculo:</label>
-                                                <label class="radio-inline">
-                                                    <input type="radio" name="tipoContrato" checked value="1" />Diário
-                                                </label>
-                                                <label class="radio-inline">
-                                                    <input type="radio" name="tipoContrato" value="2" /> Mensal
-                                                </label>
-                                            </div>
-                                            <div class="col-md-2">
-                                                <label for="dataPrimeiraParcela">Data Primeira Parcela:</label>
-                                                <input id="dataPrimeiraParcela" type="text" class="form-control data datepicker" />
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <div class="row">
-                                            <div class="col-md-2">
-                                                <label for="valorVeiculo">Valor Veículo:</label>
-                                                <input id="valorVeiculo" type="text" class="form-control valor" onchange="calcularValorFinanciado()" />
-                                            </div>
-                                            <div class="col-md-2">
-                                                <label for="valorEntrada">Valor Entrada:</label>
-                                                <input id="valorEntrada" type="text" class="form-control valor" onchange="calcularValorFinanciado()" />
-                                            </div>
-                                            <div class="col-md-2">
-                                                <label for="valorDocumentacao">Valor Documentação:</label>
-                                                <input id="valorDocumentacao" type="text" class="form-control valor" onchange="calcularValorFinanciado()" />
-                                            </div>
-                                            <div class="col-md-2">
-                                                <label for="valorDesconto">Valor Desconto:</label>
-                                                <input id="valorDesconto" type="text" class="form-control valor" onchange="calcularValorFinanciado()" />
-                                            </div>
-                                            <div class="col-md-2">
-                                                <label for="valorDinheiro">Valor Dinheiro:</label>
-                                                <input id="valorDinheiro" type="text" class="form-control valor" onchange="calcularValorFinanciado()" />
-                                            </div>
-
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <div class="row">
-                                            <div class="col-md-4">
-                                                <label for="veiculoEntrada">Veículo Entrada:</label>
-                                                <input id="veiculoEntrada" type="text" class="form-control" placeholder="Veículo Entrada (Mínimo de 3 caracteres - Placa)" />
-                                                <input id="idVeiculoEntrada" type="hidden" />
-                                            </div>
-                                            <div class="col-md-2">
-                                                <label for="valorVeiculoEntrada">Valor Veículo Entrada:</label>
-                                                <input id="valorVeiculoEntrada" type="text" class="form-control valor" onchange="calcularValorFinanciado()" />
-                                            </div>
-                                            <div class="col-md-2">
-                                                <label for="valorDepositado">Valor Depositado:</label>
-                                                <input id="valorDepositado" type="text" class="form-control valor" onchange="calcularValorFinanciado()" />
-                                            </div>
-                                            <div class="col-md-2">
-                                                <label for="valorTarifa">Valor Tarifa:</label>
-                                                <input id="valorTarifa" type="text" class="form-control valor" onchange="calcularValorFinanciado()" />
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <div class="row">
-                                            <div class="col-md-2">
-                                                <label for="valorFinanciado">Valor Financiado Total:</label>
-                                                <input id="valorFinanciado" type="text" class="form-control valor" disabled="disabled" />
-                                            </div>
-                                            <div class="col-md-2">
-                                                <label class="control-label" for="taxaJuros">Taxa Juros:</label>
-                                                <div class="input-group">
-                                                    <input id="taxaJuros" type="text" class="form-control taxa" />
-                                                    <div class="input-group-addon">%</div>
+                                    <div class="rolagem-vertical">
+                                        <div class="form-group">
+                                            <div class="row">
+                                                @*<div class="col-md-2">
+                                                    <label>Tipo de Cálculo:</label>
+                                                    <label class="radio-inline">
+                                                        <input type="radio" name="tipoContrato" checked value="1" />Diário
+                                                    </label>
+                                                    <label class="radio-inline">
+                                                        <input type="radio" name="tipoContrato" value="2" /> Mensal
+                                                    </label>
+                                                </div>*@
+                                                <div class="col-md-2">
+                                                    <label>Tipo de Cálculo:</label>
+                                                    <select id="tipoContrato" class="form-control">
+                                                        <option value="1">Diário</option>
+                                                        <option value="2">Mensal</option>
+                                                    </select>
+                                                </div>
+                                                <div class="col-md-2">
+                                                    <label for="dataPrimeiraParcela">Data Primeira Parcela:</label>
+                                                    <input id="dataPrimeiraParcela" type="text" class="form-control data datepicker" />
                                                 </div>
                                             </div>
-                                            <div class="col-md-2">
-                                                <label for="quantidadeParcela">Quantidade Parcelas:</label>
-                                                <input id="quantidadeParcela" type="text" class="form-control parcela" />
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="row">
+                                                <div class="col-md-2">
+                                                    <label for="valorVeiculo">Valor Veículo:</label>
+                                                    <input id="valorVeiculo" type="text" class="form-control valor" onchange="calcularValorFinanciado()" />
+                                                </div>
+                                                <div class="col-md-2">
+                                                    <label for="valorEntrada">Valor Entrada:</label>
+                                                    <input id="valorEntrada" type="text" class="form-control valor" onchange="calcularValorFinanciado()" />
+                                                </div>
+                                                <div class="col-md-2">
+                                                    <label for="valorDocumentacao">Valor Documentação:</label>
+                                                    <input id="valorDocumentacao" type="text" class="form-control valor" onchange="calcularValorFinanciado()" />
+                                                </div>
+                                                <div class="col-md-2">
+                                                    <label for="valorDesconto">Valor Desconto:</label>
+                                                    <input id="valorDesconto" type="text" class="form-control valor" onchange="calcularValorFinanciado()" />
+                                                </div>
+                                                <div class="col-md-2">
+                                                    <label for="valorDinheiro">Valor Dinheiro:</label>
+                                                    <input id="valorDinheiro" type="text" class="form-control valor" onchange="calcularValorFinanciado()" />
+                                                </div>
+
                                             </div>
                                         </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <div class="row">
-                                            <div class="col-md-2">
-                                                <label for="valorFinanciadoDocumentacao">Valor Financiado Documentação:</label>
-                                                <input id="valorFinanciadoDocumentacao" type="text" class="form-control valor" />
-                                            </div>
-                                            <div class="col-md-2">
-                                                <label for="valorFinanciadoVeiculo">Valor Financiado Veículo:</label>
-                                                <input id="valorFinanciadoVeiculo" type="text" class="form-control valor" />
+                                        <div class="form-group">
+                                            <div class="row">
+                                                <div class="col-md-4">
+                                                    <label for="veiculoEntrada">Veículo Entrada:</label>
+                                                    <input id="veiculoEntrada" type="text" class="form-control" placeholder="Veículo Entrada (Mínimo de 3 caracteres - Placa)" />
+                                                    <input id="idVeiculoEntrada" type="hidden" />
+                                                </div>
+                                                <div class="col-md-2">
+                                                    <label for="valorVeiculoEntrada">Valor Veículo Entrada:</label>
+                                                    <input id="valorVeiculoEntrada" type="text" class="form-control valor" onchange="calcularValorFinanciado()" />
+                                                </div>
+                                                <div class="col-md-2">
+                                                    <label for="valorDepositado">Valor Depositado:</label>
+                                                    <input id="valorDepositado" type="text" class="form-control valor" onchange="calcularValorFinanciado()" />
+                                                </div>
+                                                <div class="col-md-2">
+                                                    <label for="valorTarifa">Valor Tarifa:</label>
+                                                    <input id="valorTarifa" type="text" class="form-control valor" onchange="calcularValorFinanciado()" />
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <div class="row">
-                                            <div class="col-md-12 text-right">
-                                                <input id="btnGerarParcela" type="button" class="btn btn-info" value="Gerar Parcelas" />
+                                        <div class="form-group">
+                                            <div class="row">
+                                                <div class="col-md-2">
+                                                    <label for="valorFinanciado">Valor Financiado Total:</label>
+                                                    <input id="valorFinanciado" type="text" class="form-control valor" disabled="disabled" />
+                                                </div>
+                                                <div class="col-md-2">
+                                                    <label class="control-label" for="taxaJuros">Taxa Juros:</label>
+                                                    <div class="input-group">
+                                                        <input id="taxaJuros" type="text" class="form-control taxa" />
+                                                        <div class="input-group-addon">%</div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-2">
+                                                    <label for="quantidadeParcela">Quantidade Parcelas:</label>
+                                                    <input id="quantidadeParcela" type="text" class="form-control parcela" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="row">
+                                                <div class="col-md-2">
+                                                    <label for="valorFinanciadoDocumentacao">Valor Financiado Documentação:</label>
+                                                    <input id="valorFinanciadoDocumentacao" type="text" class="form-control valor" />
+                                                </div>
+                                                <div class="col-md-2">
+                                                    <label for="valorFinanciadoVeiculo">Valor Financiado Veículo:</label>
+                                                    <input id="valorFinanciadoVeiculo" type="text" class="form-control valor" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="row">
+                                                <div class="col-md-12 text-right">
+                                                    <input id="btnGerarParcela" type="button" class="btn btn-info" value="Gerar Parcelas" />
+                                                </div>
                                             </div>
                                         </div>
                                     </div>

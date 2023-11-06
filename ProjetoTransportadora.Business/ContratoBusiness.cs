@@ -213,7 +213,8 @@ namespace ProjetoTransportadora.Business
                         {
                             double diasCorridos = contratoDto.DataAntecipacao.GetValueOrDefault().Subtract(listaContratoParcelaDto[i].DataVencimento).Days;
 
-                            listaContratoParcelaDto[i].ValorMora = Math.Round(listaContratoParcelaDto[i].ValorOriginal * (contrato.TaxaMora.GetValueOrDefault() / 100) * (diasCorridos / 30D), 2);
+                            //listaContratoParcelaDto[i].ValorMora = Math.Round(listaContratoParcelaDto[i].ValorOriginal * (contrato.TaxaMora.GetValueOrDefault() / 100) * (diasCorridos / 30D), 2);
+                            listaContratoParcelaDto[i].ValorMora = Math.Round(listaContratoParcelaDto[i].ValorOriginal * (contrato.TaxaMora.GetValueOrDefault() / 100) * diasCorridos, 2);
                             listaContratoParcelaDto[i].ValorMulta = Math.Round(listaContratoParcelaDto[i].ValorOriginal * (contrato.TaxaMulta.GetValueOrDefault() / 100), 2);
                             listaContratoParcelaDto[i].ValorDescontoJuros = 0;
                             listaContratoParcelaDto[i].ValorParcela = Math.Round(listaContratoParcelaDto[i].ValorAmortizacao.GetValueOrDefault() +

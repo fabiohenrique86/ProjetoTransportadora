@@ -439,8 +439,8 @@
                 contratoParcelaDto.Id = $("#idContratoParcela").val();
 
                 contratoParcelaDto.DataPagamento = $("#dataPagamento").val();
-                contratoParcelaDto.TaxaMulta = $("#taxaMulta").val();
-                contratoParcelaDto.TaxaMora = $("#taxaMora").val();
+                contratoParcelaDto.TaxaMulta = $("#taxaMulta").val().replace(".", ",");
+                contratoParcelaDto.TaxaMora = $("#taxaMora").val().replace(".", ",");
                 contratoParcelaDto.ValorResiduo = $("#valorResiduo").val();
 
                 contratoParcelaDto.DataEmissao = $("#dataEmissao").val();

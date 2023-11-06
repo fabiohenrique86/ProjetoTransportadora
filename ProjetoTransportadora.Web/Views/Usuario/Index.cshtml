@@ -345,48 +345,50 @@
                 <h4 class="modal-title" id="myModalLabel"><span id="lblAcao"></span> Usuário <label id="lblTitulo"></label></h4>
             </div>
             <div class="modal-body">
-                <input id="usuarioId" type="hidden" />
-                <div class="form-group">
-                    <div class="row">
-                        <div class="col-lg-10">
-                            <label for="login">Login:</label>
-                            <input id="login" type="text" class="form-control" placeholder="Login" />
+                <div class="rolagem-vertical">
+                    <input id="usuarioId" type="hidden" />
+                    <div class="form-group">
+                        <div class="row">
+                            <div class="col-lg-10">
+                                <label for="login">Login:</label>
+                                <input id="login" type="text" class="form-control" placeholder="Login" />
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class="form-group">
-                    <div class="row">
-                        <div class="col-lg-10">
-                            <label for="senha">Senha:</label>
-                            <input id="senha" type="password" class="form-control" placeholder="Senha" />
+                    <div class="form-group">
+                        <div class="row">
+                            <div class="col-lg-10">
+                                <label for="senha">Senha:</label>
+                                <input id="senha" type="password" class="form-control" placeholder="Senha" />
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class="form-group">
-                    <div class="row">
-                        <div class="col-md-4">
-                            <input id="trocarSenha" type="checkbox" checked="checked" /> Exige troca de senha no primeiro login
+                    <div class="form-group">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <input id="trocarSenha" type="checkbox" checked="checked" /> Exige troca de senha no primeiro login
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class="form-group">
-                    <div class="row">
-                        <div class="col-lg-10">
-                            <b>Grupos:</b>
+                    <div class="form-group">
+                        <div class="row">
+                            <div class="col-lg-10">
+                                <b>Grupos:</b>
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class="form-group">
-                    <div class="row">
-                        <div class="col-lg-10">
-                            @{
-                                foreach (var grupoDto in (List<ProjetoTransportadora.Dto.GrupoDto>)ViewBag.Grupo)
-                                {
-                                    <div class="col-md-4">
-                                        <input type="checkbox" value="@grupoDto.Id" class="ckb" /> @grupoDto.Nome
-                                    </div>
+                    <div class="form-group">
+                        <div class="row">
+                            <div class="col-lg-10">
+                                @{
+                                    foreach (var grupoDto in (List<ProjetoTransportadora.Dto.GrupoDto>)ViewBag.Grupo)
+                                    {
+                                        <div class="col-md-4">
+                                            <input type="checkbox" value="@grupoDto.Id" class="ckb" /> @grupoDto.Nome
+                                        </div>
+                                    }
                                 }
-                            }
+                            </div>
                         </div>
                     </div>
                 </div>

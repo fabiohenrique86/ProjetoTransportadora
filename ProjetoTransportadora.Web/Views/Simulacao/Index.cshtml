@@ -149,7 +149,7 @@
                 simulacaoDto.ValorBens = $("#valorBens").val();
                 simulacaoDto.ValorDinheiro = $("#valorDinheiro").val();
                 simulacaoDto.ValorFinanciado = $("#valorFinanciado").val();
-                simulacaoDto.IdTipoContrato = $("input[name='tipoContrato']:checked").val();
+                simulacaoDto.IdTipoContrato = $("#tipoContrato").val(); //$("input[name='tipoContrato']:checked").val();
 
                 $.ajax({
                     dataType: "json",
@@ -240,7 +240,7 @@
                 <div class="tab-pane active" id="simulacao" role="tabpanel" aria-labelledby="simulacao-tab">
                     <div class="form-group">
                         <div class="row">
-                            <div class="col-md-2">
+                            @*<div class="col-md-2">
                                 <label>Tipo de Cálculo:</label>
                                 <label class="radio-inline">
                                     <input type="radio" name="tipoContrato" checked value="1" />Diário
@@ -248,26 +248,33 @@
                                 <label class="radio-inline">
                                     <input type="radio" name="tipoContrato" value="2" /> Mensal
                                 </label>
+                            </div>*@
+                            <div class="col-md-2">
+                                <label>Tipo de Cálculo:</label>
+                                <select id="tipoContrato" class="form-control">
+                                    <option value="1">Diário</option>
+                                    <option value="2">Mensal</option>
+                                </select>
                             </div>
                             <div class="col-md-2">
                                 <label for="dataInicio">Data Início:</label>
-                                <input id="dataInicio" type="text" class="form-control data datepicker" placeholder="Data Início" />
+                                <input id="dataInicio" type="text" class="form-control data datepicker" />
                             </div>
                             <div class="col-md-2">
                                 <label for="valorPrincipal">Valor Principal:</label>
-                                <input id="valorPrincipal" type="text" class="form-control valor" placeholder="Valor Principal" onchange="calcularValorFinanciado()" />
+                                <input id="valorPrincipal" type="text" class="form-control valor" onchange="calcularValorFinanciado()" />
                             </div>
                             <div class="col-md-2">
                                 <label for="dataPrimeiraParcela">Data Primeira Parcela:</label>
-                                <input id="dataPrimeiraParcela" name="dataPrimeiraParcela" type="text" class="form-control data datepicker" placeholder="Data Primeira Parcela" />
+                                <input id="dataPrimeiraParcela" name="dataPrimeiraParcela" type="text" class="form-control data datepicker" />
                             </div>
                             <div class="col-md-2">
                                 <label for="quantidadeParcela">Quantidade Parcelas:</label>
-                                <input id="quantidadeParcela" name="quantidadeParcela" type="text" class="form-control parcela" placeholder="Quantidade Parcelas" />
+                                <input id="quantidadeParcela" name="quantidadeParcela" type="text" class="form-control parcela" />
                             </div>
                             <div class="col-md-2">
                                 <label for="taxaMensalJuros">Taxa Mensal Juros:</label>
-                                <input id="taxaMensalJuros" name="taxaMensalJuros" type="text" class="form-control taxa" placeholder="Taxa Mensal Juros" maxlength="5" />
+                                <input id="taxaMensalJuros" name="taxaMensalJuros" type="text" class="form-control taxa" maxlength="5" />
                             </div>
                         </div>
                     </div>
@@ -275,23 +282,23 @@
                         <div class="row">
                             <div class="col-md-2">
                                 <label for="valorDocumentacao">Valor Documentação:</label>
-                                <input id="valorDocumentacao" type="text" class="form-control valor" placeholder="Valor Documentação" onchange="calcularValorFinanciado()" />
+                                <input id="valorDocumentacao" type="text" class="form-control valor" onchange="calcularValorFinanciado()" />
                             </div>
                             <div class="col-md-2">
                                 <label for="valorTarifa">Valor Tarifa:</label>
-                                <input id="valorTarifa" type="text" class="form-control valor" placeholder="Valor Tarifa" onchange="calcularValorFinanciado()" />
+                                <input id="valorTarifa" type="text" class="form-control valor" onchange="calcularValorFinanciado()" />
                             </div>
                             <div class="col-md-2">
                                 <label for="valorDesconto">Valor Desconto:</label>
-                                <input id="valorDesconto" type="text" class="form-control valor" placeholder="Valor Desconto" onchange="calcularValorFinanciado()" />
+                                <input id="valorDesconto" type="text" class="form-control valor" onchange="calcularValorFinanciado()" />
                             </div>
                             <div class="col-md-2">
                                 <label for="valorBens">Valor Bens:</label>
-                                <input id="valorBens" type="text" class="form-control valor" placeholder="Valor Bens" onchange="calcularValorFinanciado()" />
+                                <input id="valorBens" type="text" class="form-control valor" onchange="calcularValorFinanciado()" />
                             </div>
                             <div class="col-md-2">
                                 <label for="valorDinheiro">Valor Dinheiro:</label>
-                                <input id="valorDinheiro" type="text" class="form-control valor" placeholder="Valor Dinheiro" onchange="calcularValorFinanciado()" />
+                                <input id="valorDinheiro" type="text" class="form-control valor" onchange="calcularValorFinanciado()" />
                             </div>
                             <div class="col-md-2">
                                 <label for="valorFinanciado">Valor Financiado:</label>

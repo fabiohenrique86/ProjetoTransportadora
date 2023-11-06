@@ -69,7 +69,8 @@ namespace ProjetoTransportadora.Business
             double diasAtraso = contratoParcelaDto.DataVencimento.Subtract(dataPagamento).Days;
 
             contratoParcelaDto.ValorMulta = (taxaMulta / 100) * contratoParcelaDto.ValorOriginal;
-            contratoParcelaDto.ValorMora = contratoParcelaDto.ValorOriginal * Math.Pow((1 + (taxaMora / 100)), ((diasAtraso / 30D) - 1D));
+            //contratoParcelaDto.ValorMora = contratoParcelaDto.ValorOriginal * Math.Pow((1 + (taxaMora / 100)), ((diasAtraso / 30D) - 1D));
+            contratoParcelaDto.ValorMora = contratoParcelaDto.ValorOriginal * (taxaMora / 100) * diasAtraso;
             contratoParcelaDto.ValorParcela = contratoParcelaDto.ValorAmortizacao.GetValueOrDefault()
                                             + contratoParcelaDto.ValorJuros.GetValueOrDefault()
                                             + valorAcrescimo
@@ -185,7 +186,7 @@ namespace ProjetoTransportadora.Business
             if (contratoParcelaDto.IdSituacaoParcela == SituacaoParcelaDto.EnumSituacaoParcela.Paga.GetHashCode())
             { 
                 if (contratoParcelaDto.DataPagamento.GetValueOrDefault() == DateTime.MinValue)
-                    throw new BusinessException($"Data do Pagamento é obrigatória");
+                    throw new BusinessException("Data do Pagamento é obrigatória");
             }
 
             var existeContratoParcela = contratoParcelaRepository.Existe(contratoParcelaDto.Id);
@@ -196,7 +197,7 @@ namespace ProjetoTransportadora.Business
             var contrato = contratoRepository.Obter(new ContratoDto() { ContratoParcelaDto = new List<ContratoParcelaDto>() { new ContratoParcelaDto() { Id = contratoParcelaDto.Id } } });
 
             if (contrato == null)
-                throw new BusinessException($"Contrato não existe");
+                throw new BusinessException("Contrato não existe");
 
             using (var transactionScope = new TransactionScope(TransactionScopeOption.Required))
             {
