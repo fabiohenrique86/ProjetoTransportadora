@@ -63,7 +63,7 @@
             $.ajax({
                 dataType: "json",
                 type: "POST",
-                url: "/ContratoParcela/Calcular",
+                url: "/Parcela/Calcular",
                 data: JSON.stringify({
                     idContrato: $("#lblContrato").text(),
                     idContratoParcela: $("#idContratoParcela").val(),
@@ -104,7 +104,7 @@
             $.ajax({
                 dataType: "json",
                 type: "GET",
-                url: "/ContratoParcela/Listar",
+                url: "/Parcela/Listar",
                 data: { Id: idContratoParcela },
                 contentType: "application/json",
                 success: function (data) {
@@ -476,7 +476,7 @@
                 $.ajax({
                     dataType: "json",
                     type: "POST",
-                    url: "/ContratoParcela/Alterar",
+                    url: "/Parcela/Alterar",
                     data: JSON.stringify(contratoParcelaDto),
                     contentType: "application/json",
                     success: function (data) {

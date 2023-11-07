@@ -63,14 +63,15 @@ namespace ProjetoTransportadora.Web.Filters
             if (controller == "Transportadora" && action == "Index")
                 return;
 
-            if (action == "Importar" || action == "Exportar" || action == "ListarAutoComplete" || action == "Calcular" || action == "GerarParcelas")
+            // ações diversas
+            if (action == "Exportar" || action == "ListarAutoComplete" || action == "Calcular" || action == "GerarParcelas" || action == "GerarContrato")
                 return;
 
             var temPermissao = false;
 
             if (action == "Listar" || action == "ListarGrid" || action == "ListarGridParcela" || action == "Index")
                 temPermissao = usuarioDto.UsuarioGrupoDto.Any(x => x.GrupoDto.Ativo.GetValueOrDefault() == true && x.GrupoDto.GrupoFuncionalidadeDto.Any(w => w.FuncionalidadeDto.Nome == controller && w.Ler.GetValueOrDefault() == true));
-            else if (action == "Incluir" || action == "IncluirAuxiliar")
+            else if (action == "Incluir" || action == "IncluirAuxiliar" || action == "Importar")
                 temPermissao = usuarioDto.UsuarioGrupoDto.Any(x => x.GrupoDto.Ativo.GetValueOrDefault() == true && x.GrupoDto.GrupoFuncionalidadeDto.Any(w => w.FuncionalidadeDto.Nome == controller && w.Inserir.GetValueOrDefault() == true));
             else if (action == "Alterar")
                 temPermissao = usuarioDto.UsuarioGrupoDto.Any(x => x.GrupoDto.Ativo.GetValueOrDefault() == true && x.GrupoDto.GrupoFuncionalidadeDto.Any(w => w.FuncionalidadeDto.Nome == controller && w.Atualizar.GetValueOrDefault() == true));
