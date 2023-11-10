@@ -41,12 +41,14 @@
                 $("i.glyphicon-remove").show();
                 $(".input-group").removeProp("disabled");
                 $(".input-group-addon").removeProp("disabled");
+                $(".excluirAvalista").show();
             }
             else {
                 $("#modalPessoaFisica input, #modalPessoaFisica select, #modalPessoaFisica textarea").prop("disabled", "disabled");
                 $("i.glyphicon-remove").hide();
                 $(".input-group").prop("disabled", "disabled");
                 $(".input-group-addon").prop("disabled", "disabled");
+                $(".excluirAvalista").hide();
             }
         }
 
@@ -607,9 +609,9 @@
                 }
             });
 
-            //$(".excluirAvalista").click(function (o) {
-            //    (o.currentTarget).parentElement.parentElement.parentElement.parentElement.parentElement.parentElement.remove();
-            //});
+            $(".excluirAvalista").click(function (o) {
+                (o.currentTarget).parentElement.parentElement.parentElement.parentElement.parentElement.parentElement.remove();
+            });
         }
 
         function carregarDadosModal(data) {

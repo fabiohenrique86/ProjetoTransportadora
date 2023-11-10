@@ -503,6 +503,23 @@
 
             });
 
+            $("#btnExportarContratoParcela").click(function () {
+
+                var existeRegistroGrid = false;
+
+                tbContratoParcela.rows().every(function (rowIdx, tableLoop, rowLoop) {
+                    existeRegistroGrid = true;
+                    return;
+                });
+
+                if (!existeRegistroGrid) {
+                    alert("warning", "Não há registros a serem exportados");
+                    return;
+                }
+
+                window.location.href = "@Url.Action("Exportar", "Parcela")?Id=" + $("#numeroContratoPesquisar").val() + "&IdCliente=" + $("#idClientePesquisar").val() + "&IdProduto=" + $("#produtoPesquisar").val() + "&VeiculoDto.Placa=" + $("#placaPesquisar").val() + "&IdSituacaoContrato=" + $("#situacaoContratoPesquisar").val() + "&DataContratoInicial=" + formatarData($("#dataContratoInicioPesquisar").val()) + "&DataContratoFinal=" + formatarData($("#dataContratoFimPesquisar").val()) + "&ContratoParcelaDto[0].DataVencimentoInicio=" + formatarData($("#dataVencimentoInicioPesquisar").val()) + "&ContratoParcelaDto[0].DataVencimentoFim=" + formatarData($("#dataVencimentoFimPesquisar").val()) + "&ContratoParcelaDto[0].IdSituacaoParcela=" + $("#situacaoParcelaPesquisar").val();
+            });
+
         });
 
     </script>
@@ -568,6 +585,13 @@
         <div class="row">
             <div class="col-md-3">
                 <input id="btnPesquisar" type="button" class="btn btn-info" value="Pesquisar" />
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="row">
+            <div class="col-md-12">
+                <input id="btnExportarContratoParcela" type="button" class="btn btn-success" value="Exportar" />
             </div>
         </div>
     </div>

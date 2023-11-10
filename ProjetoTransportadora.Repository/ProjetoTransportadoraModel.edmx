@@ -1438,8 +1438,8 @@
           <NavigationProperty Name="RegimeCasamento" Relationship="Self.FK_Pessoa_RegimeCasamento" FromRole="Pessoa" ToRole="RegimeCasamento" />
           <NavigationProperty Name="TipoPessoa" Relationship="Self.FK_Pessoa_TipoPessoa" FromRole="Pessoa" ToRole="TipoPessoa" />
           <NavigationProperty Name="TipoResidencia" Relationship="Self.FK_Pessoa_TipoResidencia" FromRole="Pessoa" ToRole="TipoResidencia" />
-          <NavigationProperty Name="PessoaAvalista" Relationship="Self.FK_PessoaAvalista_Avalista" FromRole="Pessoa" ToRole="PessoaAvalista" />
-          <NavigationProperty Name="PessoaAvalista1" Relationship="Self.FK_PessoaAvalista_Pessoa" FromRole="Pessoa" ToRole="PessoaAvalista" />
+          <NavigationProperty Name="PessoaAvalista1" Relationship="Self.FK_PessoaAvalista_Avalista" FromRole="Pessoa" ToRole="PessoaAvalista" />
+          <NavigationProperty Name="PessoaAvalista" Relationship="Self.FK_PessoaAvalista_Pessoa" FromRole="Pessoa" ToRole="PessoaAvalista" />
           <NavigationProperty Name="PessoaEmail" Relationship="Self.FK_PessoaEmail_Pessoa" FromRole="Pessoa" ToRole="PessoaEmail" />
           <NavigationProperty Name="PessoaHistorico" Relationship="Self.FK_PessoaHistorico_Pessoa" FromRole="Pessoa" ToRole="PessoaHistorico" />
           <NavigationProperty Name="PessoaReferencia" Relationship="Self.FK_PessoaReferencia_Pessoa" FromRole="Pessoa" ToRole="PessoaReferencia" />

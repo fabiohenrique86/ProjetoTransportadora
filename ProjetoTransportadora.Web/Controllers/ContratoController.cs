@@ -132,39 +132,37 @@ namespace ProjetoTransportadora.Web.Controllers
         [HttpGet]
         public FileContentResult Exportar(ContratoDto contratoDto)
         {
-            var lista = contratoBusiness.Listar(contratoDto);
+            var listaContrato = contratoBusiness.Listar(contratoDto);
 
-            string csv = "Id; Data Contrato; Canal; Cliente; Produto; Promotor; Indicação; Fiador; Veículo; Valor Venda; Valor Entrada; Veículo Entrada; Valor Veículo Entrada; Valor Dinheiro Entrada; Data Início Juros; Primeiro Vencimento; Quantidade Parcelas; Taxa Juros Mensal; Valor Financiado Total; Valor Financiado Veículo; Valor Financiado Documentação; Valor Caixa; Valor Depositado; Valor Desconto; Data Baixa; Data Antecipação; Valor Antecipação" + Environment.NewLine;
+            string csv = "Id; Data Contrato; Canal; Cliente; Produto; Promotor; Indicação; Fiador; Veículo; Valor Venda; Valor Entrada; Veículo Entrada; Valor Veículo Entrada; Data Primeiro Vencimento; Quantidade Parcelas; Taxa Juros Mensal; Valor Financiado Total; Valor Financiado Veículo; Valor Financiado Documentação; Valor Caixa; Valor Depositado; Valor Desconto; Data Baixa; Data Antecipação; Valor Antecipação" + Environment.NewLine;
 
-            foreach (var item in lista)
+            foreach (var contrato in listaContrato)
             {
-                csv += item.Id + ";";
-                csv += item.DataContrato.ToString("dd/MM/yyyy") + ";";
-                csv += (item.CanalDto == null ? string.Empty : item.CanalDto.Nome) + ";";
-                csv += (item.PessoaClienteDto == null ? string.Empty : item.PessoaClienteDto.Nome) + ";";
-                csv += (item.ProdutoDto == null ? string.Empty : item.ProdutoDto.Nome) + ";";
-                csv += (item.PessoaPromotorDto == null ? string.Empty : item.PessoaPromotorDto.Nome) + ";";
-                csv += (item.PessoaIndicacaoDto == null ? string.Empty : item.PessoaIndicacaoDto.Nome) + ";";
-                csv += (item.PessoaFiadorDto == null ? "" : item.PessoaFiadorDto.Nome) + ";";
-                csv += (item.VeiculoDto == null ? "" : item.VeiculoDto.Placa) + ";";
-                csv += (item.VeiculoDto == null ? "" : item.VeiculoDto.ValorVenda.GetValueOrDefault().ToString("C")) + ";";
-                csv += (item.ValorEntrada == null ? string.Empty : item.ValorEntrada.GetValueOrDefault().ToString("C")) + ";";
-                csv += (item.VeiculoEntradaDto == null ? "" : item.VeiculoEntradaDto.Placa) + ";";
-                csv += (item.ValorVeiculoEntrada == null ? string.Empty : item.ValorVeiculoEntrada.GetValueOrDefault().ToString("C")) + ";";
-                //csv += (item.ValorDepositado == null ? string.Empty : item.ValorDesconto.GetValueOrDefault().ToString("C")) + ";"; 
-                //csv += item.DataPrimeiraParcela.ToString("dd/MM/yyyy") + ";";
-                csv += item.DataPrimeiraParcela.ToString("dd/MM/yyyy") + ";";
-                csv += item.ContratoParcelaDto?.Count() + ";";
-                csv += item.TaxaJuros.ToString("C") + ";";
-                csv += item.ValorFinanciado.ToString("C") + ";";
-                csv += (item.ValorFinanciadoVeiculo == null ? string.Empty : item.ValorFinanciadoVeiculo.GetValueOrDefault().ToString("C")) + ";";
-                csv += (item.ValorFinanciadoDocumentacao == null ? string.Empty : item.ValorFinanciadoDocumentacao.GetValueOrDefault().ToString("C")) + ";";
-                csv += (item.ValorDinheiro == null ? string.Empty : item.ValorDinheiro.GetValueOrDefault().ToString("C")) + ";";
-                csv += (item.ValorDepositado == null ? string.Empty : item.ValorDepositado.GetValueOrDefault().ToString("C")) + ";";
-                csv += (item.ValorDesconto == null ? string.Empty : item.ValorDesconto.GetValueOrDefault().ToString("C")) + ";";
-                csv += (item.DataBaixa == null ? string.Empty : item.DataBaixa.GetValueOrDefault().ToString("dd/MM/yyyy")) + ";";
-                csv += (item.DataAntecipacao == null ? string.Empty : item.DataAntecipacao.GetValueOrDefault().ToString("dd/MM/yyyy")) + ";";
-                csv += (item.ValorAntecipacao == null ? string.Empty : item.ValorAntecipacao.GetValueOrDefault().ToString("C")) + ";";
+                csv += contrato.Id + ";";
+                csv += contrato.DataContrato.ToString("dd/MM/yyyy") + ";";
+                csv += (contrato.CanalDto == null ? string.Empty : contrato.CanalDto.Nome) + ";";
+                csv += (contrato.PessoaClienteDto == null ? string.Empty : contrato.PessoaClienteDto.Nome) + ";";
+                csv += (contrato.ProdutoDto == null ? string.Empty : contrato.ProdutoDto.Nome) + ";";
+                csv += (contrato.PessoaPromotorDto == null ? string.Empty : contrato.PessoaPromotorDto.Nome) + ";";
+                csv += (contrato.PessoaIndicacaoDto == null ? string.Empty : contrato.PessoaIndicacaoDto.Nome) + ";";
+                csv += (contrato.PessoaFiadorDto == null ? "" : contrato.PessoaFiadorDto.Nome) + ";";
+                csv += (contrato.VeiculoDto == null ? "" : contrato.VeiculoDto.Placa) + ";";
+                csv += (contrato.VeiculoDto == null ? "" : contrato.VeiculoDto.ValorVenda.GetValueOrDefault().ToString("C")) + ";";
+                csv += (contrato.ValorEntrada == null ? string.Empty : contrato.ValorEntrada.GetValueOrDefault().ToString("C")) + ";";
+                csv += (contrato.VeiculoEntradaDto == null ? "" : contrato.VeiculoEntradaDto.Placa) + ";";
+                csv += (contrato.ValorVeiculoEntrada == null ? string.Empty : contrato.ValorVeiculoEntrada.GetValueOrDefault().ToString("C")) + ";";
+                csv += contrato.DataPrimeiraParcela.ToString("dd/MM/yyyy") + ";";
+                csv += contrato.ContratoParcelaDto?.Count() + ";";
+                csv += contrato.TaxaJuros.ToString("C") + ";";
+                csv += contrato.ValorFinanciado.ToString("C") + ";";
+                csv += (contrato.ValorFinanciadoVeiculo == null ? string.Empty : contrato.ValorFinanciadoVeiculo.GetValueOrDefault().ToString("C")) + ";";
+                csv += (contrato.ValorFinanciadoDocumentacao == null ? string.Empty : contrato.ValorFinanciadoDocumentacao.GetValueOrDefault().ToString("C")) + ";";
+                csv += (contrato.ValorDinheiro == null ? string.Empty : contrato.ValorDinheiro.GetValueOrDefault().ToString("C")) + ";";
+                csv += (contrato.ValorDepositado == null ? string.Empty : contrato.ValorDepositado.GetValueOrDefault().ToString("C")) + ";";
+                csv += (contrato.ValorDesconto == null ? string.Empty : contrato.ValorDesconto.GetValueOrDefault().ToString("C")) + ";";
+                csv += (contrato.DataBaixa == null ? string.Empty : contrato.DataBaixa.GetValueOrDefault().ToString("dd/MM/yyyy")) + ";";
+                csv += (contrato.DataAntecipacao == null ? string.Empty : contrato.DataAntecipacao.GetValueOrDefault().ToString("dd/MM/yyyy")) + ";";
+                csv += (contrato.ValorAntecipacao == null ? string.Empty : contrato.ValorAntecipacao.GetValueOrDefault().ToString("C")) + ";";
 
                 csv += Environment.NewLine;
             }

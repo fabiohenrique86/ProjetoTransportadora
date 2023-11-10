@@ -25,8 +25,8 @@ namespace ProjetoTransportadora.Repository
             this.Pessoa11 = new HashSet<Pessoa>();
             this.Pessoa12 = new HashSet<Pessoa>();
             this.Pessoa13 = new HashSet<Pessoa>();
-            this.PessoaAvalista = new HashSet<PessoaAvalista>();
             this.PessoaAvalista1 = new HashSet<PessoaAvalista>();
+            this.PessoaAvalista = new HashSet<PessoaAvalista>();
             this.PessoaEmail = new HashSet<PessoaEmail>();
             this.PessoaHistorico = new HashSet<PessoaHistorico>();
             this.PessoaReferencia = new HashSet<PessoaReferencia>();
@@ -104,9 +104,9 @@ namespace ProjetoTransportadora.Repository
         public virtual TipoPessoa TipoPessoa { get; set; }
         public virtual TipoResidencia TipoResidencia { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<PessoaAvalista> PessoaAvalista { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<PessoaAvalista> PessoaAvalista1 { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<PessoaAvalista> PessoaAvalista { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<PessoaEmail> PessoaEmail { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

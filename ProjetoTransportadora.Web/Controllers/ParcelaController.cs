@@ -62,6 +62,28 @@ namespace ProjetoTransportadora.Web.Controllers
             return Json(new { Sucesso = true, Mensagem = "Contrato parcela alterado com sucesso", Data = lista }, JsonRequestBehavior.AllowGet);
         }
 
+        [HttpGet]
+        public FileContentResult Exportar(ContratoDto contratoDto)
+        {
+            var listaContratoParcela = contratoBusiness.ListarGridParcela(contratoDto);
+
+            string csv = "Id Contrato; Número Parcela; Cliente; Data Vencimento; Valor Parcela; Situação" + Environment.NewLine;
+
+            foreach (var contratoParcela in listaContratoParcela)
+            {
+                csv += contratoParcela.GetType().GetProperty("Id").GetValue(contratoParcela, null) + ";";
+                csv += contratoParcela.GetType().GetProperty("NumeroParcela").GetValue(contratoParcela, null) + ";";
+                csv += contratoParcela.GetType().GetProperty("NomeCliente").GetValue(contratoParcela, null) + ";";
+                csv += contratoParcela.GetType().GetProperty("DataVencimento").GetValue(contratoParcela, null).ToString("dd/MM/yyyy") + ";";
+                csv += contratoParcela.GetType().GetProperty("ValorParcela").GetValue(contratoParcela, null).ToString("C") + ";";
+                csv += contratoParcela.GetType().GetProperty("NomeSituacaoParcela").GetValue(contratoParcela, null) + ";";
+
+                csv += Environment.NewLine;
+            }
+
+            return File(Encoding.UTF8.GetPreamble().Concat(Encoding.UTF8.GetBytes(csv)).ToArray(), "text/csv", "contrato-parcela-exportar-" + DateTime.Now.ToString("ddMMyyyy_HHmmss") + ".csv");
+        }
+
         public JsonResult Importar()
         {
             HttpPostedFileBase file = Request.Files[0];

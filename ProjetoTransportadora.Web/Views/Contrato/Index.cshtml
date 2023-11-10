@@ -1227,7 +1227,7 @@
                 });
             });
 
-            $("#btnExportar").click(function () {
+            $("#btnExportarContrato").click(function () {
 
                 var existeRegistroGrid = false;
 
@@ -1241,7 +1241,7 @@
                     return;
                 }
 
-                window.location.href = "@Url.Action("Exportar", "Contrato")?Placa=" + $("#placaPesquisar").val() + "&Renavam=" + $("#renavamPesquisar").val() + "&IdProprietarioAtual=" + $("#idProprietarioAtualPesquisar").val() + "&Modelo=" + $("#modeloPesquisar").val();
+                window.location.href = "@Url.Action("Exportar", "Contrato")?Id=" + $("#numeroContratoPesquisar").val() + "&IdCliente=" + $("#idClientePesquisar").val() + "&IdProduto=" + $("#produtoPesquisar").val() + "&VeiculoDto.Placa=" + $("#placaPesquisar").val() + "&IdSituacaoContrato=" + $("#situacaoContratoPesquisar").val() + "&DataContratoInicial=" + formatarData($("#dataContratoInicioPesquisar").val()) + "&DataContratoFinal=" + formatarData($("#dataContratoFimPesquisar").val());
             });
 
             $("#btnGerarParcela").click(function () {
@@ -1255,17 +1255,6 @@
                 simulacaoDto.QuantidadeParcela = $("#quantidadeParcela").val();
                 simulacaoDto.TaxaMensalJuros = $("#taxaJuros").val().replace(".", ",");
                 simulacaoDto.IdTipoContrato = $("#tipoContrato").val(); // $("input[name='tipoContrato']:checked").val();
-
-                //simulacaoDto.ContratoParcelaDto = [];
-                //tbContratoParcela.rows().every(function (rowIdx, tableLoop, rowLoop) {
-                //    var data = this.data();
-                //    simulacaoDto.ContratoParcelaDto.push
-                //    ({
-                //        "Id": this.data().Id,
-                //        "IdContrato": simulacaoDto.Id,
-                //        "NumeroParcela": data.NumeroParcela
-                //    });
-                //});
 
                 $.ajax({
                     dataType: "json",
@@ -1548,17 +1537,17 @@
             </div>
         </div>
     </div>
-    @*<div class="form-group">
-            <div class="row">
-                <div class="col-md-12">
-                    <input id="btnExportar" type="button" class="btn btn-success" value="Exportar" />
-                    <form id="frmContratoImportar" style="display: inline-flex">
+    <div class="form-group">
+        <div class="row">
+            <div class="col-md-12">
+                <input id="btnExportarContrato" type="button" class="btn btn-success" value="Exportar" />
+                @*<form id="frmContratoImportar" style="display: inline-flex">
                         <input id="arquivo" name="arquivo" type="file" />
                         <input id="btnImportar" type="submit" class="btn btn-warning" value="Importar Contrato" />
-                    </form>
-                </div>
+                    </form>*@
             </div>
-        </div>*@
+        </div>
+    </div>
     <div class="form-group">
         <ul id="myTab2" class="nav nav-tabs nav-justified" role="tablist">
             <li class="nav-item">
@@ -1748,14 +1737,14 @@
                                         <div class="form-group">
                                             <div class="row">
                                                 @*<div class="col-md-2">
-                                                    <label>Tipo de Cálculo:</label>
-                                                    <label class="radio-inline">
-                                                        <input type="radio" name="tipoContrato" checked value="1" />Diário
-                                                    </label>
-                                                    <label class="radio-inline">
-                                                        <input type="radio" name="tipoContrato" value="2" /> Mensal
-                                                    </label>
-                                                </div>*@
+                                                        <label>Tipo de Cálculo:</label>
+                                                        <label class="radio-inline">
+                                                            <input type="radio" name="tipoContrato" checked value="1" />Diário
+                                                        </label>
+                                                        <label class="radio-inline">
+                                                            <input type="radio" name="tipoContrato" value="2" /> Mensal
+                                                        </label>
+                                                    </div>*@
                                                 <div class="col-md-2">
                                                     <label>Tipo de Cálculo:</label>
                                                     <select id="tipoContrato" class="form-control">
@@ -1907,17 +1896,6 @@
                                             </table>
                                         </div>
                                     </div>
-                                    @*<div class="form-group">
-                                            <div class="row">
-                                                <div class="col-md-12">
-                                                    <input id="btnExportar" type="button" class="btn btn-success" value="Exportar" />
-                                                    <form id="frmContratoParcelaImportar" style="display: inline-flex">
-                                                        <input id="arquivoParcela" name="arquivo" type="file" />
-                                                        <input id="btnImportarContratoParcela" type="submit" class="btn btn-warning" value="Importar Parcelas" />
-                                                    </form>
-                                                </div>
-                                            </div>
-                                        </div>*@
                                 </div>
                                 <div class="tab-pane" id="historico" role="tabpanel" aria-labelledby="historico-tab">
                                     <div class="form-group">
