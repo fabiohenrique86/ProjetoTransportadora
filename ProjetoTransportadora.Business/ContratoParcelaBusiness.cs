@@ -23,6 +23,11 @@ namespace ProjetoTransportadora.Business
             contratoRepository = new ContratoRepository();
         }
 
+        public List<ContratoParcelaDto> ListarSimples(ContratoParcelaDto contratoParcelaDto)
+        {
+            return contratoParcelaRepository.ListarSimples(contratoParcelaDto);
+        }
+
         public int ListarParcelaPaga(ContratoParcelaDto contratoParcelaDto)
         {
             return contratoParcelaRepository.ListarParcelaPaga(contratoParcelaDto);

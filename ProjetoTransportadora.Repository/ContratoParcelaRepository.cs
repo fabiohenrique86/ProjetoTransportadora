@@ -86,6 +86,9 @@ namespace ProjetoTransportadora.Repository
             if (contratoParcelaDto.ListaIdSituacaoParcela != null && contratoParcelaDto.ListaIdSituacaoParcela.Count() > 0)
                 query = query.Where(x => contratoParcelaDto.ListaIdSituacaoParcela.Contains(x.IdSituacaoParcela));
 
+            if (contratoParcelaDto.ListaIdContratoParcela != null && contratoParcelaDto.ListaIdContratoParcela.Count() > 0)
+                query = query.Where(x => contratoParcelaDto.ListaIdContratoParcela.Contains(x.Id));
+
             var lista = query.Select(x => new ContratoParcelaDto()
             {
                 Id = x.Id,
@@ -155,6 +158,9 @@ namespace ProjetoTransportadora.Repository
 
             if (contratoParcelaDto.IdContrato > 0)
                 query = query.Where(x => x.IdContrato == contratoParcelaDto.IdContrato);
+
+            if (contratoParcelaDto.ListaIdContratoParcela != null && contratoParcelaDto.ListaIdContratoParcela.Count() > 0)
+                query = query.Where(x => contratoParcelaDto.ListaIdContratoParcela.Contains(x.Id));
 
             var lista = query.Select(x => new ContratoParcelaDto()
             {

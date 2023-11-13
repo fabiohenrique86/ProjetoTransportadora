@@ -36,6 +36,23 @@
 {
     <script type="text/javascript">
 
+        function submitExportar() {
+
+            var idsContratoParcela = "";
+            
+            $("#tbContratoParcela").DataTable().rows().every(function (rowIdx, tableLoop, rowLoop) {
+                idsContratoParcela += this.data().IdContratoParcela + ",";
+            });
+
+            if (idsContratoParcela == null || idsContratoParcela.length <= 0) {
+                alert("warning", "Não há registros a serem exportados");
+                return false;
+            }
+
+            $("#idsContratoParcela").val(idsContratoParcela);
+            return true;
+        }
+
         function calcularValorParcela() {
 
             var dataPagamento = $("#dataPagamento").val();
@@ -503,22 +520,33 @@
 
             });
 
-            $("#btnExportarContratoParcela").click(function () {
+            @*$("#btnExportarContratoParcela").click(function () {
 
-                var existeRegistroGrid = false;
+                var ids = "";
 
                 tbContratoParcela.rows().every(function (rowIdx, tableLoop, rowLoop) {
-                    existeRegistroGrid = true;
-                    return;
+                    ids += "ids[" + rowIdx + "]=" + this.data().IdContratoParcela + "&";
                 });
 
-                if (!existeRegistroGrid) {
+                //if (!existeRegistroGrid) {
+                //    alert("warning", "Não há registros a serem exportados");
+                //    return;
+                //}
+
+                //tbContratoParcela.rows().every(function (rowIdx, tableLoop, rowLoop) {
+                //    existeRegistroGrid = true;
+                //    return;
+                //});
+
+                if (ids == null || ids.length <= 0) {
                     alert("warning", "Não há registros a serem exportados");
                     return;
                 }
 
-                window.location.href = "@Url.Action("Exportar", "Parcela")?Id=" + $("#numeroContratoPesquisar").val() + "&IdCliente=" + $("#idClientePesquisar").val() + "&IdProduto=" + $("#produtoPesquisar").val() + "&VeiculoDto.Placa=" + $("#placaPesquisar").val() + "&IdSituacaoContrato=" + $("#situacaoContratoPesquisar").val() + "&DataContratoInicial=" + formatarData($("#dataContratoInicioPesquisar").val()) + "&DataContratoFinal=" + formatarData($("#dataContratoFimPesquisar").val()) + "&ContratoParcelaDto[0].DataVencimentoInicio=" + formatarData($("#dataVencimentoInicioPesquisar").val()) + "&ContratoParcelaDto[0].DataVencimentoFim=" + formatarData($("#dataVencimentoFimPesquisar").val()) + "&ContratoParcelaDto[0].IdSituacaoParcela=" + $("#situacaoParcelaPesquisar").val();
-            });
+                window.location.href = "@Url.Action("Exportar", "Parcela")?" + ids;
+
+                //window.location.href = "@Url.Action("Exportar", "Parcela")?Id=" + $("#numeroContratoPesquisar").val() + "&IdCliente=" + $("#idClientePesquisar").val() + "&IdProduto=" + $("#produtoPesquisar").val() + "&VeiculoDto.Placa=" + $("#placaPesquisar").val() + "&IdSituacaoContrato=" + $("#situacaoContratoPesquisar").val() + "&DataContratoInicial=" + formatarData($("#dataContratoInicioPesquisar").val()) + "&DataContratoFinal=" + formatarData($("#dataContratoFimPesquisar").val()) + "&ContratoParcelaDto[0].DataVencimentoInicio=" + formatarData($("#dataVencimentoInicioPesquisar").val()) + "&ContratoParcelaDto[0].DataVencimentoFim=" + formatarData($("#dataVencimentoFimPesquisar").val()) + "&ContratoParcelaDto[0].IdSituacaoParcela=" + $("#situacaoParcelaPesquisar").val();
+            });*@
 
         });
 
@@ -591,7 +619,10 @@
     <div class="form-group">
         <div class="row">
             <div class="col-md-12">
-                <input id="btnExportarContratoParcela" type="button" class="btn btn-success" value="Exportar" />
+                <form id="frmExportar" action="@Url.Action("Exportar","Parcela")" method="post" onsubmit="return submitExportar()">
+                    <input id="idsContratoParcela" name="idsContratoParcela" type="hidden" />
+                    <input id="btnExportarContratoParcela" type="submit" class="btn btn-success" value="Exportar" />
+                </form>
             </div>
         </div>
     </div>

@@ -46,6 +46,7 @@ namespace ProjetoTransportadora.Dto
         public List<int> ListaIdSituacaoParcela { get; set; }
         public DateTime DataVencimentoInicio { get; set; }
         public DateTime DataVencimentoFim { get; set; }
+        public List<int> ListaIdContratoParcela { get; set; }
 
         // campos referentes a última parcela
         public virtual ICollection<ContratoParcelaResiduoDto> ContratoParcelaResiduoDto { get; set; }
