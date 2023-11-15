@@ -71,24 +71,31 @@ namespace ProjetoTransportadora.Web.Controllers
 
             var listaContratoParcela = contratoParcelaBusiness.ListarSimples(contratoParcela);
 
-            string csv = "Id Contrato; Número Parcela; Data Emissão; Data Pagamento; Valor Original; Valor Desconto Juros; Valor Desconto Parcela; Valor Acréscimo; Valor Resíduo; Valor Multa; Valor Mora; Valor Juros; Valor Amortização; Valor Parcela" + Environment.NewLine;
+            string csv = "Id Contrato; Número Parcela; Data Emissão; Data Início; Data Vencimento; Dias Parcela; Dias Contrato; Data Pagamento; Valor Original; Valor Amortização; Valor Juros; Valor Multa; Valor Mora; Valor Desconto Juros; Valor Desconto Parcela; Valor Parcela; Taxa Mora; Taxa Multa; Valor Acréscimo; Valor Resíduo; Situação;" + Environment.NewLine;
 
             foreach (var cp in listaContratoParcela)
             {
                 csv += cp.IdContrato + ";";
                 csv += cp.NumeroParcela.ToString() + ";";
                 csv += cp.DataEmissao.ToString("dd/MM/yyyy") + ";";
-                csv += cp.DataPagamento.GetValueOrDefault() == DateTime.MinValue ? string.Empty : cp.DataPagamento.GetValueOrDefault().ToString("dd/MM/yyyy") + ";";
+                csv += cp.DataInicio.ToString("dd/MM/yyyy") + ";";
+                csv += cp.DataVencimento.ToString("dd/MM/yyyy") + ";";
+                csv += cp.DiasParcela.ToString() + ";";
+                csv += cp.DiasContrato.ToString() + ";";
+                csv += (cp.DataPagamento.GetValueOrDefault() == DateTime.MinValue ? string.Empty : cp.DataPagamento.GetValueOrDefault().ToString("dd/MM/yyyy")) + ";";                
                 csv += cp.ValorOriginal.ToString("C") + ";";
-                csv += cp.ValorDescontoJuros.GetValueOrDefault().ToString("C") + ";";
-                csv += cp.ValorDescontoParcela.GetValueOrDefault().ToString("C") + ";";
-                csv += cp.ValorAcrescimo.GetValueOrDefault().ToString("C") + ";";
-                csv += cp.ValorResiduo.GetValueOrDefault().ToString("C") + ";";
+                csv += cp.ValorAmortizacao.GetValueOrDefault().ToString("C") + ";";
+                csv += cp.ValorJuros.GetValueOrDefault().ToString("C") + ";";
                 csv += cp.ValorMulta.GetValueOrDefault().ToString("C") + ";";
                 csv += cp.ValorMora.GetValueOrDefault().ToString("C") + ";";
-                csv += cp.ValorJuros.GetValueOrDefault().ToString("C") + ";";
-                csv += cp.ValorAmortizacao.GetValueOrDefault().ToString("C") + ";";
+                csv += cp.ValorDescontoJuros.GetValueOrDefault().ToString("C") + ";";
+                csv += cp.ValorDescontoParcela.GetValueOrDefault().ToString("C") + ";";
                 csv += cp.ValorParcela.ToString("C") + ";";
+                csv += cp.TaxaMora.GetValueOrDefault().ToString() + ";";
+                csv += cp.TaxaMulta.GetValueOrDefault().ToString() + ";";
+                csv += cp.ValorAcrescimo.GetValueOrDefault().ToString("C") + ";";
+                csv += cp.ValorResiduo.GetValueOrDefault().ToString("C") + ";";
+                csv += (cp.SituacaoParcelaDto == null ? string.Empty : cp.SituacaoParcelaDto.Nome) + ";";
 
                 csv += Environment.NewLine;
             }

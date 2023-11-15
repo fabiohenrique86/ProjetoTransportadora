@@ -185,8 +185,18 @@ namespace ProjetoTransportadora.Repository
                 TaxaMora = x.TaxaMora ?? 0D,
                 TaxaMulta = x.TaxaMulta ?? 0D,
                 ValorAcrescimo = x.ValorAcrescimo ?? 0D,
-                ValorResiduo = x.ValorResiduo ?? 0D
-            }).OrderBy(x => x.NumeroParcela).ToList();
+                ValorResiduo = x.ValorResiduo ?? 0D,
+                SituacaoParcelaDto = x.SituacaoParcela == null ? null : new SituacaoParcelaDto()
+                {
+                    Id = x.SituacaoParcela.Id,
+                    Ativo = x.SituacaoParcela.Ativo,
+                    DataCadastro = x.SituacaoParcela.DataCadastro,
+                    DataInativacao = x.SituacaoParcela.DataInativacao,
+                    IdUsuarioCadastro = x.SituacaoParcela.IdUsuarioCadastro,
+                    IdUsuarioInativacao = x.SituacaoParcela.IdUsuarioInativacao,
+                    Nome = x.SituacaoParcela.Nome
+                }
+            }).OrderBy(x => x.IdContrato).ThenBy(x => x.NumeroParcela).ToList();
 
             return lista;
         }

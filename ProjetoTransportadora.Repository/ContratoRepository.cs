@@ -262,13 +262,32 @@ namespace ProjetoTransportadora.Repository
                 IdCliente = x.IdCliente,
                 PessoaClienteDto = x.PessoaCliente == null ? null : new PessoaDto { Id = x.PessoaCliente.Id, Nome = x.PessoaCliente.Nome, Cpf = x.PessoaCliente.Cpf, Cnpj = x.PessoaCliente.Cnpj, Ativo = x.PessoaCliente.Ativo },
                 IdVeiculo = x.IdVeiculo,
-                VeiculoDto = x.Veiculo == null ? null : new VeiculoDto { Id = x.Veiculo.Id, Placa = x.Veiculo.Placa, Modelo = x.Veiculo.Modelo, Chassi = x.Veiculo.Chassi, Renavam = x.Veiculo.Renavam, Ativo = x.Veiculo.Ativo, Cor = x.Veiculo.Cor, MontadoraDto = new MontadoraDto() { Id = x.Veiculo.Montadora.Id, Nome = x.Veiculo.Montadora.Nome } },
+                VeiculoDto = x.Veiculo == null ? null : new VeiculoDto
+                {
+                    Id = x.Veiculo.Id,
+                    Placa = x.Veiculo.Placa,
+                    Modelo = x.Veiculo.Modelo,
+                    Chassi = x.Veiculo.Chassi,
+                    Renavam = x.Veiculo.Renavam,
+                    Cor = x.Veiculo.Cor,
+                    Ativo = x.Veiculo.Ativo,
+                    MontadoraDto = new MontadoraDto() { Id = x.Veiculo.Montadora.Id, Nome = x.Veiculo.Montadora.Nome }
+                },
                 IdProduto = x.IdProduto,
                 ProdutoDto = x.Produto == null ? null : new ProdutoDto { Id = x.Produto.Id, Nome = x.Produto.Nome, Ativo = x.Produto.Ativo },
                 IdSituacaoContrato = x.IdSituacaoContrato,
                 SituacaoContratoDto = x.SituacaoContrato == null ? null : new SituacaoContratoDto() { Id = x.SituacaoContrato.Id, Ativo = x.SituacaoContrato.Ativo, DataCadastro = x.SituacaoContrato.DataCadastro, DataInativacao = x.SituacaoContrato.DataInativacao, IdUsuarioCadastro = x.SituacaoContrato.IdUsuarioCadastro, IdUsuarioInativacao = x.SituacaoContrato.IdUsuarioInativacao, Nome = x.SituacaoContrato.Nome },
                 IdCanal = x.IdCanal,
-                CanalDto = x.Canal == null ? null : new CanalDto() { Id = x.Canal.Id, Ativo = x.Canal.Ativo, DataCadastro = x.Canal.DataCadastro, DataInativacao = x.Canal.DataInativacao, IdUsuarioCadastro = x.Canal.IdUsuarioCadastro, IdUsuarioInativacao = x.Canal.IdUsuarioInativacao, Nome = x.Canal.Nome },
+                CanalDto = x.Canal == null ? null : new CanalDto()
+                {
+                    Id = x.Canal.Id,
+                    Ativo = x.Canal.Ativo,
+                    DataCadastro = x.Canal.DataCadastro,
+                    DataInativacao = x.Canal.DataInativacao,
+                    IdUsuarioCadastro = x.Canal.IdUsuarioCadastro,
+                    IdUsuarioInativacao = x.Canal.IdUsuarioInativacao,
+                    Nome = x.Canal.Nome
+                },
                 DataContrato = x.DataContrato,
                 IdFiador = x.IdFiador,
                 IdIndicacao = x.IdIndicacao,
@@ -284,7 +303,17 @@ namespace ProjetoTransportadora.Repository
                 ValorFinanciadoDocumentacao = x.ValorFinanciadoDocumentacao ?? 0D,
                 ValorFinanciadoVeiculo = x.ValorFinanciadoVeiculo ?? 0D,
                 IdVeiculoEntrada = x.IdVeiculoEntrada,
-                VeiculoEntradaDto = x.VeiculoEntrada == null ? null : new VeiculoDto { Id = x.VeiculoEntrada.Id, Placa = x.VeiculoEntrada.Placa, Modelo = x.VeiculoEntrada.Modelo, Chassi = x.VeiculoEntrada.Chassi, Renavam = x.VeiculoEntrada.Renavam, Ativo = x.VeiculoEntrada.Ativo, Cor = x.VeiculoEntrada.Cor, MontadoraDto = new MontadoraDto() { Id = x.VeiculoEntrada.Montadora.Id, Nome = x.VeiculoEntrada.Montadora.Nome } },
+                VeiculoEntradaDto = x.VeiculoEntrada == null ? null : new VeiculoDto
+                {
+                    Id = x.VeiculoEntrada.Id,
+                    Placa = x.VeiculoEntrada.Placa,
+                    Modelo = x.VeiculoEntrada.Modelo,
+                    Chassi = x.VeiculoEntrada.Chassi,
+                    Renavam = x.VeiculoEntrada.Renavam,
+                    Cor = x.VeiculoEntrada.Cor,
+                    Ativo = x.VeiculoEntrada.Ativo,
+                    MontadoraDto = new MontadoraDto() { Id = x.VeiculoEntrada.Montadora.Id, Nome = x.VeiculoEntrada.Montadora.Nome }
+                },
                 ValorVeiculoEntrada = x.ValorVeiculoEntrada ?? 0D,
                 ValorFinanciado = x.ValorFinanciado,
                 ValorDinheiro = x.ValorDinheiro ?? 0D,
@@ -307,7 +336,16 @@ namespace ProjetoTransportadora.Repository
                     NumeroParcela = w.NumeroParcela,
                     IdContrato = w.IdContrato,
                     IdSituacaoParcela = w.IdSituacaoParcela,
-                    SituacaoParcelaDto = w.SituacaoParcela == null ? null : new SituacaoParcelaDto() { Id = w.SituacaoParcela.Id, Ativo = w.SituacaoParcela.Ativo, DataCadastro = w.SituacaoParcela.DataCadastro, DataInativacao = w.SituacaoParcela.DataInativacao, IdUsuarioCadastro = w.SituacaoParcela.IdUsuarioCadastro, IdUsuarioInativacao = w.SituacaoParcela.IdUsuarioInativacao, Nome = w.SituacaoParcela.Nome },
+                    SituacaoParcelaDto = w.SituacaoParcela == null ? null : new SituacaoParcelaDto()
+                    {
+                        Id = w.SituacaoParcela.Id,
+                        Ativo = w.SituacaoParcela.Ativo,
+                        DataCadastro = w.SituacaoParcela.DataCadastro,
+                        DataInativacao = w.SituacaoParcela.DataInativacao,
+                        IdUsuarioCadastro = w.SituacaoParcela.IdUsuarioCadastro,
+                        IdUsuarioInativacao = w.SituacaoParcela.IdUsuarioInativacao,
+                        Nome = w.SituacaoParcela.Nome
+                    },
                     DataVencimento = w.DataVencimento,
                     DiasParcela = w.DiasParcela,
                     DiasContrato = w.DiasContrato,
