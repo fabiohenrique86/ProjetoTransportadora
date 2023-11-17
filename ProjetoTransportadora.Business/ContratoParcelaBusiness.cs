@@ -48,6 +48,9 @@ namespace ProjetoTransportadora.Business
 
             var contratoParcelaDto = contratoParcelaRepository.Obter(new ContratoParcelaDto() { Id = idContratoParcela });
 
+            contratoParcelaDto.ValorMulta = 0;
+            contratoParcelaDto.ValorMora = 0;
+
             if (contratoParcelaDto == null)
                 throw new BusinessException($"Contrato parcela ({idContratoParcela}) não existe");
 
@@ -59,6 +62,8 @@ namespace ProjetoTransportadora.Business
             else if (dataPagamento > contratoParcelaDto.DataVencimento)
             {
                 contratoParcelaDto.ValorDescontoJuros = 0;
+                contratoParcelaDto.ValorMulta = (taxaMulta / 100) * contratoParcelaDto.ValorOriginal;
+                contratoParcelaDto.ValorMora = contratoParcelaDto.ValorOriginal * (taxaMora / 100) * (dataPagamento.Subtract(contratoParcelaDto.DataVencimento).TotalDays);
             }
             else if (dataPagamento > contratoParcelaDto.DataInicio && dataPagamento < contratoParcelaDto.DataVencimento)
             {
@@ -67,23 +72,44 @@ namespace ProjetoTransportadora.Business
                 if (contrato == null)
                     throw new BusinessException($"Contrato ({idContrato}) não existe");
 
-                double diasCalculo = contratoParcelaDto.DataVencimento.Subtract(dataPagamento).Days;
-                contratoParcelaDto.ValorDescontoJuros = contratoParcelaDto.ValorOriginal * Math.Pow((1D + (contrato.TaxaJuros / 100)), ((diasCalculo / 30D) - 1D));
+                double diasAntecipado = contratoParcelaDto.DataVencimento.Subtract(dataPagamento).TotalDays;
+                double saldoAnterior = 0;
+
+                if (contratoParcelaDto.NumeroParcela == 1)
+                    saldoAnterior = contrato.ValorFinanciado;
+                else
+                {
+                    // pesquisa todas as parcelas do contrato
+                    var listaContratoParcelaDto = contratoParcelaRepository.ListarSimples(new ContratoParcelaDto() { IdContrato = idContrato });
+                    
+                    if (listaContratoParcelaDto != null && listaContratoParcelaDto.Count() > 0)
+                    {
+                        // soma o valor amortização até a parcela pesquisada
+                        var somaValorAmortizacao = listaContratoParcelaDto.Where(x => x.NumeroParcela <= contratoParcelaDto.NumeroParcela).Sum(x => x.ValorAmortizacao).GetValueOrDefault();
+
+                        saldoAnterior = contrato.ValorFinanciado - somaValorAmortizacao;
+                    }
+                }
+
+                contratoParcelaDto.ValorDescontoJuros = saldoAnterior * (contrato.TaxaJuros / 100) * (diasAntecipado / 30D);
             }
+            
+            //contratoParcelaDto.ValorParcela = contratoParcelaDto.ValorAmortizacao.GetValueOrDefault()
+            //                                + contratoParcelaDto.ValorJuros.GetValueOrDefault()
+            //                                + valorAcrescimo
+            //                                + contratoParcelaDto.ValorMulta.GetValueOrDefault()
+            //                                + contratoParcelaDto.ValorMora.GetValueOrDefault()
+            //                                - contratoParcelaDto.ValorDescontoJuros.GetValueOrDefault()
+            //                                - valorDescontoParcela
+            //                                - valorResiduo;
 
-            double diasAtraso = contratoParcelaDto.DataVencimento.Subtract(dataPagamento).Days;
-
-            contratoParcelaDto.ValorMulta = (taxaMulta / 100) * contratoParcelaDto.ValorOriginal;
-            //contratoParcelaDto.ValorMora = contratoParcelaDto.ValorOriginal * Math.Pow((1 + (taxaMora / 100)), ((diasAtraso / 30D) - 1D));
-            contratoParcelaDto.ValorMora = contratoParcelaDto.ValorOriginal * (taxaMora / 100) * diasAtraso;
-            contratoParcelaDto.ValorParcela = contratoParcelaDto.ValorAmortizacao.GetValueOrDefault()
-                                            + contratoParcelaDto.ValorJuros.GetValueOrDefault()
+            contratoParcelaDto.ValorParcela = contratoParcelaDto.ValorOriginal
                                             + valorAcrescimo
                                             + contratoParcelaDto.ValorMulta.GetValueOrDefault()
                                             + contratoParcelaDto.ValorMora.GetValueOrDefault()
+                                            - valorResiduo
                                             - contratoParcelaDto.ValorDescontoJuros.GetValueOrDefault()
-                                            - valorDescontoParcela
-                                            - valorResiduo;
+                                            - valorDescontoParcela;
 
             return new 
             { 

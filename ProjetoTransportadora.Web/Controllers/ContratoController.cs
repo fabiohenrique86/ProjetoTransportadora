@@ -134,7 +134,7 @@ namespace ProjetoTransportadora.Web.Controllers
         {
             var listaContrato = contratoBusiness.Listar(contratoDto);
 
-            string csv = "Id; Data do Contrato; Nome do Cliente; CPF do cliente; Produto; Placa (Veículo); Modelo (Veículo); Cor (Veículo); Renavam (Veículo); Fiador; Indicação; Promotor; Canal; Valor da Parcela; Taxa Multa; Taxa Mora; Tipo de Cálculo; Data da Primeira Parcela; Valor do Veículo; Valor da Entrada; Valor da Documentação; Valor do Desconto; Valor em Dinheiro; Placa (Veículo Entrada); Modelo (Veículo Entrada); Cor (Veículo Entrada); Renavam (Veículo Entrada); Valor do Veículo de Entrada; Valor Depositado; Valor da Tarifa; Valor Financiado Total; Taxa de Juros; Quantidade de Parcelas; Valor Financiado Documentação; Valor Financiado Veículo; Data da Antecipação; Valor da Antecipação; Data da Baixa; Situação;" + Environment.NewLine;
+            string csv = "Número Contrato; Data Contrato; Nome Cliente; CPF cliente; Produto; Placa (Veículo); Modelo (Veículo); Cor (Veículo); Renavam (Veículo); Fiador; Indicação; Promotor; Canal; Valor Parcela; Taxa Multa; Taxa Mora; Tipo Cálculo; Data Primeira Parcela; Valor Veículo; Valor Entrada; Valor Documentação; Valor Desconto; Valor Dinheiro; Placa (Veículo Entrada); Modelo (Veículo Entrada); Cor (Veículo Entrada); Renavam (Veículo Entrada); Valor Veículo Entrada; Valor Depositado; Valor Tarifa; Valor Financiado Total; Taxa Juros; Quantidade Parcelas; Valor Financiado Documentação; Valor Financiado Veículo; Data Antecipação; Valor Antecipação; Data Baixa; Situação;" + Environment.NewLine;
 
             foreach (var contrato in listaContrato)
             {

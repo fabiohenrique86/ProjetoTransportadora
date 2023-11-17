@@ -45,11 +45,11 @@ namespace ProjetoTransportadora.Web.Controllers
         }
 
         [HttpPost]
-        public JsonResult Calcular(int idContrato, int idContratoParcela, DateTime dataPagamento, double taxaMulta, double taxaMora, double valorResiduo, double valorAcrescimo, double valorDescontoParcela)
+        public JsonResult Calcular(int idContrato, int idContratoParcela, DateTime? dataPagamento, double taxaMulta, double taxaMora, double valorResiduo, double valorAcrescimo, double valorDescontoParcela)
         {
-            var contratoParcela = contratoParcelaBusiness.Calcular(idContrato, idContratoParcela, dataPagamento, taxaMulta, taxaMora, valorResiduo, valorAcrescimo, valorDescontoParcela);
+            var calculoPagamento = contratoParcelaBusiness.Calcular(idContrato, idContratoParcela, dataPagamento.GetValueOrDefault(), taxaMulta, taxaMora, valorResiduo, valorAcrescimo, valorDescontoParcela);
 
-            return Json(new { Sucesso = true, Mensagem = "Contrato parcela calculado com sucesso", Data = contratoParcela }, JsonRequestBehavior.AllowGet);
+            return Json(new { Sucesso = true, Mensagem = "Contrato parcela calculado com sucesso", Data = calculoPagamento }, JsonRequestBehavior.AllowGet);
         }
 
         [HttpPost]
@@ -71,7 +71,7 @@ namespace ProjetoTransportadora.Web.Controllers
 
             var listaContratoParcela = contratoParcelaBusiness.ListarSimples(contratoParcela);
 
-            string csv = "Id Contrato; Número Parcela; Data Emissão; Data Início; Data Vencimento; Dias Parcela; Dias Contrato; Data Pagamento; Valor Original; Valor Amortização; Valor Juros; Valor Multa; Valor Mora; Valor Desconto Juros; Valor Desconto Parcela; Valor Parcela; Taxa Mora; Taxa Multa; Valor Acréscimo; Valor Resíduo; Situação;" + Environment.NewLine;
+            string csv = "Número Contrato; Número Parcela; Data Emissão; Data Início; Data Vencimento; Dias Parcela; Dias Contrato; Data Pagamento; Valor Original; Valor Amortização; Valor Juros; Valor Multa; Valor Mora; Valor Desconto Juros; Valor Desconto Parcela; Valor Parcela; Taxa Mora; Taxa Multa; Valor Acréscimo; Valor Resíduo; Situação;" + Environment.NewLine;
 
             foreach (var cp in listaContratoParcela)
             {

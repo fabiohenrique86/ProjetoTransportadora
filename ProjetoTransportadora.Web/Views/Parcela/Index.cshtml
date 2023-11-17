@@ -108,15 +108,14 @@
             });
         }
 
-        function limparFormulario() {
+        function limparFormulario() {            
             $("#frmContratoParcelaDetalhe").trigger("reset");
+            $("#dataPagamento").val("");
             $("#tbContratoParcelaHistorico").DataTable().clear().draw();
             $("#tbContratoParcelaResiduo").DataTable().clear().draw();
         }
 
         function carregarModalContratoParcela(idContratoParcela) {
-
-            limparFormulario();
 
             $.ajax({
                 dataType: "json",
@@ -130,6 +129,8 @@
                         alert(data.Erro ? "danger" : "warning", data.Mensagem);
                         return;
                     }
+
+                    limparFormulario();
 
                     $("#lblContrato").text(data.Data[0].IdContrato);
                     $("#lblNumeroParcela").text(data.Data[0].NumeroParcela);
