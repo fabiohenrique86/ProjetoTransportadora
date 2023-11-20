@@ -77,6 +77,9 @@
             if (isNaN(valorDescontoParcela))
                 valorDescontoParcela = 0;
 
+            if (dataPagamento == "")
+                return;
+
             $.ajax({
                 dataType: "json",
                 type: "POST",
@@ -100,7 +103,7 @@
                     }
 
                     $("#valorDescontoJuros").val(Globalize.format(data.Data.ValorDescontoJuros, "n2"));
-                    $("#valorJuros").val(Globalize.format(data.Data.ValorJuros, "n2"));
+                    //$("#valorJuros").val(Globalize.format(data.Data.ValorJuros, "n2"));
                     $("#valorMulta").val(Globalize.format(data.Data.ValorMulta, "n2"));
                     $("#valorMora").val(Globalize.format(data.Data.ValorMora, "n2"));
                     $("#valorParcela").val(Globalize.format(data.Data.ValorParcela, "n2"));
@@ -180,6 +183,7 @@
                         $("#lblValorResiduo").text("Valor Resíduo Total a Ser Somado");
                         $("#divContratoParcelaResiduo").show();
                         $("#tbContratoParcelaResiduo").DataTable().rows.add(data.Data[0].ContratoParcelaResiduoDto).draw();
+                        $("#valorParcela").val(Globalize.format(data.Data[0].ValorParcela + data.Data[0].ValorResiduo, "n2"));
                     }
                     else {
                         $("#divContratoParcelaResiduo").hide();

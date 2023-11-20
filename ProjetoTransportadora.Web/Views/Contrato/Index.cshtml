@@ -230,6 +230,16 @@
 
             // aba - parcelas
 
+            if (data.ContratoParcelaDto != null && data.ContratoParcelaDto.length > 0)
+            {
+                var somaValorResiduo = 0;
+                for (var i = 0; i < data.ContratoParcelaDto.length; i++)
+                    somaValorResiduo += data.ContratoParcelaDto[i].ValorResiduo;
+
+                if (somaValorResiduo > 0)
+                    data.ContratoParcelaDto[data.ContratoParcelaDto.length - 1].ValorResiduo = somaValorResiduo * -1;
+            }
+
             $("#tbContratoParcela").DataTable().clear();
             $("#tbContratoParcela").DataTable().rows.add(data.ContratoParcelaDto).draw();
 

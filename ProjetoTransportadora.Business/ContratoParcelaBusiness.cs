@@ -50,6 +50,7 @@ namespace ProjetoTransportadora.Business
 
             contratoParcelaDto.ValorMulta = 0;
             contratoParcelaDto.ValorMora = 0;
+            contratoParcelaDto.ValorDescontoJuros = 0;
 
             if (contratoParcelaDto == null)
                 throw new BusinessException($"Contrato parcela ({idContratoParcela}) não existe");
@@ -57,11 +58,9 @@ namespace ProjetoTransportadora.Business
             if (dataPagamento <= contratoParcelaDto.DataInicio)
             {
                 contratoParcelaDto.ValorDescontoJuros = contratoParcelaDto.ValorJuros;
-                contratoParcelaDto.ValorJuros = 0;
             }
             else if (dataPagamento > contratoParcelaDto.DataVencimento)
             {
-                contratoParcelaDto.ValorDescontoJuros = 0;
                 contratoParcelaDto.ValorMulta = (taxaMulta / 100) * contratoParcelaDto.ValorOriginal;
                 contratoParcelaDto.ValorMora = contratoParcelaDto.ValorOriginal * (taxaMora / 100) * (dataPagamento.Subtract(contratoParcelaDto.DataVencimento).TotalDays);
             }
@@ -81,7 +80,7 @@ namespace ProjetoTransportadora.Business
                 {
                     // pesquisa todas as parcelas do contrato
                     var listaContratoParcelaDto = contratoParcelaRepository.ListarSimples(new ContratoParcelaDto() { IdContrato = idContrato });
-                    
+
                     if (listaContratoParcelaDto != null && listaContratoParcelaDto.Count() > 0)
                     {
                         // soma o valor amortização até a parcela pesquisada
@@ -93,15 +92,6 @@ namespace ProjetoTransportadora.Business
 
                 contratoParcelaDto.ValorDescontoJuros = saldoAnterior * (contrato.TaxaJuros / 100) * (diasAntecipado / 30D);
             }
-            
-            //contratoParcelaDto.ValorParcela = contratoParcelaDto.ValorAmortizacao.GetValueOrDefault()
-            //                                + contratoParcelaDto.ValorJuros.GetValueOrDefault()
-            //                                + valorAcrescimo
-            //                                + contratoParcelaDto.ValorMulta.GetValueOrDefault()
-            //                                + contratoParcelaDto.ValorMora.GetValueOrDefault()
-            //                                - contratoParcelaDto.ValorDescontoJuros.GetValueOrDefault()
-            //                                - valorDescontoParcela
-            //                                - valorResiduo;
 
             contratoParcelaDto.ValorParcela = contratoParcelaDto.ValorOriginal
                                             + valorAcrescimo
@@ -111,10 +101,10 @@ namespace ProjetoTransportadora.Business
                                             - contratoParcelaDto.ValorDescontoJuros.GetValueOrDefault()
                                             - valorDescontoParcela;
 
-            return new 
-            { 
+            return new
+            {
                 ValorDescontoJuros = contratoParcelaDto.ValorDescontoJuros,
-                ValorJuros = contratoParcelaDto.ValorJuros,
+                //ValorJuros = contratoParcelaDto.ValorJuros,
                 ValorMulta = contratoParcelaDto.ValorMulta,
                 ValorMora = contratoParcelaDto.ValorMora,
                 ValorParcela = contratoParcelaDto.ValorParcela,
@@ -188,7 +178,7 @@ namespace ProjetoTransportadora.Business
                 if (contrato == null)
                     throw new BusinessException($"Contrato {contratoParcelaDto.IdContrato} não existe");
 
-                if (contratoParcelaDto.DataVencimento.Year < contrato.DataContrato.Year || 
+                if (contratoParcelaDto.DataVencimento.Year < contrato.DataContrato.Year ||
                     (contratoParcelaDto.DataVencimento.Year == contrato.DataContrato.Year && contratoParcelaDto.DataVencimento.Month <= contrato.DataContrato.Month))
                     throw new BusinessException("Data Vencimento da 1ª parcela não pode ser no mesmo mês do início do contrato");
             }
@@ -214,10 +204,18 @@ namespace ProjetoTransportadora.Business
             if (contratoParcelaDto.Id <= 0)
                 throw new BusinessException("Id é obrigatório");
 
-            if (contratoParcelaDto.IdSituacaoParcela == SituacaoParcelaDto.EnumSituacaoParcela.Paga.GetHashCode())
-            { 
-                if (contratoParcelaDto.DataPagamento.GetValueOrDefault() == DateTime.MinValue)
-                    throw new BusinessException("Data do Pagamento é obrigatória");
+            if (contratoParcelaDto.IdSituacaoParcela == SituacaoParcelaDto.EnumSituacaoParcela.Paga.GetHashCode() && contratoParcelaDto.DataPagamento.GetValueOrDefault() == DateTime.MinValue)
+                throw new BusinessException("Data de Pagamento é obrigatória");
+
+            if (contratoParcelaDto.DataPagamento.GetValueOrDefault() != DateTime.MinValue)
+            {
+                if (contratoParcelaDto.DataPagamento.GetValueOrDefault().DayOfWeek == DayOfWeek.Saturday || contratoParcelaDto.DataPagamento.GetValueOrDefault().DayOfWeek == DayOfWeek.Sunday)
+                    throw new BusinessException("Data de Pagamento deve ser dia útil");
+
+                var existeFeriado = feriadoBusiness.Existe(new FeriadoDto() { DataFeriado = contratoParcelaDto.DataPagamento.GetValueOrDefault() });
+
+                if (existeFeriado)
+                    throw new BusinessException("Data de Pagamento deve ser dia útil");
             }
 
             var existeContratoParcela = contratoParcelaRepository.Existe(contratoParcelaDto.Id);
@@ -340,7 +338,7 @@ namespace ProjetoTransportadora.Business
                     Id = simulacaoDto.ContratoParcelaDto?.Count() > 0 ? simulacaoDto.ContratoParcelaDto.FirstOrDefault(x => x.NumeroParcela == i) == null ? 0 : simulacaoDto.ContratoParcelaDto.FirstOrDefault(x => x.NumeroParcela == i).Id : 0,
                     NumeroParcela = i,
                     DataInicio = (i == 1 ? simulacaoDto.DataInicio : parcelaAnterior.DataVencimento),
-                    DataVencimento = dataVencimento,                    
+                    DataVencimento = dataVencimento,
                     DataEmissao = DateTime.UtcNow.ToLocalTime(),
                     DiasContrato = Convert.ToInt32(diasContrato),
                     DiasParcela = Convert.ToInt32(diasParcela),
@@ -369,7 +367,7 @@ namespace ProjetoTransportadora.Business
                 listaContratoParcelaDto[i].ValorJuros = valorJuros;
                 listaContratoParcelaDto[i].ValorAmortizacao = valorAmortizacao;
                 listaContratoParcelaDto[i].ValorSaldoAtual = valorSaldoAtual;
-                
+
                 listaContratoParcelaDto[i].ValorOriginal = valorParcela;
                 listaContratoParcelaDto[i].ValorMora = 0;
                 listaContratoParcelaDto[i].ValorDescontoJuros = 0;
